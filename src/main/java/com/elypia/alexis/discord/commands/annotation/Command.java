@@ -9,10 +9,11 @@ import net.dv8tion.jda.core.entities.ChannelType;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Command {
 
-	String alias();
+	String[] aliases();
 	String help();
 	Parameter[] params() default {};
-	Parameter[] optParams() default {};
+	OptParameter[] optParams() default {};
 	ChannelType[] scope() default {};
 	Permission[] permissions() default {};
+	boolean developerOnly() default false;
 }

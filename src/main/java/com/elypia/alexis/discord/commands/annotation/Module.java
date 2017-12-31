@@ -10,8 +10,10 @@ import net.dv8tion.jda.core.entities.ChannelType;
 @Inherited
 public @interface Module {
 	
-	String name();
+	String[] aliases();
 	String description();
+	Class<?>[] submodules() default {};
 	ChannelType[] scope() default {};
 	Permission[] permissions() default {};
+	boolean developerOnly() default false;
 }

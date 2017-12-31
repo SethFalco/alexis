@@ -2,7 +2,7 @@ package com.elypia.alexis.discord;
 
 import java.util.logging.Level;
 
-import com.elypia.alexis.Alexis;
+import com.elypia.alexis.*;
 
 import net.dv8tion.jda.core.OnlineStatus;
 import net.dv8tion.jda.core.events.ReadyEvent;
@@ -24,7 +24,7 @@ public class DiscordDispatcher extends ListenerAdapter {
 	@Override
 	public void onReady(ReadyEvent event) {
 		long timeElapsed = System.currentTimeMillis() - Alexis.START_TIME;
-		Alexis.LOGGER.log(Level.INFO, "Time taken to launch minimally: {0}ms", timeElapsed);
+		AlexisUtils.LOGGER.log(Level.INFO, "Time taken to launch minimally: {0}ms", timeElapsed);
 		
 		event.getJDA().getPresence().setStatus(OnlineStatus.ONLINE);
 	}
