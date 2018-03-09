@@ -27,9 +27,8 @@ plugins {
 apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'org.junit.platform.gradle.plugin'
-apply plugin: "com.sedmelluq.jdaction"
 
-jar {
+jar{
 	manifest {
 		attributes 	'Implementation-Title'	 : 'Alexis',
 					'Implementation-Version' : '1.0.0'
@@ -41,7 +40,7 @@ repositories  {
 }
 
 dependencies {
-	implementation 'net.dv8tion:JDA:3.5.1_346'
+	implementation 'net.dv8tion:JDA:3.5.1_347'
 	implementation 'com.sedmelluq:lavaplayer:1.2.56'
 	implementation group: 'org.mongodb', name: 'mongodb-driver', version: '3.6.3'
 	implementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.9-rc'
