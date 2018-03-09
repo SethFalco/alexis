@@ -1,6 +1,6 @@
 package com.elypia.alexis.discord.commands.modules;
 
-import com.elypia.alexis.discord.commands.impl.CommandHandler;
+import com.elypia.alexis.discord.commands.CommandHandler;
 
 public class RuneScapeNotifyHandler extends CommandHandler {
 

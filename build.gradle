@@ -1,22 +1,23 @@
 buildscript {
 	repositories {
-        mavenCentral()
-    }
-    
+		mavenCentral()
+	}
+
 	dependencies {
-		classpath 'org.junit.platform:junit-platform-gradle-plugin:1.0.1'
+		classpath 'org.junit.platform:junit-platform-gradle-plugin:1.1.0'
 	}
 }
 
 buildscript {
-  repositories {
-    maven {
-      url "https://plugins.gradle.org/m2/"
-    }
-  }
-  dependencies {
-    classpath "gradle.plugin.com.sedmelluq:jdaction:1.0.2"
-  }
+	repositories {
+		maven {
+			url "https://plugins.gradle.org/m2/"
+		}
+  	}
+
+	dependencies {
+		classpath "gradle.plugin.com.sedmelluq:jdaction:1.0.2"
+	}
 }
 
 plugins {
@@ -24,34 +25,104 @@ plugins {
 }
 
 apply plugin: 'java'
-apply plugin: 'eclipse'
+apply plugin: 'idea'
 apply plugin: 'org.junit.platform.gradle.plugin'
 apply plugin: "com.sedmelluq.jdaction"
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+jar {
+	manifest {
+		attributes 	'Implementation-Title'	 : 'Alexis',
+					'Implementation-Version' : '1.0.0'
+	}
+}
 
 repositories  {
     jcenter()
 }
 
 dependencies {
-	compile 'net.dv8tion:JDA:3.4.0_318'
-	compile 'com.sedmelluq:lavaplayer:1.2.45'
-	compile group: 'org.mongodb', name: 'mongodb-driver', version: '3.6.1'
-	compile group: 'org.slf4j', name: 'slf4j-api', version: '1.8.0-beta0'
-	compile group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.8.0-beta0'
-	compile group: 'com.mashape.unirest', name: 'unirest-java', version: '1.4.9'
-	
-	// Testing
-	testCompile 'org.junit.jupiter:junit-jupiter-api:5.0.0'
-	
-	testRuntime 'org.junit.jupiter:junit-jupiter-engine:5.0.1'
-	testRuntime 'org.junit.platform:junit-platform-runner:1.0.0'
+	implementation 'net.dv8tion:JDA:3.5.1_346'
+	implementation 'com.sedmelluq:lavaplayer:1.2.56'
+	implementation group: 'org.mongodb', name: 'mongodb-driver', version: '3.6.3'
+	implementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.9-rc'
+	implementation group: 'com.mashape.unirest', name: 'unirest-java', version: '1.4.9'
+	implementation files('../Elypiai/Elypiai.jar')
+
+	runtimeOnly group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.7.25'
+
+	testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.1.0'
+
+	testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.1.0'
+	testRuntimeOnly group: 'org.junit.platform', name: 'junit-platform-runner', version: '1.1.0'
 }
 
-test {
-	useJUnit()
-	maxParallelForks = 8
-	testLogging.showStandardStreams = true
+compileJava {
+	options.compilerArgs += '-Xlint:unchecked'
 }
+
+junitPlatform {
+	details 'tree'
+}
+
+task wrapper(type: Wrapper) {
+	description = 'Generates gradlew[.bat] scripts'
+	gradleVersion = '4.6'
+}
+
+import groovy.io.FileType
+
+import java.util.regex.Matcher
+import java.util.regex.Pattern
+
+class SecretTask extends DefaultTask {
+
+	@TaskAction
+	void search() {
+		final File currentDirectory = new File(".")
+		final List<File> files = new ArrayList<>()
+
+		currentDirectory.eachFileRecurse(FileType.FILES) { file ->
+			String name = file.getCanonicalPath()
+
+			if (!name.contains("Test") && name.endsWith(".java"))
+				files << file
+		}
+
+		files.each { file ->
+			boolean failed
+			List<String> lines
+
+			try {
+				lines = file.readLines()
+			} catch (IOException) {
+				System.err.printf("Unable to read: '%s'%n", file.getCanonicalPath())
+				return
+			}
+
+			Map<String, Pattern> patterns = new HashMap<>()
+			patterns.put("Discord Bot Token", Pattern.compile(/(?i)[A-Z\d]{24}\.[A-Z\d-_]{6}\.[A-Z\d-_]{27}/))
+			patterns.put("Amazon Access Key", Pattern.compile(/AKIA[IJ][A-Z2-7]{14}[AQ]/))
+			patterns.put("Amazon Secret", Pattern.compile(/(?i)[A-Z\d\/+]{40}/))
+			patterns.put("Steam API Key", Pattern.compile(/[A-F\d]{32}/))
+
+			for (int i = 0; i < lines.size(); i++) {
+				patterns.forEach { name, pattern ->
+					Matcher match = pattern.matcher(lines[i])
+
+					while (match.find()) {
+						String message = "Found %s at: '%s' line: %d%n"
+						System.err.printf(message, name, file.getCanonicalPath(), i + 1)
+						failed = true
+					}
+				}
+			}
+
+			if (failed) {
+				String message = "Found secrets in the code, read logs and revoke these ASAP."
+				throw new GradleScriptException(message, null)
+			}
+		}
+	}
+}
+
+task search(type: SecretTask)

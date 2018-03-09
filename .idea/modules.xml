@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/Alexis.iml" filepath="$PROJECT_DIR$/Alexis.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Alexis_main.iml" filepath="$PROJECT_DIR$/.idea/modules/Alexis_main.iml" group="Alexis" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Alexis_test.iml" filepath="$PROJECT_DIR$/.idea/modules/Alexis_test.iml" group="Alexis" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Elypiai.iml" filepath="$PROJECT_DIR$/.idea/modules/Elypiai.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Elypiai_main.iml" filepath="$PROJECT_DIR$/.idea/modules/Elypiai_main.iml" group="Elypiai" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Elypiai_test.iml" filepath="$PROJECT_DIR$/.idea/modules/Elypiai_test.iml" group="Elypiai" />
+    </modules>
+  </component>
+</project>

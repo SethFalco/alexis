@@ -1,129 +1,143 @@
 package com.elypia.alexis.discord;
 
-import java.lang.reflect.Method;
-import java.util.*;
-import java.util.logging.Level;
-
-import javax.security.auth.login.LoginException;
-
-import com.elypia.alexis.AlexisUtils;
+import com.elypia.alexis.discord.annotation.BeforeAny;
+import com.elypia.alexis.discord.annotation.Command;
+import com.elypia.alexis.discord.annotation.Module;
 import com.elypia.alexis.discord.commands.CommandEvent;
-import com.elypia.alexis.discord.commands.annotation.*;
-import com.elypia.alexis.discord.commands.impl.CommandHandler;
-
-import net.dv8tion.jda.core.*;
+import com.elypia.alexis.discord.commands.CommandHandler;
+import com.elypia.alexis.utils.BotUtils;
+import com.elypia.elypiai.utils.ElyUtils;
+import net.dv8tion.jda.core.AccountType;
+import net.dv8tion.jda.core.JDA;
+import net.dv8tion.jda.core.JDABuilder;
+import net.dv8tion.jda.core.OnlineStatus;
 import net.dv8tion.jda.core.entities.Game;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
-import net.dv8tion.jda.core.exceptions.RateLimitedException;
+
+import javax.security.auth.login.LoginException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.logging.Level;
 
 public class Chatbot {
-	
+
 	private JDA jda;
-	private Map<List<String>, CommandHandler> handlers;
-	
-	public Chatbot(String botToken) throws LoginException, IllegalArgumentException, RateLimitedException {
+	private Map<String[], CommandHandler> handlers;
+	private ChatbotConfiguration config;
+
+	public Chatbot(ChatbotConfiguration config) throws LoginException {
+		this.config = config;
+
 		JDABuilder builder = new JDABuilder(AccountType.BOT);
-		builder.setToken(botToken);
+		builder.setToken(config.getToken());
 		builder.addEventListener(new DiscordDispatcher(this));
-		builder.setCorePoolSize(8);
-		builder.setGame(Game.playing("w/ Seth!"));
+		builder.setCorePoolSize(10);
+		builder.setGame(Game.playing(config.getDefaultStatuses()[0]));
 		builder.setStatus(OnlineStatus.IDLE);
 		builder.setBulkDeleteSplittingEnabled(false);
-
 		jda = builder.buildAsync();
-		
+
 		handlers = new HashMap<>();
 	}
-	
+
 	public void registerModules(CommandHandler... handlers) {
 		for (CommandHandler handler : handlers)
 			registerModule(handler);
 	}
-	
+
 	public void registerModule(CommandHandler handler) {
 		Module module = handler.getClass().getAnnotation(Module.class);
-		
+
 		if (module == null) {
-			AlexisUtils.LOGGER.log(Level.SEVERE, "{0} doesn't include the @Module annotation!", handler);
+			BotUtils.LOGGER.log(Level.SEVERE, "{0} doesn't include the @Module annotation!", handler);
 			return;
 		}
-	
+
 		String[] aliases = module.aliases();
-		
+
 		for (int i = 0; i < aliases.length; i++)
 			aliases[i] = aliases[i].toLowerCase();
-		
-		List<String> aliasesList = Arrays.asList(aliases);
-		
-		for (List<String> existing : handlers.keySet()) {
-			for (String alias : aliasesList) {
-				if (existing.contains(alias)) {
-					String message = "{0} contains the alias {1}, which has already been registered!";
-					Object[] params = {
-						handler,
-						alias
-					};
-					
-					AlexisUtils.LOGGER.log(Level.WARNING, message, params);
-					return;
-				}
+
+		for (String[] existing : handlers.keySet()) {
+			if (ElyUtils.containsAny(existing, aliases)) {
+				String message = "{0} contains an alias which has already been registered!";
+				BotUtils.LOGGER.log(Level.WARNING, message, handler);
+				return;
 			}
 		}
-		
-		handlers.put(aliasesList, handler);
+
+		handlers.put(aliases, handler);
 	}
-	
+
 	public void handleMessage(MessageReceivedEvent event) {
-		CommandEvent commandEvent = new CommandEvent(event);
-		
+		CommandEvent commandEvent = new CommandEvent(this, event);
+
 		if (!commandEvent.isValid())
 			return;
-		else
-			AlexisUtils.LOGGER.log(Level.INFO, event.getMessage().getContentRaw());
-		
+
+		BotUtils.LOGGER.log(Level.INFO, event.getMessage().getContentRaw());
+
 		String commandModule = commandEvent.getModule();
 		CommandHandler handler = null;
-		
-		for (List<String> aliases : handlers.keySet()) {
-			if (aliases.contains(commandModule)) {
+
+		for (String[] aliases : handlers.keySet()) {
+			if (ElyUtils.arrayContains(commandModule, aliases)) {
 				handler = handlers.get(aliases);
 				break;
 			}
 		}
-		
+
 		if (handler == null) {
-			AlexisUtils.LOGGER.log(Level.FINEST, "A user attmped to access the module {0}, which doesn't exist!", commandModule);
+			BotUtils.LOGGER.log(Level.FINEST, "A user attmped to access the module {0}, which doesn't exist!", commandModule);
 			return;
 		}
-		
+
 		Method[] methods = handler.getClass().getMethods();
 		Method commandMethod = null;
-		
+		Command command = null;
+
 		for (Method method : methods) {
-			Command command = method.getAnnotation(Command.class);
-			
+			BeforeAny beforeAny = method.getAnnotation(BeforeAny.class);
+
+			if (beforeAny != null) {
+				String[] exclusions = beforeAny.exclusions();
+
+				if (!ElyUtils.arrayContains(commandEvent.getCommand(), exclusions)) {
+					if (handler.beforeAny(commandEvent))
+						return;
+				}
+			}
+
+			command = method.getAnnotation(Command.class);
+
 			if (command == null)
 				continue;
-			
-			if (Arrays.asList(command.aliases()).contains(commandEvent.getCommand())) {
+
+			if (ElyUtils.arrayContains(commandEvent.getCommand(), command.aliases()))
 				commandMethod = method;
-				break;
-			}
 		}
-		
+
 		if (commandMethod == null) {
 			event.getChannel().sendMessage("That command doens't exist, try help?").queue();
 			return;
 		}
-		
+
+		commandEvent.setMethod(commandMethod);
+
 		try {
 			commandMethod.invoke(handler, commandEvent);
-		} catch (Exception ex) {
-			AlexisUtils.LOGGER.log(Level.SEVERE, "Failed to execute command!", ex);
+		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+			BotUtils.LOGGER.log(Level.SEVERE, "Failed to execute command!", ex);
 		}
 	}
-	
+
 	public JDA getJDA() {
 		return jda;
+	}
+
+	public ChatbotConfiguration getConfig() {
+		return config;
 	}
 }

@@ -1,31 +1,65 @@
 package com.elypia.alexis;
 
-import java.util.logging.*;
-
 import com.elypia.alexis.discord.Chatbot;
+import com.elypia.alexis.discord.ChatbotConfiguration;
+import com.elypia.alexis.discord.audio.LocalAudioController;
 import com.elypia.alexis.discord.commands.modules.*;
+import com.elypia.alexis.utils.BotUtils;
+import com.elypia.alexis.utils.ExitCode;
+import com.elypia.elypiai.amazon.data.AmazonEndpoint;
+import com.mongodb.MongoClient;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+import org.bson.Document;
+
+import javax.security.auth.login.LoginException;
+import java.util.logging.Level;
+
+import static com.mongodb.client.model.Filters.eq;
 
 public class Alexis {
-	
+
 	public static final long START_TIME = System.currentTimeMillis();
-	
+
 	public static void main(String[] args) {
-		String token = "***REMOVED***";
-		
+		String configPath = "./settings.json";
+
+		if (args.length > 0)
+			configPath = args[0];
+
+		ChatbotConfiguration config = BotUtils.getConfiguration(configPath);
+
+		if (config == null) {
+			ExitCode code = ExitCode.UNKNOWN_CONFIG_ERROR;
+			BotUtils.LOGGER.log(Level.SEVERE, code.getMessage());
+			System.exit(code.getStatusCode());
+		}
+
+		MongoClient client = new MongoClient(config.getIp(), config.getPort());
+		MongoDatabase global = client.getDatabase("global");
+		MongoCollection<Document> api = global.getCollection("api_details");
+
 		try {
-			Chatbot bot = new Chatbot(token);
-			
-			bot.registerModules(
+			Chatbot bot = new Chatbot(config);
+
+			bot.registerModules (
+				new AmazonHandler(api.find(eq("service", "amazon")).first(), AmazonEndpoint.US),
 				new BotHandler(),
-				new NaNoWriMoHandler(),
+				new BrainfuckHandler(),
+				new CleverbotHandler(client),
+				new MathHandler(),
+				new MusicHandler(LocalAudioController.class),
+				new NanowrimoHandler(),
 				new RuneScapeHandler(),
 				new RuneScapeNotifyHandler(),
+				new SteamHandler(api.find(eq("service", "steam")).first()),
 				new UrbanDictionaryHandler(),
 				new UserHandler()
 			);
-		} catch (Exception ex) {
-			AlexisUtils.LOGGER.log(Level.SEVERE, "Alexis was unable to start up!", ex);
-			System.exit(0);
+		} catch (LoginException ex) {
+			ExitCode code = ExitCode.FAILED_TO_INIT_BOT;
+			BotUtils.LOGGER.log(Level.SEVERE, code.getMessage(), ex);
+			System.exit(code.getStatusCode());
 		}
 	}
 }
