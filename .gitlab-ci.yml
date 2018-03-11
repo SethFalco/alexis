@@ -6,22 +6,15 @@ variables:
 before_script:
   - export GRADLE_USER_HOME=`pwd`/.gradle
 
-search:
-  stage: build
-  script: gradle search
-
 build:
   stage: build
-  script: gradle --build-cache assemble
+  script: gradle search | gradle --build-cache assemble
   cache:
     key: "$CI_COMMIT_REF_NAME"
     policy: push
     paths:
       - build
       - .gradle
-  artifacts:
-    paths:
-      - build/libs/
 
 test:
   stage: test
@@ -32,7 +25,3 @@ test:
     paths:
       - build
       - .gradle
-  artifacts:
-    paths:
-      - build/test-results/
-
