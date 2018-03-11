@@ -16,7 +16,7 @@ import java.util.function.Consumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class CommandEvent extends GenericEvent {
+public class MessageEvent extends GenericEvent {
 
 	private static final String COMMAND_REGEX = "(?i)^(?<prefix><@!?%s> {0,2}|%s)(?<module>[A-Z]+)(?:\\.(?<submodule>[A-Z]+))?(?: (?<command>[A-Z]+))(?: (?<params>.*))?";
 	private static final String PARAM_REGEX = "\\b(?<=\").+?(?=\")|[^\\s\"]+";
@@ -39,12 +39,13 @@ public class CommandEvent extends GenericEvent {
 
 	private Message reply;
 
-	public CommandEvent(Chatbot chatbot, MessageReceivedEvent event) {
+	public MessageEvent(Chatbot chatbot, MessageReceivedEvent event) {
 		this(chatbot, event, event.getMessage().getContentRaw());
 	}
 
-	public CommandEvent(Chatbot chatbot, MessageReceivedEvent event, String content) {
+	public MessageEvent(Chatbot chatbot, MessageReceivedEvent event, String content) {
 		super(chatbot, event);
+		this.event = event;
 
 		String prefix;
 
@@ -131,6 +132,14 @@ public class CommandEvent extends GenericEvent {
 			return getSelfMember().hasPermission(event.getTextChannel(), Permission.MESSAGE_MANAGE);
 
 		return getAuthor() == getJDA().getSelfUser();
+	}
+
+	public void commit() {
+		if (guildData != null)
+			guildData.commit();
+
+		if (userData != null)
+			userData.commit();
 	}
 
 	// Getters and setters

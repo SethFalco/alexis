@@ -4,7 +4,7 @@ import com.elypia.alexis.discord.annotation.Command;
 import com.elypia.alexis.discord.annotation.Module;
 import com.elypia.alexis.discord.annotation.Parameter;
 import com.elypia.alexis.discord.annotation.Reaction;
-import com.elypia.alexis.discord.events.CommandEvent;
+import com.elypia.alexis.discord.events.MessageEvent;
 import com.elypia.alexis.discord.handlers.commands.impl.CommandHandler;
 import com.elypia.alexis.utils.BotUtils;
 import com.elypia.elypiai.steam.Steam;
@@ -52,7 +52,7 @@ public class SteamHandler extends CommandHandler {
 			)
 		}
 	)
-	public void displayProfile(CommandEvent event) {
+	public void displayProfile(MessageEvent event) {
 		String[] params = event.getParams();
 
 		steam.getUser(params[0], user -> {
@@ -78,7 +78,7 @@ public class SteamHandler extends CommandHandler {
 			)
 		}
 	)
-	public void listLibrary(CommandEvent event) {
+	public void listLibrary(MessageEvent event) {
 		String[] params = event.getParams();
 
 		steam.getUser(params[0], user -> {
@@ -119,7 +119,7 @@ public class SteamHandler extends CommandHandler {
 		},
 		reactions = {"🎲"}
 	)
-	public void randomGame(CommandEvent event) {
+	public void randomGame(MessageEvent event) {
 		String[] params = event.getParams();
 
 		steam.getUser(params[0], user -> {
@@ -150,7 +150,7 @@ public class SteamHandler extends CommandHandler {
 		aliases = "🎲",
 		command = "random"
 	)
-	public void anotherRandomGame(CommandEvent event) {
+	public void anotherRandomGame(MessageEvent event) {
 		randomGame(event);
 	}
 }

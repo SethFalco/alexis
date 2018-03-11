@@ -4,7 +4,7 @@ import com.elypia.alexis.discord.annotation.Command;
 import com.elypia.alexis.discord.annotation.Module;
 import com.elypia.alexis.discord.annotation.OptParameter;
 import com.elypia.alexis.discord.annotation.Parameter;
-import com.elypia.alexis.discord.events.CommandEvent;
+import com.elypia.alexis.discord.events.MessageEvent;
 import com.elypia.alexis.discord.handlers.commands.impl.CommandHandler;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.JDA;
@@ -26,7 +26,7 @@ public class BotHandler extends CommandHandler {
 		aliases = "ping",
 		help = "Respond 'pong!' with the number of `ms` it took to fulfil the request!"
 	)
-	public void ping(CommandEvent event) {
+	public void ping(MessageEvent event) {
 		pingPong(event, "pong!");
 	}
 
@@ -34,11 +34,11 @@ public class BotHandler extends CommandHandler {
 		aliases = "pong",
 		help = ""
 	)
-	public void pong(CommandEvent event) {
+	public void pong(MessageEvent event) {
 		pingPong(event, "ping!");
 	}
 
-	private void pingPong(CommandEvent event, String text) {
+	private void pingPong(MessageEvent event, String text) {
 		long startTime = System.currentTimeMillis();
 
 		event.getChannel().sendMessage(text).queue(message -> {
@@ -52,7 +52,7 @@ public class BotHandler extends CommandHandler {
 		aliases = {"stats", "info"},
 		help = "Display stats on Alexis!"
 	)
-	public void displayStats(CommandEvent event) {
+	public void displayStats(MessageEvent event) {
 		JDA jda = event.getJDA();
 		User alexis = jda.getSelfUser();
 
@@ -84,7 +84,7 @@ public class BotHandler extends CommandHandler {
 			)
 		}
 	)
-	public void say(CommandEvent event) {
+	public void say(MessageEvent event) {
 		event.tryDeleteMessage();
 		event.reply(event.getParams()[0]);
 	}

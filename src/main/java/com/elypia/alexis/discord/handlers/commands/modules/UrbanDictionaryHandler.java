@@ -2,7 +2,7 @@ package com.elypia.alexis.discord.handlers.commands.modules;
 
 import com.elypia.alexis.discord.annotation.*;
 import com.elypia.alexis.discord.annotation.Module;
-import com.elypia.alexis.discord.events.CommandEvent;
+import com.elypia.alexis.discord.events.MessageEvent;
 import com.elypia.alexis.discord.handlers.commands.impl.CommandHandler;
 import com.elypia.alexis.utils.BotUtils;
 import com.elypia.elypiai.urbandictionary.UrbanDefinition;
@@ -40,12 +40,9 @@ public class UrbanDictionaryHandler extends CommandHandler {
 				defaultValue = "true"
 			)
 		},
-		reactions = {
-			"🔉",
-			"🎲"
-		}
+		reactions = { "🔉", "🎲"}
 	)
-	public void define(CommandEvent event) {
+	public void define(MessageEvent event) {
 		dict.define(event.getParams()[0], results -> {
 			if (results.getResultType() == UrbanResultType.NO_RESULTS) {
 				event.getChannel().sendMessage("Sorry I didn't find any results. :c").queue();
@@ -70,8 +67,6 @@ public class UrbanDictionaryHandler extends CommandHandler {
 			);
 			builder.addField("Example", descText, true);
 
-			builder.setFooter("React to hear sounds associated with this word!", null);
-
 			event.reply(builder);
 		}, failure -> {
 			BotUtils.unirestFailure(failure, event);
@@ -89,7 +84,7 @@ public class UrbanDictionaryHandler extends CommandHandler {
 			)
 		}
 	)
-	public void tags(CommandEvent event) {
+	public void tags(MessageEvent event) {
 		dict.define(event.getParams()[0], results -> {
 			if (results.getResultType() == UrbanResultType.NO_RESULTS) {
 				event.getChannel().sendMessage("Sorry I didn't get a result. :c").queue();
@@ -114,7 +109,7 @@ public class UrbanDictionaryHandler extends CommandHandler {
 		aliases = "🎲",
 		command = "define"
 	)
-	public void anotherRandomDefinition(CommandEvent event) {
+	public void anotherRandomDefinition(MessageEvent event) {
 		define(event);
 	}
 }

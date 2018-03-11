@@ -26,23 +26,6 @@ public @interface Command {
 	String help();
 
 	/**
-	 * Should only the developers of the bot
-	 * be able to do it.
-	 */
-
-	boolean developerOnly() default false;
-
-	/**
-	 * The permissions the user performing a command from
-	 * this module required by default to perform any
-	 * commands within this module.
-	 */
-
-	Permission[] permissions() default {
-
-	};
-
-	/**
 	 * The parameters required for this command
 	 * to function minimally.
 	 */
@@ -61,11 +44,28 @@ public @interface Command {
 	};
 
 	/**
-	 *
-	 * @return
+	 * What reactions we should <em>always</em> perform on the message
+	 * this command produces.
 	 */
 
 	String[] reactions() default {
+
+	};
+
+	/**
+	 * Should only the developers of the bot
+	 * be able to do it.
+	 */
+
+	boolean developerOnly() default false;
+
+	/**
+	 * The permissions the user performing a command from
+	 * this module required by default to perform any
+	 * commands within this module.
+	 */
+
+	Permission[] permissions() default {
 
 	};
 

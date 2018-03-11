@@ -2,7 +2,7 @@ package com.elypia.alexis.discord.handlers.commands.impl;
 
 import com.elypia.alexis.discord.annotation.Command;
 import com.elypia.alexis.discord.annotation.Module;
-import com.elypia.alexis.discord.events.CommandEvent;
+import com.elypia.alexis.discord.events.MessageEvent;
 import com.elypia.alexis.utils.BotUtils;
 
 import java.util.Collection;
@@ -24,7 +24,7 @@ public abstract class CommandHandler {
 	 * @return 	If we should continue to process the command.
 	 */
 
-	public boolean beforeAny(CommandEvent event) {
+	public boolean beforeAny(MessageEvent event) {
 		return true;
 	}
 
@@ -32,7 +32,7 @@ public abstract class CommandHandler {
 		aliases = "help",
 		help = "Displays all help information for commands in the module."
 	)
-	public void help(CommandEvent event) {
+	public void help(MessageEvent event) {
 		Module module = BotUtils.getModule(this);
 		Collection<Command> commands = BotUtils.getCommands(this);
 

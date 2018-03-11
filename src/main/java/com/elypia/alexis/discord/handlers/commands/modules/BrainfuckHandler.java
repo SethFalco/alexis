@@ -3,7 +3,7 @@ package com.elypia.alexis.discord.handlers.commands.modules;
 import com.elypia.alexis.discord.annotation.Command;
 import com.elypia.alexis.discord.annotation.Module;
 import com.elypia.alexis.discord.annotation.Parameter;
-import com.elypia.alexis.discord.events.CommandEvent;
+import com.elypia.alexis.discord.events.MessageEvent;
 import com.elypia.alexis.discord.handlers.commands.impl.CommandHandler;
 import com.elypia.elypiai.Brainfuck;
 
@@ -30,7 +30,7 @@ public class BrainfuckHandler extends CommandHandler {
             )
         }
     )
-    public void interpretBrainfuck(CommandEvent event) {
+    public void interpretBrainfuck(MessageEvent event) {
         Object[] params = event.getParams();
         String code = (String)params[0];
         String result = new Brainfuck().compileToString(code);

@@ -1,13 +1,12 @@
 package com.elypia.alexis.discord.handlers.commands.modules;
 
-import com.elypia.alexis.discord.annotation.BeforeAny;
 import com.elypia.alexis.discord.annotation.Command;
 import com.elypia.alexis.discord.annotation.Module;
 import com.elypia.alexis.discord.annotation.Parameter;
 import com.elypia.alexis.discord.audio.AudioPlayerSendHandler;
 import com.elypia.alexis.discord.audio.GuildAudioPlayer;
 import com.elypia.alexis.discord.audio.impl.AudioController;
-import com.elypia.alexis.discord.events.CommandEvent;
+import com.elypia.alexis.discord.events.MessageEvent;
 import com.elypia.alexis.discord.handlers.commands.impl.CommandHandler;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
@@ -47,8 +46,7 @@ public class MusicHandler extends CommandHandler {
 		AudioSourceManagers.registerRemoteSources(manager);
 	}
 
-	@BeforeAny({"help", "leave"})
-	public boolean beforeAny(CommandEvent event) {
+	public boolean beforeAny(MessageEvent event) {
 		Guild guild = event.getGuild();
 		AudioManager audioManager = guild.getAudioManager();
 		VoiceChannel channel = event.getMember().getVoiceState().getChannel();
@@ -78,7 +76,7 @@ public class MusicHandler extends CommandHandler {
 		aliases = {"play", "resume"},
 		help = "Play if the music if it's paused."
 	)
-	public void playPlayer(CommandEvent event) {
+	public void playPlayer(MessageEvent event) {
 		getPlayer(event).play();
 	}
 
@@ -86,7 +84,7 @@ public class MusicHandler extends CommandHandler {
 		aliases = {"pause", "stop"},
 		help = "Pause the music if it's playing."
 	)
-	public void pausePlayer(CommandEvent event) {
+	public void pausePlayer(MessageEvent event) {
 		getPlayer(event).pause();
 	}
 
@@ -94,7 +92,7 @@ public class MusicHandler extends CommandHandler {
 		aliases = {"queue", "playing", "np"},
 		help = "Display the playing track and queue."
 	)
-	public void displayQueue(CommandEvent event) {
+	public void displayQueue(MessageEvent event) {
 		GuildAudioPlayer player = getPlayer(event);
 		AudioTrack track = player.getPlayingTrack();
 		List<AudioTrack> tracks = player.getTracks();
@@ -150,7 +148,7 @@ public class MusicHandler extends CommandHandler {
 			)
 		}
 	)
-	public void addTrack(CommandEvent event) {
+	public void addTrack(MessageEvent event) {
 		String[] params = event.getParams();
 		getPlayer(event).addTrack(params[0]);
 	}
@@ -166,7 +164,7 @@ public class MusicHandler extends CommandHandler {
 			)
 		}
 	)
-	public void insertTrack(CommandEvent event) {
+	public void insertTrack(MessageEvent event) {
 		String[] params = event.getParams();
 		getPlayer(event).insertTrack(params[0]);
 	}
@@ -182,7 +180,7 @@ public class MusicHandler extends CommandHandler {
 			)
 		}
 	)
-	public void removeTrack(CommandEvent event) {
+	public void removeTrack(MessageEvent event) {
 		String[] params = event.getParams();
 		getPlayer(event).removeTrack(params[0]);
 	}
@@ -191,7 +189,7 @@ public class MusicHandler extends CommandHandler {
 		aliases = "skip",
 		help = "Skip the currently playing track."
 	)
-	public void skipTrack(CommandEvent event) {
+	public void skipTrack(MessageEvent event) {
 
 	}
 
@@ -199,7 +197,7 @@ public class MusicHandler extends CommandHandler {
 		aliases = {"clear", "prune", "purge"},
 		help = "Remove all tracks for the queue."
 	)
-	public void clearPlaylist(CommandEvent event) {
+	public void clearPlaylist(MessageEvent event) {
 		getPlayer(event).clearPlaylist();
 	}
 
@@ -207,7 +205,7 @@ public class MusicHandler extends CommandHandler {
 		aliases = {"shuffle", "scramble"},
 		help = "Shuffle the songs in the queue in a random order."
 	)
-	public void shuffleQueue(CommandEvent event) {
+	public void shuffleQueue(MessageEvent event) {
 		getPlayer(event).shuffle();
 	}
 
@@ -215,7 +213,7 @@ public class MusicHandler extends CommandHandler {
 		aliases = "repeat",
 		help = "Repeat a track or playlist, once or many times."
 	)
-	public void repeatTrack(CommandEvent event) {
+	public void repeatTrack(MessageEvent event) {
 
 	}
 
@@ -230,7 +228,7 @@ public class MusicHandler extends CommandHandler {
 			)
 		}
 	)
-	public void setTime(CommandEvent event) {
+	public void setTime(MessageEvent event) {
 
 	}
 
@@ -245,7 +243,7 @@ public class MusicHandler extends CommandHandler {
 			)
 		}
 	)
-	public void fastForward(CommandEvent event) {
+	public void fastForward(MessageEvent event) {
 
 	}
 
@@ -260,7 +258,7 @@ public class MusicHandler extends CommandHandler {
 			)
 		}
 	)
-	public void rewind(CommandEvent event) {
+	public void rewind(MessageEvent event) {
 
 	}
 
@@ -275,7 +273,7 @@ public class MusicHandler extends CommandHandler {
 			)
 		}
 	)
-	public void setVolume(CommandEvent event) {
+	public void setVolume(MessageEvent event) {
 
 	}
 
@@ -283,7 +281,7 @@ public class MusicHandler extends CommandHandler {
 		aliases = {"leave"},
 		help = "Stops playing music and leaves if applicable."
 	)
-	public void leaveChannel(CommandEvent event) {
+	public void leaveChannel(MessageEvent event) {
 
 	}
 
@@ -292,7 +290,7 @@ public class MusicHandler extends CommandHandler {
 		help = "Specify the default track or playlist to add on join.",
 		permissions = Permission.MANAGE_SERVER
 	)
-	public void defaultList(CommandEvent event) {
+	public void defaultList(MessageEvent event) {
 
 	}
 
@@ -301,11 +299,11 @@ public class MusicHandler extends CommandHandler {
 		help = "Should Alexis append her name with the current song?",
 		permissions = Permission.MANAGE_SERVER
 	)
-	public void nicknameSync(CommandEvent event) {
+	public void nicknameSync(MessageEvent event) {
 
 	}
 
-	private GuildAudioPlayer getPlayer(CommandEvent event) {
+	private GuildAudioPlayer getPlayer(MessageEvent event) {
 		return guildPlayers.get(event.getGuild().getIdLong());
 	}
 }

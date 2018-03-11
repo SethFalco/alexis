@@ -40,9 +40,9 @@ repositories  {
 }
 
 dependencies {
-	implementation 'net.dv8tion:JDA:3.5.1_347'
+	implementation 'net.dv8tion:JDA:3.5.1_348'
 	implementation 'com.sedmelluq:lavaplayer:1.2.56'
-	implementation files('../Elypiai/Elypiai.jar') //'com.elypia:elypiai:1.0.0'
+	implementation 'com.elypia:elypiai:1.0.2'
 	implementation group: 'org.mongodb', name: 'mongodb-driver', version: '3.6.3'
 
 	runtimeOnly group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.7.25'

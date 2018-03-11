@@ -3,7 +3,7 @@ package com.elypia.alexis.discord.handlers.commands.modules;
 import com.elypia.alexis.discord.annotation.Command;
 import com.elypia.alexis.discord.annotation.Module;
 import com.elypia.alexis.discord.annotation.Parameter;
-import com.elypia.alexis.discord.events.CommandEvent;
+import com.elypia.alexis.discord.events.MessageEvent;
 import com.elypia.alexis.discord.handlers.commands.impl.CommandHandler;
 import com.elypia.alexis.utils.BotUtils;
 import com.elypia.elypiai.nanowrimo.Nanowrimo;
@@ -52,7 +52,7 @@ public class NanowrimoHandler extends CommandHandler {
 		},
 		requiredDatabase = true
 	)
-	public void authenticate(CommandEvent event) {
+	public void authenticate(MessageEvent event) {
 		event.tryDeleteMessage();
 
 		String[] params = event.getParams();
@@ -84,7 +84,7 @@ public class NanowrimoHandler extends CommandHandler {
 			)
 		}
 	)
-	public void getUser(CommandEvent event) {
+	public void getUser(MessageEvent event) {
 		nanowrimo.getNanoUser(event.getParams()[0], result -> {
 			EmbedBuilder builder = new EmbedBuilder();
 			builder.setAuthor(result.getUsername(), result.getProfileUrl());

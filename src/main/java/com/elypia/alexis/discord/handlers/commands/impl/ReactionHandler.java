@@ -1,19 +1,19 @@
 package com.elypia.alexis.discord.handlers.commands.impl;
 
-import com.elypia.alexis.discord.events.CommandEvent;
+import com.elypia.alexis.discord.events.MessageEvent;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public abstract class ReactionHandler {
 
-	public List<CommandEvent> tracked;
+	public List<MessageEvent> tracked;
 
 	public ReactionHandler() {
 		tracked = new ArrayList<>();
 	}
 
-	public List<CommandEvent> getTrackedEvents() {
+	public List<MessageEvent> getTrackedEvents() {
 		return tracked;
 	}
 }

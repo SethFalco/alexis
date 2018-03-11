@@ -2,7 +2,7 @@ package com.elypia.alexis.discord.handlers.commands.modules;
 
 import com.elypia.alexis.discord.annotation.Command;
 import com.elypia.alexis.discord.annotation.Module;
-import com.elypia.alexis.discord.events.CommandEvent;
+import com.elypia.alexis.discord.events.MessageEvent;
 import com.elypia.alexis.discord.handlers.commands.impl.CommandHandler;
 import net.dv8tion.jda.core.entities.ChannelType;
 
@@ -18,7 +18,7 @@ public class GreetingsHandler extends CommandHandler {
         aliases = "welcome",
         help = "Enable or disable the welcome "
     )
-    public void setWelcomeMessage(CommandEvent event) {
+    public void setWelcomeMessage(MessageEvent event) {
 
     }
 }

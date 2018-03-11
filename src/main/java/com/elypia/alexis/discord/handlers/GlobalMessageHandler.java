@@ -1,6 +1,6 @@
 package com.elypia.alexis.discord.handlers;
 
-import com.elypia.alexis.discord.annotation.MessageEvent;
+import com.elypia.alexis.discord.annotation.Event;
 import com.elypia.alexis.discord.events.GenericEvent;
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
@@ -32,7 +32,7 @@ public class GlobalMessageHandler {
         members = database.getCollection("members");
     }
 
-    @MessageEvent (
+    @Event(
         requiresDatabase = true,
         scope = ChannelType.TEXT
     )
@@ -40,6 +40,6 @@ public class GlobalMessageHandler {
         String content = event.getMessage().getContentRaw();
         int messageXp = content.split("\\s+").length;
 
-        userData.gainXp(event);
+        event.getUserData().gainXp(event);
     }
 }

@@ -7,6 +7,7 @@ import com.mongodb.client.MongoDatabase;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.entities.ChannelType;
 import net.dv8tion.jda.core.entities.Message;
+import net.dv8tion.jda.core.entities.MessageChannel;
 import net.dv8tion.jda.core.events.Event;
 import net.dv8tion.jda.core.events.guild.GenericGuildEvent;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
@@ -38,7 +39,7 @@ public class GenericEvent {
      * cast we're aware what instance it is at the time.
      */
 
-    protected Event genericEvent;
+    protected Event event;
 
     /**
      * Only non-null for messages regardless of where they came from
@@ -46,6 +47,13 @@ public class GenericEvent {
      */
 
     protected Message message;
+
+    /**
+     * The message channel the action was executed, this could
+     * be a text channel if in a guild or a private channel if in PM.
+     */
+
+    protected MessageChannel channel;
 
     /**
      * Only non-null for events that inherit from {@link GenericGuildEvent}.
@@ -62,7 +70,7 @@ public class GenericEvent {
 
     public GenericEvent(Chatbot chatbot, Event genericEvent) {
         this.chatbot = chatbot;
-        this.genericEvent = genericEvent;
+        this.event = genericEvent;
         jda = genericEvent.getJDA();
     }
 
@@ -84,6 +92,7 @@ public class GenericEvent {
             guildData = new GuildData(chatbot.getHomeDatabase(), event.getGuild());
 
         userData = new UserData(chatbot.getHomeDatabase(), event.getAuthor());
+        channel = event.getChannel();
     }
 
     public Chatbot getChatbot() {
@@ -96,6 +105,10 @@ public class GenericEvent {
 
     public String getContent() {
         return message.getContentRaw();
+    }
+
+    public MessageChannel getChannel() {
+        return channel;
     }
 
     public MongoDatabase getDatabase(String database) {

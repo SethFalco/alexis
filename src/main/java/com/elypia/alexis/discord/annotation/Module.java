@@ -10,21 +10,12 @@ import java.lang.annotation.*;
 public @interface Module {
 
 	/**
-	 * A list of all the alises that grant the
-	 * user access to the module.
-	 */
-
-	String[] aliases();
-
-	/**
-	 * A help String to advise users what
-	 * the module is for.
-	 */
-
-	String help();
-
-	/**
-	 * A list of modules that are directly associated
+	 * Submodules are what come after module in the command. <br>
+	 * The format will be similar to the following: <br>
+	 * <code>&gt;twitch.notify add Rheannon96</code> <br>
+	 * In this case <code>notify</code> is the submodule.
+	 *
+	 * @return A list of modules that are directly associated
 	 * with this module to be put together in help.
 	 */
 
@@ -33,7 +24,21 @@ public @interface Module {
 	};
 
 	/**
-	 * The types of channels Alexis can recognise
+	 * @return A list of all the alises that grant the
+	 * user access to the module.
+	 */
+
+	String[] aliases();
+
+	/**
+	 * @return A help String to advise users what
+	 * the module is for.
+	 */
+
+	String help();
+
+	/**
+	 * @return The types of channels Alexis can recognise
 	 * this module from. By default guild and private.
 	 */
 
@@ -41,6 +46,10 @@ public @interface Module {
 		ChannelType.TEXT,
 		ChannelType.PRIVATE,
 	};
+
+	/**
+	 * @return If alexis required access to the database to use this module.
+	 */
 
 	boolean requiresDatabase() default false;
 }

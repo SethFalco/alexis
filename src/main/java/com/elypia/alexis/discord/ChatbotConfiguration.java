@@ -143,19 +143,19 @@ public class ChatbotConfiguration {
         // Discord Statuses
         JSONArray statusesArray = discord.optJSONArray("default_statuses");
 
-        if (statusesArray != null) {
-            int statusesLength = statusesArray.length();
-            defaultStatuses = new String[statusesLength];
-
-            for (int i = 0; i < statusesLength; i++) {
-                String s = statusesArray.optString(i, null);
-
-                if (s != null)
-                    defaultStatuses[i] = statusesArray.getString(i);
-                else
-                    BotUtils.LOGGER.log(Level.WARNING, "Config, default Statuses should only contain Strings; value omitted.");
-            }
-        }
+//        if (statusesArray != null) {
+//            int statusesLength = statusesArray.length();
+//            defaultStatuses = new String[statusesLength];
+//
+//            for (int i = 0; i < statusesLength; i++) {
+//                String s = statusesArray.optString(i, null);
+//
+//                if (s != null)
+//                    defaultStatuses[i] = statusesArray.getString(i);
+//                else
+//                    BotUtils.LOGGER.log(Level.WARNING, "Config, default Statuses should only contain Strings; value omitted.");
+//            }
+//        }
 
         // Discord Developers
         JSONArray developersArray = discord.optJSONArray("developers");

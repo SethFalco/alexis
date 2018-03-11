@@ -1,9 +1,10 @@
 package com.elypia.alexis.discord;
 
-import com.elypia.alexis.discord.annotation.BeforeAny;
 import com.elypia.alexis.discord.annotation.Command;
 import com.elypia.alexis.discord.annotation.Module;
-import com.elypia.alexis.discord.events.CommandEvent;
+import com.elypia.alexis.discord.events.MessageEvent;
+import com.elypia.alexis.discord.handlers.GlobalMessageHandler;
+import com.elypia.alexis.discord.handlers.GlobalReactionHandler;
 import com.elypia.alexis.discord.handlers.commands.impl.CommandHandler;
 import com.elypia.alexis.utils.BotUtils;
 import com.elypia.elypiai.utils.ElyUtils;
@@ -14,7 +15,6 @@ import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
 import net.dv8tion.jda.core.OnlineStatus;
 import net.dv8tion.jda.core.entities.Game;
-import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
 import javax.security.auth.login.LoginException;
 import java.lang.reflect.InvocationTargetException;
@@ -29,6 +29,8 @@ public class Chatbot {
 	private JDA jda;
 	private MongoClient client;
 	private Map<String[], CommandHandler> handlers;
+	private GlobalMessageHandler globalMessageHandler;
+	private GlobalReactionHandler globalReactionHandler;
 
 	private List<Game> statuses;
 
@@ -41,16 +43,13 @@ public class Chatbot {
 		builder.setToken(config.getToken());
 		builder.addEventListener(new DiscordDispatcher(this));
 		builder.setCorePoolSize(10);
-		builder.setGame(Game.playing(config.getDefaultStatuses()[0]));
+//		builder.setGame(Game.playing(config.getDefaultStatuses()[0]));
 		builder.setStatus(OnlineStatus.IDLE);
 		builder.setBulkDeleteSplittingEnabled(false);
 		jda = builder.buildAsync();
 
 		this.client = client;
-
-		for (String status : config.getDefaultStatuses()) {
-
-		}
+		globalMessageHandler = new GlobalMessageHandler(client);
 
 		handlers = new HashMap<>();
 	}
@@ -84,15 +83,13 @@ public class Chatbot {
 		handlers.put(aliases, handler);
 	}
 
-	public void handleMessage(MessageReceivedEvent event) {
-		CommandEvent commandEvent = new CommandEvent(this, event);
-
-		if (!commandEvent.isValid())
+	public void handleMessage(MessageEvent event) {
+		if (!event.isValid())
 			return;
 
 		BotUtils.LOGGER.log(Level.INFO, event.getMessage().getContentRaw());
 
-		String commandModule = commandEvent.getModule();
+		String commandModule = event.getModule();
 		CommandHandler handler = null;
 
 		for (String[] aliases : handlers.keySet()) {
@@ -112,23 +109,12 @@ public class Chatbot {
 		Command command = null;
 
 		for (Method method : methods) {
-			BeforeAny beforeAny = method.getAnnotation(BeforeAny.class);
-
-			if (beforeAny != null) {
-				String[] exclusions = beforeAny.value();
-
-				if (!ElyUtils.arrayContains(commandEvent.getCommand(), exclusions)) {
-					if (handler.beforeAny(commandEvent))
-						return;
-				}
-			}
-
 			command = method.getAnnotation(Command.class);
 
 			if (command == null)
 				continue;
 
-			if (ElyUtils.arrayContains(commandEvent.getCommand(), command.aliases()))
+			if (ElyUtils.arrayContains(event.getCommand(), command.aliases()))
 				commandMethod = method;
 		}
 
@@ -137,10 +123,11 @@ public class Chatbot {
 			return;
 		}
 
-		commandEvent.setMethod(commandMethod);
+		event.setMethod(commandMethod);
 
 		try {
-			commandMethod.invoke(handler, commandEvent);
+			commandMethod.invoke(handler, event);
+			event.commit();
 		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
 			BotUtils.LOGGER.log(Level.SEVERE, "Failed to execute command!", ex);
 		}
@@ -168,5 +155,9 @@ public class Chatbot {
 
 	public MongoDatabase getDatabase(String database) {
 		return client.getDatabase(database);
+	}
+
+	public GlobalMessageHandler getGlobalMessageHandler() {
+		return globalMessageHandler;
 	}
 }

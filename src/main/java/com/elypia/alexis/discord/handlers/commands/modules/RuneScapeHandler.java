@@ -3,7 +3,7 @@ package com.elypia.alexis.discord.handlers.commands.modules;
 import com.elypia.alexis.discord.annotation.Command;
 import com.elypia.alexis.discord.annotation.Module;
 import com.elypia.alexis.discord.annotation.Parameter;
-import com.elypia.alexis.discord.events.CommandEvent;
+import com.elypia.alexis.discord.events.MessageEvent;
 import com.elypia.alexis.discord.handlers.commands.impl.CommandHandler;
 import com.elypia.alexis.utils.BotUtils;
 import com.elypia.elypiai.runescape.QuestStats;
@@ -36,7 +36,7 @@ public class RuneScapeHandler extends CommandHandler {
 		aliases = "status",
 		help = "The total number of created accounts."
 	)
-	public void displayStatus(CommandEvent event) {
+	public void displayStatus(MessageEvent event) {
 
 	}
 
@@ -47,7 +47,7 @@ public class RuneScapeHandler extends CommandHandler {
 			@Parameter(param = "username", help = "RuneScape players username.", type = String.class)
 		}
 	)
-	public void getPlayerStats(CommandEvent event) {
+	public void getPlayerStats(MessageEvent event) {
 
 	}
 
@@ -62,7 +62,7 @@ public class RuneScapeHandler extends CommandHandler {
 			)
 		}
 	)
-	public void getQuests(CommandEvent event) {
+	public void getQuests(MessageEvent event) {
 		String param = event.getParams()[0];
 
 		runescape.getQuestStatuses(param, result -> {

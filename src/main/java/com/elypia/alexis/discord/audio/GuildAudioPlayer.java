@@ -1,7 +1,7 @@
 package com.elypia.alexis.discord.audio;
 
 import com.elypia.alexis.discord.audio.impl.AudioController;
-import com.elypia.alexis.discord.events.CommandEvent;
+import com.elypia.alexis.discord.events.MessageEvent;
 import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
@@ -21,7 +21,7 @@ public class GuildAudioPlayer {
 	private AudioPlayer player;
 	private AudioController controller;
 
-	public GuildAudioPlayer(Class<? extends AudioController> clazz, AudioPlayerManager manager, CommandEvent event) {
+	public GuildAudioPlayer(Class<? extends AudioController> clazz, AudioPlayerManager manager, MessageEvent event) {
 		this.manager = manager;
 		this.controller = AudioController.getInstance(clazz, this);
 

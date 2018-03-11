@@ -2,6 +2,7 @@ package com.elypia.alexis.discord;
 
 import com.elypia.alexis.Alexis;
 import com.elypia.alexis.discord.events.GenericEvent;
+import com.elypia.alexis.discord.events.MessageEvent;
 import com.elypia.alexis.utils.BotUtils;
 import net.dv8tion.jda.core.OnlineStatus;
 import net.dv8tion.jda.core.events.ReadyEvent;
@@ -124,6 +125,10 @@ public class DiscordDispatcher extends ListenerAdapter {
 		if (event.getAuthor().isBot())
 			return;
 
-		chatbot.handleMessage(event);
+		MessageEvent e = new MessageEvent(chatbot, event);
+
+		chatbot.getGlobalMessageHandler().handleXp(e);
+
+		chatbot.handleMessage(e);
 	}
 }

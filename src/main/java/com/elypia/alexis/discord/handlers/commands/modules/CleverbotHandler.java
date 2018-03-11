@@ -3,7 +3,7 @@ package com.elypia.alexis.discord.handlers.commands.modules;
 import com.elypia.alexis.discord.annotation.Command;
 import com.elypia.alexis.discord.annotation.Module;
 import com.elypia.alexis.discord.annotation.Parameter;
-import com.elypia.alexis.discord.events.CommandEvent;
+import com.elypia.alexis.discord.events.MessageEvent;
 import com.elypia.alexis.discord.handlers.commands.impl.CommandHandler;
 import com.elypia.alexis.utils.BotUtils;
 import com.elypia.elypiai.cleverbot.Cleverbot;
@@ -56,7 +56,7 @@ public class CleverbotHandler extends CommandHandler {
             )
         }
     )
-    public void say(CommandEvent event) {
+    public void say(MessageEvent event) {
         String body = event.getParams()[0];
         String cs = getCs(event.getChannel());
 
@@ -72,7 +72,7 @@ public class CleverbotHandler extends CommandHandler {
         aliases = {"history", "his"},
         help = "Track previous conversation in this channel."
     )
-    public void getHistory(CommandEvent event) {
+    public void getHistory(MessageEvent event) {
         String cs = getCs(event.getChannel());
         String history = cleverbot.getHistoryScript(cs);
 

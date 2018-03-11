@@ -130,11 +130,14 @@ public class UserData extends DatabaseEntity {
      */
 
     public int isEligibleForXp(GenericEvent event) {
-        long current = System.currentTimeMillis();
-        long previous = lastMessage.getTime();
-
         // Split the message for every set of whitespace characters.
         int length = event.getContent().split("\\s+").length;
+
+        if (lastMessage == null)
+            return length;
+
+        long current = System.currentTimeMillis();
+        long previous = lastMessage.getTime();
 
         // Divide by 1,000 to get milliseconds from seconds
         // Multiply by 10 for max chars allowed for the # of seconds passed.
