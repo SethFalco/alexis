@@ -22,6 +22,15 @@ public class TagData {
         filter = TagFilter.getByName(document.getString("filter"));
     }
 
+    public Document asDocument() {
+        Document document = new Document();
+        document.put("tag", tag);
+        document.put("enabled", enabled);
+        document.put("filter", filter);
+
+        return document;
+    }
+
     public Tag getTag() {
         return tag;
     }

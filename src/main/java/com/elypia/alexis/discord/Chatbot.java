@@ -158,6 +158,14 @@ public class Chatbot {
 		return client;
 	}
 
+	/**
+	 * @return The default database which stores the bulk of the chatbots data.
+	 */
+
+	public MongoDatabase getHomeDatabase() {
+		return getDatabase("alexis");
+	}
+
 	public MongoDatabase getDatabase(String database) {
 		return client.getDatabase(database);
 	}

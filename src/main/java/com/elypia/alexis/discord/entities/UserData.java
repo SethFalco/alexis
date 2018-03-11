@@ -87,6 +87,22 @@ public class UserData extends DatabaseEntity {
     }
 
     /**
+     * @return Get the ID of the user.
+     */
+
+    public long getId() {
+        return userId;
+    }
+
+    /**
+     * @return Get the current XP of the user.
+     */
+
+    public int getXp() {
+        return xp;
+    }
+
+    /**
      * @param event The generic event which rewards XP.
      * @return The new amount of XP the user has.
      */
@@ -125,22 +141,6 @@ public class UserData extends DatabaseEntity {
         int allowableLength = (int)((current - previous) / 100);
 
         return length < allowableLength ? length : -1;
-    }
-
-    /**
-     * @return Get the ID of the user.
-     */
-
-    public long getId() {
-        return userId;
-    }
-
-    /**
-     * @return Get the current XP of the user.
-     */
-
-    public int getXp() {
-        return xp;
     }
 
     /**

@@ -3,11 +3,13 @@ package com.elypia.alexis.discord.entities;
 import com.elypia.alexis.discord.entities.data.Tag;
 import com.elypia.alexis.discord.entities.data.TagFilter;
 import com.elypia.alexis.discord.entities.impl.DatabaseEntity;
+import com.elypia.alexis.discord.events.GenericEvent;
 import com.mongodb.client.MongoDatabase;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.TextChannel;
 import org.bson.Document;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -79,8 +81,11 @@ public class GuildData extends DatabaseEntity {
         Document data = new Document();
         data.put("xp", xp);
 
-
         collection.updateOne(eq("guild_id", guildId), data, options);
+    }
+
+    public long getGuildId() {
+        return guildId;
     }
 
     /**
@@ -96,8 +101,14 @@ public class GuildData extends DatabaseEntity {
      */
 
     public boolean channelHasTag(TextChannel channel, Tag tag) {
-        long id = channel.getIdLong();
+        return channelHasTag(channel.getIdLong(), tag);
+    }
 
+    public boolean channelHasTag(TextChannelData channel, Tag tag) {
+        return channelHasTag(channel.getTextChannelId(), tag);
+    }
+
+    public boolean channelHasTag(long id, Tag tag) {
         if (textChannelData.containsKey(id)) {
             TextChannelData txt = textChannelData.get(id);
 
@@ -107,16 +118,59 @@ public class GuildData extends DatabaseEntity {
         return false;
     }
 
-    public long getGuildIdLong() {
-        return guildId;
-    }
+    /**
+     * @return The total amount of XP earned in this guild.
+     */
 
     public int getXp() {
         return xp;
     }
 
+    /**
+     * Increase the total XP this guild has.
+     * Less validation checks are required for guild vs global.
+     *
+     * @param event The generic event this is due rewarding XP.
+     * @return The new total XP the guild has.
+     */
+
+    public int gainXp(GenericEvent event) {
+        String content = event.getContent();
+        int gains = content.split("\\s+").length;
+
+        xp += gains;
+        return xp;
+    }
+
+    /**
+     * @param channel A text channel which is under this guild.
+     * @return Any data Alexis is storing for that channel such as tags.
+     */
+
     public TextChannelData getTextChannelData(TextChannel channel) {
         long textChannelId = channel.getIdLong();
         return textChannelData.get(textChannelId);
+    }
+
+    /**
+     * A list of all tags the guild has set, this list may
+     * omit tags the guild has never interacted with or enabled.
+     *
+     * @return Get a list of all tags the guild has set.
+     */
+
+    public Collection<Tag> getTags() {
+        return tagData.keySet();
+    }
+
+    /**
+     * All tag data associated with this guild, may omit some
+     * tags that never never been interacted with or enabled.
+     *
+     * @return List of all tags and tag data.
+     */
+
+    public Collection<TagData> getTagData() {
+        return tagData.values();
     }
 }

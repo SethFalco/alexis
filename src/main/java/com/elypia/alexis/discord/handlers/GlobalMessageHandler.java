@@ -1,19 +1,11 @@
 package com.elypia.alexis.discord.handlers;
 
 import com.elypia.alexis.discord.annotation.MessageEvent;
-import com.elypia.alexis.discord.entities.GuildData;
-import com.elypia.alexis.discord.entities.TagData;
-import com.elypia.alexis.discord.entities.TextChannelData;
-import com.elypia.alexis.discord.entities.UserData;
-import com.elypia.alexis.discord.entities.data.Tag;
+import com.elypia.alexis.discord.events.GenericEvent;
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import net.dv8tion.jda.core.entities.ChannelType;
-import net.dv8tion.jda.core.entities.Guild;
-import net.dv8tion.jda.core.entities.TextChannel;
-import net.dv8tion.jda.core.entities.User;
-import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import org.bson.Document;
 
 /**
@@ -44,23 +36,10 @@ public class GlobalMessageHandler {
         requiresDatabase = true,
         scope = ChannelType.TEXT
     )
-    public void handleXp(MessageReceivedEvent event) {
-        Guild guild = event.getGuild();
-        User user = event.getAuthor();
-        TextChannel channel = event.getTextChannel();
-
+    public void handleXp(GenericEvent event) {
         String content = event.getMessage().getContentRaw();
         int messageXp = content.split("\\s+").length;
 
-        GuildData guildData = new GuildData(database, guild);
-        UserData userData = new UserData(database, user);
-        TextChannelData textChannelData = guildData.getTextChannelData(channel);
-
-        TagData spam = textChannelData.getGuildData().isChannel(Tag.SPAM);
-        if (spam != null) {
-            if (spam.isEnabled()) {
-
-            }
-        }
+        userData.gainXp(event);
     }
 }

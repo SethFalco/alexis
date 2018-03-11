@@ -68,7 +68,7 @@ public class DiscordDispatcher extends ListenerAdapter {
 
 	@Override
 	public void onGuildJoin(GuildJoinEvent event) {
-		GenericEvent e = new GenericEvent(event);
+		GenericEvent e = new GenericEvent(chatbot, event);
 	}
 
 	@Override

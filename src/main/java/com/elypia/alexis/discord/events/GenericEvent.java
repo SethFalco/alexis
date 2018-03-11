@@ -4,36 +4,86 @@ import com.elypia.alexis.discord.Chatbot;
 import com.elypia.alexis.discord.entities.GuildData;
 import com.elypia.alexis.discord.entities.UserData;
 import com.mongodb.client.MongoDatabase;
+import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.entities.ChannelType;
 import net.dv8tion.jda.core.entities.Message;
+import net.dv8tion.jda.core.events.Event;
 import net.dv8tion.jda.core.events.guild.GenericGuildEvent;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.events.user.GenericUserEvent;
 
+/**
+ * This is extremely generic, in runtime maybe fields may be
+ * null depending on when, where or what event actually
+ * instantiated the object.
+ */
+
 public class GenericEvent {
 
-    private Chatbot chatbot;
+    /**
+     * JDA / bot client.
+     */
 
-    private Message message;
+    protected JDA jda;
 
-    private GuildData guildData;
-    private UserData userData;
+    /**
+     * Wrapper around {@link JDA} with additional configuration
+     * and databases.
+     */
 
-    public GenericEvent(GenericGuildEvent event) {
-        guildData = new GuildData(getDatabase("guilds"), event.getGuild());
+    protected Chatbot chatbot;
+
+    /**
+     * Generic event with very limited information but can be
+     * cast we're aware what instance it is at the time.
+     */
+
+    protected Event genericEvent;
+
+    /**
+     * Only non-null for messages regardless of where they came from
+     * and will <strong>not</strong> have a value anywhere else.
+     */
+
+    protected Message message;
+
+    /**
+     * Only non-null for events that inherit from {@link GenericGuildEvent}.
+     */
+
+    protected GuildData guildData;
+
+    /**
+     * Only non-null for events which target or are executed by a
+     * particular Discord user.
+     */
+
+    protected UserData userData;
+
+    public GenericEvent(Chatbot chatbot, Event genericEvent) {
+        this.chatbot = chatbot;
+        this.genericEvent = genericEvent;
+        jda = genericEvent.getJDA();
     }
 
-    public GenericEvent(GenericUserEvent event) {
-        userData = new UserData(getDatabase("users"), event.getUser());
+    public GenericEvent(Chatbot chatbot, GenericGuildEvent event) {
+        this(chatbot, (Event)event);
+        guildData = new GuildData(chatbot.getHomeDatabase(), event.getGuild());
     }
 
-    public GenericEvent(MessageReceivedEvent event) {
-        this.message = message;
+    public GenericEvent(Chatbot chatbot, GenericUserEvent event) {
+        this(chatbot, (Event)event);
+        userData = new UserData(chatbot.getHomeDatabase(), event.getUser());
+    }
+
+    public GenericEvent(Chatbot chatbot, MessageReceivedEvent event) {
+        this(chatbot, (Event)event);
+        this.message = event.getMessage();
 
         if (event.isFromType(ChannelType.TEXT))
-            guildData = new GuildData(getDatabase("guilds"), event.getGuild());
+            guildData = new GuildData(chatbot.getHomeDatabase(), event.getGuild());
 
-        userData = new UserData(getDatabase("users"), event.getAuthor());
+        userData = new UserData(chatbot.getHomeDatabase(), event.getAuthor());
     }
 
     public Chatbot getChatbot() {

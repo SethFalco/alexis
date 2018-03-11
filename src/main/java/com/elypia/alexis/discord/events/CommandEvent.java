@@ -2,8 +2,6 @@ package com.elypia.alexis.discord.events;
 
 import com.elypia.alexis.discord.Chatbot;
 import com.elypia.alexis.discord.annotation.Command;
-import com.elypia.alexis.discord.entities.GuildData;
-import com.elypia.alexis.discord.entities.UserData;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.Permission;
@@ -18,18 +16,14 @@ import java.util.function.Consumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class CommandEvent {
+public class CommandEvent extends GenericEvent {
 
-	public static final String COMMAND_REGEX = "(?i)^(?<prefix><@!?%s> {0,2}|%s)(?<module>[A-Z]+)(?:\\.(?<submodule>[A-Z]+))?(?: (?<command>[A-Z]+))(?: (?<params>.*))?";
-	public static final String PARAM_REGEX = "\\b(?<=\").+?(?=\")|[^\\s\"]+";
+	private static final String COMMAND_REGEX = "(?i)^(?<prefix><@!?%s> {0,2}|%s)(?<module>[A-Z]+)(?:\\.(?<submodule>[A-Z]+))?(?: (?<command>[A-Z]+))(?: (?<params>.*))?";
+	private static final String PARAM_REGEX = "\\b(?<=\").+?(?=\")|[^\\s\"]+";
 
 	private static final Pattern PARAM_PATTERN = Pattern.compile(PARAM_REGEX);
 
-	private Chatbot chatbot;
 	private MessageReceivedEvent event;
-
-	private GuildData guildData;
-	private UserData userData;
 
 	private boolean isValid;
 	private String prefix;
@@ -50,8 +44,7 @@ public class CommandEvent {
 	}
 
 	public CommandEvent(Chatbot chatbot, MessageReceivedEvent event, String content) {
-		this.chatbot = chatbot;
-		this.event = event;
+		super(chatbot, event);
 
 		String prefix;
 
@@ -190,22 +183,6 @@ public class CommandEvent {
 
 	public Message getReply() {
 		return reply;
-	}
-
-	// Database
-
-	public GuildData getGuildData() {
-		if (guildData == null)
-			guildData = new GuildData(chatbot.getDatabase("guilds"), getGuild());
-
-		return guildData;
-	}
-
-	public UserData getUserData() {
-		if (userData == null)
-			userData = new UserData(chatbot.getDatabase("users"), getAuthor());
-
-		return userData;
 	}
 
 	// JDA

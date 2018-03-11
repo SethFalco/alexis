@@ -10,7 +10,7 @@ import net.dv8tion.jda.core.entities.TextChannel;
  * depending on the channel. <br>
  * Tags which are associated with moderation such as Advertising
  * will be overridden if someone with at least the
- * {@link Permission#MANAGE_SERVER} sends the message.
+ * {@link Permission#MANAGE_SERVER} permission sends the message.
  */
 
 public enum Tag {
@@ -20,39 +20,46 @@ public enum Tag {
      * invite links or bot invite links.
      */
 
-    ADVERTISING("advertising", TagFilter.ONLY),
+    ADVERTISING("advertising"),
 
     /**
      * Set it so Alexis can ignore any toggled channels.
      */
 
-    IGNORE("ignore", TagFilter.ONLY),
+    IGNORE("ignore"),
 
     /**
-     * Affects the international (request translations
+     * Affects which channels the international (request translations
      * via reacting with the respective flag) functionality will be available.
      */
 
-    INTERNATIONAL("international", TagFilter.ONLY),
+    INTERNATIONAL("international"),
+
+    /**
+     * Have Alexis entirely block or redirect media from non-media channels
+     * to channels marked with the media tag.
+     */
+
+    MEDIA("media"),
 
     /**
      * Limit which channels instances of minigames can be started.
      */
 
-    MINIGAME("minigane", TagFilter.ONLY),
+    MINIGAME("minigane"),
 
     /**
      * Restrict which channels music commands and notifications
      * can actually be posted in.
      */
 
-    MUSIC("music", TagFilter.ONLY),
+    MUSIC("music"),
 
     /**
      * Affects if users will be able to gain XP in this channel.
      */
 
-    SPAM("spam", TagFilter.ONLY);
+    SPAM("spam");
 
     /**
      *  The name of the tag as it appears in the database.
@@ -67,6 +74,10 @@ public enum Tag {
      */
 
     private TagFilter defaultFilter;
+
+    Tag(String databaseName) {
+        this(databaseName, TagFilter.ONLY);
+    }
 
     Tag(String databaseName, TagFilter defaultFilter) {
         this.databaseName = databaseName;

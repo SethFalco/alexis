@@ -25,12 +25,20 @@ public class TextChannelData {
         });
     }
 
+    public Document asDocument() {
+        Document document = new Document();
+        document.put("text_channel_id", textChannelId);
+        document.put("tags", tagsList);
+
+        return document;
+    }
+
     public GuildData getGuildData() {
         return guildData;
     }
 
     public TagData getTagData(Tag tag) {
-        return guildData.isChannel(this, tag);
+        return null;
     }
 
     public long getTextChannelId() {
