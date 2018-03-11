@@ -1,6 +1,7 @@
 package com.elypia.alexis.discord;
 
 import com.elypia.alexis.Alexis;
+import com.elypia.alexis.discord.events.GenericEvent;
 import com.elypia.alexis.utils.BotUtils;
 import net.dv8tion.jda.core.OnlineStatus;
 import net.dv8tion.jda.core.events.ReadyEvent;
@@ -21,13 +22,35 @@ import java.util.logging.Level;
 
 public class DiscordDispatcher extends ListenerAdapter {
 
+	/**
+	 * Parent chat bot instance this dispatcher is dispatching
+	 * message and reaction events too.
+	 */
+
 	private final Chatbot chatbot;
+
+	/**
+	 * Configuration, contains all values loaded at start up
+	 * of the application.
+	 */
+
 	private final ChatbotConfiguration config;
+
+	/**
+	 * @param chatbot Chatbot instance to forward message and
+	 *                reaction events too.
+	 */
 
 	public DiscordDispatcher(final Chatbot chatbot) {
 		this.chatbot = chatbot;
 		this.config = chatbot.getConfig();
 	}
+
+	/**
+	 * Occurs when the bot succesfully logs in.
+	 *
+	 * @param event ReadyEvent
+	 */
 
 	@Override
 	public void onReady(ReadyEvent event) {
@@ -37,9 +60,15 @@ public class DiscordDispatcher extends ListenerAdapter {
 		event.getJDA().getPresence().setStatus(OnlineStatus.ONLINE);
 	}
 
+	/**
+	 * Occurs when the chatbot itself, joins a new guild.
+	 *
+	 * @param event GuildJoinEvent
+	 */
+
 	@Override
 	public void onGuildJoin(GuildJoinEvent event) {
-
+		GenericEvent e = new GenericEvent(event);
 	}
 
 	@Override

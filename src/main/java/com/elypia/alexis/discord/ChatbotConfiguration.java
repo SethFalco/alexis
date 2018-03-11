@@ -6,6 +6,10 @@ import net.dv8tion.jda.core.entities.User;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.logging.Level;
 
 public class ChatbotConfiguration {
@@ -26,6 +30,41 @@ public class ChatbotConfiguration {
     // Debug
     private boolean enforcePrefix;
     private boolean developersOnly;
+
+    public static ChatbotConfiguration getConfiguration(String path) {
+        try (FileReader reader = new FileReader(path)) {
+            StringBuilder builder = new StringBuilder();
+            int i;
+
+            while ((i = reader.read()) != -1)
+                builder.append((char)i);
+
+            JSONObject object = new JSONObject(builder.toString());
+            return new ChatbotConfiguration(object);
+        } catch (FileNotFoundException ex) {
+            JSONObject object = ChatbotConfiguration.generateConfigTemplate();
+
+            try (FileWriter writer = new FileWriter(path)) {
+                String json = object.toString(4);
+                writer.write(json);
+
+                ExitCode code = ExitCode.GENERATED_NEW_CONGIG;
+                BotUtils.LOGGER.log(Level.INFO, code.getMessage() + path);
+                writer.close();
+                System.exit(code.getStatusCode());
+            } catch (IOException e) {
+                ExitCode code = ExitCode.FAILED_TO_WRITE_CONFIG;
+                BotUtils.LOGGER.log(Level.SEVERE, code.getMessage() + path, e);
+                System.exit(code.getStatusCode());
+            }
+        } catch (IOException ex){
+            ExitCode code = ExitCode.FAILED_TO_READ_CONFIG;
+            BotUtils.LOGGER.log(Level.SEVERE, code.getMessage() + path, ex);
+            System.exit(code.getStatusCode());
+        }
+
+        return null;
+    }
 
     public static JSONObject generateConfigTemplate() {
         JSONObject database = new JSONObject();
@@ -195,7 +234,11 @@ public class ChatbotConfiguration {
         return defaultStatuses;
     }
 
-    public long[] getDevelopersIds() {
+    public long getLeadDeveloper() {
+        return developers[0];
+    }
+
+    public long[] getDevelopers() {
         return developers;
     }
 

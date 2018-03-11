@@ -3,10 +3,12 @@ package com.elypia.alexis.discord;
 import com.elypia.alexis.discord.annotation.BeforeAny;
 import com.elypia.alexis.discord.annotation.Command;
 import com.elypia.alexis.discord.annotation.Module;
-import com.elypia.alexis.discord.commands.CommandEvent;
-import com.elypia.alexis.discord.commands.CommandHandler;
+import com.elypia.alexis.discord.events.CommandEvent;
+import com.elypia.alexis.discord.handlers.commands.CommandHandler;
 import com.elypia.alexis.utils.BotUtils;
 import com.elypia.elypiai.utils.ElyUtils;
+import com.mongodb.MongoClient;
+import com.mongodb.client.MongoDatabase;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
@@ -18,16 +20,21 @@ import javax.security.auth.login.LoginException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 
 public class Chatbot {
 
 	private JDA jda;
+	private MongoClient client;
 	private Map<String[], CommandHandler> handlers;
+
+	private List<Game> statuses;
+
 	private ChatbotConfiguration config;
 
-	public Chatbot(ChatbotConfiguration config) throws LoginException {
+	public Chatbot(ChatbotConfiguration config, MongoClient client) throws LoginException {
 		this.config = config;
 
 		JDABuilder builder = new JDABuilder(AccountType.BOT);
@@ -38,6 +45,12 @@ public class Chatbot {
 		builder.setStatus(OnlineStatus.IDLE);
 		builder.setBulkDeleteSplittingEnabled(false);
 		jda = builder.buildAsync();
+
+		this.client = client;
+
+		for (String status : config.getDefaultStatuses()) {
+
+		}
 
 		handlers = new HashMap<>();
 	}
@@ -102,7 +115,7 @@ public class Chatbot {
 			BeforeAny beforeAny = method.getAnnotation(BeforeAny.class);
 
 			if (beforeAny != null) {
-				String[] exclusions = beforeAny.exclusions();
+				String[] exclusions = beforeAny.value();
 
 				if (!ElyUtils.arrayContains(commandEvent.getCommand(), exclusions)) {
 					if (handler.beforeAny(commandEvent))
@@ -139,5 +152,13 @@ public class Chatbot {
 
 	public ChatbotConfiguration getConfig() {
 		return config;
+	}
+
+	public MongoClient getClient() {
+		return client;
+	}
+
+	public MongoDatabase getDatabase(String database) {
+		return client.getDatabase(database);
 	}
 }

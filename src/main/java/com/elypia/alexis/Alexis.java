@@ -2,8 +2,8 @@ package com.elypia.alexis;
 
 import com.elypia.alexis.discord.Chatbot;
 import com.elypia.alexis.discord.ChatbotConfiguration;
-import com.elypia.alexis.discord.audio.LocalAudioController;
-import com.elypia.alexis.discord.commands.modules.*;
+import com.elypia.alexis.discord.audio.controllers.LocalAudioController;
+import com.elypia.alexis.discord.handlers.commands.modules.*;
 import com.elypia.alexis.utils.BotUtils;
 import com.elypia.alexis.utils.ExitCode;
 import com.elypia.elypiai.amazon.data.AmazonEndpoint;
@@ -15,8 +15,6 @@ import org.bson.Document;
 import javax.security.auth.login.LoginException;
 import java.util.logging.Level;
 
-import static com.mongodb.client.model.Filters.eq;
-
 public class Alexis {
 
 	public static final long START_TIME = System.currentTimeMillis();
@@ -27,7 +25,7 @@ public class Alexis {
 		if (args.length > 0)
 			configPath = args[0];
 
-		ChatbotConfiguration config = BotUtils.getConfiguration(configPath);
+		ChatbotConfiguration config = ChatbotConfiguration.getConfiguration(configPath);
 
 		if (config == null) {
 			ExitCode code = ExitCode.UNKNOWN_CONFIG_ERROR;
@@ -40,19 +38,19 @@ public class Alexis {
 		MongoCollection<Document> api = global.getCollection("api_details");
 
 		try {
-			Chatbot bot = new Chatbot(config);
+			Chatbot bot = new Chatbot(config, client);
 
 			bot.registerModules (
-				new AmazonHandler(api.find(eq("service", "amazon")).first(), AmazonEndpoint.US),
+				new AmazonHandler(api, AmazonEndpoint.US),
 				new BotHandler(),
 				new BrainfuckHandler(),
 				new CleverbotHandler(client),
 				new MathHandler(),
 				new MusicHandler(LocalAudioController.class),
-				new NanowrimoHandler(),
+				new NanowrimoHandler(client.getDatabase("users")),
 				new RuneScapeHandler(),
 				new RuneScapeNotifyHandler(),
-				new SteamHandler(api.find(eq("service", "steam")).first()),
+				new SteamHandler(api),
 				new UrbanDictionaryHandler(),
 				new UserHandler()
 			);

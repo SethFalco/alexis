@@ -42,10 +42,8 @@ repositories  {
 dependencies {
 	implementation 'net.dv8tion:JDA:3.5.1_347'
 	implementation 'com.sedmelluq:lavaplayer:1.2.56'
+	implementation files('../Elypiai/Elypiai.jar') //'com.elypia:elypiai:1.0.0'
 	implementation group: 'org.mongodb', name: 'mongodb-driver', version: '3.6.3'
-	implementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.9-rc'
-	implementation group: 'com.mashape.unirest', name: 'unirest-java', version: '1.4.9'
-	implementation files('../Elypiai/Elypiai.jar')
 
 	runtimeOnly group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.7.25'
 
@@ -53,6 +51,9 @@ dependencies {
 
 	testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.1.0'
 	testRuntimeOnly group: 'org.junit.platform', name: 'junit-platform-runner', version: '1.1.0'
+
+	// Temp until no more data to port from old database
+	implementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.9-rc'
 }
 
 compileJava {
@@ -101,7 +102,7 @@ class SecretTask extends DefaultTask {
 			Map<String, Pattern> patterns = new HashMap<>()
 			patterns.put("Discord Bot Token", Pattern.compile(/(?i)[A-Z\d]{24}\.[A-Z\d-_]{6}\.[A-Z\d-_]{27}/))
 			patterns.put("Amazon Access Key", Pattern.compile(/AKIA[IJ][A-Z2-7]{14}[AQ]/))
-			patterns.put("Amazon Secret", Pattern.compile(/(?i)[A-Z\d\/+]{40}/))
+			patterns.put("Amazon Secret", Pattern.compile(/(?i)\b[A-Z\d\/+]{40}\b/))
 			patterns.put("Steam API Key", Pattern.compile(/[A-F\d]{32}/))
 
 			for (int i = 0; i < lines.size(); i++) {

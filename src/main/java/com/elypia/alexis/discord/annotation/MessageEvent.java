@@ -1,5 +1,7 @@
 package com.elypia.alexis.discord.annotation;
 
+import net.dv8tion.jda.core.entities.ChannelType;
+
 public @interface MessageEvent {
 
     /**
@@ -7,5 +9,7 @@ public @interface MessageEvent {
      *          to execute this event.
      */
 
-    boolean value() default false;
+    boolean requiresDatabase() default false;
+
+    ChannelType[] scope();
 }
