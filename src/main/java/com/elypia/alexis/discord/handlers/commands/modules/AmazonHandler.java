@@ -4,7 +4,7 @@ import com.elypia.alexis.discord.annotation.Command;
 import com.elypia.alexis.discord.annotation.Module;
 import com.elypia.alexis.discord.annotation.Parameter;
 import com.elypia.alexis.discord.events.CommandEvent;
-import com.elypia.alexis.discord.handlers.commands.CommandHandler;
+import com.elypia.alexis.discord.handlers.commands.impl.CommandHandler;
 import com.elypia.alexis.utils.BotUtils;
 import com.elypia.elypiai.amazon.Amazon;
 import com.elypia.elypiai.amazon.AmazonItem;

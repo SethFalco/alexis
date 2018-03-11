@@ -5,6 +5,7 @@ import com.elypia.alexis.discord.entities.GuildData;
 import com.elypia.alexis.discord.entities.TagData;
 import com.elypia.alexis.discord.entities.TextChannelData;
 import com.elypia.alexis.discord.entities.UserData;
+import com.elypia.alexis.discord.entities.data.Tag;
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
@@ -55,7 +56,7 @@ public class GlobalMessageHandler {
         UserData userData = new UserData(database, user);
         TextChannelData textChannelData = guildData.getTextChannelData(channel);
 
-        TagData spam = textChannelData.getGuildData().isChannel(ag.SPAM);
+        TagData spam = textChannelData.getGuildData().isChannel(Tag.SPAM);
         if (spam != null) {
             if (spam.isEnabled()) {
 

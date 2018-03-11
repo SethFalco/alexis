@@ -17,8 +17,12 @@ public class TextChannelData {
         textChannelId = document.getLong("text_channel_id");
         tagsList = new ArrayList<>();
 
-        List<Document> tags = (document.get("tags", List.class));
-        tags.forEach(tag -> tagsList.add(Tag.getByName(tag.getString("tag"))));
+        List<String> tags = (document.get("tags", List.class));
+
+        tags.forEach(tag -> {
+            Tag t = Tag.getByName(tag);
+            tagsList.add(t);
+        });
     }
 
     public GuildData getGuildData() {

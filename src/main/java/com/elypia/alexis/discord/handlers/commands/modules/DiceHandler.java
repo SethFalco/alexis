@@ -3,8 +3,8 @@ package com.elypia.alexis.discord.handlers.commands.modules;
 import com.elypia.alexis.discord.annotation.Command;
 import com.elypia.alexis.discord.annotation.Module;
 import com.elypia.alexis.discord.events.CommandEvent;
-import com.elypia.alexis.discord.games.Dicing;
-import com.elypia.alexis.discord.handlers.commands.CommandHandler;
+import com.elypia.alexis.discord.handlers.commands.impl.CommandHandler;
+import com.elypia.alexis.discord.minigames.Dicing;
 import net.dv8tion.jda.core.entities.Guild;
 
 import java.util.HashMap;

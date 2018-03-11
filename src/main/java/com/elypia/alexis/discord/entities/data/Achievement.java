@@ -16,6 +16,10 @@ public enum Achievement {
 
     NANO_AUTHENTICATED("nano_authenticated");
 
+    /**
+     * Name of the achievement as it appears in the database.
+     */
+
     private String databaseName;
 
     Achievement(String databaseName) {
@@ -23,6 +27,15 @@ public enum Achievement {
     }
 
     public String getDatabaseName() {
+        return databaseName;
+    }
+
+    public static Achievement getByName(String databaseName) {
+        return valueOf(databaseName.toUpperCase());
+    }
+
+    @Override
+    public String toString() {
         return databaseName;
     }
 }

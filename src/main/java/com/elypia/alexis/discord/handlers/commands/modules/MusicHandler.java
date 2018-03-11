@@ -8,7 +8,7 @@ import com.elypia.alexis.discord.audio.AudioPlayerSendHandler;
 import com.elypia.alexis.discord.audio.GuildAudioPlayer;
 import com.elypia.alexis.discord.audio.impl.AudioController;
 import com.elypia.alexis.discord.events.CommandEvent;
-import com.elypia.alexis.discord.handlers.commands.CommandHandler;
+import com.elypia.alexis.discord.handlers.commands.impl.CommandHandler;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;

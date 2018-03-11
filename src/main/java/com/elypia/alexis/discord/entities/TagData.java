@@ -4,6 +4,12 @@ import com.elypia.alexis.discord.entities.data.Tag;
 import com.elypia.alexis.discord.entities.data.TagFilter;
 import org.bson.Document;
 
+/**
+ * The global tag settings for the guild, for example
+ * the global {@link Tag#SPAM} will affect all channels
+ * with this tag. (or without if set to blacklist.)
+ */
+
 public class TagData {
 
     private Tag tag;
@@ -18,10 +24,6 @@ public class TagData {
 
     public Tag getTag() {
         return tag;
-    }
-
-    public void setTag(Tag tag) {
-        this.tag = tag;
     }
 
     public boolean isEnabled() {

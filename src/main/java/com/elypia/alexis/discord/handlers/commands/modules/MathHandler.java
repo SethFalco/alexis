@@ -3,7 +3,7 @@ package com.elypia.alexis.discord.handlers.commands.modules;
 import com.elypia.alexis.discord.annotation.Command;
 import com.elypia.alexis.discord.annotation.Module;
 import com.elypia.alexis.discord.events.CommandEvent;
-import com.elypia.alexis.discord.handlers.commands.CommandHandler;
+import com.elypia.alexis.discord.handlers.commands.impl.CommandHandler;
 import com.elypia.elypiai.utils.math.IntToString;
 
 @Module (

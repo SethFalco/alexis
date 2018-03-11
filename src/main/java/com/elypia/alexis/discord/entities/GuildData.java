@@ -3,9 +3,7 @@ package com.elypia.alexis.discord.entities;
 import com.elypia.alexis.discord.entities.data.Tag;
 import com.elypia.alexis.discord.entities.data.TagFilter;
 import com.elypia.alexis.discord.entities.impl.DatabaseEntity;
-import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
-import com.mongodb.client.model.UpdateOptions;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.TextChannel;
 import org.bson.Document;
@@ -15,19 +13,14 @@ import java.util.Map;
 
 import static com.mongodb.client.model.Filters.eq;
 
-public class GuildData implements DatabaseEntity {
+public class GuildData extends DatabaseEntity {
 
     /**
-     * The database connection to chatbot data only.
+     * Hold reference to self to pass as parameter in
+     * anonymous methods.
      */
 
-    private MongoDatabase database;
-
-    /**
-     * The table / collection containing guild entries.
-     */
-
-    private MongoCollection<Document> guilds;
+    private final GuildData guildData;
 
     /**
      * The long ID of the guild this instance holds data for.
@@ -57,30 +50,37 @@ public class GuildData implements DatabaseEntity {
     private Map<Tag, TagData> tagData;
 
     public GuildData(MongoDatabase database, Guild guild) {
-        this.database = database;
-        guilds = database.getCollection("guilds");
-
+        super(database, "guilds");
+        guildData = this;
         guildId = guild.getIdLong();
         textChannelData = new HashMap<>();
+        tagData = new HashMap<>();
 
-        Document guildData = guilds.find(eq("guild_id", guildId)).first();
+        Document data = getById("guild_id", guildId);
 
-        if (guildData == null) {
-            xp = 0;
-        } else {
-            xp = guildData.getInteger("xp");
-        }
+        if (data == null)
+            return;
+
+        xp = data.getInteger("xp");
+
+        getArray(data, "text_channels", o -> {
+            TextChannelData t = new TextChannelData(guildData, (Document)o);
+            textChannelData.put(t.getTextChannelId(), t);
+        });
+
+        getArray(data, "tags", o -> {
+            TagData t = new TagData((Document)o);
+            tagData.put(t.getTag(), t);
+        });
     }
 
+    @Override
     public void commit() {
-        Document guildDataD = new Document();
-        guildDataD.put("guild_id", guildId);
-        guildDataD.put("xp", xp);
+        Document data = new Document();
+        data.put("xp", xp);
 
-        UpdateOptions options = new UpdateOptions();
-        options.upsert(true);
 
-        guilds.updateOne(eq("guild_id", guildId), guildDataD, options);
+        collection.updateOne(eq("guild_id", guildId), data, options);
     }
 
     /**
@@ -95,7 +95,7 @@ public class GuildData implements DatabaseEntity {
      * @return If the channel has the functionality enabled.
      */
 
-    public boolean isChannel(TextChannel channel, Tag tag) {
+    public boolean channelHasTag(TextChannel channel, Tag tag) {
         long id = channel.getIdLong();
 
         if (textChannelData.containsKey(id)) {

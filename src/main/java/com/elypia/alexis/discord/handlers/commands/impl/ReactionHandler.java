@@ -1,4 +1,4 @@
-package com.elypia.alexis.discord.handlers.commands;
+package com.elypia.alexis.discord.handlers.commands.impl;
 
 import com.elypia.alexis.discord.events.CommandEvent;
 

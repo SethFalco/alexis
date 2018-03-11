@@ -5,7 +5,7 @@ import com.elypia.alexis.discord.annotation.Module;
 import com.elypia.alexis.discord.annotation.OptParameter;
 import com.elypia.alexis.discord.annotation.Parameter;
 import com.elypia.alexis.discord.events.CommandEvent;
-import com.elypia.alexis.discord.handlers.commands.CommandHandler;
+import com.elypia.alexis.discord.handlers.commands.impl.CommandHandler;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.entities.User;
