@@ -63,8 +63,8 @@ public class CleverbotHandler extends CommandHandler {
         cleverbot.say(body, cs, response -> {
             event.reply(response.getOutput());
             setCs(event.getChannel(), response.getCS());
-        }, failure -> {
-            BotUtils.unirestFailure(failure, event);
+        }, err -> {
+            BotUtils.unirestFailure(err, event);
         });
     }
 
