@@ -129,6 +129,7 @@ public class Chatbot {
 			commandMethod.invoke(handler, event);
 			event.commit();
 		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+			event.reply("Sorry! Something went wrong and I was unable to perform that commands.");
 			BotUtils.LOGGER.log(Level.SEVERE, "Failed to execute command!", ex);
 		}
 	}

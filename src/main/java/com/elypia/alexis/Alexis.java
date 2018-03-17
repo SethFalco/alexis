@@ -46,6 +46,7 @@ public class Alexis {
 				new BrainfuckHandler(),
 				new CleverbotHandler(client),
 				new MathHandler(),
+				new MemeHandler(),
 				new MusicHandler(LocalAudioController.class),
 				new NanowrimoHandler(client.getDatabase("users")),
 				new RuneScapeHandler(),
