@@ -1,13 +1,14 @@
 package com.elypia.alexis.discord.handlers.commands.modules;
 
-import com.elypia.alexis.discord.annotation.*;
+import com.elypia.alexis.discord.annotation.Command;
 import com.elypia.alexis.discord.annotation.Module;
+import com.elypia.alexis.discord.annotation.Parameter;
 import com.elypia.alexis.discord.events.MessageEvent;
 import com.elypia.alexis.discord.handlers.commands.impl.CommandHandler;
 import com.elypia.alexis.utils.BotUtils;
 import com.elypia.elypiai.urbandictionary.UrbanDefinition;
 import com.elypia.elypiai.urbandictionary.UrbanDictionary;
-import com.elypia.elypiai.urbandictionary.UrbanResultType;
+import com.elypia.elypiai.urbandictionary.data.UrbanResultType;
 import net.dv8tion.jda.core.EmbedBuilder;
 
 @Module(
@@ -32,14 +33,6 @@ public class UrbanDictionaryHandler extends CommandHandler {
 				type = String.class
 			)
 		},
-		optParams = {
-			@OptParameter (
-				param = "random",
-				help = "Want the top definition or a random one?",
-				type = Boolean.class,
-				defaultValue = "true"
-			)
-		},
 		reactions = { "🔉", "🎲"}
 	)
 	public void define(MessageEvent event) {
@@ -49,7 +42,7 @@ public class UrbanDictionaryHandler extends CommandHandler {
 				return;
 			}
 
-			UrbanDefinition definition = results.getRandomResult();
+			UrbanDefinition definition = results.getResult(true);
 
 			EmbedBuilder builder = new EmbedBuilder();
 			builder.setAuthor(definition.getAuthor());
@@ -68,9 +61,7 @@ public class UrbanDictionaryHandler extends CommandHandler {
 			builder.addField("Example", descText, true);
 
 			event.reply(builder);
-		}, failure -> {
-			BotUtils.unirestFailure(failure, event);
-		});
+		}, failure -> BotUtils.unirestFailure(event, failure));
 	}
 
 	@Command (
@@ -100,16 +91,6 @@ public class UrbanDictionaryHandler extends CommandHandler {
 			builder.addField("Tags", tagsText, true);
 
 			event.reply(builder);
-		}, failure -> {
-			BotUtils.unirestFailure(failure, event);
-		});
-	}
-
-	@Reaction (
-		aliases = "🎲",
-		command = "define"
-	)
-	public void anotherRandomDefinition(MessageEvent event) {
-		define(event);
+		}, failure -> BotUtils.unirestFailure(event, failure));
 	}
 }

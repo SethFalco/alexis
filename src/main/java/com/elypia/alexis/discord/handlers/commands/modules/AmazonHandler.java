@@ -67,19 +67,17 @@ public class AmazonHandler extends CommandHandler {
     public void getItem(MessageEvent event) {
         String query = event.getParams()[0];
 
-        amazon.getItem(query, result -> {
+        amazon.getItems(query, result -> {
             AmazonItem item = result.get(0);
 
             EmbedBuilder builder = new EmbedBuilder();
 
-            builder.setThumbnail(item.getLargeImage());
+            builder.setThumbnail(item.getImage());
             builder.setDescription(item.getUrl());
-            builder.addField("Price", item.getPricePretty(), false);
+            builder.addField("Price", item.getPriceString(), false);
             builder.setFooter(String.format("This is for %s", item.getAmazon().getEndpoint().getShoppingUrl()), null);
 
             event.reply(builder);
-        }, failure -> {
-            BotUtils.unirestFailure(failure, event);
-        });
+        }, failure -> BotUtils.unirestFailure(event, failure));
     }
 }

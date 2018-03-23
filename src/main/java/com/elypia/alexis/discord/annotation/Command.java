@@ -35,15 +35,6 @@ public @interface Command {
 	};
 
 	/**
-	 * The optional parameters that can help customise
-	 * the experience with the command.
-	 */
-
-	OptParameter[] optParams() default {
-
-	};
-
-	/**
 	 * What reactions we should <em>always</em> perform on the message
 	 * this command produces.
 	 */

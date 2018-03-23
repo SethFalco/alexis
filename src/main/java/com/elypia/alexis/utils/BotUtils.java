@@ -3,7 +3,7 @@ package com.elypia.alexis.utils;
 import com.elypia.alexis.Alexis;
 import com.elypia.alexis.discord.annotation.Command;
 import com.elypia.alexis.discord.annotation.Module;
-import com.elypia.alexis.discord.events.GenericEvent;
+import com.elypia.alexis.discord.events.MessageEvent;
 import com.elypia.alexis.discord.handlers.commands.impl.CommandHandler;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Member;
@@ -22,7 +22,7 @@ public class BotUtils {
 
 	public static final Logger LOGGER = Logger.getLogger(Alexis.class.getName());
 
-	public static void unirestFailure(IOException failure, GenericEvent event) {
+	public static void unirestFailure(MessageEvent event, IOException failure) {
 		// Log the exception to console, was likely time out or API in use is deprecated.
 		LOGGER.log(Level.SEVERE, "Unirest request failed.", failure);
 

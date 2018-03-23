@@ -13,12 +13,6 @@ import com.elypia.elypiai.Brainfuck;
 )
 public class BrainfuckHandler extends CommandHandler {
 
-    private Brainfuck brainfuck;
-
-    public BrainfuckHandler() {
-        brainfuck = new Brainfuck();
-    }
-
     @Command (
         aliases = {"compile", "interpret"},
         help = "Compile Brainfuck code into something non-nerds understand.",
@@ -33,8 +27,13 @@ public class BrainfuckHandler extends CommandHandler {
     public void interpretBrainfuck(MessageEvent event) {
         Object[] params = event.getParams();
         String code = (String)params[0];
-        String result = new Brainfuck().compileToString(code);
 
-        event.reply(result);
+        try {
+            Brainfuck brainfuck = Brainfuck.compile(code);
+            String result = brainfuck.interpret();
+            event.reply(result);
+        } catch (IllegalArgumentException ex) {
+            event.reply(ex.getMessage());
+        }
     }
 }

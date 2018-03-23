@@ -8,6 +8,7 @@ import com.elypia.alexis.discord.audio.GuildAudioPlayer;
 import com.elypia.alexis.discord.audio.impl.AudioController;
 import com.elypia.alexis.discord.events.MessageEvent;
 import com.elypia.alexis.discord.handlers.commands.impl.CommandHandler;
+import com.elypia.elypiai.utils.Markdown;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
@@ -23,8 +24,6 @@ import net.dv8tion.jda.core.managers.AudioManager;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static com.elypia.elypiai.utils.ElyUtils.makeMarkdown;
 
 @Module (
 	aliases = {"Music", "m"},
@@ -110,7 +109,7 @@ public class MusicHandler extends CommandHandler {
 		if (track != null) {
 			AudioTrackInfo info = track.getInfo();
 			String position = info.isStream ? "∞" : String.format("%,d/%,ds", (track.getPosition() / 1000), (track.getDuration() / 1000));
-			String name = makeMarkdown(String.format("%s - %s", info.author, info.title), info.uri);
+			String name = Markdown.a(String.format("%s - %s", info.author, info.title), info.uri);
 			name = String.format("%s `%s`", name, position);
 			builder.addField("Now Playing", name, true);
 		}
@@ -122,7 +121,7 @@ public class MusicHandler extends CommandHandler {
 				AudioTrack t = tracks.get(i);
 				AudioTrackInfo info = t.getInfo();
 				String text = String.format("%s - %s", info.author, info.title);
-				text = makeMarkdown(text, info.uri);
+				text = Markdown.a(text, info.uri);
 				text = String.format("**%d.** %s", i + 1, text);
 
 				if (stringBuilder.length() + text.length() <= MessageEmbed.VALUE_MAX_LENGTH)

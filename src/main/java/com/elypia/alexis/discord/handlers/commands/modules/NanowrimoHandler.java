@@ -68,9 +68,7 @@ public class NanowrimoHandler extends CommandHandler {
 					event.reply("Sorry you failed to authenticate to your account, please check your details and try again.");
 				}
 			}
-		}, failure -> {
-			BotUtils.unirestFailure(failure, event);
-		});
+		}, failure -> BotUtils.unirestFailure(event, failure));
 	}
 
 	@Command (
@@ -98,8 +96,6 @@ public class NanowrimoHandler extends CommandHandler {
 			}
 
 			event.getChannel().sendMessage(builder.build()).queue();
-		}, failure -> {
-			BotUtils.unirestFailure(failure, event);
-		});
+		}, failure -> BotUtils.unirestFailure(event, failure));
 	}
 }

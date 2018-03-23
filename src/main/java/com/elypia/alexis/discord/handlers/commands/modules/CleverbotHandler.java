@@ -63,9 +63,7 @@ public class CleverbotHandler extends CommandHandler {
         cleverbot.say(body, cs, response -> {
             event.reply(response.getOutput());
             setCs(event.getChannel(), response.getCS());
-        }, err -> {
-            BotUtils.unirestFailure(err, event);
-        });
+        }, failure -> BotUtils.unirestFailure(event, failure));
     }
 
     @Command (
@@ -74,7 +72,7 @@ public class CleverbotHandler extends CommandHandler {
     )
     public void getHistory(MessageEvent event) {
         String cs = getCs(event.getChannel());
-        String history = cleverbot.getHistoryScript(cs);
+        String history = cleverbot.getHistory(cs);
 
         if (history == null)
             event.reply("Maybe try talk first and I can grab your history later?");

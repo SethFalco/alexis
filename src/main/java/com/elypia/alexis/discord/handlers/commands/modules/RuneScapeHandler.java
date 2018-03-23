@@ -81,8 +81,6 @@ public class RuneScapeHandler extends CommandHandler {
 			builder.addField("Completed", String.join("\n", completed), false);
 			builder.addField("Started", String.join("\n", started), false);
 			builder.addField("Not Started", String.join("\n", notStarted), false);
-		}, failure -> {
-			BotUtils.unirestFailure(failure, event);
-		});
+		}, failure -> BotUtils.unirestFailure(event, failure));
 	}
 }

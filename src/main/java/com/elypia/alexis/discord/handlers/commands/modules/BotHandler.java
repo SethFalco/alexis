@@ -2,7 +2,6 @@ package com.elypia.alexis.discord.handlers.commands.modules;
 
 import com.elypia.alexis.discord.annotation.Command;
 import com.elypia.alexis.discord.annotation.Module;
-import com.elypia.alexis.discord.annotation.OptParameter;
 import com.elypia.alexis.discord.annotation.Parameter;
 import com.elypia.alexis.discord.events.MessageEvent;
 import com.elypia.alexis.discord.handlers.commands.impl.CommandHandler;
@@ -73,14 +72,6 @@ public class BotHandler extends CommandHandler {
 				param = "body",
 				help = "Text Alexis should repeat!",
 				type = String.class
-			)
-		},
-		optParams = {
-			@OptParameter (
-				param = "delete",
-				help = "Should Alexis delete the message after?",
-				type = Boolean.class,
-				defaultValue = "false"
 			)
 		}
 	)

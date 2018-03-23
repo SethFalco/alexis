@@ -4,7 +4,7 @@ import com.elypia.alexis.discord.annotation.Command;
 import com.elypia.alexis.discord.annotation.Module;
 import com.elypia.alexis.discord.events.MessageEvent;
 import com.elypia.alexis.discord.handlers.commands.impl.CommandHandler;
-import com.elypia.elypiai.utils.math.IntToString;
+import com.elypia.elypiai.utils.math.MathUtils;
 
 @Module (
 	aliases = {"Math"},
@@ -17,7 +17,7 @@ public class MathHandler extends CommandHandler {
 		help = "Convert a number to it's written equivelent."
 	)
 	public void convertIntToString(MessageEvent event) {
-		String result = IntToString.convert(event.getParams()[0]);
+		String result = MathUtils.asWritten(Long.parseLong(event.getParams()[0]));
 
 		if (result == null)
 			event.reply("Sorry, I was unable to convert that!");

@@ -3,7 +3,6 @@ package com.elypia.alexis.discord.handlers.commands.modules;
 import com.elypia.alexis.discord.annotation.Command;
 import com.elypia.alexis.discord.annotation.Module;
 import com.elypia.alexis.discord.annotation.Parameter;
-import com.elypia.alexis.discord.annotation.Reaction;
 import com.elypia.alexis.discord.events.MessageEvent;
 import com.elypia.alexis.discord.handlers.commands.impl.CommandHandler;
 import com.elypia.alexis.utils.BotUtils;
@@ -58,13 +57,11 @@ public class SteamHandler extends CommandHandler {
 		steam.getUser(params[0], user -> {
 			EmbedBuilder builder = new EmbedBuilder();
 
-			builder.setTitle(user.getName(), user.getProfileURL());
-			builder.setThumbnail(user.getAvatarFull());
+			builder.setTitle(user.getUsername(), user.getProfileURL());
+			builder.setThumbnail(user.getAvatar());
 
 			event.reply(builder);
-		}, failure -> {
-			BotUtils.unirestFailure(failure, event);
-		});
+		}, failure -> BotUtils.unirestFailure(event, failure));
 	}
 
 	@Command(
@@ -99,12 +96,8 @@ public class SteamHandler extends CommandHandler {
 
 //				String message = ElyUtils.generateTable(1992, games);
 //				event.reply(String.format("```\n%s\n```", message));
-			}, failure -> {
-				BotUtils.unirestFailure(failure, event);
-			});
-		}, failure -> {
-			BotUtils.unirestFailure(failure, event);
-		});
+			}, failure -> BotUtils.unirestFailure(event, failure));
+		}, failure -> BotUtils.unirestFailure(event, failure));
 	}
 
 	@Command(
@@ -124,7 +117,7 @@ public class SteamHandler extends CommandHandler {
 
 		steam.getUser(params[0], user -> {
 			steam.getLibrary(user, library -> {
-				SteamGame game = library.get(ElyUtils.RAND.nextInt(library.size()));
+				SteamGame game = library.get(ElyUtils.RANDOM.nextInt(library.size()));
 
 				EmbedBuilder builder = new EmbedBuilder();
 				builder.setTitle(game.getName(), game.getGameUrl());
@@ -138,19 +131,7 @@ public class SteamHandler extends CommandHandler {
 
 				builder.setImage(game.getLogoUrl());
 				event.reply(builder);
-			}, failure -> {
-				BotUtils.unirestFailure(failure, event);
-			});
-		}, failure -> {
-			BotUtils.unirestFailure(failure, event);
-		});
-	}
-
-	@Reaction (
-		aliases = "🎲",
-		command = "random"
-	)
-	public void anotherRandomGame(MessageEvent event) {
-		randomGame(event);
+			}, failure -> BotUtils.unirestFailure(event, failure));
+		}, failure -> BotUtils.unirestFailure(event, failure));
 	}
 }

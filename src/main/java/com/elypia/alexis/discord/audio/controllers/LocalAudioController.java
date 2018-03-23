@@ -46,7 +46,7 @@ public class LocalAudioController extends AudioController {
 
     @Override
     public void shuffle() {
-        Collections.shuffle(tracks, ElyUtils.RAND);
+        Collections.shuffle(tracks, ElyUtils.RANDOM);
     }
 
     @Override

@@ -28,7 +28,7 @@ public class Dicing {
 	}
 
 	public Map<User, Integer> result() {
-		Random rand = ElyUtils.RAND;
+		Random rand = ElyUtils.RANDOM;
 
 		players.forEach(player -> {
 			int roll = rand.nextInt(maxValue + minValue) - minValue;

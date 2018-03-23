@@ -14,19 +14,19 @@ public enum ExitCode {
     MALFORMED_CONFIG_TOKEN(21, "Config does not specify Discord bot token. Consider regenerating the configuration."),
     MALFORMED_CONFIG_PREFIX(22, "Config does not specify a default prefix. Consider regenerating the configuration.");
 
-    private int code;
-    private String message;
+    private final int CODE;
+    private final String MESSAGE;
 
     ExitCode(int code, String message) {
-        this.code = code;
-        this.message = message;
+        CODE = code;
+        MESSAGE = message;
     }
 
     public int getStatusCode() {
-        return code;
+        return CODE;
     }
 
     public String getMessage() {
-        return message;
+        return MESSAGE;
     }
 }

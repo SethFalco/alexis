@@ -73,8 +73,8 @@ public class ChatbotConfiguration {
         database.put("port", 27017);
         database.put("user", "username");
         database.put("password", "password");
-
         JSONArray statusesArray = new JSONArray();
+
         statusesArray.put("game_status_one");
         statusesArray.put("game_status_two");
 
