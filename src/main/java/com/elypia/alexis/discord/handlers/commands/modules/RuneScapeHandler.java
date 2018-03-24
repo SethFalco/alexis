@@ -44,7 +44,7 @@ public class RuneScapeHandler extends CommandHandler {
 	}
 
 	@Command(aliases = {"quests", "quest", "q"}, help = "Get status of all quests for a user.")
-	@Parameter (name = "username", help = "RuneScape players username.")
+	@Parameter(name = "username", help = "RuneScape players username.")
 	public void getQuests(MessageEvent event, String username) {
 		runescape.getQuestStatuses(username, result -> {
 			EmbedBuilder builder = new EmbedBuilder();

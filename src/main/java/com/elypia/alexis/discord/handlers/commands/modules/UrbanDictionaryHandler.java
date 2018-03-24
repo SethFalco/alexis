@@ -1,9 +1,7 @@
 package com.elypia.alexis.discord.handlers.commands.modules;
 
-import com.elypia.alexis.discord.annotations.Command;
+import com.elypia.alexis.discord.annotations.*;
 import com.elypia.alexis.discord.annotations.Module;
-import com.elypia.alexis.discord.annotations.Parameter;
-import com.elypia.alexis.discord.annotations.PostReactions;
 import com.elypia.alexis.discord.events.MessageEvent;
 import com.elypia.alexis.discord.handlers.commands.impl.CommandHandler;
 import com.elypia.alexis.utils.BotUtils;
@@ -11,6 +9,9 @@ import com.elypia.elypiai.urbandictionary.UrbanDefinition;
 import com.elypia.elypiai.urbandictionary.UrbanDictionary;
 import com.elypia.elypiai.urbandictionary.data.UrbanResultType;
 import net.dv8tion.jda.core.EmbedBuilder;
+import net.dv8tion.jda.core.entities.User;
+
+import java.time.Instant;
 
 @Module(
 	aliases = {"UrbanDictionary", "UrbanDict", "Urban", "UD"},
@@ -25,17 +26,26 @@ public class UrbanDictionaryHandler extends CommandHandler {
 		dict = new UrbanDictionary();
 	}
 
-	@Command (aliases = "define", help = "Return the definition of a word or phrase.")
+	@CommandGroup("define")
+	@Command(aliases = "define", help = "Return the definition of a word or phrase.")
 	@Parameter(name = "body", help = "Word or phrase to define!")
 	@PostReactions({"🔉", "🎲"})
 	public void define(MessageEvent event, String body) {
+		define(event, body, true);
+	}
+
+	@CommandGroup("define")
+	@Parameter(name = "body", help = "Word or phrase to define!")
+	@Parameter(name = "random", help = "Random result or top result!")
+	@PostReactions({"🔉", "🎲"})
+	public void define(MessageEvent event, String body, boolean random) {
 		dict.define(body, results -> {
 			if (results.getResultType() == UrbanResultType.NO_RESULTS) {
-				event.getChannel().sendMessage("Sorry I didn't find any results. :c").queue();
+				event.reply("Sorry I didn't find any results. :c");
 				return;
 			}
 
-			UrbanDefinition definition = results.getResult(true);
+			UrbanDefinition definition = results.getResult(random);
 
 			EmbedBuilder builder = new EmbedBuilder();
 			builder.setAuthor(definition.getAuthor());
@@ -46,10 +56,10 @@ public class UrbanDictionaryHandler extends CommandHandler {
 			builder.setDescription(definition.getDefinition());
 
 			String descText = String.format (
-				"%s\n\n👍: %,d 👎: %,d",
-				definition.getExample(),
-				definition.getThumbsUp(),
-				definition.getThumbsDown()
+					"%s\n\n👍: %,d 👎: %,d",
+					definition.getExample(),
+					definition.getThumbsUp(),
+					definition.getThumbsDown()
 			);
 			builder.addField("Example", descText, true);
 
@@ -57,7 +67,7 @@ public class UrbanDictionaryHandler extends CommandHandler {
 		}, failure -> BotUtils.httpFailure(event, failure));
 	}
 
-	@Command (aliases = "tags", help = "Return the tags associated with a word.")
+	@Command(aliases = "tags", help = "Return the tags associated with a word.")
 	@Parameter(name = "body", help = "Word or phrase to define!")
 	public void tags(MessageEvent event, String body) {
 		dict.define(body, results -> {
@@ -76,5 +86,12 @@ public class UrbanDictionaryHandler extends CommandHandler {
 
 			event.reply(builder);
 		}, failure -> BotUtils.httpFailure(event, failure));
+	}
+
+	@Command(aliases = "command", help = "Rehowehfoiwehfowhefrd.")
+	@Parameter(name = "user", help = "User to... do shit with!")
+	@Parameter(name = "timestamp", help = "Steal... this much time from them?")
+	public void newCommand(MessageEvent event, User user, Instant timestamp) {
+		event.reply(timestamp.toString());
 	}
 }

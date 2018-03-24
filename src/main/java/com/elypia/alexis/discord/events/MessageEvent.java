@@ -89,8 +89,13 @@ public class MessageEvent extends GenericEvent {
 				if (quotes != null)
 					matches.add(quotes);
 
-				else if (args != null)
-					matches.add(args.split("\\s*,\\s*"));
+				else if (args != null) {
+					String[] array = args.split("\\s*,\\s*");
+					if (array.length == 1)
+						matches.add(array[0]);
+					else
+						matches.add(array);
+				}
 			}
 
 			params = matches.toArray(new Object[matches.size()]);
