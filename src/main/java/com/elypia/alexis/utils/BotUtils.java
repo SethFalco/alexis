@@ -23,4 +23,12 @@ public final class BotUtils {
 		String message = "Sorry! I'm don't know why the command failed but I'm reporting this to Seth, perhaps trying again later?";
 		event.getChannel().sendMessage(message).queue();
 	}
+
+	public static void log(Level level, String message, String... args) {
+		LOGGER.log(level, message, args);
+	}
+
+	public static <T extends Throwable> void log(Level level, String message, T ex) {
+		LOGGER.log(level, message, ex);
+	}
 }

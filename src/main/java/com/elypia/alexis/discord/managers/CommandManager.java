@@ -1,25 +1,22 @@
 package com.elypia.alexis.discord.managers;
 
 import com.elypia.alexis.discord.Chatbot;
-import com.elypia.alexis.discord.annotations.Command;
-import com.elypia.alexis.discord.annotations.CommandGroup;
 import com.elypia.alexis.discord.annotations.Module;
 import com.elypia.alexis.discord.events.MessageEvent;
 import com.elypia.alexis.discord.handlers.commands.impl.CommandHandler;
 import com.elypia.alexis.discord.managers.impl.DiscordManager;
 import com.elypia.alexis.utils.BotUtils;
-import com.elypia.elypiai.utils.ElyUtils;
-import com.elypia.elypiai.utils.Regex;
+import com.elypia.alexis.utils.CommandUtils;
 import net.dv8tion.jda.core.entities.User;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.events.message.react.MessageReactionAddEvent;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.time.Instant;
 import java.util.*;
 import java.util.logging.Level;
-import java.util.stream.Collectors;
+
+import static com.elypia.alexis.utils.BotUtils.log;
 
 /**
  * Received and performs all message or reactions
@@ -35,7 +32,7 @@ public class CommandManager extends DiscordManager {
      * The value is the module itself.
      */
 
-    private Map<String[], CommandHandler> handlers;
+    private Map<Collection<String>, CommandHandler> handlers;
 
     public CommandManager(Chatbot chatbot) {
         super(chatbot);
@@ -43,12 +40,45 @@ public class CommandManager extends DiscordManager {
         handlers = new HashMap<>();
     }
 
+    /**
+     * Register multiple handlers.
+     *
+     * @param handlers
+     */
+
+    public void registerModules(CommandHandler... handlers) {
+        for (CommandHandler handler : handlers)
+            registerModule(handler);
+    }
+
+    public void registerModule(CommandHandler handler) {
+        Module module = handler.getClass().getAnnotation(Module.class);
+
+        if (module == null) {
+            String message = "{0} doesn't include the @Module annotation!";
+            BotUtils.LOGGER.log(Level.SEVERE, message, handler);
+            return;
+        }
+
+        Collection<String> aliases = new ArrayList<>();
+
+        for (String alias : module.aliases())
+            aliases.add(alias.toLowerCase());
+
+        for (Collection<String> key : handlers.keySet()) {
+            if (!Collections.disjoint(key, aliases)) {
+                String message = "{0} contains an alias which has already been registered!";
+                BotUtils.LOGGER.log(Level.WARNING, message, handler);
+            }
+        }
+
+        handlers.put(aliases, handler);
+    }
+
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {
-        if (!canPerform(event.getAuthor()))
-            return;
-
-        handleMessage(new MessageEvent(chatbot, event));
+        if (canPerform(event.getAuthor()))
+            handleMessage(event);
     }
 
     @Override
@@ -74,179 +104,55 @@ public class CommandManager extends DiscordManager {
         return true;
     }
 
-    /**
-     * Register multiple handlers.
-     *
-     * @param handlers
-     */
+    private void handleMessage(MessageReceivedEvent messageReceivedEvent) {
+        MessageEvent event = new MessageEvent(chatbot, messageReceivedEvent);
 
-    public void registerModules(CommandHandler... handlers) {
-        for (CommandHandler handler : handlers)
-            registerModule(handler);
-    }
-
-    public void registerModule(CommandHandler handler) {
-        Module module = handler.getClass().getAnnotation(Module.class);
-
-        if (module == null) {
-            String message = "{0} doesn't include the @Module annotation!";
-            BotUtils.LOGGER.log(Level.SEVERE, message, handler);
-            return;
-        }
-
-        String[] aliases = module.aliases();
-
-        for (int i = 0; i < aliases.length; i++)
-            aliases[i] = aliases[i].toLowerCase();
-
-        for (String[] existing : handlers.keySet()) {
-            if (ElyUtils.containsAny(existing, aliases)) {
-                String message = "{0} contains an alias which has already been registered!";
-                BotUtils.LOGGER.log(Level.WARNING, message, handler);
-                return;
-            }
-        }
-
-        handlers.put(aliases, handler);
-    }
-
-    private void handleMessage(MessageEvent event) {
         if (!event.isValid())
             return;
 
-        BotUtils.LOGGER.log(Level.INFO, event.getMessage().getContentRaw());
+        log(Level.INFO, event.getMessage().getContentRaw());
 
         CommandHandler handler = getHandler(event);
 
         if (handler == null)
             return;
 
-        Collection<Method> commands = getCommandGroup(event, handler);
-        Method method = filterByParamCount(event, commands);
+        Collection<Method> commands = CommandUtils.getCommands(event, handler);
 
-        if (method == null) {
-            event.reply("I couldn't find a way to do this with the number of parameteres you provided. Maybe try help");
+        if (commands.isEmpty()) {
+            event.reply("Sorry, that command doesn't exist!");
             return;
         }
 
-        Object[] params = parseParameters(event, method);
+        Method method = CommandUtils.getByParamCount(event, commands);
+
+        if (method == null) {
+            event.reply("Those parameters don't look right. DX Try help?");
+            return;
+        }
 
         try {
-            method.invoke(handler, params);
-//            event.commit();
-        } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
-            event.reply("Sorry! Something went wrong and I was unable to perform that commands.");
-            BotUtils.LOGGER.log(Level.SEVERE, "Failed to execute command!", ex);
+            Object[] params = CommandUtils.parseParameters(event, method);
+
+            try {
+                method.invoke(handler, params);
+            } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+                event.reply("Sorry! Something went wrong and I was unable to perform that commands.");
+                BotUtils.LOGGER.log(Level.SEVERE, "Failed to execute command!", ex);
+            }
+        } catch (IllegalArgumentException ex) {
+            event.reply(ex.getMessage());
         }
     }
 
     private CommandHandler getHandler(MessageEvent event) {
         String module = event.getModule();
 
-        for (String[] aliases : handlers.keySet()) {
-            if (ElyUtils.arrayContains(module, aliases))
-                return handlers.get(aliases);
+        for (Collection<String> key : handlers.keySet()) {
+            if (key.contains(module))
+                return handlers.get(key);
         }
 
         return null;
-    }
-
-    private Object[] parseParameters(MessageEvent event, Method method) throws IllegalArgumentException {
-        Object[] inputs = event.getParams();
-        Class<?>[] types = method.getParameterTypes();
-        Object[] params = new Object[types.length];
-
-        params[0] = event;
-
-        for (int i = 1; i <= inputs.length; i++) {
-            Object input = inputs[i - 1];
-            Class<?> type = types[i];
-
-            if (type == String.class)
-                params[i] = Objects.toString(input);
-
-            else if (type == int.class) {
-                if (Regex.NUMBER.matches(input.toString()))
-                    params[i] = Integer.parseInt(input.toString());
-                else
-                    throw new IllegalArgumentException("One of the parameters provided was not a number.");
-            }
-
-            else if (type == Instant.class) {
-
-            }
-
-            else if (type == boolean.class) {
-                params[i] = parseBoolean(input.toString());
-            }
-        }
-
-        return params;
-    }
-
-    public boolean parseBoolean(String string) {
-        return string.equalsIgnoreCase("true") || string.equalsIgnoreCase("yes");
-    }
-
-    private Method filterByParamCount(MessageEvent event, Collection<Method> methods) {
-        methods = methods.stream().filter(o -> o.getParameterCount() - 1 == event.getParams().length).collect(Collectors.toList());
-        return methods.iterator().next();
-    }
-
-    private Collection<Method> getCommandGroup(MessageEvent event, CommandHandler handler) {
-        Collection<Method> thisCommand = new ArrayList<>();
-        Collection<Method> methods = getCommands(event, handler);
-        String command = event.getCommand();
-        CommandGroup group = null;
-
-        for (Method method : methods) {
-            Command annotation = method.getAnnotation(Command.class);
-
-            if (annotation != null) {
-                if (arrayContains(annotation.aliases(), command)) {
-                    group = method.getAnnotation(CommandGroup.class);
-                    thisCommand.add(method);
-                    break;
-                }
-            }
-        }
-
-        if (group != null) {
-            for (Method method : methods) {
-                CommandGroup annotation = method.getAnnotation(CommandGroup.class);
-
-                if (annotation != null) {
-                    if (annotation.value().equals(group.value()))
-                        thisCommand.add(method);
-                }
-            }
-        }
-
-        return thisCommand;
-    }
-
-    private boolean arrayContains(String[] array, String command) {
-        for (String string : array) {
-            if (string.equalsIgnoreCase(command))
-                return true;
-        }
-
-        return false;
-    }
-
-    private Collection<Method> getCommands(MessageEvent event, CommandHandler handler) {
-        Collection<Method> commands = new ArrayList<>();
-        Method[] methods = handler.getClass().getMethods();
-
-        for (Method method : methods) {
-            if (isCommand(method))
-                commands.add(method);
-        }
-
-        return commands;
-    }
-
-    private boolean isCommand(Method method) {
-        return method.getAnnotation(Command.class) != null || method.getAnnotation(CommandGroup.class) != null;
     }
 }

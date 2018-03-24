@@ -32,7 +32,7 @@ public class MessageEvent extends GenericEvent {
 	private String module;
 	private String submodule;
 	private String command;
-	private Object[] params;
+	private List<Object> params;
 
 	private Method method;
 	private Command annotation;
@@ -46,6 +46,7 @@ public class MessageEvent extends GenericEvent {
 	public MessageEvent(Chatbot chatbot, MessageReceivedEvent event, String content) {
 		super(chatbot, event);
 		this.event = event;
+		params = new ArrayList<>();
 
 		String prefix;
 
@@ -80,25 +81,23 @@ public class MessageEvent extends GenericEvent {
 		// Due to change.
 		if (parameters != null) {
 			matcher = PARAM_PATTERN.matcher(parameters);
-			List<Object> matches = new ArrayList<>();
 
 			while (matcher.find()) {
 				String quotes = matcher.group("quotes");
 				String args = matcher.group("args");
 
 				if (quotes != null)
-					matches.add(quotes);
+					params.add(quotes);
 
 				else if (args != null) {
 					String[] array = args.split("\\s*,\\s*");
+
 					if (array.length == 1)
-						matches.add(array[0]);
+						params.add(array[0]);
 					else
-						matches.add(array);
+						params.add(array);
 				}
 			}
-
-			params = matches.toArray(new Object[matches.size()]);
 		}
 	}
 
@@ -181,7 +180,7 @@ public class MessageEvent extends GenericEvent {
 		return command;
 	}
 
-	public Object[] getParams() {
+	public List<Object> getParams() {
 		return params;
 	}
 

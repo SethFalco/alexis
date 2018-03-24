@@ -18,10 +18,11 @@ import net.dv8tion.jda.core.EmbedBuilder;
 public class NanowrimoHandler extends CommandHandler {
 
 	private MongoDatabase database;
-	private Nanowrimo nanowrimo = new Nanowrimo();
+	private Nanowrimo nanowrimo;
 
 	public NanowrimoHandler(MongoDatabase database) {
 		this.database = database;
+		nanowrimo = new Nanowrimo();
 	}
 
 	@Override

@@ -54,7 +54,6 @@ public class Alexis {
 				new MusicHandler(LocalAudioController.class),
 				new NanowrimoHandler(client.getDatabase("users")),
 				new RuneScapeHandler(),
-				new RuneScapeNotifyHandler(),
 				new SteamHandler(api),
 				new UrbanDictionaryHandler(),
 				new UserHandler()

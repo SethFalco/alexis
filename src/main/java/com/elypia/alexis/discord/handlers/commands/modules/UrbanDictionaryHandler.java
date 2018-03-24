@@ -9,9 +9,6 @@ import com.elypia.elypiai.urbandictionary.UrbanDefinition;
 import com.elypia.elypiai.urbandictionary.UrbanDictionary;
 import com.elypia.elypiai.urbandictionary.data.UrbanResultType;
 import net.dv8tion.jda.core.EmbedBuilder;
-import net.dv8tion.jda.core.entities.User;
-
-import java.time.Instant;
 
 @Module(
 	aliases = {"UrbanDictionary", "UrbanDict", "Urban", "UD"},
@@ -86,12 +83,5 @@ public class UrbanDictionaryHandler extends CommandHandler {
 
 			event.reply(builder);
 		}, failure -> BotUtils.httpFailure(event, failure));
-	}
-
-	@Command(aliases = "command", help = "Rehowehfoiwehfowhefrd.")
-	@Parameter(name = "user", help = "User to... do shit with!")
-	@Parameter(name = "timestamp", help = "Steal... this much time from them?")
-	public void newCommand(MessageEvent event, User user, Instant timestamp) {
-		event.reply(timestamp.toString());
 	}
 }
