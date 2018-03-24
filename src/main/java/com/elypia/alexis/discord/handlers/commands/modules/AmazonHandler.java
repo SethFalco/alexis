@@ -1,8 +1,8 @@
 package com.elypia.alexis.discord.handlers.commands.modules;
 
-import com.elypia.alexis.discord.annotation.Command;
-import com.elypia.alexis.discord.annotation.Module;
-import com.elypia.alexis.discord.annotation.Parameter;
+import com.elypia.alexis.discord.annotations.Command;
+import com.elypia.alexis.discord.annotations.Module;
+import com.elypia.alexis.discord.annotations.Parameter;
 import com.elypia.alexis.discord.events.MessageEvent;
 import com.elypia.alexis.discord.handlers.commands.impl.CommandHandler;
 import com.elypia.alexis.utils.BotUtils;
@@ -20,7 +20,8 @@ import static com.mongodb.client.model.Filters.eq;
 
 @Module (
     aliases = "Amazon",
-    help = "Share links and support Elypia! We get a cut from purchases!"
+    help = "Share links and support Elypia! We get a cut from purchases!",
+    defaultCommand = "search"
 )
 public class AmazonHandler extends CommandHandler {
 
@@ -53,20 +54,9 @@ public class AmazonHandler extends CommandHandler {
         }
     }
 
-    @Command (
-        aliases = {"search", "get", "gimme"},
-        help = "Search Amazon for a product and share it.",
-        params = {
-            @Parameter (
-                param = "product",
-                help = "Name of the product you're after.",
-                type = String.class
-            )
-        }
-    )
-    public void getItem(MessageEvent event) {
-        String query = event.getParams()[0];
-
+    @Command(aliases = {"search", "get"}, help = "Search Amazon for a product and share it.")
+    @Parameter(name = "query", help = "Name of the product you're after.")
+    public void getItem(MessageEvent event, String query) {
         amazon.getItems(query, result -> {
             AmazonItem item = result.get(0);
 
@@ -78,6 +68,6 @@ public class AmazonHandler extends CommandHandler {
             builder.setFooter(String.format("This is for %s", item.getAmazon().getEndpoint().getShoppingUrl()), null);
 
             event.reply(builder);
-        }, failure -> BotUtils.unirestFailure(event, failure));
+        }, failure -> BotUtils.httpFailure(event, failure));
     }
 }

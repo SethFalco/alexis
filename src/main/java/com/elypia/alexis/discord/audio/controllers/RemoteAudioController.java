@@ -1,16 +1,16 @@
 package com.elypia.alexis.discord.audio.controllers;
 
 import com.elypia.alexis.discord.audio.GuildAudioPlayer;
-import com.elypia.alexis.discord.audio.impl.AudioController;
+import com.elypia.alexis.discord.audio.controllers.impl.AudioController;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.dv8tion.jda.core.entities.TextChannel;
 
 import java.util.List;
 
-public class DBAudioController extends AudioController {
+public class RemoteAudioController extends AudioController {
 
 
-    public DBAudioController(GuildAudioPlayer guildPlayer) {
+    public RemoteAudioController(GuildAudioPlayer guildPlayer) {
         super(guildPlayer);
     }
 

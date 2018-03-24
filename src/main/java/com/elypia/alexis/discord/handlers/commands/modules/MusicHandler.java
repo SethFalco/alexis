@@ -1,11 +1,10 @@
 package com.elypia.alexis.discord.handlers.commands.modules;
 
-import com.elypia.alexis.discord.annotation.Command;
-import com.elypia.alexis.discord.annotation.Module;
-import com.elypia.alexis.discord.annotation.Parameter;
+import com.elypia.alexis.discord.annotations.*;
+import com.elypia.alexis.discord.annotations.Module;
 import com.elypia.alexis.discord.audio.AudioPlayerSendHandler;
 import com.elypia.alexis.discord.audio.GuildAudioPlayer;
-import com.elypia.alexis.discord.audio.impl.AudioController;
+import com.elypia.alexis.discord.audio.controllers.impl.AudioController;
 import com.elypia.alexis.discord.events.MessageEvent;
 import com.elypia.alexis.discord.handlers.commands.impl.CommandHandler;
 import com.elypia.elypiai.utils.Markdown;
@@ -21,15 +20,16 @@ import net.dv8tion.jda.core.entities.MessageEmbed;
 import net.dv8tion.jda.core.entities.VoiceChannel;
 import net.dv8tion.jda.core.managers.AudioManager;
 
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @Module (
 	aliases = {"Music", "m"},
-	help = "Music player to listen to music to your hearts content in guilds!",
-	scope = ChannelType.TEXT
+	help = "Music player to listen to music to your hearts content in guilds!"
 )
+@Scope(ChannelType.TEXT)
 public class MusicHandler extends CommandHandler {
 
 	private Class<? extends AudioController> clazz;
@@ -45,7 +45,7 @@ public class MusicHandler extends CommandHandler {
 		AudioSourceManagers.registerRemoteSources(manager);
 	}
 
-	public boolean beforeAny(MessageEvent event) {
+	private boolean beforeAny(MessageEvent event) {
 		Guild guild = event.getGuild();
 		AudioManager audioManager = guild.getAudioManager();
 		VoiceChannel channel = event.getMember().getVoiceState().getChannel();
@@ -71,26 +71,18 @@ public class MusicHandler extends CommandHandler {
 		return true;
 	}
 
-	@Command (
-		aliases = {"play", "resume"},
-		help = "Play if the music if it's paused."
-	)
+	@Command(aliases = {"play", "resume"}, help = "Play if the music if it's paused.")
 	public void playPlayer(MessageEvent event) {
+		beforeAny(event);
 		getPlayer(event).play();
 	}
 
-	@Command (
-		aliases = {"pause", "stop"},
-		help = "Pause the music if it's playing."
-	)
+	@Command (aliases = {"pause", "stop"}, help = "Pause the music if it's playing.")
 	public void pausePlayer(MessageEvent event) {
 		getPlayer(event).pause();
 	}
 
-	@Command (
-		aliases = {"queue", "playing", "np"},
-		help = "Display the playing track and queue."
-	)
+	@Command (aliases = {"queue", "playing", "np"}, help = "Display the playing track and queue.")
 	public void displayQueue(MessageEvent event) {
 		GuildAudioPlayer player = getPlayer(event);
 		AudioTrack track = player.getPlayingTrack();
@@ -136,168 +128,81 @@ public class MusicHandler extends CommandHandler {
 		event.reply(builder);
 	}
 
-	@Command (
-		aliases = {"add", "append"},
-		help = "Add a track to the end of the playlist.",
-		params = {
-			@Parameter (
-				param = "query",
-				help = "The URL for the audio or what to search for on YouTube!",
-				type = String.class
-			)
-		}
-	)
-	public void addTrack(MessageEvent event) {
-		String[] params = event.getParams();
-		getPlayer(event).addTrack(params[0]);
+	@Command(aliases = {"add", "append"}, help = "Add a track to the end of the playlist.")
+	@Parameter (name = "query", help = "The URL for the audio or what to search for on YouTube!")
+	public void addTrack(MessageEvent event, String query) {
+		getPlayer(event).addTrack(query);
 	}
 
-	@Command (
-		aliases = {"insert", "prepend"},
-		help = "Insert a track to the start of the queue.",
-		params = {
-			@Parameter (
-				param = "query",
-				help = "The URL for the audio or what to search for on YouTube!",
-				type = String.class
-			)
-		}
-	)
-	public void insertTrack(MessageEvent event) {
-		String[] params = event.getParams();
-		getPlayer(event).insertTrack(params[0]);
+	@Command(aliases = {"insert", "prepend"}, help = "Insert a track to the start of the queue.")
+	@Parameter (name = "query", help = "The URL for the audio or what to search for on YouTube!")
+	public void insertTrack(MessageEvent event, String query) {
+		getPlayer(event).insertTrack(query);
 	}
 
-	@Command (
-		aliases = {"remove", "rid"},
-		help = "Remove a track from the playlist.",
-		params = {
-			@Parameter (
-				param = "identifier",
-				help = "A way to identify the track.",
-				type = String.class
-			)
-		}
-	)
-	public void removeTrack(MessageEvent event) {
-		String[] params = event.getParams();
-		getPlayer(event).removeTrack(params[0]);
+	@Command(aliases = {"remove", "rid"}, help = "Remove a track from the playlist.")
+	@Parameter (name = "id", help = "A way to identify the track.")
+	public void removeTrack(MessageEvent event, String id) {
+		getPlayer(event).removeTrack(id);
 	}
 
-	@Command (
-		aliases = "skip",
-		help = "Skip the currently playing track."
-	)
+	@Command(aliases = "skip", help = "Skip the currently playing track.")
 	public void skipTrack(MessageEvent event) {
 
 	}
 
-	@Command (
-		aliases = {"clear", "prune", "purge"},
-		help = "Remove all tracks for the queue."
-	)
+	@Command(aliases = {"clear", "prune", "purge"}, help = "Remove all tracks for the queue.")
 	public void clearPlaylist(MessageEvent event) {
 		getPlayer(event).clearPlaylist();
 	}
 
-	@Command (
-		aliases = {"shuffle", "scramble"},
-		help = "Shuffle the songs in the queue in a random order."
-	)
+	@Command(aliases = {"shuffle", "scramble"}, help = "Shuffle the songs in the queue in a random order.")
 	public void shuffleQueue(MessageEvent event) {
 		getPlayer(event).shuffle();
 	}
 
-	@Command (
-		aliases = "repeat",
-		help = "Repeat a track or playlist, once or many times."
-	)
+	@Command(aliases = "repeat", help = "Repeat a track or playlist, once or many times.")
 	public void repeatTrack(MessageEvent event) {
 
 	}
 
-	@Command (
-		aliases = "time",
-		help = "Set the time to go to in the current song.",
-		params = {
-			@Parameter (
-				param = "time",
-				help = "The time to move to, try '@Me help time' for format info.",
-				type = String.class
-			)
-		}
-	)
-	public void setTime(MessageEvent event) {
+	@Command(aliases = "time", help = "Set the time to go to in the current song.")
+	@Parameter(name = "time", help = "The time to move to, try '@Me help time' for format info.")
+	public void setTime(MessageEvent event, Instant time) {
 
 	}
 
-	@Command (
-		aliases = {"forward", "fastforward", "ff"},
-		help = "Fastforward by a set amount of time.",
-		params = {
-			@Parameter (
-				param = "time",
-				help = "The time to move forward by, try '@Me help time' for format info.",
-				type = String.class
-			)
-		}
-	)
+	@Command(aliases = {"forward", "fastforward", "ff"}, help = "Fastforward by a set amount of time.")
+	@Parameter(name = "time", help = "The time to move forward by, try '@Me help time' for format info.")
 	public void fastForward(MessageEvent event) {
 
 	}
 
-	@Command (
-		aliases = {"rewind", "backward", "rw"},
-		help = "Rewind by a set amount of time.",
-		params = {
-			@Parameter (
-				param = "time",
-				help = "The time to move rewind by, try '@Me help time' for format info.",
-				type = String.class
-			)
-		}
-	)
+	@Command(aliases = {"rewind", "backward", "rw"}, help = "Rewind by a set amount of time.")
+	@Parameter(name = "time", help = "The time to move rewind by, try '@Me help time' for format info.")
 	public void rewind(MessageEvent event) {
 
 	}
 
-	@Command (
-		aliases = {"volume", "vol", "v"},
-		help = "Set the volume of the audioplayer.",
-		params = {
-			@Parameter (
-				param = "volume",
-				help = "The volume to change the audioplayer too.",
-				type = Integer.class
-			)
-		}
-	)
+	@Command(aliases = {"volume", "vol", "v"}, help = "Set the volume of the audioplayer.")
+	@Parameter(name = "volume", help = "The volume to change the audioplayer too.")
 	public void setVolume(MessageEvent event) {
 
 	}
 
-	@Command (
-		aliases = {"leave"},
-		help = "Stops playing music and leaves if applicable."
-	)
+	@Command(aliases = {"leave"}, help = "Stops playing music and leaves if applicable.")
 	public void leaveChannel(MessageEvent event) {
 
 	}
 
-	@Command (
-		aliases = "default",
-		help = "Specify the default track or playlist to add on join.",
-		permissions = Permission.MANAGE_SERVER
-	)
+	@Command (aliases = "default", help = "Specify the default track or playlist to add on join.")
+	@Permissions(Permission.MANAGE_SERVER)
 	public void defaultList(MessageEvent event) {
 
 	}
 
-	@Command (
-		aliases = {"nickname", "nicksync", "ns"},
-		help = "Should Alexis append her name with the current song?",
-		permissions = Permission.MANAGE_SERVER
-	)
+	@Command(aliases = {"nickname", "nicksync", "ns"}, help = "Should Alexis append her name with the current song?")
+	@Permissions(Permission.MANAGE_SERVER)
 	public void nicknameSync(MessageEvent event) {
 
 	}

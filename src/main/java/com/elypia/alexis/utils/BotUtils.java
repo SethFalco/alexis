@@ -1,28 +1,27 @@
 package com.elypia.alexis.utils;
 
 import com.elypia.alexis.Alexis;
-import com.elypia.alexis.discord.annotation.Command;
-import com.elypia.alexis.discord.annotation.Module;
+import com.elypia.alexis.discord.annotations.Command;
+import com.elypia.alexis.discord.annotations.Module;
 import com.elypia.alexis.discord.events.MessageEvent;
 import com.elypia.alexis.discord.handlers.commands.impl.CommandHandler;
-import net.dv8tion.jda.core.entities.Guild;
-import net.dv8tion.jda.core.entities.Member;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class BotUtils {
+public final class BotUtils {
 
 	private BotUtils() {
-		// Unable to instantiate this class.
+
 	}
 
 	public static final Logger LOGGER = Logger.getLogger(Alexis.class.getName());
 
-	public static void unirestFailure(MessageEvent event, IOException failure) {
+	public static void httpFailure(MessageEvent event, IOException failure) {
 		// Log the exception to console, was likely time out or API in use is deprecated.
 		LOGGER.log(Level.SEVERE, "Unirest request failed.", failure);
 
@@ -47,32 +46,5 @@ public class BotUtils {
 		}
 
 		return commands;
-	}
-
-	public static Member findMember(Guild guild, String term) {
-		if (guild == null || term == null)
-			return null;
-
-		List<Member> members = guild.getMembers();
-		Set<Member> results = new HashSet<>();
-
-		members.forEach(member -> {
-			Member m = guild.getMemberById(term);
-
-			if (m != null)
-				results.add(m);
-
-			if (member.getNickname().equalsIgnoreCase(term))
-				results.add(m);
-
-			if (member.getAsMention().equals(term))
-				results.add(m);
-
-			if (member.getUser().getName().equalsIgnoreCase(term))
-				results.add(m);
-
-		});
-
-		return null;
 	}
 }

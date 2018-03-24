@@ -12,7 +12,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.logging.Level;
 
-public class ChatbotConfiguration {
+public class ChatbotConfig {
 
     // Database
     private boolean enabled;
@@ -31,7 +31,7 @@ public class ChatbotConfiguration {
     private boolean enforcePrefix;
     private boolean developersOnly;
 
-    public static ChatbotConfiguration getConfiguration(String path) {
+    public static ChatbotConfig getConfiguration(String path) {
         try (FileReader reader = new FileReader(path)) {
             StringBuilder builder = new StringBuilder();
             int i;
@@ -40,9 +40,9 @@ public class ChatbotConfiguration {
                 builder.append((char)i);
 
             JSONObject object = new JSONObject(builder.toString());
-            return new ChatbotConfiguration(object);
+            return new ChatbotConfig(object);
         } catch (FileNotFoundException ex) {
-            JSONObject object = ChatbotConfiguration.generateConfigTemplate();
+            JSONObject object = ChatbotConfig.generateConfigTemplate();
 
             try (FileWriter writer = new FileWriter(path)) {
                 String json = object.toString(4);
@@ -100,7 +100,7 @@ public class ChatbotConfiguration {
         return object;
     }
 
-    public ChatbotConfiguration(JSONObject object) {
+    public ChatbotConfig(JSONObject object) {
         // Database
         JSONObject database = object.optJSONObject("database");
 

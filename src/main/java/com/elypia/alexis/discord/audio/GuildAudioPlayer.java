@@ -1,6 +1,6 @@
 package com.elypia.alexis.discord.audio;
 
-import com.elypia.alexis.discord.audio.impl.AudioController;
+import com.elypia.alexis.discord.audio.controllers.impl.AudioController;
 import com.elypia.alexis.discord.events.MessageEvent;
 import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;

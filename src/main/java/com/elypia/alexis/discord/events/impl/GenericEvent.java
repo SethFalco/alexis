@@ -1,4 +1,4 @@
-package com.elypia.alexis.discord.events;
+package com.elypia.alexis.discord.events.impl;
 
 import com.elypia.alexis.discord.Chatbot;
 import com.elypia.alexis.discord.entities.GuildData;

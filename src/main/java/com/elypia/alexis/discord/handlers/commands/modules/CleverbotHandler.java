@@ -1,8 +1,8 @@
 package com.elypia.alexis.discord.handlers.commands.modules;
 
-import com.elypia.alexis.discord.annotation.Command;
-import com.elypia.alexis.discord.annotation.Module;
-import com.elypia.alexis.discord.annotation.Parameter;
+import com.elypia.alexis.discord.annotations.Command;
+import com.elypia.alexis.discord.annotations.Module;
+import com.elypia.alexis.discord.annotations.Parameter;
 import com.elypia.alexis.discord.events.MessageEvent;
 import com.elypia.alexis.discord.handlers.commands.impl.CommandHandler;
 import com.elypia.alexis.utils.BotUtils;
@@ -45,31 +45,18 @@ public class CleverbotHandler extends CommandHandler {
         cleverbot = new Cleverbot(apiKey);
     }
 
-    @Command (
-        aliases = {"say", "ask"},
-        help = "Say something to Cleverbot.",
-        params = {
-            @Parameter(
-                param = "body",
-                help = "What you want to say.",
-                type = String.class
-            )
-        }
-    )
-    public void say(MessageEvent event) {
-        String body = event.getParams()[0];
+    @Command (aliases = {"say", "ask"}, help = "Say something to Cleverbot.")
+    @Parameter(name = "body", help = "What you want to say.")
+    public void say(MessageEvent event, String body) {
         String cs = getCs(event.getChannel());
 
         cleverbot.say(body, cs, response -> {
             event.reply(response.getOutput());
             setCs(event.getChannel(), response.getCS());
-        }, failure -> BotUtils.unirestFailure(event, failure));
+        }, failure -> BotUtils.httpFailure(event, failure));
     }
 
-    @Command (
-        aliases = {"history", "his"},
-        help = "Track previous conversation in this channel."
-    )
+    @Command (aliases = {"history", "his"}, help = "Track previous conversation in this channel.")
     public void getHistory(MessageEvent event) {
         String cs = getCs(event.getChannel());
         String history = cleverbot.getHistory(cs);

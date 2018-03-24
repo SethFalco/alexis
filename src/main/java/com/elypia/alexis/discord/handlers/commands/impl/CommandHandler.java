@@ -1,7 +1,7 @@
 package com.elypia.alexis.discord.handlers.commands.impl;
 
-import com.elypia.alexis.discord.annotation.Command;
-import com.elypia.alexis.discord.annotation.Module;
+import com.elypia.alexis.discord.annotations.Command;
+import com.elypia.alexis.discord.annotations.Module;
 import com.elypia.alexis.discord.events.MessageEvent;
 import com.elypia.alexis.utils.BotUtils;
 
@@ -16,15 +16,6 @@ public abstract class CommandHandler {
 	protected boolean enabled;
 
 	public boolean test() {
-		return true;
-	}
-
-	/**
-	 * @param event
-	 * @return 	If we should continue to process the command.
-	 */
-
-	public boolean beforeAny(MessageEvent event) {
 		return true;
 	}
 

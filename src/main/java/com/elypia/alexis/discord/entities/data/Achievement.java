@@ -14,7 +14,7 @@ public enum Achievement {
      * Can be revoke if NaNoWriMo account is de-authorised.
      */
 
-    NANO_AUTHENTICATED("nano_authenticated");
+    NANO_AUTHENTICATED;
 
     /**
      * Name of the achievement as it appears in the database.
@@ -22,7 +22,7 @@ public enum Achievement {
 
     private String databaseName;
 
-    Achievement(String databaseName) {
+    Achievement() {
         this.databaseName = databaseName;
     }
 
@@ -32,10 +32,5 @@ public enum Achievement {
 
     public static Achievement getByName(String databaseName) {
         return valueOf(databaseName.toUpperCase());
-    }
-
-    @Override
-    public String toString() {
-        return databaseName;
     }
 }

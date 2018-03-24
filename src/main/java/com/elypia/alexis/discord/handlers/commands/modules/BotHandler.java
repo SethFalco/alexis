@@ -1,8 +1,8 @@
 package com.elypia.alexis.discord.handlers.commands.modules;
 
-import com.elypia.alexis.discord.annotation.Command;
-import com.elypia.alexis.discord.annotation.Module;
-import com.elypia.alexis.discord.annotation.Parameter;
+import com.elypia.alexis.discord.annotations.Command;
+import com.elypia.alexis.discord.annotations.Module;
+import com.elypia.alexis.discord.annotations.Parameter;
 import com.elypia.alexis.discord.events.MessageEvent;
 import com.elypia.alexis.discord.handlers.commands.impl.CommandHandler;
 import net.dv8tion.jda.core.EmbedBuilder;
@@ -21,18 +21,12 @@ public class BotHandler extends CommandHandler {
 		return false;
 	}
 
-	@Command (
-		aliases = "ping",
-		help = "Respond 'pong!' with the number of `ms` it took to fulfil the request!"
-	)
+	@Command(aliases = "ping", help = "Respond 'pong!' with the number of `ms` it took to fulfil the request!")
 	public void ping(MessageEvent event) {
 		pingPong(event, "pong!");
 	}
 
-	@Command (
-		aliases = "pong",
-		help = ""
-	)
+	@Command(aliases = "pong")
 	public void pong(MessageEvent event) {
 		pingPong(event, "ping!");
 	}
@@ -47,10 +41,7 @@ public class BotHandler extends CommandHandler {
 		});
 	}
 
-	@Command (
-		aliases = {"stats", "info"},
-		help = "Display stats on Alexis!"
-	)
+	@Command(aliases = {"stats", "info"}, help = "Display stats on Alexis!")
 	public void displayStats(MessageEvent event) {
 		JDA jda = event.getJDA();
 		User alexis = jda.getSelfUser();
@@ -64,19 +55,10 @@ public class BotHandler extends CommandHandler {
 		event.reply(builder);
 	}
 
-	@Command (
-		aliases = "say",
-		help = "Have Alexis repeat something you say!",
-		params = {
-			@Parameter (
-				param = "body",
-				help = "Text Alexis should repeat!",
-				type = String.class
-			)
-		}
-	)
-	public void say(MessageEvent event) {
+	@Command(aliases = "say", help = "Have Alexis repeat something you say!")
+	@Parameter (name = "body", help = "Text Alexis should repeat!")
+	public void say(MessageEvent event, String body) {
 		event.tryDeleteMessage();
-		event.reply(event.getParams()[0]);
+		event.reply(body);
 	}
 }

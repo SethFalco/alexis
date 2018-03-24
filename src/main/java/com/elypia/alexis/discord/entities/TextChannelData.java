@@ -37,10 +37,6 @@ public class TextChannelData {
         return guildData;
     }
 
-    public TagData getTagData(Tag tag) {
-        return null;
-    }
-
     public long getTextChannelId() {
         return textChannelId;
     }

@@ -1,9 +1,8 @@
 package com.elypia.alexis.discord.entities;
 
 import com.elypia.alexis.discord.entities.data.Tag;
-import com.elypia.alexis.discord.entities.data.TagFilter;
 import com.elypia.alexis.discord.entities.impl.DatabaseEntity;
-import com.elypia.alexis.discord.events.GenericEvent;
+import com.elypia.alexis.discord.events.impl.GenericEvent;
 import com.mongodb.client.MongoDatabase;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.TextChannel;
@@ -43,13 +42,7 @@ public class GuildData extends DatabaseEntity {
 
     private Map<Long, TextChannelData> textChannelData;
 
-    /**
-     * Guild level tag settings, such as if a tag is enabled
-     * or disabled, of if tha tag is set for {@link TagFilter#ONLY}
-     * or {@link TagFilter#EXCEPT}.
-     */
-
-    private Map<Tag, TagData> tagData;
+    private Map<Tag, Boolean> tagData;
 
     public GuildData(MongoDatabase database, Guild guild) {
         super(database, "guilds");
@@ -71,8 +64,8 @@ public class GuildData extends DatabaseEntity {
         });
 
         getArray(data, "tags", o -> {
-            TagData t = new TagData((Document)o);
-            tagData.put(t.getTag(), t);
+            Document d = (Document)o;
+            tagData.put(Tag.getByName(d.getString("tag")), d.getBoolean("enabled"));
         });
     }
 
@@ -111,8 +104,6 @@ public class GuildData extends DatabaseEntity {
     public boolean channelHasTag(long id, Tag tag) {
         if (textChannelData.containsKey(id)) {
             TextChannelData txt = textChannelData.get(id);
-
-            TagData data = tagData.get(tag);
         }
 
         return false;
@@ -161,16 +152,5 @@ public class GuildData extends DatabaseEntity {
 
     public Collection<Tag> getTags() {
         return tagData.keySet();
-    }
-
-    /**
-     * All tag data associated with this guild, may omit some
-     * tags that never never been interacted with or enabled.
-     *
-     * @return List of all tags and tag data.
-     */
-
-    public Collection<TagData> getTagData() {
-        return tagData.values();
     }
 }

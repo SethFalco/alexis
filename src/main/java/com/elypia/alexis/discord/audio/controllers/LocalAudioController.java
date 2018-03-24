@@ -1,7 +1,7 @@
 package com.elypia.alexis.discord.audio.controllers;
 
 import com.elypia.alexis.discord.audio.GuildAudioPlayer;
-import com.elypia.alexis.discord.audio.impl.AudioController;
+import com.elypia.alexis.discord.audio.controllers.impl.AudioController;
 import com.elypia.elypiai.utils.ElyUtils;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;

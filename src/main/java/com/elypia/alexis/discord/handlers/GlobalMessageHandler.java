@@ -1,11 +1,10 @@
 package com.elypia.alexis.discord.handlers;
 
-import com.elypia.alexis.discord.annotation.Event;
-import com.elypia.alexis.discord.events.GenericEvent;
+import com.elypia.alexis.discord.annotations.Database;
+import com.elypia.alexis.discord.events.impl.GenericEvent;
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
-import net.dv8tion.jda.core.entities.ChannelType;
 import org.bson.Document;
 
 /**
@@ -32,10 +31,7 @@ public class GlobalMessageHandler {
         members = database.getCollection("members");
     }
 
-    @Event(
-        requiresDatabase = true,
-        scope = ChannelType.TEXT
-    )
+    @Database
     public void handleXp(GenericEvent event) {
         String content = event.getMessage().getContentRaw();
         int messageXp = content.split("\\s+").length;

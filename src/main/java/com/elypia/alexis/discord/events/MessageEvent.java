@@ -1,7 +1,9 @@
 package com.elypia.alexis.discord.events;
 
 import com.elypia.alexis.discord.Chatbot;
-import com.elypia.alexis.discord.annotation.Command;
+import com.elypia.alexis.discord.annotations.Command;
+import com.elypia.alexis.discord.annotations.PostReactions;
+import com.elypia.alexis.discord.events.impl.GenericEvent;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.Permission;
@@ -18,8 +20,8 @@ import java.util.regex.Pattern;
 
 public class MessageEvent extends GenericEvent {
 
-	private static final String COMMAND_REGEX = "(?i)^(?<prefix><@!?%s> {0,2}|%s)(?<module>[A-Z]+)(?:\\.(?<submodule>[A-Z]+))?(?: (?<command>[A-Z]+))(?: (?<params>.*))?";
-	private static final String PARAM_REGEX = "\\b(?<=\").+?(?=\")|[^\\s\"]+";
+	private static final String COMMAND_REGEX = "(?i)^(?<prefix><@!?%s>|%s)\\s{0,2}(?<module>[A-Z]+)(?:\\.(?<submodule>[A-Z]+))?(?: (?<command>[A-Z]+))?(?: (?<params>.*))?";
+	private static final String PARAM_REGEX = "(?<quotes>\\b(?<=\")(?:\\\\\"|[^\"])*(?=\")\\b)|(?<args>[^\\s\",]+(?:\\s*,\\s*[^\\s\",]+)*)";
 
 	private static final Pattern PARAM_PATTERN = Pattern.compile(PARAM_REGEX);
 
@@ -30,12 +32,10 @@ public class MessageEvent extends GenericEvent {
 	private String module;
 	private String submodule;
 	private String command;
-	private String[] params;
-	private String[] optParams;
+	private Object[] params;
 
 	private Method method;
 	private Command annotation;
-	private String[] reactions;
 
 	private Message reply;
 
@@ -65,7 +65,7 @@ public class MessageEvent extends GenericEvent {
 		if (!isValid)
 			return;
 
-		prefix = matcher.group("prefix").trim();
+		prefix = matcher.group("prefix");
 		module = matcher.group("module").toLowerCase();
 
 		submodule = matcher.group("submodule");
@@ -80,12 +80,20 @@ public class MessageEvent extends GenericEvent {
 		// Due to change.
 		if (parameters != null) {
 			matcher = PARAM_PATTERN.matcher(parameters);
-			List<String> matches = new ArrayList<>();
+			List<Object> matches = new ArrayList<>();
 
-			while (matcher.find())
-				matches.add(matcher.group());
+			while (matcher.find()) {
+				String quotes = matcher.group("quotes");
+				String args = matcher.group("args");
 
-			params = matches.toArray(new String[matches.size()]);
+				if (quotes != null)
+					matches.add(quotes);
+
+				else if (args != null)
+					matches.add(args.split("\\s*,\\s*"));
+			}
+
+			params = matches.toArray(new Object[matches.size()]);
 		}
 	}
 
@@ -118,8 +126,12 @@ public class MessageEvent extends GenericEvent {
 	private void afterReply(Message message) {
 		reply = message;
 
-		for (String reaction : reactions)
-			message.addReaction(reaction).queue();
+		PostReactions post = method.getAnnotation(PostReactions.class);
+
+		if (post != null) {
+			for (String reaction : post.value())
+				message.addReaction(reaction).queue();
+		}
 	}
 
 	public void tryDeleteMessage() {
@@ -164,12 +176,8 @@ public class MessageEvent extends GenericEvent {
 		return command;
 	}
 
-	public String[] getParams() {
+	public Object[] getParams() {
 		return params;
-	}
-
-	public String[] getOptParams() {
-		return optParams;
 	}
 
 	public Method getMethod() {
@@ -180,14 +188,9 @@ public class MessageEvent extends GenericEvent {
 		return annotation;
 	}
 
-	public String[] getReactions() {
-		return reactions;
-	}
-
 	public void setMethod(Method method) {
 		this.method = method;
 		this.annotation = method.getAnnotation(Command.class);
-		this.reactions = annotation.reactions();
 	}
 
 	public Message getReply() {

@@ -1,8 +1,8 @@
 package com.elypia.alexis.discord.handlers.commands.modules;
 
-import com.elypia.alexis.discord.annotation.Command;
-import com.elypia.alexis.discord.annotation.Module;
-import com.elypia.alexis.discord.annotation.Parameter;
+import com.elypia.alexis.discord.annotations.Command;
+import com.elypia.alexis.discord.annotations.Module;
+import com.elypia.alexis.discord.annotations.Parameter;
 import com.elypia.alexis.discord.events.MessageEvent;
 import com.elypia.alexis.discord.handlers.commands.impl.CommandHandler;
 import com.elypia.alexis.utils.BotUtils;
@@ -32,40 +32,21 @@ public class RuneScapeHandler extends CommandHandler {
 		return false;
 	}
 
-	@Command (
-		aliases = "status",
-		help = "The total number of created accounts."
-	)
+	@Command(aliases = "status", help = "The total number of created accounts.")
 	public void displayStatus(MessageEvent event) {
 
 	}
 
-	@Command (
-		aliases = "stats",
-		help = "Get stats for a particular user.",
-		params = {
-			@Parameter(param = "username", help = "RuneScape players username.", type = String.class)
-		}
-	)
-	public void getPlayerStats(MessageEvent event) {
+	@Command(aliases = "stats", help = "Get stats for a particular user.")
+	@Parameter(name = "username", help = "RuneScape players username.")
+	public void getPlayerStats(MessageEvent event, String username) {
 
 	}
 
-	@Command (
-		aliases = {"quests", "quest", "q"},
-		help = "Get status of all quests for a user.",
-		params = {
-			@Parameter (
-				param = "username",
-				help = "RuneScape players username.",
-				type = String.class
-			)
-		}
-	)
-	public void getQuests(MessageEvent event) {
-		String param = event.getParams()[0];
-
-		runescape.getQuestStatuses(param, result -> {
+	@Command(aliases = {"quests", "quest", "q"}, help = "Get status of all quests for a user.")
+	@Parameter (name = "username", help = "RuneScape players username.")
+	public void getQuests(MessageEvent event, String username) {
+		runescape.getQuestStatuses(username, result -> {
 			EmbedBuilder builder = new EmbedBuilder();
 
 			Collection<QuestStats> completedQuests = result.getQuests(QuestStatus.COMPLETED);
@@ -81,6 +62,6 @@ public class RuneScapeHandler extends CommandHandler {
 			builder.addField("Completed", String.join("\n", completed), false);
 			builder.addField("Started", String.join("\n", started), false);
 			builder.addField("Not Started", String.join("\n", notStarted), false);
-		}, failure -> BotUtils.unirestFailure(event, failure));
+		}, failure -> BotUtils.httpFailure(event, failure));
 	}
 }

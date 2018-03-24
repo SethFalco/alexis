@@ -1,8 +1,9 @@
 package com.elypia.alexis.discord.handlers.commands.modules;
 
-import com.elypia.alexis.discord.annotation.Command;
-import com.elypia.alexis.discord.annotation.Module;
-import com.elypia.alexis.discord.annotation.Parameter;
+import com.elypia.alexis.discord.annotations.Command;
+import com.elypia.alexis.discord.annotations.Module;
+import com.elypia.alexis.discord.annotations.Parameter;
+import com.elypia.alexis.discord.annotations.PostReactions;
 import com.elypia.alexis.discord.events.MessageEvent;
 import com.elypia.alexis.discord.handlers.commands.impl.CommandHandler;
 import com.elypia.alexis.utils.BotUtils;
@@ -13,18 +14,14 @@ import com.mongodb.client.MongoCollection;
 import net.dv8tion.jda.core.EmbedBuilder;
 import org.bson.Document;
 
-import java.util.concurrent.TimeUnit;
-
 import static com.mongodb.client.model.Filters.eq;
 
 @Module (
 	aliases = "Steam",
-	help = "Integration with the popular DRM, Steam!"
+	help = "Integration with the popular DRM, Steam!",
+	defaultCommand = "get"
 )
 public class SteamHandler extends CommandHandler {
-
-	private static final String PLAYTIME_FORMAT = "%,d hrs";
-	private static final TimeUnit PREFERRED_UNIT = TimeUnit.HOURS;
 
 	private Steam steam;
 
@@ -40,46 +37,34 @@ public class SteamHandler extends CommandHandler {
 		steam = new Steam(apiKey);
 	}
 
-	@Command (
-		aliases = {"get", "user", "profile"},
-		help = "Get information on a Steam user!",
-		params = {
-			@Parameter (
-				param = "user",
-				help = "The username or ID of the user!",
-				type = String.class
-			)
-		}
-	)
-	public void displayProfile(MessageEvent event) {
-		String[] params = event.getParams();
+	@Command(aliases = {"get", "user", "profile"}, help = "Get information on a Steam user!")
+	@Parameter(name = "username", help = "The name you'd find at the end of their custom URL!")
+	public void displayProfile(MessageEvent event, String username) {
+		steam.getUser(username, user -> {
+			if (user == null) {
+				event.reply("I don't think that user exists?");
+				return;
+			}
 
-		steam.getUser(params[0], user -> {
 			EmbedBuilder builder = new EmbedBuilder();
 
 			builder.setTitle(user.getUsername(), user.getProfileURL());
 			builder.setThumbnail(user.getAvatar());
 
 			event.reply(builder);
-		}, failure -> BotUtils.unirestFailure(event, failure));
+		}, failure -> BotUtils.httpFailure(event, failure));
 	}
 
-	@Command(
-		aliases = {"lib", "library"},
-		help = "Get a players library orderd by recent playtime, then playtime!",
-		params = {
-			@Parameter (
-				param = "user",
-				help = "The username or ID of the user!",
-				type = String.class
-			)
-		}
-	)
-	public void listLibrary(MessageEvent event) {
-		String[] params = event.getParams();
+	@Command(aliases = {"lib", "library"}, help = "Get a players library orderd by recent playtime, then playtime!")
+	@Parameter(name = "username", help = "The username or ID of the user!")
+	public void listLibrary(MessageEvent event, String username) {
+		steam.getUser(username, user -> {
+			user.getLibrary(library -> {
+				if (user == null) {
+					event.reply("I don't think that user exists?");
+					return;
+				}
 
-		steam.getUser(params[0], user -> {
-			steam.getLibrary(user, library -> {
 				Object[][] games = new Object[library.size() + 1][3];
 
 				games[0][0] = "Title";
@@ -90,48 +75,42 @@ public class SteamHandler extends CommandHandler {
 					SteamGame game = library.get(i);
 
 					games[i][0] = game.getName();
-					games[i][1] = game.getTotalPlaytime(PREFERRED_UNIT);
-					games[i][2] = game.getRecentPlaytime(PREFERRED_UNIT);
+					games[i][1] = game.getTotalPlaytime();
+					games[i][2] = game.getRecentPlaytime();
 				}
 
 //				String message = ElyUtils.generateTable(1992, games);
 //				event.reply(String.format("```\n%s\n```", message));
-			}, failure -> BotUtils.unirestFailure(event, failure));
-		}, failure -> BotUtils.unirestFailure(event, failure));
+			}, failure -> BotUtils.httpFailure(event, failure));
+		}, failure -> BotUtils.httpFailure(event, failure));
 	}
 
-	@Command(
-		aliases = {"random", "rand", "game", "r"},
-		help = "Select a random game from the players library!",
-		params = {
-			@Parameter (
-				param = "user",
-				help = "The username or ID of the user!",
-				type = String.class
-			)
-		},
-		reactions = {"🎲"}
-	)
-	public void randomGame(MessageEvent event) {
-		String[] params = event.getParams();
+	@Command(aliases = {"random", "rand", "game", "r"}, help = "Select a random game from the players library!")
+	@Parameter(name = "username", help = "The username or ID of the user!")
+	@PostReactions("🎲")
+	public void randomGame(MessageEvent event, String username) {
+		steam.getUser(username, user -> {
+			if (user == null) {
+				event.reply("I don't think that user exists?");
+				return;
+			}
 
-		steam.getUser(params[0], user -> {
-			steam.getLibrary(user, library -> {
+			user.getLibrary(library -> {
 				SteamGame game = library.get(ElyUtils.RANDOM.nextInt(library.size()));
 
 				EmbedBuilder builder = new EmbedBuilder();
 				builder.setTitle(game.getName(), game.getGameUrl());
 				builder.setThumbnail(game.getIconUrl());
 
-				String totalPlaytime = String.format(PLAYTIME_FORMAT, game.getTotalPlaytime(PREFERRED_UNIT));
+				String totalPlaytime = String.format("%,d", game.getTotalPlaytime());
 				builder.addField("Total Playtime", totalPlaytime, true);
 
-				String recentPlaytime = String.format(PLAYTIME_FORMAT, game.getRecentPlaytime(PREFERRED_UNIT));
+				String recentPlaytime = String.format("%,d", game.getRecentPlaytime());
 				builder.addField("Recent Playtime", recentPlaytime, true);
 
 				builder.setImage(game.getLogoUrl());
 				event.reply(builder);
-			}, failure -> BotUtils.unirestFailure(event, failure));
-		}, failure -> BotUtils.unirestFailure(event, failure));
+			}, failure -> BotUtils.httpFailure(event, failure));
+		}, failure -> BotUtils.httpFailure(event, failure));
 	}
 }

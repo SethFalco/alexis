@@ -67,29 +67,12 @@ public enum Tag {
 
     private String databaseName;
 
-    /**
-     * The default filter value of the tag. <br>
-     * <strong>{@link TagFilter#ONLY}</strong> means only the listed channels.
-     * <strong>{@link TagFilter#EXCEPT}</strong> means all but the listed channels.
-     */
-
-    private TagFilter defaultFilter;
-
     Tag(String databaseName) {
-        this(databaseName, TagFilter.ONLY);
-    }
-
-    Tag(String databaseName, TagFilter defaultFilter) {
         this.databaseName = databaseName;
-        this.defaultFilter = defaultFilter;
     }
 
     public String getDatabaseName() {
         return databaseName;
-    }
-
-    public TagFilter getDefaultFilter() {
-        return defaultFilter;
     }
 
     public static Tag getByName(String databaseName) {
