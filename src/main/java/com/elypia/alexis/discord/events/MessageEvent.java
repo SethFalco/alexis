@@ -23,9 +23,7 @@ import java.util.regex.Pattern;
 public class MessageEvent extends GenericEvent {
 
 	private static final String COMMAND_REGEX = "(?i)^(?<prefix><@!?%s>|%s)\\s{0,2}(?<module>[A-Z]+)(?:\\.(?<submodule>[A-Z]+))?(?: (?<command>[A-Z]+))?(?: (?<params>.*))?";
-	private static final String PARAM_REGEX = "(?<quotes>\\b(?<=\")(?:\\\\\"|[^\"])*(?=\")\\b)|(?<args>[^\\s\",]+(?:\\s*,\\s*[^\\s\",]+)*)";
-
-	private static final Pattern PARAM_PATTERN = Pattern.compile(PARAM_REGEX);
+	private static final Pattern PARAM_PATTERN = Pattern.compile("(?<quotes>\\b(?<=\")(?:\\\\\"|[^\"])*(?=\"))|(?<args>[^\\s\",]+(?:\\s*,\\s*[^\\s\",]+)*)");
 
 	private MessageReceivedEvent event;
 

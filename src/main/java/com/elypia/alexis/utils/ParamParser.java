@@ -11,6 +11,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.Instant;
 import java.time.OffsetDateTime;
+import java.util.List;
 import java.util.logging.Level;
 
 public final class ParamParser {
@@ -227,7 +228,14 @@ public final class ParamParser {
     }
 
     private static User parseUser(MessageEvent event, String input) throws IllegalArgumentException {
-        return null;
+        User user = null;
+        List<User> mentioned = event.getMessage().getMentionedUsers();
+        
+        if (mentioned.size() > 0)
+            return mentioned.get(0);
+
+
+        return user;
     }
 
     private static User[] parseUserArray(MessageEvent event, String[] input) throws IllegalArgumentException {
