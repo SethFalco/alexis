@@ -1,6 +1,7 @@
 package com.elypia.alexis.utils;
 
 import com.elypia.alexis.discord.events.MessageEvent;
+import com.elypia.elypiai.osu.data.OsuMode;
 import com.elypia.elypiai.utils.Regex;
 import net.dv8tion.jda.core.entities.*;
 
@@ -60,6 +61,9 @@ public final class ParamParser {
 
             else if (clazz == Emote[].class)
                 return parseEmoteArray(event, input);
+
+            else if (clazz == OsuMode[].class)
+                return parseOsuModeArray(input);
         } else {
             if (object.getClass().isArray()) {
                 String arg = String.join(", ", (String[])object);
@@ -107,6 +111,9 @@ public final class ParamParser {
 
                 else if (clazz == Emote.class)
                     return parseEmote(event, input);
+
+                else if (clazz == OsuMode.class)
+                    return parseOsuMode(input);
             }
         }
 
@@ -321,6 +328,36 @@ public final class ParamParser {
 
         for (int i = 0; i < input.length; i++)
             output[i] = parseEmote(event, input[i]);
+
+        return output;
+    }
+
+    private static OsuMode parseOsuMode(String input) throws IllegalArgumentException {
+        for (OsuMode mode : OsuMode.values()) {
+            if (input.equals(String.valueOf(mode.getId())))
+                return mode;
+        }
+
+        if (input.equalsIgnoreCase("osu"))
+            return OsuMode.OSU;
+
+        if (input.equalsIgnoreCase("mania") || input.equalsIgnoreCase("piano"))
+            return OsuMode.MANIA;
+
+        if (input.equalsIgnoreCase("taiko") || input.equalsIgnoreCase("drums"))
+            return OsuMode.TAIKO;
+
+        if (input.equalsIgnoreCase("catch the beat") || input.equalsIgnoreCase("ctb"))
+            return OsuMode.CATCH_THE_BEAT;
+
+        throw new IllegalArgumentException("Parameter `" + input + "` isn't a game mode on osu!");
+    }
+
+    private static OsuMode[] parseOsuModeArray(String[] input) throws IllegalArgumentException {
+        OsuMode[] output = new OsuMode[input.length];
+
+        for (int i = 0; i < input.length; i++)
+            output[i] = parseOsuMode(input[i]);
 
         return output;
     }

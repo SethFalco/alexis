@@ -56,10 +56,13 @@ public class Alexis {
 				new MathHandler(),
 				new MusicHandler(LocalAudioController.class),
 				new NanowrimoHandler(client.getDatabase("users")),
+				new OsuHandler("***REMOVED***"),
 				new RuneScapeHandler(),
 				new SteamHandler(api),
+				new TwitchHandler("***REMOVED***"),
 				new UrbanDictionaryHandler(),
-				new UserHandler()
+				new UserHandler(),
+				new YouTubeHandler("***REMOVED***")
 			);
 
 			bot.registerManagers(events, commands);

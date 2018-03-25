@@ -117,8 +117,10 @@ public class CommandManager extends DiscordManager {
 
         CommandHandler handler = getHandler(event);
 
-        if (handler == null)
+        if (handler == null) {
+            log(Level.INFO, "Command was attemped in unregistered module {0}.", event.getModule());
             return;
+        }
 
         if (handler.getClass().getAnnotation(Developer.class) != null) {
             if (!Config.isDeveloper(event.getAuthor()))

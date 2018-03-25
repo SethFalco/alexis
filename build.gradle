@@ -40,7 +40,7 @@ repositories  {
 }
 
 dependencies {
-	implementation 'net.dv8tion:JDA:3.5.1_352'
+	implementation 'net.dv8tion:JDA:3.5.1_353'
 	implementation 'com.sedmelluq:lavaplayer:1.2.56'
 	implementation 'com.elypia:elypiai:1.0.4'
 	implementation group: 'org.mongodb', name: 'mongodb-driver', version: '3.6.3'
