@@ -1,7 +1,7 @@
 package com.elypia.alexis;
 
 import com.elypia.alexis.discord.Chatbot;
-import com.elypia.alexis.discord.ChatbotConfig;
+import com.elypia.alexis.discord.Config;
 import com.elypia.alexis.discord.audio.controllers.LocalAudioController;
 import com.elypia.alexis.discord.handlers.commands.modules.*;
 import com.elypia.alexis.discord.managers.CommandManager;
@@ -27,7 +27,7 @@ public class Alexis {
 		if (args.length > 0)
 			configPath = args[0];
 
-		ChatbotConfig config = ChatbotConfig.getConfiguration(configPath);
+		Config config = Config.getConfiguration(configPath);
 
 		if (config == null) {
 			ExitCode code = ExitCode.UNKNOWN_CONFIG_ERROR;
@@ -35,12 +35,12 @@ public class Alexis {
 			System.exit(code.getStatusCode());
 		}
 
-		MongoClient client = new MongoClient(config.getIp(), config.getPort());
+		MongoClient client = new MongoClient(config.ip, config.port);
 		MongoDatabase global = client.getDatabase("global");
 		MongoCollection<Document> api = global.getCollection("api_details");
 
 		try {
-			Chatbot bot = new Chatbot(config, client);
+			Chatbot bot = new Chatbot(client);
 
 			EventManager events = new EventManager(bot);
 			CommandManager commands = new CommandManager(bot);
@@ -50,6 +50,9 @@ public class Alexis {
 				new BotHandler(),
 				new BrainfuckHandler(),
 				new CleverbotHandler(client),
+				new DevHandler(),
+				new EmoteHandler(),
+				new GuildHandler(),
 				new MathHandler(),
 				new MusicHandler(LocalAudioController.class),
 				new NanowrimoHandler(client.getDatabase("users")),

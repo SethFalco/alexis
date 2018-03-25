@@ -2,7 +2,7 @@ package com.elypia.alexis.utils;
 
 public enum ExitCode {
 
-    SUCCESS(0, "Shutdown peacefully."),
+    PEACEFUL(0, "Shutdown peacefully."),
 
     GENERATED_NEW_CONGIG(1, "Generated a new config file at: "),
     FAILED_TO_READ_CONFIG(2, "Failed to read config file at: "),

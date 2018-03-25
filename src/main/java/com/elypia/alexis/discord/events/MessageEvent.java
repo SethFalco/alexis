@@ -1,6 +1,7 @@
 package com.elypia.alexis.discord.events;
 
 import com.elypia.alexis.discord.Chatbot;
+import com.elypia.alexis.discord.Config;
 import com.elypia.alexis.discord.annotations.Command;
 import com.elypia.alexis.discord.annotations.Module;
 import com.elypia.alexis.discord.annotations.PostReactions;
@@ -50,8 +51,8 @@ public class MessageEvent extends GenericEvent {
 
 		String prefix;
 
-		if (chatbot.getConfig().enforcePrefix())
-			prefix = chatbot.getConfig().getDefaultPrefix();
+		if (Config.enforcePrefix)
+			prefix = Config.defaultPrefix;
 		else
 			prefix = ">";
 

@@ -2,16 +2,13 @@ package com.elypia.alexis.utils;
 
 import com.elypia.alexis.discord.events.MessageEvent;
 import com.elypia.elypiai.utils.Regex;
-import net.dv8tion.jda.core.entities.Guild;
-import net.dv8tion.jda.core.entities.Member;
-import net.dv8tion.jda.core.entities.Role;
-import net.dv8tion.jda.core.entities.User;
+import net.dv8tion.jda.core.entities.*;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.Instant;
 import java.time.OffsetDateTime;
-import java.util.List;
+import java.util.Collection;
 import java.util.logging.Level;
 
 public final class ParamParser {
@@ -55,12 +52,18 @@ public final class ParamParser {
             else if (clazz == User[].class)
                 return parseUserArray(event, input);
 
+            else if (clazz == TextChannel[].class)
+                return parseChannelArray(event, input);
+
             else if (clazz == Role[].class)
                 return parseRoleArray(event, input);
+
+            else if (clazz == Emote[].class)
+                return parseEmoteArray(event, input);
         } else {
             if (object.getClass().isArray()) {
                 String arg = String.join(", ", (String[])object);
-                throw new IllegalArgumentException("Parameter " + arg + " can't be as a list.");
+                throw new IllegalArgumentException("Parameter `" + arg + "` can't be a list.");
             }
 
             String input = (String)object;
@@ -96,8 +99,14 @@ public final class ParamParser {
                 else if (clazz == User.class)
                     return parseUser(event, input);
 
+                else if (clazz == TextChannel.class)
+                    return parseChannel(event, input);
+
                 else if (clazz == Role.class)
                     return parseRole(event, input);
+
+                else if (clazz == Emote.class)
+                    return parseEmote(event, input);
             }
         }
 
@@ -107,7 +116,7 @@ public final class ParamParser {
 
     private static int parseInt(String input) throws IllegalArgumentException {
         if (!Regex.NUMBER.matches(input))
-            throw new IllegalArgumentException("Parameter " + input + " is not a number.");
+            throw new IllegalArgumentException("Parameter `" + input + "` is not a number.");
 
         return Integer.parseInt(input);
     }
@@ -123,7 +132,7 @@ public final class ParamParser {
 
     private static long parseLong(String input) throws IllegalArgumentException {
         if (!Regex.NUMBER.matches(input))
-            throw new IllegalArgumentException("Parameter " + input + " is not a number.");
+            throw new IllegalArgumentException("Parameter `" + input + "` is not a number.");
 
         return Long.parseLong(input);
     }
@@ -139,7 +148,7 @@ public final class ParamParser {
 
     private static double parseDouble(String input) throws IllegalArgumentException {
         if (!Regex.NUMBER.matches(input))
-            throw new IllegalArgumentException("Parameter " + input + " is not a number.");
+            throw new IllegalArgumentException("Parameter `" + input + "` is not a number.");
 
         return Double.parseDouble(input);
     }
@@ -175,7 +184,7 @@ public final class ParamParser {
         try {
             return new URL(input);
         } catch (MalformedURLException e) {
-            throw new IllegalArgumentException("Parameter " + input + " is not a valid URL.");
+            throw new IllegalArgumentException("Parameter `" + input + "` is not a valid URL.");
         }
     }
 
@@ -189,7 +198,7 @@ public final class ParamParser {
     }
 
     private static OffsetDateTime parseTime(String input) throws IllegalArgumentException {
-        return null;
+        throw new IllegalArgumentException("Parameter `" + input + "` could not be parsed as a time.");
     }
 
     private static OffsetDateTime[] parseTimeArray(String[] input) throws IllegalArgumentException {
@@ -202,7 +211,14 @@ public final class ParamParser {
     }
 
     private static Guild parseGuild(MessageEvent event, String input) throws IllegalArgumentException {
-        return null;
+        Collection<Guild> guilds = event.getAuthor().getMutualGuilds();
+
+        for (Guild g : guilds) {
+            if (g.getId().equals(input) || g.getName().equalsIgnoreCase(input))
+                return g;
+        }
+
+        throw new IllegalArgumentException("Parameter `" + input + "` could not be be linked to a guild.");
     }
 
     private static Guild[] parseGuildArray(MessageEvent event, String[] input) throws IllegalArgumentException {
@@ -215,7 +231,7 @@ public final class ParamParser {
     }
 
     private static Member parseMember(MessageEvent event, String input) throws IllegalArgumentException {
-        return null;
+        throw new IllegalArgumentException("Parameter `" + input + "` could not be be linked to a member.");
     }
 
     private static Member[] parseMemberArray(MessageEvent event, String[] input) throws IllegalArgumentException {
@@ -228,14 +244,23 @@ public final class ParamParser {
     }
 
     private static User parseUser(MessageEvent event, String input) throws IllegalArgumentException {
-        User user = null;
-        List<User> mentioned = event.getMessage().getMentionedUsers();
-        
-        if (mentioned.size() > 0)
-            return mentioned.get(0);
+        ChannelType type = event.getChannel().getType();
 
+        if (type == ChannelType.TEXT) {
+            Collection<Member> members = event.getGuild().getMembers();
 
-        return user;
+            for (Member member : members) {
+                User user = member.getUser();
+
+                if (member.getEffectiveName().equalsIgnoreCase(input))
+                    return user;
+
+                if (user.getId().equals(input) || user.getName().equalsIgnoreCase(input))
+                    return user;
+            }
+        }
+
+        throw new IllegalArgumentException("Parameter `" + input + "` could not be be linked to a user.");
     }
 
     private static User[] parseUserArray(MessageEvent event, String[] input) throws IllegalArgumentException {
@@ -247,8 +272,28 @@ public final class ParamParser {
         return output;
     }
 
+    private static TextChannel parseChannel(MessageEvent event, String input) throws IllegalArgumentException {
+        Collection<TextChannel> channels = event.getGuild().getTextChannels();
+
+        for (TextChannel channel : channels) {
+            if (channel.getId().equals(input) || channel.getName().equalsIgnoreCase(input) || channel.getAsMention().equals(input))
+                return channel;
+        }
+
+        throw new IllegalArgumentException("Parameter `" + input + "` could not be be linked to a channel.");
+    }
+
+    private static TextChannel[] parseChannelArray(MessageEvent event, String[] input) throws IllegalArgumentException {
+        TextChannel[] output = new TextChannel[input.length];
+
+        for (int i = 0; i < input.length; i++)
+            output[i] = parseChannel(event, input[i]);
+
+        return output;
+    }
+
     private static Role parseRole(MessageEvent event, String input) throws IllegalArgumentException {
-        return null;
+        throw new IllegalArgumentException("Parameter `" + input + "` could not be be linked to a role.");
     }
 
     private static Role[] parseRoleArray(MessageEvent event, String[] input) throws IllegalArgumentException {
@@ -256,6 +301,26 @@ public final class ParamParser {
 
         for (int i = 0; i < input.length; i++)
             output[i] = parseRole(event, input[i]);
+
+        return output;
+    }
+
+    private static Emote parseEmote(MessageEvent event, String input) throws IllegalArgumentException {
+        Collection<Emote> emotes = event.getJDA().getEmotes();
+
+        for (Emote emote : emotes) {
+            if (emote.getId().equals(input) || emote.getAsMention().equals(input) || emote.getName().equalsIgnoreCase(input))
+                return emote;
+        }
+
+        throw new IllegalArgumentException("Parameter `" + input + "` could not be be linked to an emote.");
+    }
+
+    private static Emote[] parseEmoteArray(MessageEvent event, String[] input) throws IllegalArgumentException {
+        Emote[] output = new Emote[input.length];
+
+        for (int i = 0; i < input.length; i++)
+            output[i] = parseEmote(event, input[i]);
 
         return output;
     }

@@ -1,7 +1,10 @@
 package com.elypia.alexis.discord.managers;
 
 import com.elypia.alexis.discord.Chatbot;
+import com.elypia.alexis.discord.Config;
+import com.elypia.alexis.discord.annotations.Developer;
 import com.elypia.alexis.discord.annotations.Module;
+import com.elypia.alexis.discord.annotations.Permissions;
 import com.elypia.alexis.discord.events.MessageEvent;
 import com.elypia.alexis.discord.handlers.commands.impl.CommandHandler;
 import com.elypia.alexis.discord.managers.impl.DiscordManager;
@@ -98,8 +101,8 @@ public class CommandManager extends DiscordManager {
         if (user.isBot())
             return false;
 
-        if (config.developersOnly())
-            return config.isDeveloper(user);
+        if (Config.developersOnly)
+            return Config.isDeveloper(user);
 
         return true;
     }
@@ -117,6 +120,11 @@ public class CommandManager extends DiscordManager {
         if (handler == null)
             return;
 
+        if (handler.getClass().getAnnotation(Developer.class) != null) {
+            if (!Config.isDeveloper(event.getAuthor()))
+                return;
+        }
+
         if (event.getCommand() == null)
             event.setCommand(handler);
 
@@ -132,6 +140,15 @@ public class CommandManager extends DiscordManager {
         if (method == null) {
             event.reply("Those parameters don't look right. DX Try help?");
             return;
+        }
+
+        Permissions permissions = method.getAnnotation(Permissions.class);
+
+        if (permissions != null) {
+            if (!event.getMember().hasPermission(permissions.value())) {
+                event.reply("You lack permission to do this command.");
+                return;
+            }
         }
 
         try {

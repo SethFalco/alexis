@@ -25,13 +25,9 @@ public class Chatbot {
 
 	private List<Game> statuses;
 
-	private ChatbotConfig config;
-
-	public Chatbot(ChatbotConfig config, MongoClient client) throws LoginException {
-		this.config = config;
-
+	public Chatbot(MongoClient client) throws LoginException {
 		JDABuilder builder = new JDABuilder(AccountType.BOT);
-		builder.setToken(config.getToken());
+		builder.setToken(Config.token);
 		builder.setCorePoolSize(10);
 //		builder.setGame(Game.playing(config.getDefaultStatuses()[0]));
 		builder.setStatus(OnlineStatus.IDLE);
@@ -49,10 +45,6 @@ public class Chatbot {
 
 	public JDA getJDA() {
 		return jda;
-	}
-
-	public ChatbotConfig getConfig() {
-		return config;
 	}
 
 	public MongoClient getClient() {

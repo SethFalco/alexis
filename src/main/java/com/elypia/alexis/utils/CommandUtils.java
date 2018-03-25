@@ -31,7 +31,6 @@ public final class CommandUtils {
         String command = event.getCommand();
         CommandGroup group = null;
 
-
         for (Method method : methods) {
             Command annotation = method.getAnnotation(Command.class);
 

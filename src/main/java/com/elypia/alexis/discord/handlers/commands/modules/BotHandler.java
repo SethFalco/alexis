@@ -1,5 +1,6 @@
 package com.elypia.alexis.discord.handlers.commands.modules;
 
+import com.elypia.alexis.discord.Config;
 import com.elypia.alexis.discord.annotations.Command;
 import com.elypia.alexis.discord.annotations.Module;
 import com.elypia.alexis.discord.annotations.Parameter;
@@ -17,6 +18,8 @@ import net.dv8tion.jda.core.entities.User;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.Collection;
+import java.util.Map;
+import java.util.StringJoiner;
 import java.util.stream.Collectors;
 
 import static com.elypia.alexis.utils.BotUtils.inviteUrl;
@@ -63,12 +66,31 @@ public class BotHandler extends CommandHandler {
 	public void displayStats(MessageEvent event) {
 		JDA jda = event.getJDA();
 		User alexis = jda.getSelfUser();
+		Map<Long, String> developers = Config.developers;
 
 		EmbedBuilder builder = new EmbedBuilder();
-		builder.setTitle(String.format("%s stats!", alexis.getName()));
+		builder.setTitle(alexis.getName());
 		builder.setThumbnail(alexis.getAvatarUrl());
-		builder.addField("Guilds", String.valueOf(jda.getGuilds().size()), false);
-		builder.addField("Users", String.valueOf(jda.getUsers().size()), false);
+
+		StringJoiner joiner = new StringJoiner("\n");
+
+		developers.forEach((id, url) -> {
+			User user = jda.getUserById(id);
+			joiner.add(Markdown.a(user.getName(), url));
+		});
+
+		builder.addField("Developer(s)", joiner.toString(), true);
+		builder.addField("Scribble Master", "Jossu", true);
+
+		builder.addField("Guilds", String.valueOf(jda.getGuilds().size()), true);
+
+		Collection<User> users = jda.getUsers();
+		long bots = users.stream().filter(User::isBot).count();
+		String userField = String.format("%,d (%,d)", users.size() - bots, bots);
+		builder.addField("Users (Bots)", userField, true);
+
+		builder.addField("Guild", Markdown.a("Elypia", "https://discord.gg/"), true);
+		builder.setFooter("Did you know you can support the project through the 'Amazon' module!", null);
 
 		event.reply(builder);
 	}
@@ -91,7 +113,7 @@ public class BotHandler extends CommandHandler {
 		}).collect(Collectors.toList());
 
 		EmbedBuilder builder = new EmbedBuilder();
-		users.forEach(o -> builder.addField(o.getName(), Markdown.a("Invite link!", inviteUrl(o)), false));
+		users.forEach(o -> builder.addField(o.getName(), Markdown.a("Invite link!", inviteUrl(o)), true));
 		event.reply(builder);
 	}
 }
