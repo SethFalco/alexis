@@ -107,8 +107,8 @@ public class MessageEvent extends GenericEvent {
 
 	// Functions
 
-	public void reply(String body) {
-		getChannel().sendMessage(body).queue(this::afterReply);
+	public void reply(Object body) {
+		getChannel().sendMessage(body.toString()).queue(this::afterReply);
 	}
 
 	public void reply(EmbedBuilder builder) {

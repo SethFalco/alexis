@@ -9,12 +9,12 @@ import com.elypia.elypiai.utils.math.MathUtils;
 import net.dv8tion.jda.core.EmbedBuilder;
 
 @Module (
-	aliases = {"Math"},
+	aliases = {"Util", "Math"},
 	help = "Math commands and fun stuff."
 )
-public class MathHandler extends CommandHandler {
+public class UtilHandler extends CommandHandler {
 
-	@Command (aliases = {"convert"}, help = "Convert a number to it's written equivelent.")
+	@Command(aliases = {"convert"}, help = "Convert a number to it's written equivelent.")
 	@Parameter(name = "value", help = "The number to convert to the written form.")
 	public void asWritten(MessageEvent event, long values[]) {
 		EmbedBuilder builder = new EmbedBuilder();
@@ -35,5 +35,11 @@ public class MathHandler extends CommandHandler {
 		}
 
 		event.reply(builder);
+	}
+
+	@Command(aliases = "count", help = "Cound the number of charachters sent.")
+	@Parameter(name = "text", help = "The text to count from.")
+	public void count(MessageEvent event, String input) {
+		event.reply(input.length());
 	}
 }

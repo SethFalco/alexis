@@ -44,7 +44,7 @@ public class UrbanDictionaryHandler extends CommandHandler {
 				if (results.getResultType() == UrbanResultType.NO_RESULTS)
 					return;
 
-				UrbanDefinition definition = results.getResult(false);
+				UrbanDefinition definition = results.getResult(true);
 
 				String name = String.format("👍: %,d 👎: %,d\n", definition.getThumbsUp(), definition.getThumbsDown());
 				builder.addField(definition.getWord() + " " + name, definition.getDefinition(), true);
@@ -82,10 +82,10 @@ public class UrbanDictionaryHandler extends CommandHandler {
 			builder.setDescription(definition.getDefinition());
 
 			String descText = String.format (
-					"%s\n\n👍: %,d 👎: %,d",
-					definition.getExample(),
-					definition.getThumbsUp(),
-					definition.getThumbsDown()
+				"%s\n\n👍: %,d 👎: %,d",
+				definition.getExample(),
+				definition.getThumbsUp(),
+				definition.getThumbsDown()
 			);
 			builder.addField("Example", descText, true);
 

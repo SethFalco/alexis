@@ -251,21 +251,6 @@ public final class ParamParser {
     }
 
     private static User parseUser(MessageEvent event, String input) throws IllegalArgumentException {
-        ChannelType type = event.getChannel().getType();
-
-        if (type == ChannelType.TEXT) {
-            Collection<Member> members = event.getGuild().getMembers();
-
-            for (Member member : members) {
-                User user = member.getUser();
-
-                if (member.getEffectiveName().equalsIgnoreCase(input))
-                    return user;
-
-                if (user.getId().equals(input) || user.getName().equalsIgnoreCase(input))
-                    return user;
-            }
-        }
 
         throw new IllegalArgumentException("Parameter `" + input + "` could not be be linked to a user.");
     }
