@@ -19,6 +19,9 @@ public final class ParamParser {
 
     public static Object parseParam(MessageEvent event, Object object, Class<?> clazz) throws IllegalArgumentException {
         if (clazz.isArray()) {
+            if (!object.getClass().isArray())
+                object = new String[] {(String)object};
+
             String[] input = (String[])object;
 
             if (clazz == int[].class)
@@ -54,6 +57,11 @@ public final class ParamParser {
             else if (clazz == Role[].class)
                 return parseRoleArray(event, input);
         } else {
+            if (object.getClass().isArray()) {
+                String arg = String.join(", ", (String[])object);
+                throw new IllegalArgumentException("Parameter " + arg + " can't be as a list.");
+            }
+
             String input = (String)object;
 
             if (clazz.isPrimitive()) {

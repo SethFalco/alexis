@@ -10,6 +10,9 @@ import com.elypia.elypiai.urbandictionary.UrbanDictionary;
 import com.elypia.elypiai.urbandictionary.data.UrbanResultType;
 import net.dv8tion.jda.core.EmbedBuilder;
 
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
+
 @Module(
 	aliases = {"UrbanDictionary", "UrbanDict", "Urban", "UD"},
 	help = "An online dictionary defined by the community for definitions and examples.",
@@ -27,8 +30,34 @@ public class UrbanDictionaryHandler extends CommandHandler {
 	@Command(aliases = "define", help = "Return the definition of a word or phrase.")
 	@Parameter(name = "body", help = "Word or phrase to define!")
 	@PostReactions({"🔉", "🎲"})
-	public void define(MessageEvent event, String body) {
-		define(event, body, true);
+	public void define(MessageEvent event, String body[]) throws InterruptedException {
+		if (body.length == 1) {
+			define(event, body[0], true);
+			return;
+		}
+
+		CountDownLatch latch = new CountDownLatch(body.length);
+		EmbedBuilder builder = new EmbedBuilder();
+
+		for (String s : body) {
+			dict.define(s, results -> {
+				if (results.getResultType() == UrbanResultType.NO_RESULTS)
+					return;
+
+				UrbanDefinition definition = results.getResult(false);
+
+				String name = String.format("👍: %,d 👎: %,d\n", definition.getThumbsUp(), definition.getThumbsDown());
+				builder.addField(definition.getWord() + " " + name, definition.getDefinition(), true);
+
+				latch.countDown();
+			}, failure -> {
+				BotUtils.httpFailure(event, failure);
+				latch.countDown();
+			});
+		}
+
+		latch.await(10, TimeUnit.SECONDS);
+		event.reply(builder);
 	}
 
 	@CommandGroup("define")

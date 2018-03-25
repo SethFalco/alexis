@@ -117,6 +117,9 @@ public class CommandManager extends DiscordManager {
         if (handler == null)
             return;
 
+        if (event.getCommand() == null)
+            event.setCommand(handler);
+
         Collection<Method> commands = CommandUtils.getCommands(event, handler);
 
         if (commands.isEmpty()) {

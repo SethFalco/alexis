@@ -2,8 +2,10 @@ package com.elypia.alexis.discord.events;
 
 import com.elypia.alexis.discord.Chatbot;
 import com.elypia.alexis.discord.annotations.Command;
+import com.elypia.alexis.discord.annotations.Module;
 import com.elypia.alexis.discord.annotations.PostReactions;
 import com.elypia.alexis.discord.events.impl.GenericEvent;
+import com.elypia.alexis.discord.handlers.commands.impl.CommandHandler;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.Permission;
@@ -74,7 +76,10 @@ public class MessageEvent extends GenericEvent {
 		if (submodule != null)
 			submodule = submodule.toLowerCase();
 
-		command = matcher.group("command").toLowerCase();
+		command = matcher.group("command");
+
+		if (command != null)
+			command = command.toLowerCase();
 
 		String parameters = matcher.group("params");
 
@@ -178,6 +183,11 @@ public class MessageEvent extends GenericEvent {
 
 	public String getCommand() {
 		return command;
+	}
+
+	public void setCommand(CommandHandler handler) {
+		Module module = handler.getClass().getAnnotation(Module.class);
+		this.command = module.defaultCommand();
 	}
 
 	public List<Object> getParams() {
