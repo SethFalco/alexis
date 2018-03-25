@@ -25,3 +25,15 @@ test:
     paths:
       - build
       - .gradle
+
+deploy:
+  stage: deploy
+  script:
+    - gradle shadowJar
+    - scp build/libs/Alexis.jar $USER:$PASSWORD@$ADDRESS:~/alexis/$CI_COMMIT_REF_NAME/Alexis.jar
+  cache:
+    key: "$CI_COMMIT_REF_NAME"
+    policy: pull
+    paths:
+      - build
+      - .gradle

@@ -27,15 +27,9 @@ public class Alexis {
 		if (args.length > 0)
 			configPath = args[0];
 
-		Config config = Config.getConfiguration(configPath);
+		Config.getConfiguration(configPath);
 
-		if (config == null) {
-			ExitCode code = ExitCode.UNKNOWN_CONFIG_ERROR;
-			BotUtils.LOGGER.log(Level.SEVERE, code.getMessage());
-			System.exit(code.getStatusCode());
-		}
-
-		MongoClient client = new MongoClient(config.ip, config.port);
+		MongoClient client = new MongoClient(Config.ip, Config.port);
 		MongoDatabase global = client.getDatabase("global");
 		MongoCollection<Document> api = global.getCollection("api_details");
 
