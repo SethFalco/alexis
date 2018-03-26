@@ -28,7 +28,7 @@ deploy:
   script:
     - gradle --build-cache shadowJar
     - apk update
-    - apk add openssh
+    - apk add openssh-sftp-server
     - sftp -oPort=$PORT $USER:$PASSWORD@$ADDRESS
     - put build/libs/Alexis.jar
   cache:
