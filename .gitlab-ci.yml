@@ -19,7 +19,6 @@ test:
   stage: test
   script:
     - gradle --build-cache check
-    - "[-f build/reports/jacoco/test/html/index.html] && cat build/reports/jacoco/test/html/index.html || echo No code coverage results found."
   cache:
     paths:
       - .gradle
@@ -29,7 +28,6 @@ deploy:
   stage: deploy
   script:
     - gradle shadowJar
-    - echo Not sending to server yet.
   cache:
     key: $CI_COMMIT_REF_NAME
     policy: pull
