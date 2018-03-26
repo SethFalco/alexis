@@ -19,7 +19,7 @@ test:
   stage: test
   script:
     - gradle --build-cache check
-    - cat build/reports/jacoco/test/html/index.html
+    - if [-e build/reports/jacoco/test/html/index.html] then cat build/reports/jacoco/test/html/index.html fi
   cache:
     paths:
       - .gradle
