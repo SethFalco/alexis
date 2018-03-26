@@ -23,8 +23,10 @@ public class VoiceHandler extends CommandHandler {
         StringJoiner joiner = new StringJoiner(" ");
         Arrays.stream(channel).filter(Objects::nonNull).forEach(o -> members.addAll(o.getMembers()));
 
-        for (Member member : members)
-            joiner.add(member.getAsMention());
+        for (Member member : members) {
+            if (!member.getUser().isBot())
+                joiner.add(member.getAsMention());
+        }
 
         if (joiner.length() == 0)
             event.reply("Wait... who should I be mentioning?");

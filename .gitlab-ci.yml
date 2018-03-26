@@ -36,8 +36,8 @@ deploy:
   image: alpine:3.6
   script:
     - apk update
-    - apk add openssh
-    - sftp -oPort=$PORT $USER:$PASSWORD@$ADDRESS
+    - apk add openssh-sftp-server
+    - sftp -oPort=$PORT $USER@$ADDRESS
     - sftp put build/libs/Alexis.jar
   cache:
     paths:
