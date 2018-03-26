@@ -34,7 +34,6 @@ deploy:
     - echo "$SSH_KEY" | tr -d '\r' | ssh-add - > /dev/null
     - mkdir -p ~/.ssh
     - ssh-keyscan $SSH_ADDRESS >> ~/.ssh/known_hosts
-    - cat ~/.ssh/known_hosts
     - sftp -oPort=$SSH_PORT $SSH_USER@$SSH_ADDRESS
     - sftp put build/libs/Alexis.jar
   cache:
