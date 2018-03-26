@@ -25,7 +25,7 @@ test:
       - .gradle
       - build
 
-.deploy:
+deploy:
   stage: deploy
   script:
     - gradle shadowJar
