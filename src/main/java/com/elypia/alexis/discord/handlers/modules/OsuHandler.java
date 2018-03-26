@@ -1,4 +1,4 @@
-package com.elypia.alexis.discord.handlers.commands.modules;
+package com.elypia.alexis.discord.handlers.modules;
 
 
 import com.elypia.alexis.discord.annotations.Command;
@@ -6,7 +6,7 @@ import com.elypia.alexis.discord.annotations.CommandGroup;
 import com.elypia.alexis.discord.annotations.Module;
 import com.elypia.alexis.discord.annotations.Parameter;
 import com.elypia.alexis.discord.events.MessageEvent;
-import com.elypia.alexis.discord.handlers.commands.impl.CommandHandler;
+import com.elypia.alexis.discord.handlers.impl.CommandHandler;
 import com.elypia.elypiai.osu.Osu;
 import com.elypia.elypiai.osu.data.OsuMode;
 import com.elypia.elypiai.utils.Markdown;

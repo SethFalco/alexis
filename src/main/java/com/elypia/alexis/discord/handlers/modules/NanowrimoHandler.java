@@ -1,11 +1,11 @@
-package com.elypia.alexis.discord.handlers.commands.modules;
+package com.elypia.alexis.discord.handlers.modules;
 
 import com.elypia.alexis.discord.annotations.Command;
 import com.elypia.alexis.discord.annotations.Database;
 import com.elypia.alexis.discord.annotations.Module;
 import com.elypia.alexis.discord.annotations.Parameter;
 import com.elypia.alexis.discord.events.MessageEvent;
-import com.elypia.alexis.discord.handlers.commands.impl.CommandHandler;
+import com.elypia.alexis.discord.handlers.impl.CommandHandler;
 import com.elypia.alexis.utils.BotUtils;
 import com.elypia.elypiai.nanowrimo.Nanowrimo;
 import com.mongodb.client.MongoDatabase;

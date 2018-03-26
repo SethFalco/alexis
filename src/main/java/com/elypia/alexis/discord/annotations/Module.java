@@ -1,6 +1,6 @@
 package com.elypia.alexis.discord.annotations;
 
-import com.elypia.alexis.discord.handlers.commands.impl.CommandHandler;
+import com.elypia.alexis.discord.handlers.impl.CommandHandler;
 
 import java.lang.annotation.*;
 

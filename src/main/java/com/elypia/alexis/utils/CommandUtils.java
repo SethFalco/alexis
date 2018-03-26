@@ -3,7 +3,7 @@ package com.elypia.alexis.utils;
 import com.elypia.alexis.discord.annotations.Command;
 import com.elypia.alexis.discord.annotations.CommandGroup;
 import com.elypia.alexis.discord.events.MessageEvent;
-import com.elypia.alexis.discord.handlers.commands.impl.CommandHandler;
+import com.elypia.alexis.discord.handlers.impl.CommandHandler;
 
 import java.lang.reflect.Method;
 import java.util.*;

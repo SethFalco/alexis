@@ -1,9 +1,9 @@
-package com.elypia.alexis.discord.handlers.commands.modules;
+package com.elypia.alexis.discord.handlers.modules;
 
 import com.elypia.alexis.discord.annotations.*;
 import com.elypia.alexis.discord.annotations.Module;
 import com.elypia.alexis.discord.events.MessageEvent;
-import com.elypia.alexis.discord.handlers.commands.impl.CommandHandler;
+import com.elypia.alexis.discord.handlers.impl.CommandHandler;
 import com.elypia.elypiai.google.youtube.YouTube;
 import com.elypia.elypiai.google.youtube.YouTubeItem;
 import net.dv8tion.jda.core.EmbedBuilder;

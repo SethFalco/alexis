@@ -56,6 +56,9 @@ public final class ParamParser {
             else if (clazz == TextChannel[].class)
                 return parseChannelArray(event, input);
 
+            else if (clazz == VoiceChannel[].class)
+                return parseVoiceArray(event, input);
+
             else if (clazz == Role[].class)
                 return parseRoleArray(event, input);
 
@@ -105,6 +108,9 @@ public final class ParamParser {
 
                 else if (clazz == TextChannel.class)
                     return parseChannel(event, input);
+
+                else if (clazz == VoiceChannel.class)
+                    return parseVoice(event, input);
 
                 else if (clazz == Role.class)
                     return parseRole(event, input);
@@ -284,7 +290,34 @@ public final class ParamParser {
         return output;
     }
 
+    private static VoiceChannel parseVoice(MessageEvent event, String input) throws IllegalArgumentException {
+        Collection<VoiceChannel> channels = event.getGuild().getVoiceChannels();
+
+        for (VoiceChannel channel : channels) {
+            if (channel.getId().equals(input) || channel.getName().equalsIgnoreCase(input))
+                return channel;
+        }
+
+        throw new IllegalArgumentException("Parameter `" + input + "` could not be be linked to a channel.");
+    }
+
+    private static VoiceChannel[] parseVoiceArray(MessageEvent event, String[] input) throws IllegalArgumentException {
+        VoiceChannel[] output = new VoiceChannel[input.length];
+
+        for (int i = 0; i < input.length; i++)
+            output[i] = parseVoice(event, input[i]);
+
+        return output;
+    }
+
     private static Role parseRole(MessageEvent event, String input) throws IllegalArgumentException {
+        Collection<Role> roles = event.getGuild().getRoles();
+
+        for (Role role : roles) {
+            if (role.getId().equals(input) || role.getAsMention().equals(input) || role.getName().equalsIgnoreCase(input))
+                return role;
+        }
+
         throw new IllegalArgumentException("Parameter `" + input + "` could not be be linked to a role.");
     }
 

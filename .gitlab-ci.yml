@@ -25,10 +25,13 @@ test:
 
 deploy:
   stage: deploy
+  image: alpine:3.6
   script:
     - gradle --build-cache shadowJar
+    - apk update
+    - apk add openssh
     - sftp -oPort=$PORT $USER:$PASSWORD@$ADDRESS
-    - put build/libs/Alexis.jar
+    - sftp put build/libs/Alexis.jar
   cache:
     paths:
       - .gradle

@@ -6,7 +6,7 @@ import com.elypia.alexis.discord.annotations.Command;
 import com.elypia.alexis.discord.annotations.Module;
 import com.elypia.alexis.discord.annotations.PostReactions;
 import com.elypia.alexis.discord.events.impl.GenericEvent;
-import com.elypia.alexis.discord.handlers.commands.impl.CommandHandler;
+import com.elypia.alexis.discord.handlers.impl.CommandHandler;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.Permission;

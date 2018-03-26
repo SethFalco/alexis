@@ -1,4 +1,4 @@
-package com.elypia.alexis.discord.handlers.commands.modules;
+package com.elypia.alexis.discord.handlers.modules;
 
 import com.elypia.alexis.discord.annotations.*;
 import com.elypia.alexis.discord.annotations.Module;
@@ -6,7 +6,7 @@ import com.elypia.alexis.discord.audio.AudioPlayerSendHandler;
 import com.elypia.alexis.discord.audio.GuildAudioPlayer;
 import com.elypia.alexis.discord.audio.controllers.impl.AudioController;
 import com.elypia.alexis.discord.events.MessageEvent;
-import com.elypia.alexis.discord.handlers.commands.impl.CommandHandler;
+import com.elypia.alexis.discord.handlers.impl.CommandHandler;
 import com.elypia.elypiai.utils.Markdown;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;

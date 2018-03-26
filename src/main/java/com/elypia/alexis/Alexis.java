@@ -3,7 +3,7 @@ package com.elypia.alexis;
 import com.elypia.alexis.discord.Chatbot;
 import com.elypia.alexis.discord.Config;
 import com.elypia.alexis.discord.audio.controllers.LocalAudioController;
-import com.elypia.alexis.discord.handlers.commands.modules.*;
+import com.elypia.alexis.discord.handlers.modules.*;
 import com.elypia.alexis.discord.managers.CommandManager;
 import com.elypia.alexis.discord.managers.EventManager;
 import com.elypia.alexis.utils.BotUtils;
@@ -57,6 +57,7 @@ public class Alexis {
 				new TwitchHandler("***REMOVED***"),
 				new UrbanDictionaryHandler(),
 				new UserHandler(),
+				new VoiceHandler(),
 				new YouTubeHandler("***REMOVED***")
 			);
 
