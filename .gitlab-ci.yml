@@ -19,7 +19,7 @@ test:
   stage: test
   script:
     - gradle --build-cache check
-    - [-f build/reports/jacoco/test/html/index.html] && cat build/reports/jacoco/test/html/index.html || echo "No code coverage results found."
+    - "[-f build/reports/jacoco/test/html/index.html] && cat build/reports/jacoco/test/html/index.html || echo No code coverage results found."
   cache:
     paths:
       - .gradle
