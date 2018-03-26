@@ -37,7 +37,8 @@ deploy:
   script:
     - apk update
     - apk add openssh-client
-    - sftp -oStrictHostKeyChecking=no -oPort=$PORT $USER:$PASSWORD@$ADDRESS
+    - echo "$SSH_KEY" | tr -d '\r' | ssh-add - > /dev/null
+    - sftp -oPort=$PORT $USER@$ADDRESS
     - sftp put build/libs/Alexis.jar
   cache:
     paths:
