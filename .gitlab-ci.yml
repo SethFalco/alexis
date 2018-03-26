@@ -25,9 +25,11 @@ test:
       - .gradle
       - build
 
-deploy:
+.deploy:
   stage: deploy
-  script: gradle bintray
+  script:
+    - gradle shadowJar
+    - echo Not sending to server yet.
   cache:
     key: $CI_COMMIT_REF_NAME
     policy: pull
