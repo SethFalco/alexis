@@ -6,9 +6,17 @@ variables:
 before_script:
   - export GRADLE_USER_HOME=`pwd`/.gradle
 
-build:
+assemble:
   stage: build
   script: gradle --build-cache assemble
+  cache:
+    paths:
+      - .gradle
+      - build
+
+shadowjar:
+  stage: build
+  script: gradle --build-cache shadowJar
   cache:
     paths:
       - .gradle
@@ -27,7 +35,6 @@ deploy:
   stage: deploy
   image: alpine:3.6
   script:
-    - gradle --build-cache shadowJar
     - apk update
     - apk add openssh
     - sftp -oPort=$PORT $USER:$PASSWORD@$ADDRESS
