@@ -1,6 +1,7 @@
 plugins {
     id 'java'
     id 'idea'
+    id "jacoco"
     id 'com.github.johnrengelman.shadow' version '2.0.3'
 }
 
@@ -36,6 +37,19 @@ dependencies {
 
     testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.1.0'
     testRuntimeOnly group: 'org.junit.platform', name: 'junit-platform-runner', version: '1.1.0'
+}
+
+test {
+    useJUnitPlatform()
+    finalizedBy jacocoTestReport
+
+    reports {
+        html.enabled = false
+    }
+}
+
+jacoco {
+    toolVersion = "0.8.0"
 }
 
 task wrapper(type: Wrapper) {
