@@ -31,7 +31,7 @@ deploy:
     - apk update
     - apk add openssh-client
     - eval $(ssh-agent -s)
-    - echo $SSH_KEY | tr -d '\r' | ssh-add - > /dev/null
+    - echo "$SSH_KEY" | tr -d '\r' | ssh-add - > /dev/null
     - mkdir -p ~/.ssh
     - ssh-keyscan $SSH_ADDRESS >> ~/.ssh/known_hosts
     - cat ~/.ssh/known_hosts
