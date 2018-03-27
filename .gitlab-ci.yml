@@ -25,7 +25,8 @@ test:
       - build
 
 deploy:
-  only: master
+  only:
+    - master
   stage: deploy
   image: alpine:3.6
   script:
