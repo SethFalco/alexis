@@ -39,7 +39,7 @@ deploy:
     - sftp -oPort=$SSH_PORT $SSH_USER@$SSH_ADDRESS
     - mkdir -p ~/alexis/$CI_JOB_ID/
     - cd ~/alexis/$CI_JOB_ID/
-    - put build/libs/Alexis.jar
+    - bye
   cache:
     key: $CI_PROJECT_ID
     policy: pull
