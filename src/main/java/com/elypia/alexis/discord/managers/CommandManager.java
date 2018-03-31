@@ -133,7 +133,7 @@ public class CommandManager extends DiscordManager {
         Collection<Method> commands = CommandUtils.getCommands(event, handler);
 
         if (commands.isEmpty()) {
-            event.reply("Sorry, that command doesn't exist!");
+            event.reply("Sorry, that command doesn't exist, try help?");
             return;
         }
 
