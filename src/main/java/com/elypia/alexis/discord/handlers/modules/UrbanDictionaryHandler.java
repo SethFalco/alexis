@@ -1,13 +1,13 @@
 package com.elypia.alexis.discord.handlers.modules;
 
-import com.elypia.alexis.discord.annotations.*;
-import com.elypia.alexis.discord.annotations.Module;
+import com.elypia.jdautils.annotations.command.*;
 import com.elypia.alexis.discord.events.MessageEvent;
 import com.elypia.alexis.discord.handlers.impl.CommandHandler;
 import com.elypia.alexis.utils.BotUtils;
 import com.elypia.elypiai.urbandictionary.UrbanDefinition;
 import com.elypia.elypiai.urbandictionary.UrbanDictionary;
 import com.elypia.elypiai.urbandictionary.data.UrbanResultType;
+import com.elypia.jdautils.annotations.command.Module;
 import net.dv8tion.jda.core.EmbedBuilder;
 
 import java.util.concurrent.CountDownLatch;
@@ -29,7 +29,8 @@ public class UrbanDictionaryHandler extends CommandHandler {
 	@CommandGroup("define")
 	@Command(aliases = "define", help = "Return the definition of a word or phrase.")
 	@Parameter(name = "body", help = "Word or phrase to define!")
-	@PostReactions({"🔉", "🎲"})
+	@Reaction(alias = "🔉", help = "Hear an audio clip associtated with this word.")
+	@Reaction(alias = "🎲", help = "Don't like definition? Get a new one!")
 	public void define(MessageEvent event, String body[]) throws InterruptedException {
 		if (body.length == 1) {
 			define(event, body[0], true);
@@ -63,7 +64,8 @@ public class UrbanDictionaryHandler extends CommandHandler {
 	@CommandGroup("define")
 	@Parameter(name = "body", help = "Word or phrase to define!")
 	@Parameter(name = "random", help = "Random result or top result!")
-	@PostReactions({"🔉", "🎲"})
+	@Reaction(alias = "🔉", help = "Hear an audio clip associtated with this word.")
+	@Reaction(alias = "🎲", help = "Don't like definition? Get a new one!")
 	public void define(MessageEvent event, String body, boolean random) {
 		dict.define(body, results -> {
 			if (results.getResultType() == UrbanResultType.NO_RESULTS) {

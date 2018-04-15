@@ -1,4 +1,4 @@
-package com.elypia.alexis.discord.annotations;
+package com.elypia.jdautils.annotations.command;
 
 import java.lang.annotation.*;
 

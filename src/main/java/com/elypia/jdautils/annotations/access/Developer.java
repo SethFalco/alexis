@@ -1,4 +1,4 @@
-package com.elypia.alexis.discord.annotations;
+package com.elypia.jdautils.annotations.access;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

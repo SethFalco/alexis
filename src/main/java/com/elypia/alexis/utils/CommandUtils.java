@@ -1,7 +1,7 @@
 package com.elypia.alexis.utils;
 
-import com.elypia.alexis.discord.annotations.Command;
-import com.elypia.alexis.discord.annotations.CommandGroup;
+import com.elypia.jdautils.annotations.command.Command;
+import com.elypia.jdautils.annotations.command.CommandGroup;
 import com.elypia.alexis.discord.events.MessageEvent;
 import com.elypia.alexis.discord.handlers.impl.CommandHandler;
 

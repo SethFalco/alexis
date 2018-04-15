@@ -1,6 +1,6 @@
 package com.elypia.alexis.discord.handlers;
 
-import com.elypia.alexis.discord.annotations.Database;
+import com.elypia.jdautils.annotations.access.Database;
 import com.elypia.alexis.discord.events.impl.GenericEvent;
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;

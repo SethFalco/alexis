@@ -1,7 +1,7 @@
 package com.elypia.alexis.discord.handlers.impl;
 
-import com.elypia.alexis.discord.annotations.Command;
-import com.elypia.alexis.discord.annotations.Module;
+import com.elypia.jdautils.annotations.command.Command;
+import com.elypia.jdautils.annotations.command.Module;
 import com.elypia.alexis.discord.events.MessageEvent;
 
 import java.lang.reflect.Method;

@@ -13,10 +13,11 @@
     <orderEntry type="library" name="Gradle: com.sedmelluq:lavaplayer:1.2.56" level="project" />
     <orderEntry type="library" name="Gradle: com.elypia:elypiai:1.0.4" level="project" />
     <orderEntry type="library" name="Gradle: org.mongodb:mongodb-driver:3.6.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.aspectj:aspectjweaver:1.9.0" level="project" />
     <orderEntry type="library" name="Gradle: com.google.code.findbugs:jsr305:3.0.2" level="project" />
     <orderEntry type="library" name="Gradle: com.sedmelluq:lavaplayer-common:1.0.6" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.slf4j:slf4j-log4j12:1.7.25" level="project" />
     <orderEntry type="library" name="Gradle: org.slf4j:slf4j-api:1.7.25" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.slf4j:slf4j-log4j12:1.7.25" level="project" />
     <orderEntry type="library" name="Gradle: org.apache.commons:commons-collections4:4.1" level="project" />
     <orderEntry type="library" name="Gradle: org.json:json:20180130" level="project" />
     <orderEntry type="library" name="Gradle: net.sf.trove4j:trove4j:3.0.3" level="project" />
@@ -36,7 +37,7 @@
     <orderEntry type="library" name="Gradle: org.apache.httpcomponents:httpcore:4.4.9" level="project" />
     <orderEntry type="library" name="Gradle: commons-logging:commons-logging:1.2" level="project" />
     <orderEntry type="library" name="Gradle: com.fasterxml.jackson.core:jackson-annotations:2.9.0" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: log4j:log4j:1.2.17" level="project" />
     <orderEntry type="library" name="Gradle: com.squareup.okio:okio:1.14.0" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: log4j:log4j:1.2.17" level="project" />
   </component>
 </module>

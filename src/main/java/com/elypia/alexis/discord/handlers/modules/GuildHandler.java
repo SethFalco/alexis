@@ -1,9 +1,11 @@
 package com.elypia.alexis.discord.handlers.modules;
 
-import com.elypia.alexis.discord.annotations.*;
-import com.elypia.alexis.discord.annotations.Module;
+import com.elypia.jdautils.annotations.access.Permissions;
+import com.elypia.jdautils.annotations.command.*;
 import com.elypia.alexis.discord.events.MessageEvent;
 import com.elypia.alexis.discord.handlers.impl.CommandHandler;
+import com.elypia.jdautils.annotations.access.Scope;
+import com.elypia.jdautils.annotations.command.Module;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.*;

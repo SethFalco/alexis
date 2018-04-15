@@ -1,13 +1,17 @@
 package com.elypia.alexis.discord.handlers.modules;
 
-import com.elypia.alexis.discord.annotations.*;
-import com.elypia.alexis.discord.annotations.Module;
+import com.elypia.jdautils.annotations.command.Module;
 import com.elypia.alexis.discord.audio.AudioPlayerSendHandler;
 import com.elypia.alexis.discord.audio.GuildAudioPlayer;
 import com.elypia.alexis.discord.audio.controllers.impl.AudioController;
 import com.elypia.alexis.discord.events.MessageEvent;
 import com.elypia.alexis.discord.handlers.impl.CommandHandler;
 import com.elypia.elypiai.utils.Markdown;
+import com.elypia.jdautils.annotations.access.Scope;
+import com.elypia.jdautils.annotations.command.Command;
+import com.elypia.jdautils.annotations.command.Parameter;
+import com.elypia.jdautils.annotations.access.Permissions;
+import com.elypia.jdautils.annotations.validation.Limit;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
@@ -129,7 +133,7 @@ public class MusicHandler extends CommandHandler {
 	}
 
 	@Command(aliases = {"add", "append"}, help = "Add a track to the end of the playlist.")
-	@Parameter (name = "query", help = "The URL for the audio or what to search for on YouTube!")
+	@Parameter(name = "query", help = "The URL for the audio or what to search for on YouTube!")
 	public void addTrack(MessageEvent event, String query) {
 		getPlayer(event).addTrack(query);
 	}
@@ -186,7 +190,7 @@ public class MusicHandler extends CommandHandler {
 
 	@Command(aliases = {"volume", "vol", "v"}, help = "Set the volume of the audioplayer.")
 	@Parameter(name = "volume", help = "The volume to change the audioplayer too.")
-	public void setVolume(MessageEvent event) {
+	public void setVolume(MessageEvent event, @Limit(min = 0, max = 150) int volume) {
 
 	}
 

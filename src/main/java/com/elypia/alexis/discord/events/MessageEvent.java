@@ -2,9 +2,8 @@ package com.elypia.alexis.discord.events;
 
 import com.elypia.alexis.discord.Chatbot;
 import com.elypia.alexis.discord.Config;
-import com.elypia.alexis.discord.annotations.Command;
-import com.elypia.alexis.discord.annotations.Module;
-import com.elypia.alexis.discord.annotations.PostReactions;
+import com.elypia.jdautils.annotations.command.Command;
+import com.elypia.jdautils.annotations.command.Module;
 import com.elypia.alexis.discord.events.impl.GenericEvent;
 import com.elypia.alexis.discord.handlers.impl.CommandHandler;
 import net.dv8tion.jda.core.EmbedBuilder;
@@ -132,14 +131,14 @@ public class MessageEvent extends GenericEvent {
 	}
 
 	private void afterReply(Message message) {
-		reply = message;
-
-		PostReactions post = method.getAnnotation(PostReactions.class);
-
-		if (post != null) {
-			for (String reaction : post.value())
-				message.addReaction(reaction).queue();
-		}
+//		reply = message;
+//
+//		PostReactions post = method.getAnnotation(PostReactions.class);
+//
+//		if (post != null) {
+//			for (String reaction : post.value())
+//				message.addReaction(reaction).queue();
+//		}
 	}
 
 	public void tryDeleteMessage() {

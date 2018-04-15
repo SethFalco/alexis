@@ -1,4 +1,4 @@
-package com.elypia.alexis.discord.annotations;
+package com.elypia.jdautils.annotations.command;
 
 import com.elypia.alexis.discord.handlers.impl.CommandHandler;
 

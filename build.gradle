@@ -13,7 +13,7 @@ shadowJar {
     classifier = null
     version = null
 
-	manifest {
+    manifest {
         attributes 'Implementation-Title' : projectName,
                    'Implementation-Version' : projectVersion,
                    'Main-Class': 'com.elypia.alexis.Alexis'
@@ -33,6 +33,7 @@ dependencies {
     implementation 'com.sedmelluq:lavaplayer:1.2.56'
     implementation 'com.elypia:elypiai:1.0.4'
     implementation group: 'org.mongodb', name: 'mongodb-driver', version: '3.6.3'
+    implementation group: 'org.aspectj', name: 'aspectjweaver', version: '1.9.0'
 
     runtimeOnly group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.7.25'
 

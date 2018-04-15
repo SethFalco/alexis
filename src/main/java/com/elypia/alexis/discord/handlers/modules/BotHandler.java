@@ -1,10 +1,10 @@
 package com.elypia.alexis.discord.handlers.modules;
 
 import com.elypia.alexis.discord.Config;
-import com.elypia.alexis.discord.annotations.Command;
-import com.elypia.alexis.discord.annotations.Module;
-import com.elypia.alexis.discord.annotations.Parameter;
-import com.elypia.alexis.discord.annotations.Scope;
+import com.elypia.jdautils.annotations.command.Command;
+import com.elypia.jdautils.annotations.command.Module;
+import com.elypia.jdautils.annotations.command.Parameter;
+import com.elypia.jdautils.annotations.access.Scope;
 import com.elypia.alexis.discord.events.MessageEvent;
 import com.elypia.alexis.discord.handlers.impl.CommandHandler;
 import com.elypia.elypiai.utils.Markdown;

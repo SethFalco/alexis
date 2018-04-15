@@ -2,9 +2,9 @@ package com.elypia.alexis.discord.managers;
 
 import com.elypia.alexis.discord.Chatbot;
 import com.elypia.alexis.discord.Config;
-import com.elypia.alexis.discord.annotations.Developer;
-import com.elypia.alexis.discord.annotations.Module;
-import com.elypia.alexis.discord.annotations.Permissions;
+import com.elypia.jdautils.annotations.access.Developer;
+import com.elypia.jdautils.annotations.command.Module;
+import com.elypia.jdautils.annotations.access.Permissions;
 import com.elypia.alexis.discord.events.MessageEvent;
 import com.elypia.alexis.discord.handlers.impl.CommandHandler;
 import com.elypia.alexis.discord.managers.impl.DiscordManager;

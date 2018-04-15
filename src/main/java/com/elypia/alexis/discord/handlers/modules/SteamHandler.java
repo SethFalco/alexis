@@ -1,15 +1,15 @@
 package com.elypia.alexis.discord.handlers.modules;
 
-import com.elypia.alexis.discord.annotations.Command;
-import com.elypia.alexis.discord.annotations.Module;
-import com.elypia.alexis.discord.annotations.Parameter;
-import com.elypia.alexis.discord.annotations.PostReactions;
 import com.elypia.alexis.discord.events.MessageEvent;
 import com.elypia.alexis.discord.handlers.impl.CommandHandler;
 import com.elypia.alexis.utils.BotUtils;
 import com.elypia.elypiai.steam.Steam;
 import com.elypia.elypiai.steam.SteamGame;
 import com.elypia.elypiai.utils.ElyUtils;
+import com.elypia.jdautils.annotations.command.Command;
+import com.elypia.jdautils.annotations.command.Module;
+import com.elypia.jdautils.annotations.command.Parameter;
+import com.elypia.jdautils.annotations.command.Reaction;
 import com.mongodb.client.MongoCollection;
 import net.dv8tion.jda.core.EmbedBuilder;
 import org.bson.Document;
@@ -87,7 +87,7 @@ public class SteamHandler extends CommandHandler {
 
 	@Command(aliases = {"random", "rand", "game", "r"}, help = "Select a random game from the players library!")
 	@Parameter(name = "username", help = "The username or ID of the user!")
-	@PostReactions("🎲")
+	@Reaction(alias = "🎲", help = "Reroll for a different game.")
 	public void randomGame(MessageEvent event, String username) {
 		steam.getUser(username, user -> {
 			if (user == null) {

@@ -14,10 +14,11 @@
     <orderEntry type="library" name="Gradle: com.sedmelluq:lavaplayer:1.2.56" level="project" />
     <orderEntry type="library" name="Gradle: com.elypia:elypiai:1.0.4" level="project" />
     <orderEntry type="library" name="Gradle: org.mongodb:mongodb-driver:3.6.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.aspectj:aspectjweaver:1.9.0" level="project" />
     <orderEntry type="library" name="Gradle: org.mockito:mockito-core:2.15.0" level="project" />
     <orderEntry type="library" name="Gradle: org.junit.jupiter:junit-jupiter-api:5.1.0" level="project" />
-    <orderEntry type="library" name="Gradle: com.google.code.findbugs:jsr305:3.0.2" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.slf4j:slf4j-log4j12:1.7.25" level="project" />
+    <orderEntry type="library" name="Gradle: com.google.code.findbugs:jsr305:3.0.2" level="project" />
     <orderEntry type="library" name="Gradle: com.sedmelluq:lavaplayer-common:1.0.6" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.junit.jupiter:junit-jupiter-engine:5.1.0" level="project" />
     <orderEntry type="library" name="Gradle: org.slf4j:slf4j-api:1.7.25" level="project" />
