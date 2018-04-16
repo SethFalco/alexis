@@ -1,14 +1,14 @@
 package com.elypia.alexis.discord.handlers.modules;
 
-import com.elypia.jdautils.annotations.command.Command;
-import com.elypia.jdautils.annotations.command.Module;
-import com.elypia.jdautils.annotations.command.Parameter;
 import com.elypia.alexis.discord.events.MessageEvent;
 import com.elypia.alexis.discord.handlers.impl.CommandHandler;
 import com.elypia.alexis.utils.BotUtils;
 import com.elypia.elypiai.amazon.Amazon;
 import com.elypia.elypiai.amazon.AmazonItem;
 import com.elypia.elypiai.amazon.data.AmazonEndpoint;
+import com.elypia.jdautils.annotations.command.Command;
+import com.elypia.jdautils.annotations.command.Module;
+import com.elypia.jdautils.annotations.command.Param;
 import com.mongodb.client.MongoCollection;
 import net.dv8tion.jda.core.EmbedBuilder;
 import org.bson.Document;
@@ -55,7 +55,7 @@ public class AmazonHandler extends CommandHandler {
     }
 
     @Command(aliases = {"search", "get"}, help = "Search Amazon for a product and share it.")
-    @Parameter(name = "query", help = "Name of the product you're after.")
+    @Param(name = "query", help = "Name of the product you're after.")
     public void getItem(MessageEvent event, String query) {
         amazon.getItems(query, result -> {
             AmazonItem item = result.get(0);

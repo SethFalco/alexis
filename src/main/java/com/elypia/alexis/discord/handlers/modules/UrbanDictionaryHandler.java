@@ -15,8 +15,7 @@ import java.util.concurrent.TimeUnit;
 
 @Module(
 	aliases = {"UrbanDictionary", "UrbanDict", "Urban", "UD"},
-	help = "An online dictionary defined by the community for definitions and examples.",
-	defaultCommand = "define"
+	help = "An online dictionary defined by the community for definitions and examples."
 )
 public class UrbanDictionaryHandler extends CommandHandler {
 
@@ -25,10 +24,10 @@ public class UrbanDictionaryHandler extends CommandHandler {
 	public UrbanDictionaryHandler() {
 		dict = new UrbanDictionary();
 	}
-
+	
 	@CommandGroup("define")
 	@Command(aliases = "define", help = "Return the definition of a word or phrase.")
-	@Parameter(name = "body", help = "Word or phrase to define!")
+	@Param(name = "body", help = "Word or phrase to define!")
 	@Reaction(alias = "🔉", help = "Hear an audio clip associtated with this word.")
 	@Reaction(alias = "🎲", help = "Don't like definition? Get a new one!")
 	public void define(MessageEvent event, String body[]) throws InterruptedException {
@@ -62,8 +61,8 @@ public class UrbanDictionaryHandler extends CommandHandler {
 	}
 
 	@CommandGroup("define")
-	@Parameter(name = "body", help = "Word or phrase to define!")
-	@Parameter(name = "random", help = "Random result or top result!")
+	@Param(name = "body", help = "Word or phrase to define!")
+	@Param(name = "random", help = "Random result or top result!")
 	@Reaction(alias = "🔉", help = "Hear an audio clip associtated with this word.")
 	@Reaction(alias = "🎲", help = "Don't like definition? Get a new one!")
 	public void define(MessageEvent event, String body, boolean random) {
@@ -96,7 +95,7 @@ public class UrbanDictionaryHandler extends CommandHandler {
 	}
 
 	@Command(aliases = "tags", help = "Return the tags associated with a word.")
-	@Parameter(name = "body", help = "Word or phrase to define!")
+	@Param(name = "body", help = "Word or phrase to define!")
 	public void tags(MessageEvent event, String body) {
 		dict.define(body, results -> {
 			if (results.getResultType() == UrbanResultType.NO_RESULTS) {

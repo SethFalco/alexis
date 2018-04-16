@@ -1,8 +1,5 @@
 package com.elypia.alexis.discord.handlers.modules;
 
-import com.elypia.jdautils.annotations.command.Command;
-import com.elypia.jdautils.annotations.command.Module;
-import com.elypia.jdautils.annotations.command.Parameter;
 import com.elypia.alexis.discord.events.MessageEvent;
 import com.elypia.alexis.discord.handlers.impl.CommandHandler;
 import com.elypia.alexis.utils.BotUtils;
@@ -10,6 +7,9 @@ import com.elypia.elypiai.runescape.QuestStats;
 import com.elypia.elypiai.runescape.RuneScape;
 import com.elypia.elypiai.runescape.data.QuestStatus;
 import com.elypia.elypiai.utils.ElyUtils;
+import com.elypia.jdautils.annotations.command.Command;
+import com.elypia.jdautils.annotations.command.Module;
+import com.elypia.jdautils.annotations.command.Param;
 import net.dv8tion.jda.core.EmbedBuilder;
 
 import java.util.Collection;
@@ -38,13 +38,13 @@ public class RuneScapeHandler extends CommandHandler {
 	}
 
 	@Command(aliases = "stats", help = "Get stats for a particular user.")
-	@Parameter(name = "username", help = "RuneScape players username.")
+	@Param(name = "username", help = "RuneScape players username.")
 	public void getPlayerStats(MessageEvent event, String username) {
 
 	}
 
 	@Command(aliases = {"quests", "quest", "q"}, help = "Get status of all quests for a user.")
-	@Parameter(name = "username", help = "RuneScape players username.")
+	@Param(name = "username", help = "RuneScape players username.")
 	public void getQuests(MessageEvent event, String username) {
 		runescape.getQuestStatuses(username, result -> {
 			EmbedBuilder builder = new EmbedBuilder();

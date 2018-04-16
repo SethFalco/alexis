@@ -1,44 +1,39 @@
-package com.elypia.alexis.discord.managers;
+package com.elypia.commandler.jda;
 
-import com.elypia.alexis.discord.Chatbot;
-import com.elypia.alexis.discord.Config;
 import com.elypia.alexis.discord.events.MessageEvent;
 import com.elypia.alexis.discord.handlers.impl.CommandHandler;
-import com.elypia.alexis.discord.managers.impl.DiscordManager;
 import com.elypia.alexis.utils.BotUtils;
 import com.elypia.alexis.utils.CommandUtils;
 import com.elypia.commandler.Validator;
 import com.elypia.commandler.annotations.command.Module;
-import net.dv8tion.jda.core.entities.User;
+import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
-import net.dv8tion.jda.core.events.message.react.MessageReactionAddEvent;
+import net.dv8tion.jda.core.hooks.ListenerAdapter;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
 import java.util.logging.Level;
 
-import static com.elypia.alexis.utils.BotUtils.log;
-
 /**
  * Received and performs all message or reactions
  * that refer to commands for this chatbot.
- * See {@link EventManager} to non-command related handling.
  */
 
-public class CommandManager extends DiscordManager {
+public class JDACommandler extends ListenerAdapter {
+
+    private JDA jda;
 
     /**
-     * A all registers handlers for this instance of the chatbot. <br>
+     * All registered handlers for this instance of the chatbot. <br>
      * The key is an array of aliases that refer to a module. <br>
      * The value is the module itself.
      */
 
     private Map<Collection<String>, CommandHandler> handlers;
 
-    public CommandManager(Chatbot chatbot) {
-        super(chatbot);
-
+    public JDACommandler(JDA jda) {
+        this.jda = jda;
         handlers = new HashMap<>();
     }
 
@@ -56,11 +51,8 @@ public class CommandManager extends DiscordManager {
     public void registerModule(CommandHandler handler) {
         Module module = handler.getClass().getAnnotation(Module.class);
 
-        if (module == null) {
-            String message = "{0} doesn't include the @Module annotation!";
-            BotUtils.LOGGER.log(Level.SEVERE, message, handler);
-            return;
-        }
+        if (module == null)
+            throw new IllegalArgumentException("CommandHandler doesn't contain Module annotation!");
 
         Collection<String> aliases = new ArrayList<>();
 
@@ -68,10 +60,8 @@ public class CommandManager extends DiscordManager {
             aliases.add(alias.toLowerCase());
 
         for (Collection<String> key : handlers.keySet()) {
-            if (!Collections.disjoint(key, aliases)) {
-                String message = "{0} contains an alias which has already been registered!";
-                BotUtils.LOGGER.log(Level.WARNING, message, handler);
-            }
+            if (!Collections.disjoint(key, aliases))
+                throw new IllegalArgumentException("CommandHandler contains alias which is already registered.");
         }
 
         handlers.put(aliases, handler);
@@ -79,47 +69,15 @@ public class CommandManager extends DiscordManager {
 
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {
-        if (canPerform(event.getAuthor()))
-            handleMessage(event);
-    }
-
-    @Override
-    public void onMessageReactionAdd(MessageReactionAddEvent event) {
-
-    }
-
-    /**
-     * Checks if the the user that triggered the event is allowed to perform
-     * to do commands at the moment.
-     *
-     * @param user The user that just triggered this event.
-     * @return If the user can perform commands on this instance of the chatbot.
-     */
-
-    private boolean canPerform(User user) {
-        if (user.isBot())
-            return false;
-
-        if (Config.developersOnly)
-            return Config.isDeveloper(user);
-
-        return true;
-    }
-
-    private void handleMessage(MessageReceivedEvent messageReceivedEvent) {
         MessageEvent event = new MessageEvent(chatbot, messageReceivedEvent);
 
         if (!event.isValid())
             return;
 
-        log(Level.INFO, event.getMessage().getContentRaw());
-
         CommandHandler handler = getHandler(event);
 
-        if (handler == null) {
-            log(Level.INFO, "Command was attemped in unregistered module {0}.", event.getModule());
+        if (handler == null)
             return;
-        }
 
         if (event.getCommand() == null)
             event.setCommand(handler);

@@ -1,4 +1,4 @@
-package com.elypia.jdautils.annotations.validation;
+package com.elypia.commandler.annotations.validation;
 
 import java.lang.annotation.*;
 
@@ -11,6 +11,6 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Inherited
 public @interface Limit {
-    double min() default Double.MIN_VALUE;
-    double max() default Double.MAX_VALUE;
+    long min() default Long.MIN_VALUE;
+    long max() default Long.MAX_VALUE;
 }

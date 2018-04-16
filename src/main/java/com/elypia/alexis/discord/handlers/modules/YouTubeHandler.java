@@ -1,14 +1,14 @@
 package com.elypia.alexis.discord.handlers.modules;
 
-import com.elypia.jdautils.annotations.command.Module;
 import com.elypia.alexis.discord.events.MessageEvent;
 import com.elypia.alexis.discord.handlers.impl.CommandHandler;
+import com.elypia.alexis.commandler.annotations.Developer;
+import com.elypia.commandler.annotations.command.Command;
+import com.elypia.commandler.annotations.command.CommandGroup;
+import com.elypia.commandler.annotations.command.Module;
+import com.elypia.commandler.annotations.command.Param;
 import com.elypia.elypiai.google.youtube.YouTube;
 import com.elypia.elypiai.google.youtube.YouTubeItem;
-import com.elypia.jdautils.annotations.access.Developer;
-import com.elypia.jdautils.annotations.command.Command;
-import com.elypia.jdautils.annotations.command.CommandGroup;
-import com.elypia.jdautils.annotations.command.Parameter;
 import net.dv8tion.jda.core.EmbedBuilder;
 
 import static com.elypia.alexis.utils.BotUtils.httpFailure;
@@ -28,7 +28,7 @@ public class YouTubeHandler extends CommandHandler {
 
     @CommandGroup("get")
     @Command(aliases = "get", help = "Search for a video.")
-    @Parameter(name = "query", help = "Search term for the video you want.")
+    @Param(name = "query", help = "Search term for the video you want.")
     public void getVideo(MessageEvent event, String query) {
         youtube.getVideo(query, result -> {
             EmbedBuilder builder = new EmbedBuilder();
@@ -42,8 +42,8 @@ public class YouTubeHandler extends CommandHandler {
     }
 
     @CommandGroup("get")
-    @Parameter(name = "query", help = "Search term for the video you want.")
-    @Parameter(name = "count", help = "How many search results to display.")
+    @Param(name = "query", help = "Search term for the video you want.")
+    @Param(name = "count", help = "How many search results to display.")
     public void getVideos(MessageEvent event, String query, int count) {
         EmbedBuilder builder = new EmbedBuilder();
 

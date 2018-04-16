@@ -1,13 +1,12 @@
-package com.elypia.jdautils.annotations.command;
+package com.elypia.alexis.commandler.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Target(ElementType.METHOD)
+@Target({ElementType.TYPE, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Reactions {
+public @interface Database {
 
-    Reaction[] value();
 }

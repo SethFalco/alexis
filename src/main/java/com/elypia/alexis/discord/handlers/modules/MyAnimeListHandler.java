@@ -1,11 +1,11 @@
 package com.elypia.alexis.discord.handlers.modules;
 
-import com.elypia.jdautils.annotations.command.Command;
-import com.elypia.jdautils.annotations.command.Module;
-import com.elypia.jdautils.annotations.command.Parameter;
 import com.elypia.alexis.discord.events.MessageEvent;
 import com.elypia.alexis.discord.handlers.impl.CommandHandler;
 import com.elypia.elypiai.myanimelist.MyAnimeList;
+import com.elypia.jdautils.annotations.command.Command;
+import com.elypia.jdautils.annotations.command.Module;
+import com.elypia.jdautils.annotations.command.Param;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.MessageEmbed;
 
@@ -28,7 +28,7 @@ public class MyAnimeListHandler extends CommandHandler {
     }
 
     @Command(aliases = "anime", help = "Get information on an anime.")
-    @Parameter(name = "animes", help = "A search terms to find shows.")
+    @Param(name = "animes", help = "A search terms to find shows.")
     public void getAnime(MessageEvent event, String anime) {
         mal.getAnime(anime, result -> {
             EmbedBuilder builder = new EmbedBuilder();

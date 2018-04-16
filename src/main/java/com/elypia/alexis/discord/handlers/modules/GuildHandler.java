@@ -26,7 +26,7 @@ public class GuildHandler extends CommandHandler {
     }
 
     @CommandGroup("info")
-    @Parameter(name = "guild", help = "Some form of identification for this guild.")
+    @Param(name = "guild", help = "Some form of identification for this guild.")
     @Scope(ChannelType.PRIVATE)
     public void info(MessageEvent event, Guild guild) {
         EmbedBuilder builder = new EmbedBuilder();
@@ -45,7 +45,7 @@ public class GuildHandler extends CommandHandler {
 
     @CommandGroup("prune")
     @Command(aliases = "prune", help = "Delete messages in the guild in bulk.")
-    @Parameter(name = "count", help = "The number of messages to delete.")
+    @Param(name = "count", help = "The number of messages to delete.")
     @Permissions(Permission.MANAGE_SERVER)
     @Scope(ChannelType.TEXT)
     public void prune(MessageEvent event, int count) {
@@ -53,8 +53,8 @@ public class GuildHandler extends CommandHandler {
     }
 
     @CommandGroup("prune")
-    @Parameter(name = "count", help = "The number of messages to delete.")
-    @Parameter(name = "channel", help = "The channel to delete messages in.")
+    @Param(name = "count", help = "The number of messages to delete.")
+    @Param(name = "channel", help = "The channel to delete messages in.")
     @Permissions(Permission.MANAGE_SERVER)
     @Scope(ChannelType.TEXT)
     public void prune(MessageEvent event, int count, TextChannel channel) {

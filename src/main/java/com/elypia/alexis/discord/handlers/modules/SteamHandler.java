@@ -8,7 +8,7 @@ import com.elypia.elypiai.steam.SteamGame;
 import com.elypia.elypiai.utils.ElyUtils;
 import com.elypia.jdautils.annotations.command.Command;
 import com.elypia.jdautils.annotations.command.Module;
-import com.elypia.jdautils.annotations.command.Parameter;
+import com.elypia.jdautils.annotations.command.Param;
 import com.elypia.jdautils.annotations.command.Reaction;
 import com.mongodb.client.MongoCollection;
 import net.dv8tion.jda.core.EmbedBuilder;
@@ -38,7 +38,7 @@ public class SteamHandler extends CommandHandler {
 	}
 
 	@Command(aliases = {"get", "user", "profile"}, help = "Get information on a Steam user!")
-	@Parameter(name = "username", help = "The name you'd find at the end of their custom URL!")
+	@Param(name = "username", help = "The name you'd find at the end of their custom URL!")
 	public void displayProfile(MessageEvent event, String username) {
 		steam.getUser(username, user -> {
 			if (user == null) {
@@ -56,7 +56,7 @@ public class SteamHandler extends CommandHandler {
 	}
 
 	@Command(aliases = {"lib", "library"}, help = "Get a players library orderd by recent playtime, then playtime!")
-	@Parameter(name = "username", help = "The username or ID of the user!")
+	@Param(name = "username", help = "The username or ID of the user!")
 	public void listLibrary(MessageEvent event, String username) {
 		steam.getUser(username, user -> {
 			user.getLibrary(library -> {
@@ -86,7 +86,7 @@ public class SteamHandler extends CommandHandler {
 	}
 
 	@Command(aliases = {"random", "rand", "game", "r"}, help = "Select a random game from the players library!")
-	@Parameter(name = "username", help = "The username or ID of the user!")
+	@Param(name = "username", help = "The username or ID of the user!")
 	@Reaction(alias = "🎲", help = "Reroll for a different game.")
 	public void randomGame(MessageEvent event, String username) {
 		steam.getUser(username, user -> {

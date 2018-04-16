@@ -1,13 +1,13 @@
 package com.elypia.alexis.discord.handlers.modules;
 
-import com.elypia.jdautils.annotations.command.Command;
-import com.elypia.jdautils.annotations.access.Database;
-import com.elypia.jdautils.annotations.command.Module;
-import com.elypia.jdautils.annotations.command.Parameter;
 import com.elypia.alexis.discord.events.MessageEvent;
 import com.elypia.alexis.discord.handlers.impl.CommandHandler;
 import com.elypia.alexis.utils.BotUtils;
 import com.elypia.elypiai.nanowrimo.Nanowrimo;
+import com.elypia.jdautils.annotations.access.Database;
+import com.elypia.jdautils.annotations.command.Command;
+import com.elypia.jdautils.annotations.command.Module;
+import com.elypia.jdautils.annotations.command.Param;
 import com.mongodb.client.MongoDatabase;
 import net.dv8tion.jda.core.EmbedBuilder;
 
@@ -32,9 +32,9 @@ public class NanowrimoHandler extends CommandHandler {
 	}
 
 	@Command(aliases = {"authenticate", "auth"}, help = "Auth to your NaNoWriMo account.")
-	@Parameter(name = "name", help = "Your NaNoWriMo username.")
-	@Parameter(name = "secret", help = "Your NaNoWriMo secret at: https://nanowrimo.org/api/wordcount", secret = true)
-	@Parameter(name = "wordcount", help = "Your total word count to submit.")
+	@Param(name = "name", help = "Your NaNoWriMo username.")
+	@Param(name = "secret", help = "Your NaNoWriMo secret at: https://nanowrimo.org/api/wordcount", secret = true)
+	@Param(name = "wordcount", help = "Your total word count to submit.")
 	@Database
 	public void authenticate(MessageEvent event, String name, String secret, int wordcount) {
 		event.tryDeleteMessage();
@@ -53,7 +53,7 @@ public class NanowrimoHandler extends CommandHandler {
 	}
 
 	@Command(aliases = "info", help = "Get basic information on a user.")
-	@Parameter(name = "name", help = "Your NaNoWriMo username.")
+	@Param(name = "name", help = "Your NaNoWriMo username.")
 	public void getUser(MessageEvent event, String name) {
 		nanowrimo.getNanoUser(name, result -> {
 			EmbedBuilder builder = new EmbedBuilder();

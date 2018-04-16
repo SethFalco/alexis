@@ -1,16 +1,16 @@
 package com.elypia.alexis.discord.handlers.modules;
 
-import com.elypia.jdautils.annotations.command.Module;
 import com.elypia.alexis.discord.audio.AudioPlayerSendHandler;
 import com.elypia.alexis.discord.audio.GuildAudioPlayer;
 import com.elypia.alexis.discord.audio.controllers.impl.AudioController;
 import com.elypia.alexis.discord.events.MessageEvent;
 import com.elypia.alexis.discord.handlers.impl.CommandHandler;
 import com.elypia.elypiai.utils.Markdown;
+import com.elypia.jdautils.annotations.access.Permissions;
 import com.elypia.jdautils.annotations.access.Scope;
 import com.elypia.jdautils.annotations.command.Command;
-import com.elypia.jdautils.annotations.command.Parameter;
-import com.elypia.jdautils.annotations.access.Permissions;
+import com.elypia.jdautils.annotations.command.Module;
+import com.elypia.jdautils.annotations.command.Param;
 import com.elypia.jdautils.annotations.validation.Limit;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
@@ -133,19 +133,19 @@ public class MusicHandler extends CommandHandler {
 	}
 
 	@Command(aliases = {"add", "append"}, help = "Add a track to the end of the playlist.")
-	@Parameter(name = "query", help = "The URL for the audio or what to search for on YouTube!")
+	@Param(name = "query", help = "The URL for the audio or what to search for on YouTube!")
 	public void addTrack(MessageEvent event, String query) {
 		getPlayer(event).addTrack(query);
 	}
 
 	@Command(aliases = {"insert", "prepend"}, help = "Insert a track to the start of the queue.")
-	@Parameter (name = "query", help = "The URL for the audio or what to search for on YouTube!")
+	@Param (name = "query", help = "The URL for the audio or what to search for on YouTube!")
 	public void insertTrack(MessageEvent event, String query) {
 		getPlayer(event).insertTrack(query);
 	}
 
 	@Command(aliases = {"remove", "rid"}, help = "Remove a track from the playlist.")
-	@Parameter (name = "id", help = "A way to identify the track.")
+	@Param (name = "id", help = "A way to identify the track.")
 	public void removeTrack(MessageEvent event, String id) {
 		getPlayer(event).removeTrack(id);
 	}
@@ -171,25 +171,25 @@ public class MusicHandler extends CommandHandler {
 	}
 
 	@Command(aliases = "time", help = "Set the time to go to in the current song.")
-	@Parameter(name = "time", help = "The time to move to, try '@Me help time' for format info.")
+	@Param(name = "time", help = "The time to move to, try '@Me help time' for format info.")
 	public void setTime(MessageEvent event, Instant time) {
 
 	}
 
 	@Command(aliases = {"forward", "fastforward", "ff"}, help = "Fastforward by a set amount of time.")
-	@Parameter(name = "time", help = "The time to move forward by, try '@Me help time' for format info.")
+	@Param(name = "time", help = "The time to move forward by, try '@Me help time' for format info.")
 	public void fastForward(MessageEvent event) {
 
 	}
 
 	@Command(aliases = {"rewind", "backward", "rw"}, help = "Rewind by a set amount of time.")
-	@Parameter(name = "time", help = "The time to move rewind by, try '@Me help time' for format info.")
+	@Param(name = "time", help = "The time to move rewind by, try '@Me help time' for format info.")
 	public void rewind(MessageEvent event) {
 
 	}
 
 	@Command(aliases = {"volume", "vol", "v"}, help = "Set the volume of the audioplayer.")
-	@Parameter(name = "volume", help = "The volume to change the audioplayer too.")
+	@Param(name = "volume", help = "The volume to change the audioplayer too.")
 	public void setVolume(MessageEvent event, @Limit(min = 0, max = 150) int volume) {
 
 	}

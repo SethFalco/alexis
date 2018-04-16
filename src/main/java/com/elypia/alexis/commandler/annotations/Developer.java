@@ -1,4 +1,4 @@
-package com.elypia.jdautils.annotations.access;
+package com.elypia.alexis.commandler.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

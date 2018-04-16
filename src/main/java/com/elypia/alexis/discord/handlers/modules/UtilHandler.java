@@ -1,21 +1,21 @@
 package com.elypia.alexis.discord.handlers.modules;
 
-import com.elypia.jdautils.annotations.command.Command;
-import com.elypia.jdautils.annotations.command.Module;
-import com.elypia.jdautils.annotations.command.Parameter;
 import com.elypia.alexis.discord.events.MessageEvent;
 import com.elypia.alexis.discord.handlers.impl.CommandHandler;
+import com.elypia.commandler.annotations.command.Command;
+import com.elypia.commandler.annotations.command.Module;
+import com.elypia.commandler.annotations.command.Param;
 import com.elypia.elypiai.utils.math.MathUtils;
 import net.dv8tion.jda.core.EmbedBuilder;
 
-@Module (
+@Module(
 	aliases = {"Util", "Math"},
 	help = "Math commands and fun stuff."
 )
 public class UtilHandler extends CommandHandler {
 
 	@Command(aliases = {"convert"}, help = "Convert a number to it's written equivelent.")
-	@Parameter(name = "value", help = "The number to convert to the written form.")
+	@Param(name = "value", help = "The number to convert to the written form.")
 	public void asWritten(MessageEvent event, long values[]) {
 		EmbedBuilder builder = new EmbedBuilder();
 		builder.setTitle("**Results**");
@@ -38,7 +38,7 @@ public class UtilHandler extends CommandHandler {
 	}
 
 	@Command(aliases = "count", help = "Cound the number of charachters sent.")
-	@Parameter(name = "text", help = "The text to count from.")
+	@Param(name = "text", help = "The text to count from.")
 	public void count(MessageEvent event, String input) {
 		event.reply(input.length());
 	}

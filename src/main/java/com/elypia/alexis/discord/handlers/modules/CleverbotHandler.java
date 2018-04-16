@@ -1,12 +1,12 @@
 package com.elypia.alexis.discord.handlers.modules;
 
-import com.elypia.jdautils.annotations.command.Command;
-import com.elypia.jdautils.annotations.command.Module;
-import com.elypia.jdautils.annotations.command.Parameter;
 import com.elypia.alexis.discord.events.MessageEvent;
 import com.elypia.alexis.discord.handlers.impl.CommandHandler;
 import com.elypia.alexis.utils.BotUtils;
 import com.elypia.elypiai.cleverbot.Cleverbot;
+import com.elypia.jdautils.annotations.command.Command;
+import com.elypia.jdautils.annotations.command.Module;
+import com.elypia.jdautils.annotations.command.Param;
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
@@ -46,7 +46,7 @@ public class CleverbotHandler extends CommandHandler {
     }
 
     @Command (aliases = {"say", "ask"}, help = "Say something to Cleverbot.")
-    @Parameter(name = "body", help = "What you want to say.")
+    @Param(name = "body", help = "What you want to say.")
     public void say(MessageEvent event, String body) {
         String cs = getCs(event.getChannel());
 

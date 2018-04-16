@@ -1,12 +1,12 @@
 package com.elypia.alexis.discord.handlers.modules;
 
-import com.elypia.jdautils.annotations.command.Command;
-import com.elypia.jdautils.annotations.access.Developer;
-import com.elypia.jdautils.annotations.command.Module;
-import com.elypia.jdautils.annotations.command.Parameter;
 import com.elypia.alexis.discord.events.MessageEvent;
 import com.elypia.alexis.discord.handlers.impl.CommandHandler;
 import com.elypia.alexis.utils.ExitCode;
+import com.elypia.jdautils.annotations.access.Developer;
+import com.elypia.jdautils.annotations.command.Command;
+import com.elypia.jdautils.annotations.command.Module;
+import com.elypia.jdautils.annotations.command.Param;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.entities.Icon;
 
@@ -26,7 +26,7 @@ import static com.elypia.alexis.utils.BotUtils.log;
 public class DevHandler extends CommandHandler {
 
     @Command(aliases = "name", help = "Change the global name of the chatbot.")
-    @Parameter(name = "input", help = "The new name to set the chatbot too.")
+    @Param(name = "input", help = "The new name to set the chatbot too.")
     public void name(MessageEvent event, String input) {
         event.getJDA().getSelfUser().getManager().setName(input).queue(o -> {
             event.reply("Name has succesfully been changed to " + input + ".");
@@ -34,7 +34,7 @@ public class DevHandler extends CommandHandler {
     }
 
     @Command(aliases = "avatar", help = "Change the avatar of the chatbot.")
-    @Parameter(name = "url", help = "Location for the new avatar for the chatbot.")
+    @Param(name = "url", help = "Location for the new avatar for the chatbot.")
     public void avatar(MessageEvent event, URL url) throws IOException {
         try (InputStream stream = url.openStream()) {
             Icon icon = Icon.from(stream);

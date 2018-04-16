@@ -1,13 +1,13 @@
 package com.elypia.alexis.discord.handlers.modules;
 
-import com.elypia.jdautils.annotations.command.Module;
 import com.elypia.alexis.discord.events.MessageEvent;
 import com.elypia.alexis.discord.handlers.impl.CommandHandler;
+import com.elypia.commandler.annotations.access.Scope;
+import com.elypia.commandler.annotations.command.Command;
+import com.elypia.commandler.annotations.command.CommandGroup;
+import com.elypia.commandler.annotations.command.Module;
+import com.elypia.commandler.annotations.command.Param;
 import com.elypia.elypiai.utils.Markdown;
-import com.elypia.jdautils.annotations.access.Scope;
-import com.elypia.jdautils.annotations.command.Command;
-import com.elypia.jdautils.annotations.command.CommandGroup;
-import com.elypia.jdautils.annotations.command.Parameter;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.ChannelType;
 import net.dv8tion.jda.core.entities.Member;
@@ -33,7 +33,7 @@ public class UserHandler extends CommandHandler {
 
 	@CommandGroup("info")
 	@Command(aliases = "info", help = "Get some basic information on the user!")
-	@Parameter(name = "user", help = "The user to display information for.")
+	@Param(name = "user", help = "The user to display information for.")
 	@Scope(ChannelType.TEXT)
 	public void getInfo(MessageEvent event, User user) {
 		EmbedBuilder builder = new EmbedBuilder();

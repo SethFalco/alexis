@@ -1,4 +1,4 @@
-package com.elypia.jdautils.annotations.access;
+package com.elypia.commandler.annotations.access;
 
 import net.dv8tion.jda.core.entities.ChannelType;
 
@@ -16,6 +16,5 @@ import java.lang.annotation.Target;
 @Target({ElementType.TYPE, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Scope {
-
     ChannelType[] value();
 }

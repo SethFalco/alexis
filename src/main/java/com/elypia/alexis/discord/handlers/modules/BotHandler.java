@@ -1,13 +1,13 @@
 package com.elypia.alexis.discord.handlers.modules;
 
 import com.elypia.alexis.discord.Config;
-import com.elypia.jdautils.annotations.command.Command;
-import com.elypia.jdautils.annotations.command.Module;
-import com.elypia.jdautils.annotations.command.Parameter;
-import com.elypia.jdautils.annotations.access.Scope;
 import com.elypia.alexis.discord.events.MessageEvent;
 import com.elypia.alexis.discord.handlers.impl.CommandHandler;
 import com.elypia.elypiai.utils.Markdown;
+import com.elypia.jdautils.annotations.access.Scope;
+import com.elypia.jdautils.annotations.command.Command;
+import com.elypia.jdautils.annotations.command.Module;
+import com.elypia.jdautils.annotations.command.Param;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.entities.ChannelType;
@@ -96,7 +96,7 @@ public class BotHandler extends CommandHandler {
 	}
 
 	@Command(aliases = "say", help = "Have Alexis repeat something you say!")
-	@Parameter (name = "body", help = "Text Alexis should repeat!")
+	@Param(name = "body", help = "Text Alexis should repeat!")
 	public void say(MessageEvent event, String body) {
 		event.tryDeleteMessage();
 		event.reply(body);

@@ -1,13 +1,13 @@
 package com.elypia.alexis.discord.handlers.modules;
 
-import com.elypia.jdautils.annotations.command.Command;
-import com.elypia.jdautils.annotations.command.Module;
-import com.elypia.jdautils.annotations.command.Parameter;
 import com.elypia.alexis.discord.events.MessageEvent;
 import com.elypia.alexis.discord.handlers.impl.CommandHandler;
 import com.elypia.elypiai.twitch.Twitch;
 import com.elypia.elypiai.twitch.TwitchUser;
 import com.elypia.elypiai.twitch.data.BroadcasterType;
+import com.elypia.jdautils.annotations.command.Command;
+import com.elypia.jdautils.annotations.command.Module;
+import com.elypia.jdautils.annotations.command.Param;
 import net.dv8tion.jda.core.EmbedBuilder;
 
 import static com.elypia.alexis.utils.BotUtils.httpFailure;
@@ -25,7 +25,7 @@ public class TwitchHandler extends CommandHandler {
     }
 
     @Command(aliases = "get", help = "Get information on streamers.")
-    @Parameter(name = "usernames", help = "The user(s) to retrieve.")
+    @Param(name = "usernames", help = "The user(s) to retrieve.")
     public void getUser(MessageEvent event, String[] usernames) {
         twitch.getUsers(usernames, result -> {
             if (result.isEmpty()) {
