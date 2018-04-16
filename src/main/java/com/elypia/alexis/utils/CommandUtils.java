@@ -1,7 +1,7 @@
 package com.elypia.alexis.utils;
 
-import com.elypia.alexis.discord.events.MessageEvent;
-import com.elypia.alexis.discord.handlers.impl.CommandHandler;
+import com.elypia.commandler.events.MessageEvent;
+import com.elypia.commandler.CommandHandler;
 import com.elypia.commandler.parsing.ParamParser;
 import com.elypia.commandler.annotations.command.Command;
 import com.elypia.commandler.annotations.command.CommandGroup;

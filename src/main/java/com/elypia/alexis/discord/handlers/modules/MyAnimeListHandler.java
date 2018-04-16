@@ -1,7 +1,7 @@
 package com.elypia.alexis.discord.handlers.modules;
 
-import com.elypia.alexis.discord.events.MessageEvent;
-import com.elypia.alexis.discord.handlers.impl.CommandHandler;
+import com.elypia.commandler.events.MessageEvent;
+import com.elypia.commandler.CommandHandler;
 import com.elypia.elypiai.myanimelist.MyAnimeList;
 import com.elypia.jdautils.annotations.command.Command;
 import com.elypia.jdautils.annotations.command.Module;

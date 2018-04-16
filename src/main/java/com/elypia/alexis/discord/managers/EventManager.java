@@ -2,7 +2,6 @@ package com.elypia.alexis.discord.managers;
 
 import com.elypia.alexis.Alexis;
 import com.elypia.alexis.discord.Chatbot;
-import com.elypia.alexis.discord.events.impl.GenericEvent;
 import com.elypia.alexis.discord.managers.impl.DiscordManager;
 import com.elypia.alexis.utils.BotUtils;
 import net.dv8tion.jda.core.OnlineStatus;

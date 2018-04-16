@@ -1,6 +1,6 @@
 package com.elypia.alexis.discord.handlers.impl;
 
-import com.elypia.alexis.discord.events.MessageEvent;
+import com.elypia.commandler.events.MessageEvent;
 
 import java.util.ArrayList;
 import java.util.List;

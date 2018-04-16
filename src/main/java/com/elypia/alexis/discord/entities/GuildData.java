@@ -2,7 +2,6 @@ package com.elypia.alexis.discord.entities;
 
 import com.elypia.alexis.discord.entities.data.Tag;
 import com.elypia.alexis.discord.entities.impl.DatabaseEntity;
-import com.elypia.alexis.discord.events.impl.GenericEvent;
 import com.mongodb.client.MongoDatabase;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.TextChannel;

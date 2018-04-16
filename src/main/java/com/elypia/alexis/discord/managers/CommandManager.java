@@ -2,8 +2,8 @@ package com.elypia.alexis.discord.managers;
 
 import com.elypia.alexis.discord.Chatbot;
 import com.elypia.alexis.discord.Config;
-import com.elypia.alexis.discord.events.MessageEvent;
-import com.elypia.alexis.discord.handlers.impl.CommandHandler;
+import com.elypia.commandler.events.MessageEvent;
+import com.elypia.commandler.CommandHandler;
 import com.elypia.alexis.discord.managers.impl.DiscordManager;
 import com.elypia.alexis.utils.BotUtils;
 import com.elypia.alexis.utils.CommandUtils;

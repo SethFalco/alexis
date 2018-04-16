@@ -1,14 +1,14 @@
 package com.elypia.alexis.discord.handlers.modules;
 
-import com.elypia.alexis.discord.events.MessageEvent;
-import com.elypia.alexis.discord.handlers.impl.CommandHandler;
+import com.elypia.commandler.events.MessageEvent;
+import com.elypia.commandler.CommandHandler;
+import com.elypia.commandler.annotations.command.Command;
+import com.elypia.commandler.annotations.command.CommandGroup;
+import com.elypia.commandler.annotations.command.Module;
+import com.elypia.commandler.annotations.command.Param;
 import com.elypia.elypiai.osu.Osu;
 import com.elypia.elypiai.osu.data.OsuMode;
 import com.elypia.elypiai.utils.Markdown;
-import com.elypia.jdautils.annotations.command.Command;
-import com.elypia.jdautils.annotations.command.CommandGroup;
-import com.elypia.jdautils.annotations.command.Module;
-import com.elypia.jdautils.annotations.command.Param;
 import net.dv8tion.jda.core.EmbedBuilder;
 
 import java.util.StringJoiner;
