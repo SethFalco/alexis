@@ -1,44 +1,21 @@
 package com.elypia.alexis.discord.handlers.modules;
 
-import com.elypia.commandler.events.MessageEvent;
-import com.elypia.commandler.CommandHandler;
 import com.elypia.alexis.utils.BotUtils;
-import com.elypia.elypiai.amazon.Amazon;
-import com.elypia.elypiai.amazon.AmazonItem;
+import com.elypia.commandler.CommandHandler;
+import com.elypia.commandler.annotations.command.*;
+import com.elypia.commandler.events.MessageEvent;
+import com.elypia.elypiai.amazon.*;
 import com.elypia.elypiai.amazon.data.AmazonEndpoint;
-import com.elypia.jdautils.annotations.command.Command;
-import com.elypia.jdautils.annotations.command.Module;
-import com.elypia.jdautils.annotations.command.Param;
-import com.mongodb.client.MongoCollection;
+import com.elypia.jdautils.annotations.command.*;
 import net.dv8tion.jda.core.EmbedBuilder;
-import org.bson.Document;
 
 import java.security.InvalidKeyException;
 import java.util.Objects;
 
-import static com.mongodb.client.model.Filters.eq;
-
-@Module (
-    aliases = "Amazon",
-    help = "Share links and support Elypia! We get a cut from purchases!",
-    defaultCommand = "search"
-)
+@Module(aliases = "Amazon", help = "Share links and support Elypia! We get a cut from purchases!")
 public class AmazonHandler extends CommandHandler {
 
     private Amazon amazon;
-
-    public AmazonHandler(MongoCollection<Document> apiDetails, AmazonEndpoint endpoint) {
-        this(apiDetails.find(eq("service", "amazon")).first(), endpoint);
-    }
-
-    public AmazonHandler(Document document, AmazonEndpoint endpoint) {
-        this (
-            document.getString("access_key"),
-            document.getString("secret"),
-            document.getString("us"),
-            endpoint
-        );
-    }
 
     public AmazonHandler(String accessKey, String secret, String id, AmazonEndpoint endpoint) {
         Objects.requireNonNull(accessKey);

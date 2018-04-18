@@ -24,7 +24,7 @@ public final class BotUtils {
 
 		// Let the user know what happened and apologise.
 		String message = "Sorry! I'm don't know why the command failed but I'm reporting this to Seth, perhaps trying again later?";
-		event.getChannel().sendMessage(message).queue();
+		event.getMessageEvent().getChannel().sendMessage(message).queue();
 	}
 
 	public static String inviteUrl(User user) {

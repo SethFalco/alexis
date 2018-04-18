@@ -1,8 +1,13 @@
 package com.elypia.alexis.discord;
 
+import com.elypia.alexis.discord.audio.controllers.LocalAudioController;
 import com.elypia.alexis.discord.handlers.GlobalMessageHandler;
 import com.elypia.alexis.discord.handlers.GlobalReactionHandler;
+import com.elypia.alexis.discord.handlers.modules.*;
+import com.elypia.alexis.discord.managers.EventManager;
 import com.elypia.alexis.discord.managers.impl.DiscordManager;
+import com.elypia.commandler.jda.JDACommandler;
+import com.elypia.elypiai.amazon.data.AmazonEndpoint;
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoDatabase;
 import net.dv8tion.jda.core.AccountType;
@@ -35,12 +40,34 @@ public class Chatbot {
 
 		jda = builder.buildAsync();
 
+        JDACommandler commandler = new JDACommandler(jda);
+
+        commandler.registerModules(
+            new AmazonHandler("AKIAJO2PITTL4NPRS5DA", "6NNu5fzNynDfq4Dq6kx1GxhZI3+xakl4PA8LGxn+", "***REMOVED***", AmazonEndpoint.US),
+            new BotHandler(),
+            new BrainfuckHandler(),
+            new CleverbotHandler(client),
+            new DevHandler(),
+            new EmoteHandler(),
+            new GuildHandler(),
+            new UtilHandler(),
+            new MusicHandler(LocalAudioController.class),
+            new MyAnimeListHandler("***REMOVED***"),
+            new NanowrimoHandler(),
+            new OsuHandler("***REMOVED***"),
+            new RuneScapeHandler(),
+            new SteamHandler("***REMOVED***"),
+            new TwitchHandler("***REMOVED***"),
+            new UrbanDictionaryHandler(),
+            new UserHandler(),
+            new VoiceHandler(),
+            new YouTubeHandler("***REMOVED***")
+        );
+
 		this.client = client;
 		globalMessageHandler = new GlobalMessageHandler(client);
-	}
 
-	public void registerManagers(DiscordManager... managers) {
-		jda.addEventListener((Object[])managers);
+		EventManager events = new EventManager(bot);
 	}
 
 	public JDA getJDA() {

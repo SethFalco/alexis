@@ -1,13 +1,11 @@
 package com.elypia.alexis.discord.handlers.modules;
 
-import com.elypia.commandler.events.MessageEvent;
-import com.elypia.commandler.CommandHandler;
+import com.elypia.alexis.commandler.annotations.Database;
 import com.elypia.alexis.utils.BotUtils;
+import com.elypia.commandler.CommandHandler;
+import com.elypia.commandler.annotations.command.*;
+import com.elypia.commandler.events.MessageEvent;
 import com.elypia.elypiai.nanowrimo.Nanowrimo;
-import com.elypia.jdautils.annotations.access.Database;
-import com.elypia.jdautils.annotations.command.Command;
-import com.elypia.jdautils.annotations.command.Module;
-import com.elypia.jdautils.annotations.command.Param;
 import com.mongodb.client.MongoDatabase;
 import net.dv8tion.jda.core.EmbedBuilder;
 
@@ -20,7 +18,7 @@ public class NanowrimoHandler extends CommandHandler {
 	private MongoDatabase database;
 	private Nanowrimo nanowrimo;
 
-	public NanowrimoHandler(MongoDatabase database) {
+	public NanowrimoHandler() {
 		this.database = database;
 		nanowrimo = new Nanowrimo();
 	}
@@ -31,11 +29,11 @@ public class NanowrimoHandler extends CommandHandler {
 		return false;
 	}
 
+	@Database
 	@Command(aliases = {"authenticate", "auth"}, help = "Auth to your NaNoWriMo account.")
 	@Param(name = "name", help = "Your NaNoWriMo username.")
 	@Param(name = "secret", help = "Your NaNoWriMo secret at: https://nanowrimo.org/api/wordcount", secret = true)
 	@Param(name = "wordcount", help = "Your total word count to submit.")
-	@Database
 	public void authenticate(MessageEvent event, String name, String secret, int wordcount) {
 		event.tryDeleteMessage();
 
