@@ -1,16 +1,11 @@
 package com.elypia.alexis.discord.handlers.modules;
 
-import com.elypia.commandler.events.MessageEvent;
 import com.elypia.commandler.CommandHandler;
-import com.elypia.jdautils.annotations.access.Scope;
-import com.elypia.jdautils.annotations.command.Command;
-import com.elypia.jdautils.annotations.command.CommandGroup;
-import com.elypia.jdautils.annotations.command.Module;
-import com.elypia.jdautils.annotations.command.Param;
+import com.elypia.commandler.annotations.command.*;
+import com.elypia.commandler.events.MessageEvent;
+import com.elypia.commandler.jda.annotations.Scope;
 import net.dv8tion.jda.core.EmbedBuilder;
-import net.dv8tion.jda.core.entities.ChannelType;
-import net.dv8tion.jda.core.entities.Emote;
-import net.dv8tion.jda.core.entities.Guild;
+import net.dv8tion.jda.core.entities.*;
 
 import java.util.List;
 
@@ -24,7 +19,7 @@ public class EmoteHandler extends CommandHandler {
     @Command(aliases = "list", help = "List all of the custom emotes in this guild.")
     @Scope(ChannelType.TEXT)
     public void listEmotes(MessageEvent event) {
-        listEmotes(event, event.getGuild());
+        listEmotes(event, event.getMessageEvent().getGuild());
     }
 
     @CommandGroup("list")

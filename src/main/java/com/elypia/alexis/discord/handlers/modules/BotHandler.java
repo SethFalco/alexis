@@ -1,30 +1,22 @@
 package com.elypia.alexis.discord.handlers.modules;
 
-import com.elypia.alexis.discord.Config;
-import com.elypia.commandler.events.MessageEvent;
+import com.elypia.alexis.Alexis;
 import com.elypia.commandler.CommandHandler;
+import com.elypia.commandler.annotations.command.*;
+import com.elypia.commandler.events.MessageEvent;
+import com.elypia.commandler.jda.annotations.Scope;
 import com.elypia.elypiai.utils.Markdown;
-import com.elypia.jdautils.annotations.access.Scope;
-import com.elypia.jdautils.annotations.command.Command;
-import com.elypia.jdautils.annotations.command.Module;
-import com.elypia.jdautils.annotations.command.Param;
-import net.dv8tion.jda.core.EmbedBuilder;
-import net.dv8tion.jda.core.JDA;
-import net.dv8tion.jda.core.entities.ChannelType;
-import net.dv8tion.jda.core.entities.Guild;
-import net.dv8tion.jda.core.entities.Member;
-import net.dv8tion.jda.core.entities.User;
+import net.dv8tion.jda.core.*;
+import net.dv8tion.jda.core.entities.*;
+import org.json.*;
 
-import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
-import java.util.Collection;
-import java.util.Map;
-import java.util.StringJoiner;
+import java.time.*;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.elypia.alexis.utils.BotUtils.inviteUrl;
 
-@Module (
+@Module(
 	aliases = {"Bot", "Robot"},
 	help = "Bot commands for stats or information."
 )
@@ -38,15 +30,16 @@ public class BotHandler extends CommandHandler {
 
 	@Override
 	public boolean test() {
-
 		return false;
 	}
 
+	@Static
 	@Command(aliases = "ping", help = "Respond 'pong!' with the number of `ms` it took to fulfil the request!")
 	public void ping(MessageEvent event) {
 		pingPong(event, "pong!");
 	}
 
+	@Static
 	@Command(aliases = "pong")
 	public void pong(MessageEvent event) {
 		pingPong(event, "ping!");
@@ -55,18 +48,17 @@ public class BotHandler extends CommandHandler {
 	private void pingPong(MessageEvent event, String text) {
 		long startTime = System.currentTimeMillis();
 
-		event.getChannel().sendMessage(text).queue(message -> {
+		event.getMessageEvent().getChannel().sendMessage(text).queue(message -> {
 			long endTime = System.currentTimeMillis() - startTime;
-
 			message.editMessage(String.format("%s `%,dms`", message.getContentRaw(), endTime)).queue();
 		});
 	}
 
 	@Command(aliases = {"stats", "info"}, help = "Display stats on Alexis!")
-	public void displayStats(MessageEvent event) {
-		JDA jda = event.getJDA();
+	public EmbedBuilder displayStats(MessageEvent event) {
+		JDA jda = event.getMessageEvent().getJDA();
 		User alexis = jda.getSelfUser();
-		Map<Long, String> developers = Config.developers;
+        JSONArray devs = Alexis.config.getJSONObject("discord").getJSONArray("developers");
 
 		EmbedBuilder builder = new EmbedBuilder();
 		builder.setTitle(alexis.getName());
@@ -74,10 +66,11 @@ public class BotHandler extends CommandHandler {
 
 		StringJoiner joiner = new StringJoiner("\n");
 
-		developers.forEach((id, url) -> {
-			User user = jda.getUserById(id);
-			joiner.add(Markdown.a(user.getName(), url));
-		});
+		for (int i = 0; i < devs.length(); i++) {
+            JSONObject object = devs.getJSONObject(i);
+            User user = jda.getUserById(object.getLong("id"));
+            joiner.add(Markdown.a(user.getName(), object.getString("url")));
+        }
 
 		builder.addField("Developer(s)", joiner.toString(), true);
 		builder.addField("Scribble Master", "Jossu", true);
@@ -92,9 +85,10 @@ public class BotHandler extends CommandHandler {
 		builder.addField("Guild", Markdown.a("Elypia", "https://discord.gg/"), true);
 		builder.setFooter("Did you know you can support the project through the 'Amazon' module!", null);
 
-		event.reply(builder);
+		return builder;
 	}
 
+	@Static
 	@Command(aliases = "say", help = "Have Alexis repeat something you say!")
 	@Param(name = "body", help = "Text Alexis should repeat!")
 	public void say(MessageEvent event, String body) {
@@ -104,8 +98,8 @@ public class BotHandler extends CommandHandler {
 
 	@Command(aliases = "invites", help = "Get invites for all the bots in here!")
 	@Scope(ChannelType.TEXT)
-	public void invites(MessageEvent event) {
-		Guild guild = event.getGuild();
+	public EmbedBuilder invites(MessageEvent event) {
+		Guild guild = event.getMessageEvent().getGuild();
 		Collection<Member> bots = guild.getMembers();
 
 		Collection<User> users = bots.stream().map(Member::getUser).filter(User::isBot).filter(o -> {
@@ -114,6 +108,7 @@ public class BotHandler extends CommandHandler {
 
 		EmbedBuilder builder = new EmbedBuilder();
 		users.forEach(o -> builder.addField(o.getName(), Markdown.a("Invite link!", inviteUrl(o)), true));
-		event.reply(builder);
+
+		return builder;
 	}
 }

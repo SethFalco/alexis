@@ -1,23 +1,17 @@
 package com.elypia.alexis.discord.handlers.modules;
 
-import com.elypia.commandler.events.MessageEvent;
-import com.elypia.commandler.CommandHandler;
 import com.elypia.alexis.utils.BotUtils;
-import com.elypia.elypiai.runescape.QuestStats;
-import com.elypia.elypiai.runescape.RuneScape;
+import com.elypia.commandler.CommandHandler;
+import com.elypia.commandler.annotations.command.*;
+import com.elypia.commandler.events.MessageEvent;
+import com.elypia.elypiai.runescape.*;
 import com.elypia.elypiai.runescape.data.QuestStatus;
 import com.elypia.elypiai.utils.ElyUtils;
-import com.elypia.jdautils.annotations.command.Command;
-import com.elypia.jdautils.annotations.command.Module;
-import com.elypia.jdautils.annotations.command.Param;
 import net.dv8tion.jda.core.EmbedBuilder;
 
 import java.util.Collection;
 
-@Module (
-	aliases = {"RuneScape", "RS"},
-	help = "Integration with the popular MMORPG, RuneScape!"
-)
+@Module(aliases = {"RuneScape", "RS"}, help = "Integration with the popular MMORPG, RuneScape!")
 public class RuneScapeHandler extends CommandHandler {
 
 	private RuneScape runescape;

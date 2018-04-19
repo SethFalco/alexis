@@ -1,51 +1,44 @@
 package com.elypia.alexis.discord.handlers.modules;
 
-import com.elypia.commandler.events.MessageEvent;
 import com.elypia.commandler.CommandHandler;
-import com.elypia.commandler.jda.annotations.access.Scope;
-import com.elypia.commandler.annotations.command.Command;
-import com.elypia.commandler.annotations.command.CommandGroup;
-import com.elypia.commandler.annotations.command.Module;
-import com.elypia.commandler.annotations.command.Param;
+import com.elypia.commandler.annotations.command.*;
+import com.elypia.commandler.annotations.filter.Search;
+import com.elypia.commandler.events.MessageEvent;
+import com.elypia.commandler.jda.annotations.Scope;
 import com.elypia.elypiai.utils.Markdown;
 import net.dv8tion.jda.core.EmbedBuilder;
-import net.dv8tion.jda.core.entities.ChannelType;
-import net.dv8tion.jda.core.entities.Member;
-import net.dv8tion.jda.core.entities.Role;
-import net.dv8tion.jda.core.entities.User;
+import net.dv8tion.jda.core.entities.*;
 
 import java.time.format.DateTimeFormatter;
-import java.util.Collection;
-import java.util.StringJoiner;
+import java.util.*;
 
 import static com.elypia.alexis.utils.BotUtils.inviteUrl;
+import static com.elypia.commandler.jda.data.SearchScope.LOCAL;
 
-@Module(
-	aliases = "User",
-	help = "Get information or stats on global users! Try 'members' for guild specific commands."
-)
+@Module(aliases = "User", help = "Get information or stats on global users! Try 'members' for guild specific commands.")
 public class UserHandler extends CommandHandler {
 
 	@CommandGroup("info")
 	public void getInfo(MessageEvent event) {
-		getInfo(event, event.getAuthor());
+		getInfo(event, event.getMessageEvent().getAuthor());
 	}
 
 	@CommandGroup("info")
 	@Command(aliases = "info", help = "Get some basic information on the user!")
 	@Param(name = "user", help = "The user to display information for.")
 	@Scope(ChannelType.TEXT)
-	public void getInfo(MessageEvent event, User user) {
+	public void getInfo(MessageEvent event, @Search(LOCAL) User user) {
 		EmbedBuilder builder = new EmbedBuilder();
 		String avatar = user.getEffectiveAvatarUrl();
 		DateTimeFormatter format = DateTimeFormatter.ISO_LOCAL_DATE;
-		Member member = event.getMember();
+		Guild guild = event.getMessageEvent().getGuild();
+		Member member = guild.getMember(user);
 
 		if (member != null) {
 			builder.setAuthor(member.getEffectiveName());
 			builder.addField("Online Status", member.getOnlineStatus().toString(), true);
 			builder.addField("Status", member.getGame().getName(), true);
-			builder.addField("Joined " + event.getGuild().getName(), member.getJoinDate().format(format), true);
+			builder.addField("Joined " + guild.getName(), member.getJoinDate().format(format), true);
 
 			Collection<Role> roles = member.getRoles();
 

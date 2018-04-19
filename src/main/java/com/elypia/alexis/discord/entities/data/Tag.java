@@ -1,8 +1,7 @@
 package com.elypia.alexis.discord.entities.data;
 
 import net.dv8tion.jda.core.Permission;
-import net.dv8tion.jda.core.entities.Guild;
-import net.dv8tion.jda.core.entities.TextChannel;
+import net.dv8tion.jda.core.entities.*;
 
 /**
  * Tags are key words that can be associated with {@link Guild}

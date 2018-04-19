@@ -9,10 +9,7 @@ import com.elypia.elypiai.nanowrimo.Nanowrimo;
 import com.mongodb.client.MongoDatabase;
 import net.dv8tion.jda.core.EmbedBuilder;
 
-@Module(
-	aliases = {"NaNoWriMo", "nano", "nnwm"},
-	help = ""
-)
+@Module(aliases = {"NaNoWriMo", "nano", "nnwm"}, help = "")
 public class NanowrimoHandler extends CommandHandler {
 
 	private MongoDatabase database;
@@ -25,7 +22,6 @@ public class NanowrimoHandler extends CommandHandler {
 
 	@Override
 	public boolean test() {
-
 		return false;
 	}
 
@@ -65,7 +61,7 @@ public class NanowrimoHandler extends CommandHandler {
 				builder.setFooter(String.format(footerFormat, result.getUsername()), null);
 			}
 
-			event.getChannel().sendMessage(builder.build()).queue();
+			event.reply(builder);
 		}, failure -> BotUtils.httpFailure(event, failure));
 	}
 }

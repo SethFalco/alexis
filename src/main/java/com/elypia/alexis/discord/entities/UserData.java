@@ -6,10 +6,7 @@ import com.mongodb.client.MongoDatabase;
 import net.dv8tion.jda.core.entities.User;
 import org.bson.Document;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.Objects;
+import java.util.*;
 
 import static com.mongodb.client.model.Filters.eq;
 
@@ -101,49 +98,49 @@ public class UserData extends DatabaseEntity {
         return xp;
     }
 
-    /**
-     * @param event The generic event which rewards XP.
-     * @return The new amount of XP the user has.
-     */
+//    /**
+//     * @param event The generic event which rewards XP.
+//     * @return The new amount of XP the user has.
+//     */
+//
+//    public int gainXp(GenericEvent event) {
+//        int gains = isEligibleForXp(event);
+//
+//        if (gains > 0)
+//            xp += gains;
+//
+//        // Reset last message to current timestamp.
+//        lastMessage = new Date();
+//        return xp;
+//    }
 
-    public int gainXp(GenericEvent event) {
-        int gains = isEligibleForXp(event);
-
-        if (gains > 0)
-            xp += gains;
-
-        // Reset last message to current timestamp.
-        lastMessage = new Date();
-        return xp;
-    }
-
-    /**
-     * Checks if the user is entitled to XP based on
-     * the last time they sent a message. <br>
-     * The return value with be -1 if it appears the user
-     * has been typing faster than physically possible.
-     * (10 characters in a second.)
-     *
-     * @param event The generic event which rewards XP.
-     * @return Amount of XP user is entitled to, or -1 if deemed cheating.
-     */
-
-    public int isEligibleForXp(GenericEvent event) {
-        // Split the message for every set of whitespace characters.
-        int length = event.getContent().split("\\s+").length;
-
-        if (lastMessage == null)
-            return length;
-
-        long current = System.currentTimeMillis();
-        long previous = lastMessage.getTime();
-
-        // Divide by 1,000 to get milliseconds from seconds
-        // Multiply by 10 for max chars allowed for the # of seconds passed.
-        int allowableLength = (int)((current - previous) / 100);
-
-        return length < allowableLength ? length : -1;
-    }
+//    /**
+//     * Checks if the user is entitled to XP based on
+//     * the last time they sent a message. <br>
+//     * The return value with be -1 if it appears the user
+//     * has been typing faster than physically possible.
+//     * (10 characters in a second.)
+//     *
+//     * @param event The generic event which rewards XP.
+//     * @return Amount of XP user is entitled to, or -1 if deemed cheating.
+//     */
+//
+//    public int isEligibleForXp(GenericEvent event) {
+//        // Split the message for every set of whitespace characters.
+//        int length = event.getContent().split("\\s+").length;
+//
+//        if (lastMessage == null)
+//            return length;
+//
+//        long current = System.currentTimeMillis();
+//        long previous = lastMessage.getTime();
+//
+//        // Divide by 1,000 to get milliseconds from seconds
+//        // Multiply by 10 for max chars allowed for the # of seconds passed.
+//        int allowableLength = (int)((current - previous) / 100);
+//
+//        return length < allowableLength ? length : -1;
+//    }
 
     /**
      * @return The last time the user sent a message which was entitled to XP.

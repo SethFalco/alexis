@@ -1,10 +1,8 @@
 package com.elypia.alexis.discord.handlers.modules;
 
-import com.elypia.commandler.events.MessageEvent;
 import com.elypia.commandler.CommandHandler;
-import com.elypia.commandler.annotations.command.Command;
-import com.elypia.commandler.annotations.command.Module;
-import com.elypia.commandler.annotations.command.Param;
+import com.elypia.commandler.annotations.command.*;
+import com.elypia.commandler.events.MessageEvent;
 import com.elypia.elypiai.utils.math.MathUtils;
 import net.dv8tion.jda.core.EmbedBuilder;
 

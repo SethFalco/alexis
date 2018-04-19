@@ -6,16 +6,36 @@ import com.elypia.commandler.annotations.command.*;
 import com.elypia.commandler.events.MessageEvent;
 import com.elypia.elypiai.amazon.*;
 import com.elypia.elypiai.amazon.data.AmazonEndpoint;
-import com.elypia.jdautils.annotations.command.*;
 import net.dv8tion.jda.core.EmbedBuilder;
+import org.json.*;
 
 import java.security.InvalidKeyException;
-import java.util.Objects;
+import java.util.*;
 
 @Module(aliases = "Amazon", help = "Share links and support Elypia! We get a cut from purchases!")
 public class AmazonHandler extends CommandHandler {
 
     private Amazon amazon;
+
+    public AmazonHandler(JSONObject object) {
+        Objects.requireNonNull(object);
+
+        String accessKey = object.getString("access_key");
+        String secret = object.getString("secret");
+
+        JSONArray array = object.getJSONArray("stores");
+        JSONObject store = array.getJSONObject(0);
+
+        String id = store.getString("id");
+        AmazonEndpoint endpoint = AmazonEndpoint.US; // Temp
+
+        try {
+            amazon = new Amazon(accessKey, secret, id, endpoint);
+        } catch (InvalidKeyException ex) {
+            ex.printStackTrace();
+            enabled = false;
+        }
+    }
 
     public AmazonHandler(String accessKey, String secret, String id, AmazonEndpoint endpoint) {
         Objects.requireNonNull(accessKey);

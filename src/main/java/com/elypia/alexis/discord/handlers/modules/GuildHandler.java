@@ -1,13 +1,10 @@
 package com.elypia.alexis.discord.handlers.modules;
 
-import com.elypia.jdautils.annotations.access.Permissions;
-import com.elypia.jdautils.annotations.command.*;
-import com.elypia.commandler.events.MessageEvent;
 import com.elypia.commandler.CommandHandler;
-import com.elypia.jdautils.annotations.access.Scope;
-import com.elypia.jdautils.annotations.command.Module;
-import net.dv8tion.jda.core.EmbedBuilder;
-import net.dv8tion.jda.core.Permission;
+import com.elypia.commandler.annotations.command.*;
+import com.elypia.commandler.events.MessageEvent;
+import com.elypia.commandler.jda.annotations.*;
+import net.dv8tion.jda.core.*;
 import net.dv8tion.jda.core.entities.*;
 
 import java.util.Collection;
@@ -22,7 +19,7 @@ public class GuildHandler extends CommandHandler {
     @Command(aliases = "info", help = "Get the guilds information.")
     @Scope(ChannelType.TEXT)
     public void info(MessageEvent event) {
-        info(event, event.getGuild());
+        info(event, event.getMessageEvent().getGuild());
     }
 
     @CommandGroup("info")
@@ -49,7 +46,7 @@ public class GuildHandler extends CommandHandler {
     @Permissions(Permission.MANAGE_SERVER)
     @Scope(ChannelType.TEXT)
     public void prune(MessageEvent event, int count) {
-        prune(event, count, event.getMessage().getTextChannel());
+        prune(event, count, event.getMessageEvent().getTextChannel());
     }
 
     @CommandGroup("prune")
@@ -63,7 +60,7 @@ public class GuildHandler extends CommandHandler {
             return;
         }
 
-        channel.getHistoryBefore(event.getMessage(), count).queue(o -> {
+        channel.getHistoryBefore(event.getMessageEvent().getMessage(), count).queue(o -> {
             channel.deleteMessages(o.getRetrievedHistory()).queue(ob -> {
                 event.tryDeleteMessage();
             });

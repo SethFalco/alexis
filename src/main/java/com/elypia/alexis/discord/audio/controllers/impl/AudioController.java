@@ -1,8 +1,7 @@
 package com.elypia.alexis.discord.audio.controllers.impl;
 
 import com.elypia.alexis.discord.audio.GuildAudioPlayer;
-import com.elypia.alexis.discord.audio.controllers.LocalAudioController;
-import com.elypia.alexis.discord.audio.controllers.RemoteAudioController;
+import com.elypia.alexis.discord.audio.controllers.*;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import net.dv8tion.jda.core.JDA;
 

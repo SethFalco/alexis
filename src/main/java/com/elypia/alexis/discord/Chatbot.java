@@ -1,96 +1,76 @@
 package com.elypia.alexis.discord;
 
+import com.elypia.alexis.Alexis;
 import com.elypia.alexis.discord.audio.controllers.LocalAudioController;
-import com.elypia.alexis.discord.handlers.GlobalMessageHandler;
-import com.elypia.alexis.discord.handlers.GlobalReactionHandler;
 import com.elypia.alexis.discord.handlers.modules.*;
 import com.elypia.alexis.discord.managers.EventManager;
-import com.elypia.alexis.discord.managers.impl.DiscordManager;
 import com.elypia.commandler.jda.JDACommandler;
-import com.elypia.elypiai.amazon.data.AmazonEndpoint;
-import com.mongodb.MongoClient;
-import com.mongodb.client.MongoDatabase;
-import net.dv8tion.jda.core.AccountType;
-import net.dv8tion.jda.core.JDA;
-import net.dv8tion.jda.core.JDABuilder;
-import net.dv8tion.jda.core.OnlineStatus;
+import net.dv8tion.jda.core.*;
 import net.dv8tion.jda.core.entities.Game;
+import org.json.*;
 
 import javax.security.auth.login.LoginException;
-import java.util.List;
+import java.util.*;
 
 public class Chatbot {
 
 	private JDA jda;
 
-	private GlobalMessageHandler globalMessageHandler;
-	private GlobalReactionHandler globalReactionHandler;
-
-	private MongoClient client;
-
 	private List<Game> statuses;
 
-	public Chatbot(MongoClient client) throws LoginException {
+	public Chatbot() throws LoginException {
+	    statuses = new ArrayList<>();
+
+	    JSONObject discord = Alexis.config.getJSONObject("discord");
+
 		JDABuilder builder = new JDABuilder(AccountType.BOT);
-		builder.setToken(Config.token);
+		builder.setToken(discord.getString("token"));
 		builder.setCorePoolSize(10);
-//		builder.setGame(Game.playing(config.getDefaultStatuses()[0]));
 		builder.setStatus(OnlineStatus.IDLE);
 		builder.setBulkDeleteSplittingEnabled(false);
+		builder.addEventListener(new EventManager(this));
+
+        JSONArray statusesArray = discord.getJSONArray("statuses");
+
+        for (int i = 0; i < statusesArray.length(); i++) {
+            JSONObject status = statusesArray.getJSONObject(i);
+            int key = status.getInt("key");
+            String text = status.getString("text");
+
+            statuses.add(Game.of(Game.GameType.fromKey(key), text));
+        }
+
+        builder.setGame(statuses.get(0));
 
 		jda = builder.buildAsync();
 
+        JSONObject apiDetails = Alexis.config.getJSONObject("api_details");
         JDACommandler commandler = new JDACommandler(jda);
 
         commandler.registerModules(
-            new AmazonHandler("AKIAJO2PITTL4NPRS5DA", "6NNu5fzNynDfq4Dq6kx1GxhZI3+xakl4PA8LGxn+", "***REMOVED***", AmazonEndpoint.US),
+            new AmazonHandler(apiDetails.getJSONObject("amazon")),
             new BotHandler(),
             new BrainfuckHandler(),
-            new CleverbotHandler(client),
+            new CleverbotHandler(apiDetails.getJSONObject("cleverbot").getString("api_key")),
             new DevHandler(),
             new EmoteHandler(),
             new GuildHandler(),
             new UtilHandler(),
             new MusicHandler(LocalAudioController.class),
-            new MyAnimeListHandler("***REMOVED***"),
+            new MyAnimeListHandler(apiDetails.getJSONObject("myanimelist").getString("token")),
             new NanowrimoHandler(),
-            new OsuHandler("***REMOVED***"),
+            new OsuHandler(apiDetails.getJSONObject("osu").getString("api_key")),
             new RuneScapeHandler(),
-            new SteamHandler("***REMOVED***"),
-            new TwitchHandler("***REMOVED***"),
+            new SteamHandler(apiDetails.getJSONObject("steam").getString("api_key")),
+            new TwitchHandler(apiDetails.getJSONObject("twitch").getString("api_key")),
             new UrbanDictionaryHandler(),
             new UserHandler(),
             new VoiceHandler(),
-            new YouTubeHandler("***REMOVED***")
+            new YouTubeHandler(apiDetails.getJSONObject("google").getString("api_key"))
         );
-
-		this.client = client;
-		globalMessageHandler = new GlobalMessageHandler(client);
-
-		EventManager events = new EventManager(bot);
 	}
 
 	public JDA getJDA() {
 		return jda;
-	}
-
-	public MongoClient getClient() {
-		return client;
-	}
-
-	/**
-	 * @return The default database which stores the bulk of the chatbots data.
-	 */
-
-	public MongoDatabase getHomeDatabase() {
-		return getDatabase("alexis");
-	}
-
-	public MongoDatabase getDatabase(String database) {
-		return client.getDatabase(database);
-	}
-
-	public GlobalMessageHandler getGlobalMessageHandler() {
-		return globalMessageHandler;
 	}
 }

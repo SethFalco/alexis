@@ -1,20 +1,15 @@
 package com.elypia.alexis.discord.handlers.modules;
 
-import com.elypia.commandler.events.MessageEvent;
 import com.elypia.commandler.CommandHandler;
+import com.elypia.commandler.annotations.command.*;
+import com.elypia.commandler.events.MessageEvent;
 import com.elypia.elypiai.myanimelist.MyAnimeList;
-import com.elypia.jdautils.annotations.command.Command;
-import com.elypia.jdautils.annotations.command.Module;
-import com.elypia.jdautils.annotations.command.Param;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.MessageEmbed;
 
 import static com.elypia.alexis.utils.BotUtils.httpFailure;
 
-@Module(
-    aliases = {"myanimelist", "mal"},
-    help = "Search through MyAnimeList for animes and managas."
-)
+@Module(aliases = {"myanimelist", "mal"}, help = "Search through MyAnimeList for animes and managas.")
 public class MyAnimeListHandler extends CommandHandler {
 
     private MyAnimeList mal;

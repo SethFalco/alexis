@@ -3,13 +3,10 @@ package com.elypia.alexis.discord.entities;
 import com.elypia.alexis.discord.entities.data.Tag;
 import com.elypia.alexis.discord.entities.impl.DatabaseEntity;
 import com.mongodb.client.MongoDatabase;
-import net.dv8tion.jda.core.entities.Guild;
-import net.dv8tion.jda.core.entities.TextChannel;
+import net.dv8tion.jda.core.entities.*;
 import org.bson.Document;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import static com.mongodb.client.model.Filters.eq;
 
@@ -116,21 +113,21 @@ public class GuildData extends DatabaseEntity {
         return xp;
     }
 
-    /**
-     * Increase the total XP this guild has.
-     * Less validation checks are required for guild vs global.
-     *
-     * @param event The generic event this is due rewarding XP.
-     * @return The new total XP the guild has.
-     */
-
-    public int gainXp(GenericEvent event) {
-        String content = event.getContent();
-        int gains = content.split("\\s+").length;
-
-        xp += gains;
-        return xp;
-    }
+//    /**
+//     * Increase the total XP this guild has.
+//     * Less validation checks are required for guild vs global.
+//     *
+//     * @param event The generic event this is due rewarding XP.
+//     * @return The new total XP the guild has.
+//     */
+//
+//    public int gainXp(GenericEvent event) {
+//        String content = event.getContent();
+//        int gains = content.split("\\s+").length;
+//
+//        xp += gains;
+//        return xp;
+//    }
 
     /**
      * @param channel A text channel which is under this guild.

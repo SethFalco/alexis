@@ -3,8 +3,7 @@ package com.elypia.alexis.discord.entities;
 import com.elypia.alexis.discord.entities.data.Tag;
 import org.bson.Document;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class TextChannelData {
 

@@ -1,19 +1,15 @@
 package com.elypia.alexis.discord.handlers.modules;
 
-import com.elypia.commandler.events.MessageEvent;
 import com.elypia.commandler.CommandHandler;
-import com.elypia.commandler.annotations.command.Command;
-import com.elypia.commandler.annotations.command.CommandGroup;
-import com.elypia.commandler.annotations.command.Module;
-import com.elypia.commandler.annotations.command.Param;
+import com.elypia.commandler.annotations.command.*;
+import com.elypia.commandler.events.MessageEvent;
 import com.elypia.elypiai.osu.Osu;
 import com.elypia.elypiai.osu.data.OsuMode;
 import com.elypia.elypiai.utils.Markdown;
 import net.dv8tion.jda.core.EmbedBuilder;
 
 import java.util.StringJoiner;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 import static com.elypia.alexis.utils.BotUtils.httpFailure;
 

@@ -1,26 +1,18 @@
 package com.elypia.alexis.discord.handlers.modules;
 
-import com.elypia.commandler.events.MessageEvent;
-import com.elypia.commandler.CommandHandler;
 import com.elypia.alexis.utils.BotUtils;
-import com.elypia.elypiai.steam.Steam;
-import com.elypia.elypiai.steam.SteamGame;
+import com.elypia.commandler.CommandHandler;
+import com.elypia.commandler.annotations.command.*;
+import com.elypia.commandler.events.MessageEvent;
+import com.elypia.elypiai.steam.*;
 import com.elypia.elypiai.utils.ElyUtils;
-import com.elypia.jdautils.annotations.command.Command;
-import com.elypia.jdautils.annotations.command.Module;
-import com.elypia.jdautils.annotations.command.Param;
-import com.elypia.jdautils.annotations.command.Reaction;
 import com.mongodb.client.MongoCollection;
 import net.dv8tion.jda.core.EmbedBuilder;
 import org.bson.Document;
 
 import static com.mongodb.client.model.Filters.eq;
 
-@Module (
-	aliases = "Steam",
-	help = "Integration with the popular DRM, Steam!",
-	defaultCommand = "get"
-)
+@Module(aliases = "Steam", help = "Integration with the popular DRM, Steam!")
 public class SteamHandler extends CommandHandler {
 
 	private Steam steam;

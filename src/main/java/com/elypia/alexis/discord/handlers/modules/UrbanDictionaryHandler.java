@@ -1,22 +1,16 @@
 package com.elypia.alexis.discord.handlers.modules;
 
-import com.elypia.jdautils.annotations.command.*;
-import com.elypia.commandler.events.MessageEvent;
-import com.elypia.commandler.CommandHandler;
 import com.elypia.alexis.utils.BotUtils;
-import com.elypia.elypiai.urbandictionary.UrbanDefinition;
-import com.elypia.elypiai.urbandictionary.UrbanDictionary;
+import com.elypia.commandler.CommandHandler;
+import com.elypia.commandler.annotations.command.*;
+import com.elypia.commandler.events.MessageEvent;
+import com.elypia.elypiai.urbandictionary.*;
 import com.elypia.elypiai.urbandictionary.data.UrbanResultType;
-import com.elypia.jdautils.annotations.command.Module;
 import net.dv8tion.jda.core.EmbedBuilder;
 
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
-@Module(
-	aliases = {"UrbanDictionary", "UrbanDict", "Urban", "UD"},
-	help = "An online dictionary defined by the community for definitions and examples."
-)
+@Module(aliases = {"UrbanDictionary", "UrbanDict", "Urban", "UD"}, help = "An online dictionary defined by the community for definitions and examples.")
 public class UrbanDictionaryHandler extends CommandHandler {
 
 	private UrbanDictionary dict;
@@ -24,7 +18,7 @@ public class UrbanDictionaryHandler extends CommandHandler {
 	public UrbanDictionaryHandler() {
 		dict = new UrbanDictionary();
 	}
-	
+
 	@CommandGroup("define")
 	@Command(aliases = "define", help = "Return the definition of a word or phrase.")
 	@Param(name = "body", help = "Word or phrase to define!")
@@ -99,7 +93,7 @@ public class UrbanDictionaryHandler extends CommandHandler {
 	public void tags(MessageEvent event, String body) {
 		dict.define(body, results -> {
 			if (results.getResultType() == UrbanResultType.NO_RESULTS) {
-				event.getChannel().sendMessage("Sorry I didn't get a result. :c").queue();
+				event.getMessageEvent().getChannel().sendMessage("Sorry I didn't get a result. :c").queue();
 				return;
 			}
 

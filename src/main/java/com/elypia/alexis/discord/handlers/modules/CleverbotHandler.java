@@ -1,15 +1,12 @@
 package com.elypia.alexis.discord.handlers.modules;
 
-import com.elypia.commandler.events.MessageEvent;
-import com.elypia.commandler.CommandHandler;
 import com.elypia.alexis.utils.BotUtils;
+import com.elypia.commandler.CommandHandler;
+import com.elypia.commandler.annotations.command.*;
+import com.elypia.commandler.events.MessageEvent;
 import com.elypia.elypiai.cleverbot.Cleverbot;
-import com.elypia.jdautils.annotations.command.Command;
-import com.elypia.jdautils.annotations.command.Module;
-import com.elypia.jdautils.annotations.command.Param;
 import com.mongodb.MongoClient;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.*;
 import com.mongodb.client.model.UpdateOptions;
 import com.mongodb.client.result.UpdateResult;
 import net.dv8tion.jda.core.entities.MessageChannel;
@@ -30,35 +27,25 @@ public class CleverbotHandler extends CommandHandler {
     private MongoDatabase database;
     private MongoCollection<Document> channels;
 
-    public CleverbotHandler(MongoClient client) {
-        database = client.getDatabase("alexis");
-        channels = database.getCollection("channels");
-
-        MongoDatabase global = client.getDatabase("global");
-        MongoCollection<Document> api = global.getCollection("api_details");
-        Document document = api.find(eq("service", "cleverbot")).first();
-
-        cleverbot = new Cleverbot(document.getString("api_key"));
-    }
-
     public CleverbotHandler(String apiKey) {
         cleverbot = new Cleverbot(apiKey);
     }
 
-    @Command (aliases = {"say", "ask"}, help = "Say something to Cleverbot.")
+    @Command(aliases = {"say", "ask"}, help = "Say something to Cleverbot.")
     @Param(name = "body", help = "What you want to say.")
     public void say(MessageEvent event, String body) {
-        String cs = getCs(event.getChannel());
+        MessageChannel channel = event.getMessageEvent().getChannel();
+        String cs = getCs(channel);
 
         cleverbot.say(body, cs, response -> {
             event.reply(response.getOutput());
-            setCs(event.getChannel(), response.getCS());
+            setCs(channel, response.getCS());
         }, failure -> BotUtils.httpFailure(event, failure));
     }
 
     @Command (aliases = {"history", "his"}, help = "Track previous conversation in this channel.")
     public void getHistory(MessageEvent event) {
-        String cs = getCs(event.getChannel());
+        String cs = getCs(event.getMessageEvent().getChannel());
         String history = cleverbot.getHistory(cs);
 
         if (history == null)

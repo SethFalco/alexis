@@ -5,8 +5,7 @@ import com.elypia.commandler.events.MessageEvent;
 import net.dv8tion.jda.core.entities.User;
 
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.logging.*;
 
 public final class BotUtils {
 
@@ -20,7 +19,7 @@ public final class BotUtils {
 
 	public static void httpFailure(MessageEvent event, IOException failure) {
 		// Log the exception to console, was likely time out or API in use is deprecated.
-		LOGGER.log(Level.SEVERE, "Unirest request failed.", failure);
+		LOGGER.log(Level.SEVERE, "HTTP request failed.", failure);
 
 		// Let the user know what happened and apologise.
 		String message = "Sorry! I'm don't know why the command failed but I'm reporting this to Seth, perhaps trying again later?";

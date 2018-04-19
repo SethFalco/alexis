@@ -1,39 +1,26 @@
 package com.elypia.alexis.discord.handlers.modules;
 
-import com.elypia.alexis.discord.audio.AudioPlayerSendHandler;
-import com.elypia.alexis.discord.audio.GuildAudioPlayer;
+import com.elypia.alexis.discord.audio.*;
 import com.elypia.alexis.discord.audio.controllers.impl.AudioController;
-import com.elypia.commandler.events.MessageEvent;
 import com.elypia.commandler.CommandHandler;
+import com.elypia.commandler.annotations.command.*;
+import com.elypia.commandler.events.MessageEvent;
+import com.elypia.commandler.jda.annotations.*;
+import com.elypia.commandler.validation.annotations.Limit;
 import com.elypia.elypiai.utils.Markdown;
-import com.elypia.jdautils.annotations.access.Permissions;
-import com.elypia.jdautils.annotations.access.Scope;
-import com.elypia.jdautils.annotations.command.Command;
-import com.elypia.jdautils.annotations.command.Module;
-import com.elypia.jdautils.annotations.command.Param;
-import com.elypia.jdautils.annotations.validation.Limit;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
-import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
-import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
-import net.dv8tion.jda.core.EmbedBuilder;
-import net.dv8tion.jda.core.Permission;
-import net.dv8tion.jda.core.entities.ChannelType;
-import net.dv8tion.jda.core.entities.Guild;
-import net.dv8tion.jda.core.entities.MessageEmbed;
-import net.dv8tion.jda.core.entities.VoiceChannel;
+import com.sedmelluq.discord.lavaplayer.track.*;
+import net.dv8tion.jda.core.*;
+import net.dv8tion.jda.core.entities.*;
+import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.managers.AudioManager;
 
 import java.time.Instant;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-@Module (
-	aliases = {"Music", "m"},
-	help = "Music player to listen to music to your hearts content in guilds!"
-)
 @Scope(ChannelType.TEXT)
+@Module(aliases = {"Music", "m"}, help = "Music player to listen to music to your hearts content in guilds!")
 public class MusicHandler extends CommandHandler {
 
 	private Class<? extends AudioController> clazz;
@@ -50,9 +37,10 @@ public class MusicHandler extends CommandHandler {
 	}
 
 	private boolean beforeAny(MessageEvent event) {
-		Guild guild = event.getGuild();
+		MessageReceivedEvent e = event.getMessageEvent();
+		Guild guild = e.getGuild();
 		AudioManager audioManager = guild.getAudioManager();
-		VoiceChannel channel = event.getMember().getVoiceState().getChannel();
+		VoiceChannel channel = e.getMember().getVoiceState().getChannel();
 
 		if (channel == null)
 			return false;
@@ -212,6 +200,6 @@ public class MusicHandler extends CommandHandler {
 	}
 
 	private GuildAudioPlayer getPlayer(MessageEvent event) {
-		return guildPlayers.get(event.getGuild().getIdLong());
+		return guildPlayers.get(event.getMessageEvent().getGuild().getIdLong());
 	}
 }

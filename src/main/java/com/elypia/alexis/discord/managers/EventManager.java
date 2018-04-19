@@ -2,27 +2,23 @@ package com.elypia.alexis.discord.managers;
 
 import com.elypia.alexis.Alexis;
 import com.elypia.alexis.discord.Chatbot;
-import com.elypia.alexis.discord.managers.impl.DiscordManager;
 import com.elypia.alexis.utils.BotUtils;
 import net.dv8tion.jda.core.OnlineStatus;
 import net.dv8tion.jda.core.events.ReadyEvent;
-import net.dv8tion.jda.core.events.guild.GuildBanEvent;
-import net.dv8tion.jda.core.events.guild.GuildJoinEvent;
-import net.dv8tion.jda.core.events.guild.GuildLeaveEvent;
-import net.dv8tion.jda.core.events.guild.member.GuildMemberJoinEvent;
-import net.dv8tion.jda.core.events.guild.member.GuildMemberLeaveEvent;
-import net.dv8tion.jda.core.events.guild.member.GuildMemberRoleAddEvent;
-import net.dv8tion.jda.core.events.guild.member.GuildMemberRoleRemoveEvent;
-import net.dv8tion.jda.core.events.guild.voice.GuildVoiceLeaveEvent;
-import net.dv8tion.jda.core.events.guild.voice.GuildVoiceMoveEvent;
+import net.dv8tion.jda.core.events.guild.*;
+import net.dv8tion.jda.core.events.guild.member.*;
+import net.dv8tion.jda.core.events.guild.voice.*;
 import net.dv8tion.jda.core.events.message.react.MessageReactionAddEvent;
+import net.dv8tion.jda.core.hooks.ListenerAdapter;
 
 import java.util.logging.Level;
 
-public class EventManager extends DiscordManager {
+public class EventManager extends ListenerAdapter {
+
+    private Chatbot chatbot;
 
 	public EventManager(Chatbot chatbot) {
-		super(chatbot);
+		this.chatbot = chatbot;
 	}
 
 	/**
@@ -47,7 +43,7 @@ public class EventManager extends DiscordManager {
 
 	@Override
 	public void onGuildJoin(GuildJoinEvent event) {
-		GenericEvent e = new GenericEvent(chatbot, event);
+
 	}
 
 	@Override
