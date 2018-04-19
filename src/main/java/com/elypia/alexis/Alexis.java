@@ -20,7 +20,7 @@ public class Alexis {
 
 	public static void main(String[] args) {
 	    // Config
-		String configPath = "./settings.json";
+		String configPath = "./config.json";
 
 		if (args.length > 0)
 			configPath = args[0];
