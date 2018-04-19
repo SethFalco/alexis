@@ -2,8 +2,9 @@ package com.elypia.alexis.discord.handlers.modules;
 
 import com.elypia.alexis.utils.BotUtils;
 import com.elypia.commandler.CommandHandler;
-import com.elypia.commandler.annotations.command.*;
-import com.elypia.commandler.events.MessageEvent;
+import com.elypia.commandler.annotations.*;
+import com.elypia.commandler.jda.events.MessageEvent;
+import com.elypia.commandler.jda.annotations.Reaction;
 import com.elypia.elypiai.urbandictionary.*;
 import com.elypia.elypiai.urbandictionary.data.UrbanResultType;
 import net.dv8tion.jda.core.EmbedBuilder;

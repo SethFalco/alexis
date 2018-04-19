@@ -2,8 +2,8 @@ package com.elypia.alexis.discord.handlers.modules;
 
 import com.elypia.alexis.commandler.annotations.Developer;
 import com.elypia.commandler.CommandHandler;
-import com.elypia.commandler.annotations.command.*;
-import com.elypia.commandler.events.MessageEvent;
+import com.elypia.commandler.annotations.*;
+import com.elypia.commandler.jda.events.MessageEvent;
 import com.elypia.elypiai.google.youtube.*;
 import net.dv8tion.jda.core.EmbedBuilder;
 
