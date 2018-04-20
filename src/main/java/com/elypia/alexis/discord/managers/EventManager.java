@@ -30,7 +30,7 @@ public class EventManager extends ListenerAdapter {
 	@Override
 	public void onReady(ReadyEvent event) {
 		long timeElapsed = System.currentTimeMillis() - Alexis.START_TIME;
-		BotUtils.LOGGER.log(Level.INFO, "Time taken to launch: {0}ms", timeElapsed);
+		BotUtils.log(Level.INFO, "Time taken to launch: %,dms", timeElapsed);
 
 		event.getJDA().getPresence().setStatus(OnlineStatus.ONLINE);
 	}

@@ -30,8 +30,13 @@ public final class BotUtils {
 		return String.format(BOT_URL, user.getIdLong());
 	}
 
-	public static void log(Level level, String message, String... args) {
-		LOGGER.log(level, message, args);
+	public static void log(Level level, String message, Object... args) {
+	    final String msg = String.format(message, args);
+
+		LOGGER.log(level, msg, args);
+		Alexis.getDev().openPrivateChannel().queue(channel -> {
+			channel.sendMessage(msg).queue();
+		});
 	}
 
 	public static <T extends Throwable> void log(Level level, String message, T ex) {
