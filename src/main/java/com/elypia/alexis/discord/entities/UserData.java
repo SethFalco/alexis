@@ -1,190 +1,116 @@
 package com.elypia.alexis.discord.entities;
 
-import com.elypia.alexis.discord.entities.data.Achievement;
-import com.elypia.alexis.discord.entities.impl.DatabaseEntity;
-import com.mongodb.client.MongoDatabase;
-import net.dv8tion.jda.core.entities.User;
-import org.bson.Document;
+import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+import org.bson.types.ObjectId;
+import org.mongodb.morphia.annotations.Entity;
+import org.mongodb.morphia.annotations.Id;
+import org.mongodb.morphia.annotations.Reference;
 
-import java.util.*;
+import java.util.Date;
 
-import static com.mongodb.client.model.Filters.eq;
+/**
+ * This is the data on the <strong>global</strong> instance of a user
+ * and is in no way guild specific.
+ */
 
-public class UserData extends DatabaseEntity {
+@Entity("users")
+public class UserData {
+
+    @Id
+    private ObjectId id;
 
     /**
      * The ID of the user on Discord and as stored in the database.
      */
 
+    @Reference("user_id")
     private long userId;
 
     /**
      * The total XP this user has.
      */
 
+    @Reference("xp")
     private int xp;
-
-    /**
-     * All achievments this user has obtained. <br>
-     * Do note: Achievments can be revoked and are primarily
-     * for internal use.
-     */
-
-    private Collection<Achievement> achievements;
 
     /**
      * The last time this user sent a message on Discord globally.
      * Used to determine if they earn XP or not.
      */
 
-    private Date lastMessage;
+    @Reference("last_active")
+    private Date lastActive;
 
     /**
-     * Query the database for all data on the user, and wrap this class
-     * around it. If no user is found, then all values are default and when
-     * {@link #commit()} is called the user will be inserted.
+     * @param event The generic event which rewards XP.
+     * @return The new amount of XP the user has.
+     */
+
+    public int gainXp(MessageReceivedEvent event) {
+        int gains = isEligibleForXp(event);
+
+        if (gains > 0)
+            xp += gains;
+
+        // Reset last message to current timestamp.
+        lastActive.setTime(System.currentTimeMillis());
+        return xp;
+    }
+
+    /**
+     * Checks if the user is entitled to XP based on
+     * the last time they sent a message. <br>
+     * The return value with be -1 if it appears the user
+     * has been typing faster than physically possible.
+     * (10 characters in a second.)
      *
-     * @param database The database which stores chatbot data.
-     * @param user The discord user we wish to get data for.
+     * @param event The generic event which rewards XP.
+     * @return Amount of XP user is entitled to, or -1 if deemed cheating.
      */
 
-    public UserData(MongoDatabase database, User user) {
-        super(database, "users");
-        userId = user.getIdLong();
-        achievements = new ArrayList<>();
+    public int isEligibleForXp(MessageReceivedEvent event) {
+        // Split the message for every set of whitespace characters.
+        String content = event.getMessage().getContentRaw();
+        int length = content.split("\\s+").length;
 
-        Document data = getById("user_id", userId);
+        if (lastActive == null)
+            return length;
 
-        if (data == null)
-            return;
+        long current = System.currentTimeMillis();
+        long previous = lastActive.getTime();
 
-        xp = data.getInteger("xp");
-        lastMessage = data.getDate("last_message");
+        // Divide by 1,000 to get milliseconds from seconds
+        // Multiply by 10 for max chars allowed for the # of seconds passed.
+        int allowableLength = (int)((current - previous) / 100);
 
-        getArray(data, "achievements", o -> {
-            Achievement a = Achievement.getByName((String)o);
-            achievements.add(a);
-        });
+        return length < allowableLength ? length : -1;
     }
 
-    /**
-     * Should only be called once we're finished with this object.
-     * Commit all values in this value object to the database. If
-     * this entry doesn't exist yet then create it.
-     */
-
-    @Override
-    public void commit() {
-        Document userData = new Document();
-        userData.put("xp", xp);
-        userData.put("achievements", achievements);
-
-        collection.updateOne(eq("user_id", userId), userData, options);
+    public void setId(ObjectId id) {
+        this.id = id;
     }
 
-    /**
-     * @return Get the ID of the user.
-     */
-
-    public long getId() {
+    public long getUserId() {
         return userId;
     }
 
-    /**
-     * @return Get the current XP of the user.
-     */
+    public void setUserId(long userId) {
+        this.userId = userId;
+    }
 
     public int getXp() {
         return xp;
     }
 
-//    /**
-//     * @param event The generic event which rewards XP.
-//     * @return The new amount of XP the user has.
-//     */
-//
-//    public int gainXp(GenericEvent event) {
-//        int gains = isEligibleForXp(event);
-//
-//        if (gains > 0)
-//            xp += gains;
-//
-//        // Reset last message to current timestamp.
-//        lastMessage = new Date();
-//        return xp;
-//    }
-
-//    /**
-//     * Checks if the user is entitled to XP based on
-//     * the last time they sent a message. <br>
-//     * The return value with be -1 if it appears the user
-//     * has been typing faster than physically possible.
-//     * (10 characters in a second.)
-//     *
-//     * @param event The generic event which rewards XP.
-//     * @return Amount of XP user is entitled to, or -1 if deemed cheating.
-//     */
-//
-//    public int isEligibleForXp(GenericEvent event) {
-//        // Split the message for every set of whitespace characters.
-//        int length = event.getContent().split("\\s+").length;
-//
-//        if (lastMessage == null)
-//            return length;
-//
-//        long current = System.currentTimeMillis();
-//        long previous = lastMessage.getTime();
-//
-//        // Divide by 1,000 to get milliseconds from seconds
-//        // Multiply by 10 for max chars allowed for the # of seconds passed.
-//        int allowableLength = (int)((current - previous) / 100);
-//
-//        return length < allowableLength ? length : -1;
-//    }
-
-    /**
-     * @return The last time the user sent a message which was entitled to XP.
-     */
-
-    public Date getLastMessageDate() {
-        return lastMessage;
+    public void setXp(int xp) {
+        this.xp = xp;
     }
 
-    /**
-     * @param achievement The achievement to award to the user.
-     */
-
-    public void awardAchievement(Achievement achievement) {
-        Objects.requireNonNull(achievement);
-        achievements.add(achievement);
+    public Date getLastActive() {
+        return lastActive;
     }
 
-    /**
-     * Users can lose acheivements for reverting what they did to achieve it.
-     * For example unauthenticating to an account.
-     *
-     * @param achievement The achievment to remove from the user.
-     */
-
-    public void revokeAchievement(Achievement achievement) {
-        Objects.requireNonNull(achievement);
-        achievements.remove(achievement);
-    }
-
-    /**
-     * @return Any achievments the user has.
-     */
-
-    public Collection<Achievement> getAchievements() {
-        return achievements;
-    }
-
-    /**
-     * @param achievement The achiemement we want.
-     * @return If the user has this achievment.
-     */
-
-    public boolean hasAchievement(Achievement achievement) {
-        return achievements.contains(achievement);
+    public void setLastActive(Date lastActive) {
+        this.lastActive = lastActive;
     }
 }
