@@ -29,7 +29,7 @@ repositories  {
 }
 
 dependencies {
-    implementation 'net.dv8tion:JDA:3.6.0_368'
+    implementation 'net.dv8tion:JDA:3.6.0_369'
     implementation 'com.sedmelluq:lavaplayer:1.2.63'
     implementation 'com.elypia:elypiai:1.0.5'
     implementation 'com.elypia:commandler:1.0.1'

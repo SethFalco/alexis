@@ -1,0 +1,30 @@
+package com.elypia.alexis.entities;
+
+import org.mongodb.morphia.annotations.Embedded;
+import org.mongodb.morphia.annotations.Property;
+
+@Embedded
+public class LevelSettings {
+
+    @Property("sync_to_global")
+    private boolean syncToGlobal;
+
+    @Embedded("message")
+    private MessageSettings notifySettings;
+
+    public boolean isSyncToGlobal() {
+        return syncToGlobal;
+    }
+
+    public void setSyncToGlobal(boolean syncToGlobal) {
+        this.syncToGlobal = syncToGlobal;
+    }
+
+    public MessageSettings getNotifySettings() {
+        return notifySettings;
+    }
+
+    public void setNotifySettings(MessageSettings notifySettings) {
+        this.notifySettings = notifySettings;
+    }
+}

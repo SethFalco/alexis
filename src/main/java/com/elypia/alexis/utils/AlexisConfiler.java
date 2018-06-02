@@ -1,9 +1,9 @@
 package com.elypia.alexis.utils;
 
 import com.elypia.alexis.Alexis;
-import com.elypia.alexis.discord.Chatbot;
-import com.elypia.alexis.discord.entities.GuildData;
-import com.elypia.alexis.discord.entities.GuildSettings;
+import com.elypia.alexis.Chatbot;
+import com.elypia.alexis.entities.GuildData;
+import com.elypia.alexis.entities.GuildSettings;
 import com.elypia.commandler.confiler.DefaultConfiler;
 import net.dv8tion.jda.core.entities.ChannelType;
 import net.dv8tion.jda.core.entities.Guild;

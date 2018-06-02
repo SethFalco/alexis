@@ -1,6 +1,5 @@
 package com.elypia.alexis;
 
-import com.elypia.alexis.discord.Chatbot;
 import com.elypia.alexis.utils.BotUtils;
 import com.elypia.alexis.utils.Config;
 import com.elypia.alexis.utils.ExitCode;
