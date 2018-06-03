@@ -1,9 +1,12 @@
 package com.elypia.alexis.entities;
 
+import com.elypia.alexis.Alexis;
 import org.bson.types.ObjectId;
+import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.annotations.*;
+import org.mongodb.morphia.query.Query;
 
-@Entity("guilds")
+@Entity(value = "guilds", noClassnameStored = true)
 public class GuildData {
 
     @Id
@@ -27,8 +30,25 @@ public class GuildData {
     @Embedded("settings")
     private GuildSettings settings;
 
+    public static GuildData query(long guildId) {
+        Datastore store = Alexis.getChatbot().getDatastore();
+        Query<GuildData> query = store.createQuery(GuildData.class);
+        GuildData data = query.filter("guild_id ==", guildId).get();
+
+        if (data == null) {
+            data = new GuildData();
+            data.guildId = guildId;
+        }
+
+        return data;
+    }
+
     public ObjectId getId() {
         return id;
+    }
+
+    public void setId(ObjectId id) {
+        this.id = id;
     }
 
     public long getGuildId() {
@@ -48,6 +68,9 @@ public class GuildData {
     }
 
     public GuildSettings getSettings() {
+        if (settings == null)
+            settings = new GuildSettings();
+
         return settings;
     }
 

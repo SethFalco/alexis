@@ -1,14 +1,11 @@
 package com.elypia.alexis.entities;
 
 import org.bson.types.ObjectId;
-import org.mongodb.morphia.annotations.Entity;
-import org.mongodb.morphia.annotations.Id;
-import org.mongodb.morphia.annotations.Property;
+import org.mongodb.morphia.annotations.*;
 
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
-@Entity("emote")
+@Entity(value = "emote", noClassnameStored = true)
 public class EmoteData {
 
     @Id

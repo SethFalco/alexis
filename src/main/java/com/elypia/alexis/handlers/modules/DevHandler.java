@@ -2,15 +2,12 @@ package com.elypia.alexis.handlers.modules;
 
 import com.elypia.alexis.utils.ExitCode;
 import com.elypia.commandler.CommandHandler;
-import com.elypia.commandler.annotations.Command;
-import com.elypia.commandler.annotations.Module;
-import com.elypia.commandler.annotations.Param;
+import com.elypia.commandler.annotations.*;
 import com.elypia.commandler.events.MessageEvent;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.entities.Icon;
 
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.net.URL;
 import java.util.StringJoiner;
 import java.util.logging.Level;

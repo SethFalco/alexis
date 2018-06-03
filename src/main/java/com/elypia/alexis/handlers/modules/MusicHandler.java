@@ -1,34 +1,23 @@
 package com.elypia.alexis.handlers.modules;
 
-import com.elypia.alexis.audio.AudioPlayerSendHandler;
-import com.elypia.alexis.audio.GuildAudioPlayer;
+import com.elypia.alexis.audio.*;
 import com.elypia.alexis.audio.controllers.impl.AudioController;
 import com.elypia.commandler.CommandHandler;
-import com.elypia.commandler.annotations.Command;
-import com.elypia.commandler.annotations.Module;
-import com.elypia.commandler.annotations.Param;
-import com.elypia.commandler.annotations.access.Permissions;
-import com.elypia.commandler.annotations.access.Scope;
+import com.elypia.commandler.annotations.*;
+import com.elypia.commandler.annotations.access.*;
 import com.elypia.commandler.annotations.validation.Limit;
 import com.elypia.commandler.events.MessageEvent;
 import com.elypia.elypiai.utils.Markdown;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
-import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
-import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
-import net.dv8tion.jda.core.EmbedBuilder;
-import net.dv8tion.jda.core.Permission;
-import net.dv8tion.jda.core.entities.ChannelType;
-import net.dv8tion.jda.core.entities.Guild;
-import net.dv8tion.jda.core.entities.MessageEmbed;
-import net.dv8tion.jda.core.entities.VoiceChannel;
+import com.sedmelluq.discord.lavaplayer.track.*;
+import net.dv8tion.jda.core.*;
+import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.managers.AudioManager;
 
 import java.time.Instant;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Scope(ChannelType.TEXT)
 @Module(

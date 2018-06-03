@@ -3,12 +3,10 @@ package com.elypia.alexis.utils;
 import com.elypia.alexis.Alexis;
 import com.elypia.commandler.events.MessageEvent;
 import net.dv8tion.jda.core.JDA;
-import net.dv8tion.jda.core.entities.MessageChannel;
-import net.dv8tion.jda.core.entities.User;
+import net.dv8tion.jda.core.entities.*;
 
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.logging.*;
 
 public final class BotUtils {
 

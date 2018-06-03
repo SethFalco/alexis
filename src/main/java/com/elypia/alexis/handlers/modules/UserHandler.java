@@ -2,10 +2,7 @@ package com.elypia.alexis.handlers.modules;
 
 import com.elypia.alexis.utils.BotUtils;
 import com.elypia.commandler.CommandHandler;
-import com.elypia.commandler.annotations.Command;
-import com.elypia.commandler.annotations.CommandGroup;
-import com.elypia.commandler.annotations.Module;
-import com.elypia.commandler.annotations.Param;
+import com.elypia.commandler.annotations.*;
 import com.elypia.commandler.annotations.access.Scope;
 import com.elypia.commandler.annotations.filter.Search;
 import com.elypia.commandler.data.SearchScope;
@@ -15,8 +12,7 @@ import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.*;
 
 import java.time.format.DateTimeFormatter;
-import java.util.Collection;
-import java.util.StringJoiner;
+import java.util.*;
 
 @Module(
 	name = "User",

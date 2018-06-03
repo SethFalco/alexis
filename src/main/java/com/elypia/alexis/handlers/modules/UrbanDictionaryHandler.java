@@ -4,13 +4,11 @@ import com.elypia.alexis.utils.BotUtils;
 import com.elypia.commandler.CommandHandler;
 import com.elypia.commandler.annotations.*;
 import com.elypia.commandler.events.MessageEvent;
-import com.elypia.elypiai.urbandictionary.UrbanDefinition;
-import com.elypia.elypiai.urbandictionary.UrbanDictionary;
+import com.elypia.elypiai.urbandictionary.*;
 import com.elypia.elypiai.urbandictionary.data.UrbanResultType;
 import net.dv8tion.jda.core.EmbedBuilder;
 
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 @Module(
 	name = "UrbanDictionary",

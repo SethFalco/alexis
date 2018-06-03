@@ -1,42 +1,42 @@
 package com.elypia.alexis.handlers;
 
 import com.elypia.alexis.Chatbot;
-import com.elypia.alexis.entities.GreetingSettings;
-import com.elypia.alexis.entities.GuildData;
-import com.elypia.alexis.entities.MessageSettings;
-import com.elypia.alexis.utils.BotUtils;
-import com.elypia.alexis.utils.Config;
+import com.elypia.alexis.entities.*;
+import com.elypia.alexis.utils.*;
 import com.elypia.elypiai.utils.ElyUtils;
-import net.dv8tion.jda.core.JDA;
-import net.dv8tion.jda.core.OnlineStatus;
-import net.dv8tion.jda.core.entities.Guild;
-import net.dv8tion.jda.core.entities.TextChannel;
+import com.mongodb.MongoClient;
+import net.dv8tion.jda.core.*;
+import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.ReadyEvent;
-import net.dv8tion.jda.core.events.guild.GuildBanEvent;
-import net.dv8tion.jda.core.events.guild.GuildJoinEvent;
-import net.dv8tion.jda.core.events.guild.GuildLeaveEvent;
-import net.dv8tion.jda.core.events.guild.member.GuildMemberJoinEvent;
-import net.dv8tion.jda.core.events.guild.member.GuildMemberLeaveEvent;
-import net.dv8tion.jda.core.events.guild.member.GuildMemberRoleAddEvent;
-import net.dv8tion.jda.core.events.guild.member.GuildMemberRoleRemoveEvent;
-import net.dv8tion.jda.core.events.guild.voice.GuildVoiceLeaveEvent;
-import net.dv8tion.jda.core.events.guild.voice.GuildVoiceMoveEvent;
+import net.dv8tion.jda.core.events.guild.*;
+import net.dv8tion.jda.core.events.guild.member.*;
+import net.dv8tion.jda.core.events.guild.voice.*;
+import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.events.message.react.MessageReactionAddEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
-import org.mongodb.morphia.Datastore;
+import org.mongodb.morphia.*;
 import org.mongodb.morphia.query.Query;
 
-import java.util.List;
+import java.util.*;
 import java.util.logging.Level;
 
 public class EventHandler extends ListenerAdapter {
 
     private Chatbot chatbot;
+    private MongoClient client;
+    private Morphia morphia;
 	private Datastore store;
+
+	private InsertOptions insertOption;
 
 	public EventHandler(Chatbot chatbot) {
 		this.chatbot = chatbot;
+		this.client = chatbot.getDatabase();
+		this.morphia = chatbot.getMorphia();
 		this.store = chatbot.getDatastore();
+
+		insertOption = new InsertOptions();
+		insertOption.continueOnError(true);
 	}
 
 	/**
@@ -52,11 +52,25 @@ public class EventHandler extends ListenerAdapter {
 
 		event.getJDA().getPresence().setStatus(OnlineStatus.ONLINE);
 
-//		for (Guild guild : event.getJDA().getGuilds()) {
-//			GuildData data = new GuildData();
-//			data.setGuildId(guild.getIdLong());
-//			store.save(data);
-//		}
+		Collection<GuildData> guildData = new ArrayList<>();
+
+		event.getJDA().getGuilds().forEach(guild -> {
+			GuildData data = new GuildData();
+			data.setGuildId(guild.getIdLong());
+			guildData.add(data);
+		});
+
+		store.save(guildData, insertOption);
+
+		Collection<UserData> userData = new ArrayList<>();
+
+		event.getJDA().getUsers().forEach(user -> {
+			UserData data = new UserData();
+			data.setUserId(user.getIdLong());
+			userData.add(data);
+		});
+
+		store.save(userData, insertOption);
 	}
 
 	/**
@@ -81,7 +95,7 @@ public class EventHandler extends ListenerAdapter {
 
 		GuildData data = new GuildData();
 		data.setGuildId(guild.getIdLong());
-		store.save(data);
+		store.save(data, insertOption);
 	}
 
 	@Override
@@ -141,6 +155,11 @@ public class EventHandler extends ListenerAdapter {
 
 	@Override
 	public void onGuildVoiceMove(GuildVoiceMoveEvent event) {
+
+	}
+
+	@Override
+	public void onMessageReceived(MessageReceivedEvent event) {
 
 	}
 

@@ -3,23 +3,16 @@ package com.elypia.alexis;
 import com.elypia.alexis.audio.controllers.LocalAudioController;
 import com.elypia.alexis.handlers.EventHandler;
 import com.elypia.alexis.handlers.modules.*;
-import com.elypia.alexis.utils.AlexisConfiler;
-import com.elypia.alexis.utils.Config;
+import com.elypia.alexis.utils.*;
 import com.elypia.commandler.Commandler;
 import com.mongodb.MongoClient;
-import net.dv8tion.jda.core.AccountType;
-import net.dv8tion.jda.core.JDA;
-import net.dv8tion.jda.core.JDABuilder;
-import net.dv8tion.jda.core.OnlineStatus;
+import net.dv8tion.jda.core.*;
 import net.dv8tion.jda.core.entities.Game;
-import org.json.JSONArray;
-import org.json.JSONObject;
-import org.mongodb.morphia.Datastore;
-import org.mongodb.morphia.Morphia;
+import org.json.*;
+import org.mongodb.morphia.*;
 
 import javax.security.auth.login.LoginException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class Chatbot {
 
@@ -98,6 +91,7 @@ public class Chatbot {
 			new MyAnimeListHandler(api.getString("mal")),
 			new NanowrimoHandler(),
 			new OsuHandler(api.getString("osu")),
+			new PrefixHandler(),
 			new RuneScapeHandler(),
 			new SteamHandler(api.getString("steam")),
 			new TwitchHandler(api.getString("twitch")),

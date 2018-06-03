@@ -1,7 +1,6 @@
 package com.elypia.alexis.entities;
 
-import org.mongodb.morphia.annotations.Embedded;
-import org.mongodb.morphia.annotations.Property;
+import org.mongodb.morphia.annotations.*;
 
 @Embedded
 public class JoinRoleSettings {

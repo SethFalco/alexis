@@ -1,15 +1,12 @@
 package com.elypia.alexis;
 
-import com.elypia.alexis.utils.BotUtils;
-import com.elypia.alexis.utils.Config;
-import com.elypia.alexis.utils.ExitCode;
+import com.elypia.alexis.utils.*;
 
 import javax.security.auth.login.LoginException;
 import java.io.IOException;
 import java.util.logging.Level;
 
-import static com.elypia.alexis.utils.ExitCode.FAILED_TO_INIT_BOT;
-import static com.elypia.alexis.utils.ExitCode.FAILED_TO_READ_CONFIG;
+import static com.elypia.alexis.utils.ExitCode.*;
 
 public class Alexis {
 

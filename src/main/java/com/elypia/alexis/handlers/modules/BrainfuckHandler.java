@@ -1,10 +1,7 @@
 package com.elypia.alexis.handlers.modules;
 
 import com.elypia.commandler.CommandHandler;
-import com.elypia.commandler.annotations.Command;
-import com.elypia.commandler.annotations.CommandGroup;
-import com.elypia.commandler.annotations.Module;
-import com.elypia.commandler.annotations.Param;
+import com.elypia.commandler.annotations.*;
 import com.elypia.commandler.events.MessageEvent;
 import com.elypia.elypiai.Brainfuck;
 

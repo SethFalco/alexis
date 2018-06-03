@@ -1,16 +1,11 @@
 package com.elypia.alexis.handlers.modules;
 
 import com.elypia.commandler.CommandHandler;
-import com.elypia.commandler.annotations.Command;
-import com.elypia.commandler.annotations.CommandGroup;
-import com.elypia.commandler.annotations.Module;
-import com.elypia.commandler.annotations.Param;
+import com.elypia.commandler.annotations.*;
 import com.elypia.commandler.annotations.access.Scope;
 import com.elypia.commandler.events.MessageEvent;
 import net.dv8tion.jda.core.EmbedBuilder;
-import net.dv8tion.jda.core.entities.ChannelType;
-import net.dv8tion.jda.core.entities.Emote;
-import net.dv8tion.jda.core.entities.Guild;
+import net.dv8tion.jda.core.entities.*;
 
 import java.util.List;
 
