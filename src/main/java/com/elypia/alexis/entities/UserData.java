@@ -1,8 +1,11 @@
 package com.elypia.alexis.entities;
 
+import com.elypia.alexis.Alexis;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import org.bson.types.ObjectId;
+import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.annotations.*;
+import org.mongodb.morphia.query.Query;
 
 import java.util.Date;
 
@@ -38,6 +41,19 @@ public class UserData {
 
     @Property("last_active")
     private Date lastActive;
+
+    public static UserData query(long userId) {
+        Datastore store = Alexis.getChatbot().getDatastore();
+        Query<UserData> query = store.createQuery(UserData.class);
+        UserData data = query.filter("user_id ==", userId).get();
+
+        if (data == null) {
+            data = new UserData();
+            data.userId = userId;
+        }
+
+        return data;
+    }
 
     /**
      * @param event The generic event which rewards XP.

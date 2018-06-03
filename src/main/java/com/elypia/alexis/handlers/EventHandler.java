@@ -3,7 +3,6 @@ package com.elypia.alexis.handlers;
 import com.elypia.alexis.Chatbot;
 import com.elypia.alexis.entities.*;
 import com.elypia.alexis.utils.*;
-import com.elypia.elypiai.utils.ElyUtils;
 import com.mongodb.MongoClient;
 import net.dv8tion.jda.core.*;
 import net.dv8tion.jda.core.entities.*;
@@ -82,7 +81,7 @@ public class EventHandler extends ListenerAdapter {
 	@Override
 	public void onGuildJoin(GuildJoinEvent event) {
 		Guild guild = event.getGuild();
-		TextChannel channel = guild.getDefaultChannel();
+		TextChannel channel = BotUtils.getWriteableChannel(event);
 
 		if (channel != null) {
 			String prefix = Config.getConfig("discord").getString("prefix");
@@ -108,29 +107,33 @@ public class EventHandler extends ListenerAdapter {
 
 	@Override
 	public void onGuildMemberJoin(GuildMemberJoinEvent event) {
+		onGuildMemberEvent(event, true);
+	}
+
+	@Override
+	public void onGuildMemberLeave(GuildMemberLeaveEvent event) {
+		onGuildMemberEvent(event, false);
+	}
+
+	public void onGuildMemberEvent(GenericGuildMemberEvent event, boolean join) {
 		boolean bot = event.getUser().isBot();
 
 		Guild guild = event.getGuild();
 		Query<GuildData> query = store.createQuery(GuildData.class);
 		GuildData data = query.filter("guild_id ==", guild.getIdLong()).get();
 
-		GreetingSettings greeting = data.getSettings().getGreetingSettings();
-		MessageSettings settings = bot ? greeting.getBotWelcome() : greeting.getUserWelcome();
+		GreetingSettings greetings = data.getSettings().getGreetingSettings();
+		GreetingSetting greeting = join ? greetings.getWelcome() : greetings.getFarewell();
+		MessageSettings settings = bot ? greeting.getBot() : greeting.getUser();
 
 		if (settings.isEnabled()) {
 			JDA jda = event.getJDA();
 			TextChannel channel = jda.getTextChannelById(settings.getChannel());
-
-			List<String> messages = settings.getMessages();
-			String message = messages.get(ElyUtils.RANDOM.nextInt(messages.size()));
+			String message = settings.getMessage();
+			message = BotUtils.buildCustomMessage(event, message);
 
 			channel.sendMessage(message).queue();
 		}
-	}
-
-	@Override
-	public void onGuildMemberLeave(GuildMemberLeaveEvent event) {
-
 	}
 
 	@Override

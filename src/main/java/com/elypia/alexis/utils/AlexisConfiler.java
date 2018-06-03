@@ -14,7 +14,7 @@ public class AlexisConfiler extends DefaultConfiler {
     public String getPrefix(MessageReceivedEvent event) {
         String defaultPrefix = Config.getConfig("discord").getString("prefix");
 
-        if (event.isFromType(ChannelType.PRIVATE))
+        if (event.isFromType(ChannelType.PRIVATE) || !BotUtils.isDatabaseAlive())
             return defaultPrefix;
 
         Chatbot bot = Alexis.getChatbot();

@@ -1,5 +1,6 @@
 package com.elypia.alexis.handlers.modules;
 
+import com.elypia.alexis.commandler.annotations.validation.command.Developer;
 import com.elypia.alexis.utils.ExitCode;
 import com.elypia.commandler.CommandHandler;
 import com.elypia.commandler.annotations.*;
@@ -14,11 +15,8 @@ import java.util.logging.Level;
 
 import static com.elypia.alexis.utils.BotUtils.log;
 
-@Module(
-    name = "Developer Only Commands",
-    aliases = "dev",
-    description = "Only the developer(s) can perform these."
-)
+@Developer
+@Module(name = "Developer Only Commands", aliases = "dev", description = "Only the developer(s) can perform these.")
 public class DevHandler extends CommandHandler {
 
     @Command(aliases = "name", help = "Change the global name of the chatbot.")

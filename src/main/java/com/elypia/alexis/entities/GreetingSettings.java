@@ -5,47 +5,25 @@ import org.mongodb.morphia.annotations.Embedded;
 @Embedded
 public class GreetingSettings {
 
-    @Embedded("welcome.user")
-    private MessageSettings userWelcome;
+    @Embedded("welcome")
+    private GreetingSetting welcome;
 
-    @Embedded("welcome.bot")
-    private MessageSettings botWelcome;
+    @Embedded("farewell")
+    private GreetingSetting farewell;
 
-    @Embedded("farewell.user")
-    private MessageSettings userFarewell;
-
-    @Embedded("farewell.bot")
-    private MessageSettings botFarewell;
-
-    public MessageSettings getUserWelcome() {
-        return userWelcome;
+    public GreetingSetting getWelcome() {
+        return welcome;
     }
 
-    public void setUserWelcome(MessageSettings userWelcome) {
-        this.userWelcome = userWelcome;
+    public void setWelcome(GreetingSetting welcome) {
+        this.welcome = welcome;
     }
 
-    public MessageSettings getBotWelcome() {
-        return botWelcome;
+    public GreetingSetting getFarewell() {
+        return farewell;
     }
 
-    public void setBotWelcome(MessageSettings botWelcome) {
-        this.botWelcome = botWelcome;
-    }
-
-    public MessageSettings getUserFarewell() {
-        return userFarewell;
-    }
-
-    public void setUserFarewell(MessageSettings userFarewell) {
-        this.userFarewell = userFarewell;
-    }
-
-    public MessageSettings getBotFarewell() {
-        return botFarewell;
-    }
-
-    public void setBotFarewell(MessageSettings botFarewell) {
-        this.botFarewell = botFarewell;
+    public void setFarewell(GreetingSetting farewell) {
+        this.farewell = farewell;
     }
 }

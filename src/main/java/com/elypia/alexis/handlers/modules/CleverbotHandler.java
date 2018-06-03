@@ -1,31 +1,22 @@
 package com.elypia.alexis.handlers.modules;
 
+import com.elypia.alexis.Alexis;
+import com.elypia.alexis.commandler.annotations.validation.command.Database;
+import com.elypia.alexis.entities.*;
 import com.elypia.alexis.utils.BotUtils;
 import com.elypia.commandler.CommandHandler;
 import com.elypia.commandler.annotations.*;
 import com.elypia.commandler.events.MessageEvent;
 import com.elypia.elypiai.cleverbot.Cleverbot;
-import com.mongodb.client.*;
-import com.mongodb.client.model.UpdateOptions;
-import com.mongodb.client.result.UpdateResult;
 import net.dv8tion.jda.core.entities.MessageChannel;
-import org.bson.Document;
+import org.mongodb.morphia.*;
+import org.mongodb.morphia.query.*;
 
-import java.util.logging.Level;
-
-import static com.mongodb.client.model.Filters.eq;
-import static com.mongodb.client.model.Updates.set;
-
-@Module(
-    name = "Module",
-    aliases = {"cleverbot", "cb"},
-    description = "Come talk to cleverbot."
-)
+@Database
+@Module(name = "Module", aliases = {"cleverbot", "cb"}, description = "Come talk to cleverbot.")
 public class CleverbotHandler extends CommandHandler {
 
     private Cleverbot cleverbot;
-    private MongoDatabase database;
-    private MongoCollection<Document> channels;
 
     public CleverbotHandler(String apiKey) {
         cleverbot = new Cleverbot(apiKey);
@@ -35,17 +26,20 @@ public class CleverbotHandler extends CommandHandler {
     @Param(name = "body", help = "What you want to say.")
     public void say(MessageEvent event, String body) {
         MessageChannel channel = event.getMessageEvent().getChannel();
-        String cs = getCs(channel);
+        MessageChannelData data = MessageChannelData.query(channel.getIdLong());
+        String cs = data.getCleverState();
 
         cleverbot.say(body, cs, response -> {
             event.reply(response.getOutput());
-            setCs(channel, response.getCS());
+            setChannelCleverState(data, response.getCS());
         }, failure -> BotUtils.sendHttpError(event, failure));
     }
 
     @Command (aliases = {"history", "his"}, help = "Track previous conversation in this channel.")
     public void getHistory(MessageEvent event) {
-        String cs = getCs(event.getMessageEvent().getChannel());
+        MessageChannel channel = event.getMessageEvent().getChannel();
+        MessageChannelData data = MessageChannelData.query(channel.getIdLong());
+        String cs = data.getCleverState();
         String history = cleverbot.getHistory(cs);
 
         if (history == null)
@@ -54,29 +48,18 @@ public class CleverbotHandler extends CommandHandler {
             event.reply(String.format("```\n%s\n```", history));
     }
 
-    private String getCs(MessageChannel channel) {
-        long channelId = channel.getIdLong();
-        Document document = channels.find(eq("channel_id", channelId)).first();
-
-        if (document != null)
-            return document.getString("cs");
-        else
-            return null;
-    }
-
-    private void setCs(MessageChannel channel, String cs) {
-        long channelId = channel.getIdLong();
+    private void setChannelCleverState(MessageChannelData data, String cs) {
+        Datastore store = Alexis.getChatbot().getDatastore();
 
         UpdateOptions options = new UpdateOptions();
         options.upsert(true);
 
-        UpdateResult result = channels.updateOne(
-            eq("channel_id",channelId),
-            set("cs", cs),
-            options
-        );
+        Query<MessageChannelData> query = store.createQuery(MessageChannelData.class);
+        query = query.filter("channel_id", data.getChannelId());
 
-        if (!result.wasAcknowledged())
-            BotUtils.log(Level.SEVERE, "Cleverbot CS update was not acknowledged.");
+        UpdateOperations<MessageChannelData> update = store.createUpdateOperations(MessageChannelData.class);
+        update.set("clever_state", cs);
+
+        store.update(query, update, options);
     }
 }

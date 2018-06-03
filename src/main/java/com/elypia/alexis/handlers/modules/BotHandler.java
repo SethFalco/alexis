@@ -3,7 +3,7 @@ package com.elypia.alexis.handlers.modules;
 import com.elypia.alexis.utils.BotUtils;
 import com.elypia.commandler.CommandHandler;
 import com.elypia.commandler.annotations.*;
-import com.elypia.commandler.annotations.access.Scope;
+import com.elypia.commandler.annotations.validation.command.Scope;
 import com.elypia.commandler.events.MessageEvent;
 import com.elypia.elypiai.utils.Markdown;
 import net.dv8tion.jda.core.*;

@@ -1,16 +1,18 @@
 package com.elypia.alexis.handlers.modules;
 
-import com.elypia.alexis.Alexis;
+import com.elypia.alexis.Alexis;import com.elypia.alexis.commandler.annotations.validation.command.Database;
 import com.elypia.alexis.entities.GuildData;
 import com.elypia.commandler.CommandHandler;
 import com.elypia.commandler.annotations.*;
-import com.elypia.commandler.annotations.access.Scope;
-import com.elypia.commandler.annotations.validation.Length;
+import com.elypia.commandler.annotations.validation.command.*;
+import com.elypia.commandler.annotations.validation.param.Length;
 import com.elypia.commandler.events.MessageEvent;
 import net.dv8tion.jda.core.entities.*;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.query.UpdateOperations;
 
+@Elevated
+@Database
 @Scope(ChannelType.TEXT)
 @Module(name = "Prefix Configuration", aliases = "prefix", description = "Configure your prefix or for big guilds set Alexis for mention only!")
 public class PrefixHandler extends CommandHandler {

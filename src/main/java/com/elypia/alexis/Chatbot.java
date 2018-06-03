@@ -1,6 +1,8 @@
 package com.elypia.alexis;
 
 import com.elypia.alexis.audio.controllers.LocalAudioController;
+import com.elypia.alexis.commandler.annotations.validation.command.*;
+import com.elypia.alexis.commandler.validators.command.*;
 import com.elypia.alexis.handlers.EventHandler;
 import com.elypia.alexis.handlers.modules.*;
 import com.elypia.alexis.utils.*;
@@ -85,6 +87,7 @@ public class Chatbot {
 			new CleverbotHandler(api.getString("cleverbot")),
 			new DevHandler(),
 			new EmoteHandler(),
+			new GreetingModule(),
 			new GuildHandler(),
 			new UtilHandler(),
 			new MusicHandler(LocalAudioController.class),
@@ -100,6 +103,9 @@ public class Chatbot {
 			new VoiceHandler(),
 			new YouTubeHandler(api.getString("google"))
 		);
+
+		commandler.registerValidator(Database.class, new DatabaseValidator());
+		commandler.registerValidator(Developer.class, new DeveloperValidator());
 	}
 
 	public long getStartUpTime() {

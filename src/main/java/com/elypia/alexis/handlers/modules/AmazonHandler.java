@@ -12,10 +12,7 @@ import org.json.JSONObject;
 import java.security.InvalidKeyException;
 import java.util.Objects;
 
-@Module(
-    name = "Amazon",
-    aliases = "amazon",
-    description = "Share links and support Elypia! We get a cut from purchases!")
+@Module(name = "Amazon", aliases = "amazon", description = "Share links and support Elypia! We get a cut from purchases!")
 public class AmazonHandler extends CommandHandler {
 
     private Amazon amazon;

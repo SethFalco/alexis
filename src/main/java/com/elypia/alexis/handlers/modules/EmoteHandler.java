@@ -2,7 +2,7 @@ package com.elypia.alexis.handlers.modules;
 
 import com.elypia.commandler.CommandHandler;
 import com.elypia.commandler.annotations.*;
-import com.elypia.commandler.annotations.access.Scope;
+import com.elypia.commandler.annotations.validation.command.Scope;
 import com.elypia.commandler.events.MessageEvent;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.*;

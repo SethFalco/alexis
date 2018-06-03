@@ -6,7 +6,7 @@ plugins {
 }
 
 String projectName = "Alexis"
-String projectVersion = "1.1.0"
+String projectVersion = "2.0.0"
 
 shadowJar {
     baseName = projectName
@@ -29,10 +29,10 @@ repositories  {
 }
 
 dependencies {
-    implementation 'net.dv8tion:JDA:3.6.0_369'
-    implementation 'com.sedmelluq:lavaplayer:1.2.63'
+    implementation 'net.dv8tion:JDA:3.6.0_371'
+    implementation 'com.sedmelluq:lavaplayer:1.3.2'
     implementation 'com.elypia:elypiai:1.0.5'
-    implementation 'com.elypia:commandler:1.0.1'
+    implementation 'com.elypia:commandler:1.0.5'
     implementation group: 'org.mongodb', name: 'mongodb-driver', version: '3.7.1'
     implementation 'org.mongodb.morphia:morphia:1.3.2'
 

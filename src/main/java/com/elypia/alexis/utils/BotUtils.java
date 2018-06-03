@@ -1,11 +1,15 @@
 package com.elypia.alexis.utils;
 
 import com.elypia.alexis.Alexis;
+import com.elypia.alexis.entities.UserData;
 import com.elypia.commandler.events.MessageEvent;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.entities.*;
+import net.dv8tion.jda.core.events.guild.GenericGuildEvent;
+import net.dv8tion.jda.core.events.guild.member.GenericGuildMemberEvent;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.logging.*;
 
 public final class BotUtils {
@@ -15,6 +19,49 @@ public final class BotUtils {
 
 	private BotUtils() {
 
+	}
+
+	public static String buildCustomMessage(GenericGuildMemberEvent event, String message) {
+		Guild guild = event.getGuild();
+		Member member = event.getMember();
+
+		message = message.replace("{guild.name}", guild.getName());
+
+		message = message.replace("{user.name}", member.getEffectiveName());
+		message = message.replace("{user.mention}", member.getAsMention());
+
+		return message;
+	}
+
+	public static TextChannel getWriteableChannel(GenericGuildEvent event) {
+		Guild guild = event.getGuild();
+		Collection<TextChannel> channels = guild.getTextChannelsByName("general", true);
+
+		for (TextChannel channel : channels) {
+			if (channel.canTalk())
+				return channel;
+		}
+
+		channels = guild.getTextChannels();
+
+		for (TextChannel channel : channels) {
+			if (channel.canTalk())
+				return channel;
+		}
+
+		return null;
+	}
+
+	public static boolean isDatabaseAlive() {
+		boolean config = Config.getConfig("database").getBoolean("enabled");
+		long dev = Config.getConfig("discord").getJSONArray("developers").getJSONObject(0).getLong("discord_id");
+
+		try {
+			UserData data = UserData.query(dev);
+			return config && data != null;
+		} catch (NullPointerException ex) {
+			return false;
+		}
 	}
 
 	public static void sendHttpError(MessageEvent event, IOException failure) {

@@ -2,8 +2,6 @@ package com.elypia.alexis.entities;
 
 import org.mongodb.morphia.annotations.*;
 
-import java.util.List;
-
 @Embedded
 public class MessageSettings {
 
@@ -13,8 +11,8 @@ public class MessageSettings {
     @Property("channel")
     private long channel;
 
-    @Property("messages")
-    private List<String> messages;
+    @Property("message")
+    private String message;
 
     public boolean isEnabled() {
         return enabled;
@@ -32,11 +30,11 @@ public class MessageSettings {
         this.channel = channel;
     }
 
-    public List<String> getMessages() {
-        return messages;
+    public String getMessage() {
+        return message;
     }
 
-    public void setMessages(List<String> messages) {
-        this.messages = messages;
+    public void setMessages(String message) {
+        this.message = message;
     }
 }
