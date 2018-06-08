@@ -10,7 +10,8 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="commandler_main" />
-    <orderEntry type="library" name="Gradle: net.dv8tion:JDA:3.6.0_374" level="project" />
+    <orderEntry type="library" name="Gradle: net.dv8tion:JDA:3.6.0_375" level="project" />
+    <orderEntry type="library" name="Gradle: org.apache.velocity:velocity:1.7" level="project" />
     <orderEntry type="library" name="Gradle: com.google.code.findbugs:jsr305:3.0.2" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.apache.logging.log4j:log4j-api:2.11.0" level="project" />
     <orderEntry type="library" name="Gradle: org.slf4j:slf4j-api:1.7.25" level="project" />
@@ -20,6 +21,8 @@
     <orderEntry type="library" name="Gradle: club.minnced:opus-java:1.0.2" level="project" />
     <orderEntry type="library" name="Gradle: com.neovisionaries:nv-websocket-client:2.2" level="project" />
     <orderEntry type="library" name="Gradle: com.squareup.okhttp3:okhttp:3.8.1" level="project" />
+    <orderEntry type="library" name="Gradle: commons-collections:commons-collections:3.2.1" level="project" />
+    <orderEntry type="library" name="Gradle: commons-lang:commons-lang:2.4" level="project" />
     <orderEntry type="library" name="Gradle: club.minnced:opus-java-api:1.0.2" level="project" />
     <orderEntry type="library" name="Gradle: club.minnced:opus-java-natives:1.0.2" level="project" />
     <orderEntry type="library" name="Gradle: com.squareup.okio:okio:1.13.0" level="project" />
