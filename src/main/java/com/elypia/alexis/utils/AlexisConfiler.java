@@ -2,6 +2,7 @@ package com.elypia.alexis.utils;
 
 import com.elypia.alexis.*;
 import com.elypia.alexis.entities.*;
+import com.elypia.alexis.entities.embedded.GuildSettings;
 import com.elypia.commandler.confiler.DefaultConfiler;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;

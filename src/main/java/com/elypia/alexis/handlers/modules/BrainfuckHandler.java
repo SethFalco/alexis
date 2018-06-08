@@ -12,6 +12,7 @@ import com.elypia.elypiai.Brainfuck;
 )
 public class BrainfuckHandler extends CommandHandler {
 
+    @Default
     @CommandGroup("interpret")
     @Command(aliases = {"compile", "interpret"}, help = "Compile Brainfuck code into something non-nerds understand.")
     @Param(name = "code", help = "The code to compile.")

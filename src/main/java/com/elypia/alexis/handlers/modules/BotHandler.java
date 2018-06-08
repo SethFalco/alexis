@@ -93,6 +93,7 @@ public class BotHandler extends CommandHandler {
 		return body;
 	}
 
+	@Static
 	@Command(aliases = "invites", help = "Get invites for all the bots in here!")
 	@Scope(ChannelType.TEXT)
 	public EmbedBuilder invites(MessageEvent event) {
@@ -104,6 +105,7 @@ public class BotHandler extends CommandHandler {
 		}).collect(Collectors.toList());
 
 		EmbedBuilder builder = new EmbedBuilder();
+		builder.setThumbnail(guild.getIconUrl());
 		users.forEach(o -> builder.addField(o.getName(), Markdown.a("Invite link!", BotUtils.formInviteUrl(o)), true));
 
 		return builder;

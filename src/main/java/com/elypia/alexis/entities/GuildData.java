@@ -1,6 +1,7 @@
 package com.elypia.alexis.entities;
 
 import com.elypia.alexis.Alexis;
+import com.elypia.alexis.entities.embedded.GuildSettings;
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.annotations.*;

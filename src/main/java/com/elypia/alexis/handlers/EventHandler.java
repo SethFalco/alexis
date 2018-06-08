@@ -2,6 +2,7 @@ package com.elypia.alexis.handlers;
 
 import com.elypia.alexis.Chatbot;
 import com.elypia.alexis.entities.*;
+import com.elypia.alexis.entities.embedded.*;
 import com.elypia.alexis.utils.*;
 import com.mongodb.MongoClient;
 import net.dv8tion.jda.core.*;
@@ -14,7 +15,7 @@ import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.events.message.react.MessageReactionAddEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 import org.mongodb.morphia.*;
-import org.mongodb.morphia.query.Query;
+import org.mongodb.morphia.query.*;
 
 import java.util.*;
 import java.util.logging.Level;
@@ -164,6 +165,25 @@ public class EventHandler extends ListenerAdapter {
 	@Override
 	public void onMessageReceived(MessageReceivedEvent event) {
 
+	}
+
+	private void handleXp(MessageReceivedEvent event) {
+		if (!event.isFromType(ChannelType.TEXT))
+			return;
+
+		if (event.getGuild().getMembers().size() == 2)
+			return;
+
+		User user = event.getAuthor();
+		UserData data = UserData.query(user.getIdLong());
+
+		int entitlement = data.getXpEntitlement(event);
+
+		if (entitlement > 0) {
+			UpdateOperations<UserData> update = store.createUpdateOperations(UserData.class);
+			update.set("xp", data.getXp() + entitlement);
+			store.update(data, update);
+		}
 	}
 
 	@Override

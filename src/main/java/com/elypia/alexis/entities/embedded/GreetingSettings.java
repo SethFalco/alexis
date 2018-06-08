@@ -1,4 +1,4 @@
-package com.elypia.alexis.entities;
+package com.elypia.alexis.entities.embedded;
 
 import org.mongodb.morphia.annotations.Embedded;
 

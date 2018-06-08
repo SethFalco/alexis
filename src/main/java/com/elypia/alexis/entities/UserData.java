@@ -56,22 +56,6 @@ public class UserData {
     }
 
     /**
-     * @param event The generic event which rewards XP.
-     * @return The new amount of XP the user has.
-     */
-
-    public int gainXp(MessageReceivedEvent event) {
-        int gains = isEligibleForXp(event);
-
-        if (gains > 0)
-            xp += gains;
-
-        // Reset last message to current timestamp.
-        lastActive.setTime(System.currentTimeMillis());
-        return xp;
-    }
-
-    /**
      * Checks if the user is entitled to XP based on
      * the last time they sent a message. <br>
      * The return value with be -1 if it appears the user
@@ -82,7 +66,7 @@ public class UserData {
      * @return Amount of XP user is entitled to, or -1 if deemed cheating.
      */
 
-    public int isEligibleForXp(MessageReceivedEvent event) {
+    public int getXpEntitlement(MessageReceivedEvent event) {
         // Split the message for every set of whitespace characters.
         String content = event.getMessage().getContentRaw();
         int length = content.split("\\s+").length;
@@ -97,7 +81,11 @@ public class UserData {
         // Multiply by 10 for max chars allowed for the # of seconds passed.
         int allowableLength = (int)((current - previous) / 100);
 
-        return length < allowableLength ? length : -1;
+        return length <= allowableLength ? length : 0;
+    }
+
+    public ObjectId getId() {
+        return id;
     }
 
     public void setId(ObjectId id) {

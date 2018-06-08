@@ -20,15 +20,12 @@ public class EmoteData {
     @Property("uses")
     private List<Date> uses;
 
-    public int incrementUseCount(int value) {
-        for (int i = 0; i < value; i++)
-            uses.add(new Date());
-
-        return uses.size();
-    }
-
     public ObjectId getId() {
         return id;
+    }
+
+    public void setId(ObjectId id) {
+        this.id = id;
     }
 
     public long getEmoteId() {
