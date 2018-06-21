@@ -1,9 +1,9 @@
 package com.elypia.alexis.handlers.modules;
 
 import com.elypia.alexis.utils.BotUtils;
-import com.elypia.commandler.CommandHandler;
 import com.elypia.commandler.annotations.*;
 import com.elypia.commandler.events.MessageEvent;
+import com.elypia.commandler.modules.CommandHandler;
 import com.elypia.elypiai.osu.Osu;
 import com.elypia.elypiai.osu.data.OsuMode;
 import com.elypia.elypiai.utils.Markdown;
@@ -12,11 +12,7 @@ import net.dv8tion.jda.core.EmbedBuilder;
 import java.util.StringJoiner;
 import java.util.concurrent.*;
 
-@Module(
-    name = "osu!",
-    aliases = {"osu"},
-    description = "Integration with osu!, the popular rhythem game."
-)
+@Module(name = "osu!", aliases = {"osu"}, description = "Integration with osu!, the popular rhythem game.")
 public class OsuHandler extends CommandHandler {
 
     private Osu osu;
@@ -25,14 +21,14 @@ public class OsuHandler extends CommandHandler {
         osu = new Osu(apikey);
     }
 
-    @CommandGroup("get")
-    @Command(aliases = "get", help = "Get stats on osu! players.")
+    @Overload("get")
+    @Command(name = "Player Stats", aliases = "get", help = "Get stats on osu! players.")
     @Param(name = "players", help = "The players usernames you want to retrieve.")
     public void getPlayers(MessageEvent event, String[] players) throws InterruptedException {
         getPlayers(event, players, OsuMode.OSU);
     }
 
-    @CommandGroup("get")
+    @Overload("get")
     @Param(name = "players", help = "The players usernames you want to retrieve.")
     @Param(name = "mode", help = "The mode to use when getting players.")
     public void getPlayers(MessageEvent event, String[] players, OsuMode mode) throws InterruptedException {

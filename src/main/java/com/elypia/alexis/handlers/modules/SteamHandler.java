@@ -1,18 +1,14 @@
 package com.elypia.alexis.handlers.modules;
 
 import com.elypia.alexis.utils.BotUtils;
-import com.elypia.commandler.CommandHandler;
 import com.elypia.commandler.annotations.*;
 import com.elypia.commandler.events.MessageEvent;
+import com.elypia.commandler.modules.CommandHandler;
 import com.elypia.elypiai.steam.*;
 import com.elypia.elypiai.utils.ElyUtils;
 import net.dv8tion.jda.core.EmbedBuilder;
 
-@Module(
-	name = "Steam",
-	aliases = "steam",
-	description = "Integration with the popular DRM, Steam!"
-)
+@Module(name = "Steam", aliases = "steam", description = "Integration with the popular DRM, Steam!")
 public class SteamHandler extends CommandHandler {
 
 	private Steam steam;
@@ -21,7 +17,7 @@ public class SteamHandler extends CommandHandler {
 		steam = new Steam(apiKey);
 	}
 
-	@Command(aliases = {"get", "user", "profile"}, help = "Get information on a Steam user!")
+	@Command(name = "Steam Profile", aliases = {"get", "user", "profile"}, help = "Get information on a Steam user!")
 	@Param(name = "username", help = "The name you'd find at the end of their custom URL!")
 	public void displayProfile(MessageEvent event, String username) {
 		steam.getUser(username, user -> {
@@ -39,7 +35,7 @@ public class SteamHandler extends CommandHandler {
 		}, failure -> BotUtils.sendHttpError(event, failure));
 	}
 
-	@Command(aliases = {"lib", "library"}, help = "Get a players library orderd by recent playtime, then playtime!")
+	@Command(name = "Steam Library", aliases = {"lib", "library"}, help = "Get a players library orderd by recent playtime, then playtime!")
 	@Param(name = "username", help = "The username or ID of the user!")
 	public void listLibrary(MessageEvent event, String username) {
 		steam.getUser(username, user -> {
@@ -69,7 +65,7 @@ public class SteamHandler extends CommandHandler {
 		}, failure -> BotUtils.sendHttpError(event, failure));
 	}
 
-	@Command(aliases = {"random", "rand", "game", "r"}, help = "Select a random game from the players library!")
+	@Command(name = "Game Roulette", aliases = {"random", "rand", "game", "r"}, help = "Select a random game from the players library!")
 	@Param(name = "username", help = "The username or ID of the user!")
 	@Reaction(alias = "🎲", help = "Reroll for a different game.")
 	public void randomGame(MessageEvent event, String username) {

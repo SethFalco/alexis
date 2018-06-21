@@ -1,17 +1,13 @@
 package com.elypia.alexis.handlers.modules;
 
 import com.elypia.alexis.utils.BotUtils;
-import com.elypia.commandler.CommandHandler;
 import com.elypia.commandler.annotations.*;
 import com.elypia.commandler.events.MessageEvent;
+import com.elypia.commandler.modules.CommandHandler;
 import com.elypia.elypiai.google.youtube.*;
 import net.dv8tion.jda.core.EmbedBuilder;
 
-@Module(
-    name = "YouTube",
-    aliases = {"youtube", "yt"},
-    description = "Commands related to YouTube."
-)
+@Module(name = "YouTube", aliases = {"youtube", "yt"}, description = "Commands related to YouTube.")
 public class YouTubeHandler extends CommandHandler {
 
     private YouTube youtube;
@@ -20,8 +16,8 @@ public class YouTubeHandler extends CommandHandler {
         youtube = new YouTube(apikey);
     }
 
-    @CommandGroup("get")
-    @Command(aliases = "get", help = "Search for a video.")
+    @Overload("get")
+    @Command(name = "Search YouTube", aliases = "get", help = "Search for a video.")
     @Param(name = "query", help = "Search term for the video you want.")
     public void getVideo(MessageEvent event, String query) {
         youtube.getVideo(query, result -> {
@@ -36,7 +32,7 @@ public class YouTubeHandler extends CommandHandler {
         }, failure -> BotUtils.sendHttpError(event, failure));
     }
 
-    @CommandGroup("get")
+    @Overload("get")
     @Param(name = "query", help = "Search term for the video you want.")
     @Param(name = "count", help = "How many search results to display.")
     public void getVideos(MessageEvent event, String query, int count) {

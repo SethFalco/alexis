@@ -7,6 +7,7 @@ import com.elypia.alexis.handlers.EventHandler;
 import com.elypia.alexis.handlers.modules.*;
 import com.elypia.alexis.utils.*;
 import com.elypia.commandler.Commandler;
+import com.elypia.commandler.pages.PageBuilder;
 import com.mongodb.MongoClient;
 import net.dv8tion.jda.core.*;
 import net.dv8tion.jda.core.entities.Game;
@@ -14,6 +15,7 @@ import org.json.*;
 import org.mongodb.morphia.*;
 
 import javax.security.auth.login.LoginException;
+import java.io.*;
 import java.util.*;
 
 public class Chatbot {
@@ -23,16 +25,31 @@ public class Chatbot {
 	private JDA jda;
 	private List<Game> statuses;
 
+	private Commandler commandler;
+
 	private MongoClient client;
 	private Morphia morphia;
 	private Datastore store;
 
-	public Chatbot() throws LoginException, InterruptedException {
-		startUpTime = System.currentTimeMillis();
+	public Chatbot(boolean doc) throws LoginException, IOException {
+		if (!doc) {
+			startUpTime = System.currentTimeMillis();
 
-	    initDatabase();
-		initJDA();
+			initDatabase();
+			initJDA();
+		}
+
 		initCommandler();
+
+		if (doc) {
+			PageBuilder builder = new PageBuilder(commandler);
+			builder.setName("Alexis");
+			builder.setAvatar("./resources/alexis.png");
+			builder.setFavicon("./resources/favicon.ico");
+			builder.setDescription("Alexis is a multi purpose bot for Discord!");
+
+			builder.build(new File("." + File.separator + "pages" + File.separator));
+		}
 	}
 
 	private void initDatabase() {
@@ -49,7 +66,7 @@ public class Chatbot {
 		}
 	}
 
-	private void initJDA() throws LoginException, InterruptedException {
+	private void initJDA() throws LoginException {
 		statuses = new ArrayList<>();
 
 		JSONObject discord = Config.getConfig("discord");
@@ -78,7 +95,7 @@ public class Chatbot {
 
 	private void initCommandler() {
 		JSONObject api = Config.getConfig("api_keys");
-		Commandler commandler = new Commandler(jda, new AlexisConfiler());
+		commandler = new Commandler(jda, new AlexisConfiler());
 
 		commandler.registerModules(
 			new AmazonHandler(api.getJSONObject("amazon")),

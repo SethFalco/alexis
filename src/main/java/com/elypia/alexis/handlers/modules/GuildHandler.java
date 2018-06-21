@@ -1,9 +1,9 @@
 package com.elypia.alexis.handlers.modules;
 
-import com.elypia.commandler.CommandHandler;
 import com.elypia.commandler.annotations.*;
 import com.elypia.commandler.annotations.validation.command.*;
 import com.elypia.commandler.events.MessageEvent;
+import com.elypia.commandler.modules.CommandHandler;
 import net.dv8tion.jda.core.*;
 import net.dv8tion.jda.core.entities.*;
 
@@ -16,14 +16,14 @@ import java.util.Collection;
 )
 public class GuildHandler extends CommandHandler {
 
-    @CommandGroup("info")
-    @Command(aliases = "info", help = "Get the guilds information.")
+    @Overload("info")
+    @Command(name = "Guild Info", aliases = "info", help = "Get the guilds information.")
     @Scope(ChannelType.TEXT)
     public void info(MessageEvent event) {
         info(event, event.getMessageEvent().getGuild());
     }
 
-    @CommandGroup("info")
+    @Overload("info")
     @Param(name = "guild", help = "Some form of identification for this guild.")
     @Scope(ChannelType.PRIVATE)
     public EmbedBuilder info(MessageEvent event, Guild guild) {
@@ -41,8 +41,8 @@ public class GuildHandler extends CommandHandler {
         return builder;
     }
 
-    @CommandGroup("prune")
-    @Command(aliases = "prune", help = "Delete messages in the guild in bulk.")
+    @Overload("prune")
+    @Command(name = "Delete Messages", aliases = "prune", help = "Delete messages in the guild in bulk.")
     @Param(name = "count", help = "The number of messages to delete.")
     @Permissions(Permission.MANAGE_SERVER)
     @Scope(ChannelType.TEXT)
@@ -50,7 +50,7 @@ public class GuildHandler extends CommandHandler {
         prune(event, count, event.getMessageEvent().getTextChannel());
     }
 
-    @CommandGroup("prune")
+    @Overload("prune")
     @Param(name = "count", help = "The number of messages to delete.")
     @Param(name = "channel", help = "The channel to delete messages in.")
     @Permissions(Permission.MANAGE_SERVER)
@@ -59,7 +59,7 @@ public class GuildHandler extends CommandHandler {
         if (count < 2 || count > 100)
             return "Please specify between 2 and 100 messages.";
 
-        channel.getHistoryBefore(event.getMessageEvent().getMessage(), count).queue(o -> {
+        channel.getHistoryBefore(event.getMessage(), count).queue(o -> {
             channel.deleteMessages(o.getRetrievedHistory()).queue(ob -> {
                 event.tryDeleteMessage();
             });

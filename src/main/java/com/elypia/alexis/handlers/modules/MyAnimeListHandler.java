@@ -1,9 +1,9 @@
 package com.elypia.alexis.handlers.modules;
 
 import com.elypia.alexis.utils.BotUtils;
-import com.elypia.commandler.CommandHandler;
 import com.elypia.commandler.annotations.*;
 import com.elypia.commandler.events.MessageEvent;
+import com.elypia.commandler.modules.CommandHandler;
 import com.elypia.elypiai.myanimelist.MyAnimeList;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.MessageEmbed;
@@ -25,7 +25,7 @@ public class MyAnimeListHandler extends CommandHandler {
         mal = new MyAnimeList(user, password);
     }
 
-    @Command(aliases = "anime", help = "Get information on an anime.")
+    @Command(name = "Get Anime", aliases = "anime", help = "Get information on an anime.")
     @Param(name = "animes", help = "A search terms to find shows.")
     public void getAnime(MessageEvent event, String anime) {
         mal.getAnime(anime, result -> {

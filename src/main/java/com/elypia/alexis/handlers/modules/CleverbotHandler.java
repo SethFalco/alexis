@@ -2,11 +2,11 @@ package com.elypia.alexis.handlers.modules;
 
 import com.elypia.alexis.Alexis;
 import com.elypia.alexis.commandler.annotations.validation.command.Database;
-import com.elypia.alexis.entities.*;
+import com.elypia.alexis.entities.MessageChannelData;
 import com.elypia.alexis.utils.BotUtils;
-import com.elypia.commandler.CommandHandler;
 import com.elypia.commandler.annotations.*;
 import com.elypia.commandler.events.MessageEvent;
+import com.elypia.commandler.modules.CommandHandler;
 import com.elypia.elypiai.cleverbot.Cleverbot;
 import net.dv8tion.jda.core.entities.MessageChannel;
 import org.mongodb.morphia.*;
@@ -22,7 +22,7 @@ public class CleverbotHandler extends CommandHandler {
         cleverbot = new Cleverbot(apiKey);
     }
 
-    @Command(aliases = {"say", "ask"}, help = "Say something to Cleverbot.")
+    @Command(name = "Talk to Cleverbot", aliases = {"say", "ask"}, help = "Say something to Cleverbot.")
     @Param(name = "body", help = "What you want to say.")
     public void say(MessageEvent event, String body) {
         MessageChannel channel = event.getMessageEvent().getChannel();
@@ -35,17 +35,17 @@ public class CleverbotHandler extends CommandHandler {
         }, failure -> BotUtils.sendHttpError(event, failure));
     }
 
-    @Command (aliases = {"history", "his"}, help = "Track previous conversation in this channel.")
-    public void getHistory(MessageEvent event) {
+    @Command(name = "Channel Chat History", aliases = {"history", "his"}, help = "Track previous conversation in this channel.")
+    public String getHistory(MessageEvent event) {
         MessageChannel channel = event.getMessageEvent().getChannel();
         MessageChannelData data = MessageChannelData.query(channel.getIdLong());
         String cs = data.getCleverState();
         String history = cleverbot.getHistory(cs);
 
         if (history == null)
-            event.reply("Maybe try talk first and I can grab your history later?");
+            return "Maybe try talk first and I can grab your history later?";
         else
-            event.reply(String.format("```\n%s\n```", history));
+            return String.format("```\n%s\n```", history);
     }
 
     private void setChannelCleverState(MessageChannelData data, String cs) {

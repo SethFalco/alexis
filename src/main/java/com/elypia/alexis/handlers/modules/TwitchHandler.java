@@ -1,18 +1,14 @@
 package com.elypia.alexis.handlers.modules;
 
 import com.elypia.alexis.utils.BotUtils;
-import com.elypia.commandler.CommandHandler;
 import com.elypia.commandler.annotations.*;
 import com.elypia.commandler.events.MessageEvent;
+import com.elypia.commandler.modules.CommandHandler;
 import com.elypia.elypiai.twitch.*;
 import com.elypia.elypiai.twitch.data.BroadcasterType;
 import net.dv8tion.jda.core.EmbedBuilder;
 
-@Module(
-    name = "Twitch",
-    aliases = "twitch",
-    description = "Get information on various streamers!"
-)
+@Module(name = "Twitch", aliases = "twitch", description = "Get information on various streamers!")
 public class TwitchHandler extends CommandHandler {
 
     private Twitch twitch;
@@ -21,7 +17,7 @@ public class TwitchHandler extends CommandHandler {
         twitch = new Twitch(clientId);
     }
 
-    @Command(aliases = "get", help = "Get information on streamers.")
+    @Command(name = "Streamer Info", aliases = {"get", "info"}, help = "Get information on streamers.")
     @Param(name = "usernames", help = "The user(s) to retrieve.")
     public void getUser(MessageEvent event, String[] usernames) {
         twitch.getUsers(usernames, result -> {

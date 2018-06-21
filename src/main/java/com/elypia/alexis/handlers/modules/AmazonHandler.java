@@ -1,9 +1,9 @@
 package com.elypia.alexis.handlers.modules;
 
 import com.elypia.alexis.utils.BotUtils;
-import com.elypia.commandler.CommandHandler;
 import com.elypia.commandler.annotations.*;
 import com.elypia.commandler.events.MessageEvent;
+import com.elypia.commandler.modules.CommandHandler;
 import com.elypia.elypiai.amazon.*;
 import com.elypia.elypiai.amazon.data.AmazonEndpoint;
 import net.dv8tion.jda.core.EmbedBuilder;
@@ -47,7 +47,7 @@ public class AmazonHandler extends CommandHandler {
         }
     }
 
-    @Command(aliases = {"search", "get"}, help = "Search Amazon for a product and share it.")
+    @Command(name = "Search for a Product", aliases = {"search", "get"}, help = "Search Amazon for a product and share it.")
     @Param(name = "query", help = "Name of the product you're after.")
     public void getItem(MessageEvent event, String query) {
         amazon.getItems(query, result -> {

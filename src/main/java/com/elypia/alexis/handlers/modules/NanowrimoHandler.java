@@ -1,18 +1,14 @@
 package com.elypia.alexis.handlers.modules;
 
 import com.elypia.alexis.utils.BotUtils;
-import com.elypia.commandler.CommandHandler;
 import com.elypia.commandler.annotations.*;
 import com.elypia.commandler.events.MessageEvent;
+import com.elypia.commandler.modules.CommandHandler;
 import com.elypia.elypiai.nanowrimo.Nanowrimo;
 import com.mongodb.client.MongoDatabase;
 import net.dv8tion.jda.core.EmbedBuilder;
 
-@Module(
-	name = "National Novel Writing Month",
-	aliases = {"nanowrimo", "nano", "nnwm"},
-	description = ""
-)
+@Module(name = "National Novel Writing Month", aliases = {"nanowrimo", "nano", "nnwm"}, description = "")
 public class NanowrimoHandler extends CommandHandler {
 
 	private MongoDatabase database;
@@ -28,9 +24,9 @@ public class NanowrimoHandler extends CommandHandler {
 		return false;
 	}
 
-	@Command(aliases = {"authenticate", "auth"}, help = "Auth to your NaNoWriMo account.")
+	@Command(name = "Authenticate to NaNoWriMo", aliases = {"authenticate", "auth"}, help = "Auth to your NaNoWriMo account.")
 	@Param(name = "name", help = "Your NaNoWriMo username.")
-	@Param(name = "secret", help = "Your NaNoWriMo secret at: https://nanowrimo.org/api/wordcount", secret = true)
+	@Param(name = "secret", help = "Your NaNoWriMo secret at: https://nanowrimo.org/api/wordcount")
 	@Param(name = "wordcount", help = "Your total word count to submit.")
 	public void authenticate(MessageEvent event, String name, String secret, int wordcount) {
 		event.tryDeleteMessage();
@@ -48,7 +44,7 @@ public class NanowrimoHandler extends CommandHandler {
 		}, failure -> BotUtils.sendHttpError(event, failure));
 	}
 
-	@Command(aliases = "info", help = "Get basic information on a user.")
+	@Command(name = "Writer Info", aliases = "info", help = "Get basic information on a user.")
 	@Param(name = "name", help = "Your NaNoWriMo username.")
 	public void getUser(MessageEvent event, String name) {
 		nanowrimo.getNanoUser(name, result -> {

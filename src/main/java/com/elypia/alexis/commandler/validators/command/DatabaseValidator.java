@@ -8,11 +8,15 @@ import com.elypia.commandler.validation.ICommandValidator;
 public class DatabaseValidator implements ICommandValidator<Database> {
 
     @Override
-    public void validate(MessageEvent event, Database annotation) throws IllegalAccessException {
+    public boolean validate(MessageEvent event, Database annotation) {
         if (BotUtils.isDatabaseAlive())
-            return;
+            return event.invalidate("Sorry! :c For some reason the database is down so you won't be able to perform this command right now.");
 
-        String message = "Sorry! :c For some reason the database is down so you won't be able to perform this command right now.";
-        throw new IllegalAccessException(message);
+        return true;
+    }
+
+    @Override
+    public String help(Database annotation) {
+        return "This module required the database, should it ever go this may be disbaled until that it resolved.";
     }
 }

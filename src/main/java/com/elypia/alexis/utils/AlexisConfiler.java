@@ -1,18 +1,18 @@
 package com.elypia.alexis.utils;
 
 import com.elypia.alexis.*;
-import com.elypia.alexis.entities.*;
+import com.elypia.alexis.entities.GuildData;
 import com.elypia.alexis.entities.embedded.GuildSettings;
 import com.elypia.commandler.confiler.DefaultConfiler;
 import net.dv8tion.jda.core.entities.*;
-import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.core.events.message.GenericMessageEvent;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.query.Query;
 
 public class AlexisConfiler extends DefaultConfiler {
 
     @Override
-    public String getPrefix(MessageReceivedEvent event) {
+    public String getPrefix(GenericMessageEvent event) {
         String defaultPrefix = Config.getConfig("discord").getString("prefix");
 
         if (event.isFromType(ChannelType.PRIVATE) || !BotUtils.isDatabaseAlive())

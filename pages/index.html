@@ -1,0 +1,694 @@
+<!doctype html>
+<html>
+ <head> 
+  <title>Alexis | Help</title> 
+  <meta charset="UTF-8"> 
+  <link rel="icon" type="image/x-icon" href="./assets/favicon.ico"> 
+  <link rel="stylesheet" href="styles.css"> 
+  <link rel="stylesheet" href="reset.css"> 
+  <link href="https://fonts.googleapis.com/css?family=Lovers+Quarrel|Megrim|Raleway|Wire+One" rel="stylesheet"> 
+  <script src="app.js"></script> 
+  <meta property="og:site_name" content="Alexis"> 
+  <meta property="og:title" content="Alexis | Help"> 
+  <meta property="og:description" content="Alexis is a multi purpose bot for Discord!"> 
+  <meta property="og:image" content="./assets/alexis.png"> 
+ </head> 
+ <body> 
+  <img class="background" src="./resources/Night.png"> 
+  <main> 
+   <nav> 
+    <h1 class="bot-name">Alexis Help</h1> 
+    <ul> 
+     <li class="module-list-item" id="Amazon">Amazon</li> 
+     <li class="module-list-item" id="Bot-Module">Bot Module</li> 
+     <li class="module-list-item" id="Brainfuck">Brainfuck</li> 
+     <li class="module-list-item" id="Module">Module</li> 
+     <li class="module-list-item" id="Emoticons">Emoticons</li> 
+     <li class="module-list-item" id="Welcome-and-Farewell">Welcome and Farewell</li> 
+     <li class="module-list-item" id="Guild-/-Server">Guild / Server</li> 
+     <li class="module-list-item" id="Miscellaneous-Utilities">Miscellaneous Utilities</li> 
+     <li class="module-list-item" id="Music-Player">Music Player</li> 
+     <li class="module-list-item" id="My-Anime-List">My Anime List</li> 
+     <li class="module-list-item" id="osu!">osu!</li> 
+     <li class="module-list-item" id="Prefix-Configuration">Prefix Configuration</li> 
+     <li class="module-list-item" id="RuneScape">RuneScape</li> 
+     <li class="module-list-item" id="Steam">Steam</li> 
+     <li class="module-list-item" id="Twitch">Twitch</li> 
+     <li class="module-list-item" id="UrbanDictionary">UrbanDictionary</li> 
+     <li class="module-list-item" id="User">User</li> 
+     <li class="module-list-item" id="Guild-Voice-Channels">Guild Voice Channels</li> 
+     <li class="module-list-item" id="YouTube">YouTube</li> 
+    </ul> 
+   </nav> 
+   <div class="container"> 
+    <div class="module-info" id="info-Amazon"> 
+     <div class="module-nav"> 
+      <ul> 
+       <li><a href="#Search-for-a-Product">Search for a Product</a></li> 
+      </ul> 
+     </div> 
+     <h1>Amazon</h1> 
+     <ul class="module-aliases"> 
+      <li>amazon</li> 
+     </ul> 
+     <p>Share links and support Elypia! We get a cut from purchases!</p> 
+     <div class="command-info"> 
+      <div class="command-title"> 
+       <h3 id="Search-for-a-Product">Search for a Product</h3> 
+       <ul class="command-validators"> 
+       </ul> 
+      </div> 
+      <ul class="command-aliases"> 
+       <li>search</li> 
+       <li>get</li> 
+      </ul> 
+      <p>Search Amazon for a product and share it.</p> 
+     </div> 
+    </div> 
+    <div class="module-info" id="info-Bot-Module"> 
+     <div class="module-nav"> 
+      <ul> 
+       <li><a href="#Say">Say</a></li> 
+       <li><a href="#Bot-Invites">Bot Invites</a></li> 
+       <li><a href="#Bot-Statistics">Bot Statistics</a></li> 
+       <li><a href="#Ping!">Ping!</a></li> 
+      </ul> 
+     </div> 
+     <h1>Bot Module</h1> 
+     <ul class="module-aliases"> 
+      <li>bot</li> 
+      <li>robot</li> 
+     </ul> 
+     <p>Bot commands for stats or information.</p> 
+     <div class="command-info"> 
+      <div class="command-title"> 
+       <h3 id="Say">Say</h3> 
+       <ul class="command-validators"> 
+       </ul> 
+      </div> 
+      <ul class="command-aliases"> 
+       <li>say</li> 
+      </ul> 
+      <p>Have Alexis repeat something you say!</p> 
+     </div> 
+     <div class="command-info"> 
+      <div class="command-title"> 
+       <h3 id="Bot-Invites">Bot Invites</h3> 
+       <ul class="command-validators"> 
+        <li class="tooltip"> <span class="tooltiptext">This commands can only be performed in the following channels: `Guild Text Channels`.</span> <img src="./resources/commands/scope.svg" alt="Scope" height="24" width="24"> </li> 
+       </ul> 
+      </div> 
+      <ul class="command-aliases"> 
+       <li>invites</li> 
+      </ul> 
+      <p>Get invites for all the bots in here!</p> 
+     </div> 
+     <div class="command-info"> 
+      <div class="command-title"> 
+       <h3 id="Bot-Statistics">Bot Statistics</h3> 
+       <ul class="command-validators"> 
+       </ul> 
+      </div> 
+      <ul class="command-aliases"> 
+       <li>stats</li> 
+       <li>info</li> 
+      </ul> 
+      <p>Display stats on Alexis!</p> 
+     </div> 
+     <div class="command-info"> 
+      <div class="command-title"> 
+       <h3 id="Ping!">Ping!</h3> 
+       <ul class="command-validators"> 
+       </ul> 
+      </div> 
+      <ul class="command-aliases"> 
+       <li>ping</li> 
+      </ul> 
+      <p>Respond 'pong!' with the number of `ms` it took to fulfil the request!</p> 
+     </div> 
+    </div> 
+    <div class="module-info" id="info-Brainfuck"> 
+     <div class="module-nav"> 
+      <ul> 
+       <li><a href="#Interpret-Code">Interpret Code</a></li> 
+      </ul> 
+     </div> 
+     <h1>Brainfuck</h1> 
+     <ul class="module-aliases"> 
+      <li>brainfuck</li> 
+      <li>bf</li> 
+     </ul> 
+     <p>Compile Brainfuck code into Strings.</p> 
+     <div class="command-info"> 
+      <div class="command-title"> 
+       <h3 id="Interpret-Code">Interpret Code</h3> 
+       <ul class="command-validators"> 
+       </ul> 
+      </div> 
+      <ul class="command-aliases"> 
+       <li>compile</li> 
+       <li>interpret</li> 
+      </ul> 
+      <p>Compile Brainfuck code into something non-nerds understand.</p> 
+     </div> 
+    </div> 
+    <div class="module-info" id="info-Module"> 
+     <div class="module-nav"> 
+      <ul> 
+       <li><a href="#Channel-Chat-History">Channel Chat History</a></li> 
+       <li><a href="#Talk-to-Cleverbot">Talk to Cleverbot</a></li> 
+      </ul> 
+     </div> 
+     <h1>Module</h1> 
+     <ul class="module-aliases"> 
+      <li>cleverbot</li> 
+      <li>cb</li> 
+     </ul> 
+     <p>Come talk to cleverbot.</p> 
+     <div class="command-info"> 
+      <div class="command-title"> 
+       <h3 id="Channel-Chat-History">Channel Chat History</h3> 
+       <ul class="command-validators"> 
+        <li class="tooltip"> <span class="tooltiptext">This module required the database, should it ever go this may be disbaled until that it resolved.</span> <img src="./resources/commands/database.svg" alt="Database" height="24" width="24"> </li> 
+       </ul> 
+      </div> 
+      <ul class="command-aliases"> 
+       <li>history</li> 
+       <li>his</li> 
+      </ul> 
+      <p>Track previous conversation in this channel.</p> 
+     </div> 
+     <div class="command-info"> 
+      <div class="command-title"> 
+       <h3 id="Talk-to-Cleverbot">Talk to Cleverbot</h3> 
+       <ul class="command-validators"> 
+        <li class="tooltip"> <span class="tooltiptext">This module required the database, should it ever go this may be disbaled until that it resolved.</span> <img src="./resources/commands/database.svg" alt="Database" height="24" width="24"> </li> 
+       </ul> 
+      </div> 
+      <ul class="command-aliases"> 
+       <li>say</li> 
+       <li>ask</li> 
+      </ul> 
+      <p>Say something to Cleverbot.</p> 
+     </div> 
+    </div> 
+    <div class="module-info" id="info-Emoticons"> 
+     <div class="module-nav"> 
+      <ul> 
+       <li><a href="#Display-Emote">Display Emote</a></li> 
+       <li><a href="#List-all-Emotes">List all Emotes</a></li> 
+      </ul> 
+     </div> 
+     <h1>Emoticons</h1> 
+     <ul class="module-aliases"> 
+      <li>emote</li> 
+      <li>emoji</li> 
+      <li>emoticon</li> 
+     </ul> 
+     <p>Check all the emotes or how much they're being used.</p> 
+     <div class="command-info"> 
+      <div class="command-title"> 
+       <h3 id="Display-Emote">Display Emote</h3> 
+       <ul class="command-validators"> 
+       </ul> 
+      </div> 
+      <ul class="command-aliases"> 
+       <li>get</li> 
+       <li>post</li> 
+      </ul> 
+      <p>Post an emote in the chat!</p> 
+     </div> 
+     <div class="command-info"> 
+      <div class="command-title"> 
+       <h3 id="List-all-Emotes">List all Emotes</h3> 
+       <ul class="command-validators"> 
+        <li class="tooltip"> <span class="tooltiptext">This commands can only be performed in the following channels: `Guild Text Channels`.</span> <img src="./resources/commands/scope.svg" alt="Scope" height="24" width="24"> </li> 
+       </ul> 
+      </div> 
+      <ul class="command-aliases"> 
+       <li>list</li> 
+      </ul> 
+      <p>List all of the custom emotes in this guild.</p> 
+     </div> 
+    </div> 
+    <div class="module-info" id="info-Welcome-and-Farewell"> 
+     <div class="module-nav"> 
+      <ul> 
+       <li><a href="#Set-Greeting-Channel">Set Greeting Channel</a></li> 
+       <li><a href="#Set-Greeting-Message">Set Greeting Message</a></li> 
+      </ul> 
+     </div> 
+     <h1>Welcome and Farewell</h1> 
+     <ul class="module-aliases"> 
+      <li>greeting</li> 
+      <li>greetings</li> 
+      <li>welcome</li> 
+     </ul> 
+     <p>Configure where and what is sent when a user or bot joins and leaves the guild.</p> 
+     <div class="command-info"> 
+      <div class="command-title"> 
+       <h3 id="Set-Greeting-Channel">Set Greeting Channel</h3> 
+       <ul class="command-validators"> 
+        <li class="tooltip"> <span class="tooltiptext">This commands requires the user have the Manage Server permission to perform this commands.</span> <img src="./resources/commands/elevated.svg" alt="Elevated" height="24" width="24"> </li> 
+        <li class="tooltip"> <span class="tooltiptext">This module required the database, should it ever go this may be disbaled until that it resolved.</span> <img src="./resources/commands/database.svg" alt="Database" height="24" width="24"> </li> 
+       </ul> 
+      </div> 
+      <ul class="command-aliases"> 
+       <li>channel</li> 
+      </ul> 
+      <p>Change the channel that you display bot messages without affecting other settings.</p> 
+     </div> 
+     <div class="command-info"> 
+      <div class="command-title"> 
+       <h3 id="Set-Greeting-Message">Set Greeting Message</h3> 
+       <ul class="command-validators"> 
+        <li class="tooltip"> <span class="tooltiptext">This commands requires the user have the Manage Server permission to perform this commands.</span> <img src="./resources/commands/elevated.svg" alt="Elevated" height="24" width="24"> </li> 
+        <li class="tooltip"> <span class="tooltiptext">This module required the database, should it ever go this may be disbaled until that it resolved.</span> <img src="./resources/commands/database.svg" alt="Database" height="24" width="24"> </li> 
+       </ul> 
+      </div> 
+      <ul class="command-aliases"> 
+       <li>message</li> 
+      </ul> 
+      <p>Set a greeting messages for the given event and account type.</p> 
+     </div> 
+    </div> 
+    <div class="module-info" id="info-Guild-/-Server"> 
+     <div class="module-nav"> 
+      <ul> 
+       <li><a href="#Guild-Info">Guild Info</a></li> 
+       <li><a href="#Delete-Messages">Delete Messages</a></li> 
+      </ul> 
+     </div> 
+     <h1>Guild / Server</h1> 
+     <ul class="module-aliases"> 
+      <li>guild</li> 
+     </ul> 
+     <p>Guild related commands to perform actions or get info.</p> 
+     <div class="command-info"> 
+      <div class="command-title"> 
+       <h3 id="Guild-Info">Guild Info</h3> 
+       <ul class="command-validators"> 
+        <li class="tooltip"> <span class="tooltiptext">This commands can only be performed in the following channels: `Guild Text Channels`.</span> <img src="./resources/commands/scope.svg" alt="Scope" height="24" width="24"> </li> 
+       </ul> 
+      </div> 
+      <ul class="command-aliases"> 
+       <li>info</li> 
+      </ul> 
+      <p>Get the guilds information.</p> 
+     </div> 
+     <div class="command-info"> 
+      <div class="command-title"> 
+       <h3 id="Delete-Messages">Delete Messages</h3> 
+       <ul class="command-validators"> 
+        <li class="tooltip"> <span class="tooltiptext">This commands can only be performed in the following channels: `Guild Text Channels`.</span> <img src="./resources/commands/scope.svg" alt="Scope" height="24" width="24"> </li> 
+        <li class="tooltip"> <span class="tooltiptext">Both the user and bot require the following permissions to do this commands: `Manage Server`.</span> <img src="./resources/commands/permissions.svg" alt="Permissions" height="24" width="24"> </li> 
+       </ul> 
+      </div> 
+      <ul class="command-aliases"> 
+       <li>prune</li> 
+      </ul> 
+      <p>Delete messages in the guild in bulk.</p> 
+     </div> 
+    </div> 
+    <div class="module-info" id="info-Miscellaneous-Utilities"> 
+     <div class="module-nav"> 
+      <ul> 
+       <li><a href="#Character-Counter">Character Counter</a></li> 
+       <li><a href="#Number-as-Written">Number as Written</a></li> 
+      </ul> 
+     </div> 
+     <h1>Miscellaneous Utilities</h1> 
+     <ul class="module-aliases"> 
+      <li>util</li> 
+      <li>math</li> 
+     </ul> 
+     <p>Math commands and fun stuff.</p> 
+     <div class="command-info"> 
+      <div class="command-title"> 
+       <h3 id="Character-Counter">Character Counter</h3> 
+       <ul class="command-validators"> 
+       </ul> 
+      </div> 
+      <ul class="command-aliases"> 
+       <li>count</li> 
+      </ul> 
+      <p>Cound the number of characters sent.</p> 
+     </div> 
+     <div class="command-info"> 
+      <div class="command-title"> 
+       <h3 id="Number-as-Written">Number as Written</h3> 
+       <ul class="command-validators"> 
+       </ul> 
+      </div> 
+      <ul class="command-aliases"> 
+       <li>convert</li> 
+      </ul> 
+      <p>Convert a number to it's written equivelent.</p> 
+     </div> 
+    </div> 
+    <div class="module-info" id="info-Music-Player"> 
+     <div class="module-nav"> 
+      <ul> 
+      </ul> 
+     </div> 
+     <h1>Music Player</h1> 
+     <ul class="module-aliases"> 
+      <li>music</li> 
+      <li>m</li> 
+     </ul> 
+     <p>Music player to listen to music to your hearts content in guilds!</p> 
+    </div> 
+    <div class="module-info" id="info-My-Anime-List"> 
+     <div class="module-nav"> 
+      <ul> 
+       <li><a href="#Get-Anime">Get Anime</a></li> 
+      </ul> 
+     </div> 
+     <h1>My Anime List</h1> 
+     <ul class="module-aliases"> 
+      <li>myanimelist</li> 
+      <li>mal</li> 
+      <li>anime</li> 
+     </ul> 
+     <p>Search through MyAnimeList for animes and managas.</p> 
+     <div class="command-info"> 
+      <div class="command-title"> 
+       <h3 id="Get-Anime">Get Anime</h3> 
+       <ul class="command-validators"> 
+       </ul> 
+      </div> 
+      <ul class="command-aliases"> 
+       <li>anime</li> 
+      </ul> 
+      <p>Get information on an anime.</p> 
+     </div> 
+    </div> 
+    <div class="module-info" id="info-osu!"> 
+     <div class="module-nav"> 
+      <ul> 
+       <li><a href="#Player-Stats">Player Stats</a></li> 
+      </ul> 
+     </div> 
+     <h1>osu!</h1> 
+     <ul class="module-aliases"> 
+      <li>osu</li> 
+     </ul> 
+     <p>Integration with osu!, the popular rhythem game.</p> 
+     <div class="command-info"> 
+      <div class="command-title"> 
+       <h3 id="Player-Stats">Player Stats</h3> 
+       <ul class="command-validators"> 
+       </ul> 
+      </div> 
+      <ul class="command-aliases"> 
+       <li>get</li> 
+      </ul> 
+      <p>Get stats on osu! players.</p> 
+     </div> 
+    </div> 
+    <div class="module-info" id="info-Prefix-Configuration"> 
+     <div class="module-nav"> 
+      <ul> 
+       <li><a href="#Set-Prefix">Set Prefix</a></li> 
+       <li><a href="#Mention-Only">Mention Only</a></li> 
+      </ul> 
+     </div> 
+     <h1>Prefix Configuration</h1> 
+     <ul class="module-aliases"> 
+      <li>prefix</li> 
+     </ul> 
+     <p>Configure your prefix or for big guilds set Alexis for mention only!</p> 
+     <div class="command-info"> 
+      <div class="command-title"> 
+       <h3 id="Set-Prefix">Set Prefix</h3> 
+       <ul class="command-validators"> 
+        <li class="tooltip"> <span class="tooltiptext">This commands can only be performed in the following channels: `Guild Text Channels`.</span> <img src="./resources/commands/scope.svg" alt="Scope" height="24" width="24"> </li> 
+        <li class="tooltip"> <span class="tooltiptext">This module required the database, should it ever go this may be disbaled until that it resolved.</span> <img src="./resources/commands/database.svg" alt="Database" height="24" width="24"> </li> 
+        <li class="tooltip"> <span class="tooltiptext">This commands requires the user have the Manage Server permission to perform this commands.</span> <img src="./resources/commands/elevated.svg" alt="Elevated" height="24" width="24"> </li> 
+       </ul> 
+      </div> 
+      <ul class="command-aliases"> 
+       <li>set</li> 
+       <li>prefix</li> 
+      </ul> 
+      <p>Change the prefix of the bot for this guild only.</p> 
+     </div> 
+     <div class="command-info"> 
+      <div class="command-title"> 
+       <h3 id="Mention-Only">Mention Only</h3> 
+       <ul class="command-validators"> 
+        <li class="tooltip"> <span class="tooltiptext">This module required the database, should it ever go this may be disbaled until that it resolved.</span> <img src="./resources/commands/database.svg" alt="Database" height="24" width="24"> </li> 
+        <li class="tooltip"> <span class="tooltiptext">This commands can only be performed in the following channels: `Guild Text Channels`.</span> <img src="./resources/commands/scope.svg" alt="Scope" height="24" width="24"> </li> 
+        <li class="tooltip"> <span class="tooltiptext">This commands requires the user have the Manage Server permission to perform this commands.</span> <img src="./resources/commands/elevated.svg" alt="Elevated" height="24" width="24"> </li> 
+       </ul> 
+      </div> 
+      <ul class="command-aliases"> 
+       <li>mention</li> 
+       <li>mentiononly</li> 
+      </ul> 
+      <p>Only trigger Alexis on mention with no other prefix.</p> 
+     </div> 
+    </div> 
+    <div class="module-info" id="info-RuneScape"> 
+     <div class="module-nav"> 
+      <ul> 
+       <li><a href="#Player-Quest-Log">Player Quest Log</a></li> 
+       <li><a href="#Status">Status</a></li> 
+       <li><a href="#Player-Stats">Player Stats</a></li> 
+      </ul> 
+     </div> 
+     <h1>RuneScape</h1> 
+     <ul class="module-aliases"> 
+      <li>runescape</li> 
+      <li>rs</li> 
+     </ul> 
+     <p>Integration with the popular MMORPG, RuneScape!</p> 
+     <div class="command-info"> 
+      <div class="command-title"> 
+       <h3 id="Player-Quest-Log">Player Quest Log</h3> 
+       <ul class="command-validators"> 
+       </ul> 
+      </div> 
+      <ul class="command-aliases"> 
+       <li>quests</li> 
+       <li>quest</li> 
+       <li>q</li> 
+      </ul> 
+      <p>Get status of all quests for a user.</p> 
+     </div> 
+     <div class="command-info"> 
+      <div class="command-title"> 
+       <h3 id="Status">Status</h3> 
+       <ul class="command-validators"> 
+       </ul> 
+      </div> 
+      <ul class="command-aliases"> 
+       <li>status</li> 
+      </ul> 
+      <p>The total number of created accounts.</p> 
+     </div> 
+     <div class="command-info"> 
+      <div class="command-title"> 
+       <h3 id="Player-Stats">Player Stats</h3> 
+       <ul class="command-validators"> 
+       </ul> 
+      </div> 
+      <ul class="command-aliases"> 
+       <li>stats</li> 
+      </ul> 
+      <p>Get stats for a particular user.</p> 
+     </div> 
+    </div> 
+    <div class="module-info" id="info-Steam"> 
+     <div class="module-nav"> 
+      <ul> 
+       <li><a href="#Steam-Library">Steam Library</a></li> 
+       <li><a href="#Steam-Profile">Steam Profile</a></li> 
+       <li><a href="#Game-Roulette">Game Roulette</a></li> 
+      </ul> 
+     </div> 
+     <h1>Steam</h1> 
+     <ul class="module-aliases"> 
+      <li>steam</li> 
+     </ul> 
+     <p>Integration with the popular DRM, Steam!</p> 
+     <div class="command-info"> 
+      <div class="command-title"> 
+       <h3 id="Steam-Library">Steam Library</h3> 
+       <ul class="command-validators"> 
+       </ul> 
+      </div> 
+      <ul class="command-aliases"> 
+       <li>lib</li> 
+       <li>library</li> 
+      </ul> 
+      <p>Get a players library orderd by recent playtime, then playtime!</p> 
+     </div> 
+     <div class="command-info"> 
+      <div class="command-title"> 
+       <h3 id="Steam-Profile">Steam Profile</h3> 
+       <ul class="command-validators"> 
+       </ul> 
+      </div> 
+      <ul class="command-aliases"> 
+       <li>get</li> 
+       <li>user</li> 
+       <li>profile</li> 
+      </ul> 
+      <p>Get information on a Steam user!</p> 
+     </div> 
+     <div class="command-info"> 
+      <div class="command-title"> 
+       <h3 id="Game-Roulette">Game Roulette</h3> 
+       <ul class="command-validators"> 
+       </ul> 
+      </div> 
+      <ul class="command-aliases"> 
+       <li>random</li> 
+       <li>rand</li> 
+       <li>game</li> 
+       <li>r</li> 
+      </ul> 
+      <p>Select a random game from the players library!</p> 
+     </div> 
+    </div> 
+    <div class="module-info" id="info-Twitch"> 
+     <div class="module-nav"> 
+      <ul> 
+       <li><a href="#Streamer-Info">Streamer Info</a></li> 
+      </ul> 
+     </div> 
+     <h1>Twitch</h1> 
+     <ul class="module-aliases"> 
+      <li>twitch</li> 
+     </ul> 
+     <p>Get information on various streamers!</p> 
+     <div class="command-info"> 
+      <div class="command-title"> 
+       <h3 id="Streamer-Info">Streamer Info</h3> 
+       <ul class="command-validators"> 
+       </ul> 
+      </div> 
+      <ul class="command-aliases"> 
+       <li>get</li> 
+       <li>info</li> 
+      </ul> 
+      <p>Get information on streamers.</p> 
+     </div> 
+    </div> 
+    <div class="module-info" id="info-UrbanDictionary"> 
+     <div class="module-nav"> 
+      <ul> 
+       <li><a href="#Get-Associated-Tags">Get Associated Tags</a></li> 
+       <li><a href="#Define">Define</a></li> 
+      </ul> 
+     </div> 
+     <h1>UrbanDictionary</h1> 
+     <ul class="module-aliases"> 
+      <li>urbandictionary</li> 
+      <li>urbandict</li> 
+      <li>urban</li> 
+      <li>ud</li> 
+     </ul> 
+     <p>An online dictionary defined by the community for definitions and examples.</p> 
+     <div class="command-info"> 
+      <div class="command-title"> 
+       <h3 id="Get-Associated-Tags">Get Associated Tags</h3> 
+       <ul class="command-validators"> 
+       </ul> 
+      </div> 
+      <ul class="command-aliases"> 
+       <li>tags</li> 
+      </ul> 
+      <p>Return the tags associated with a word.</p> 
+     </div> 
+     <div class="command-info"> 
+      <div class="command-title"> 
+       <h3 id="Define">Define</h3> 
+       <ul class="command-validators"> 
+       </ul> 
+      </div> 
+      <ul class="command-aliases"> 
+       <li>define</li> 
+      </ul> 
+      <p>Return the definition of a word or phrase.</p> 
+     </div> 
+    </div> 
+    <div class="module-info" id="info-User"> 
+     <div class="module-nav"> 
+      <ul> 
+       <li><a href="#User-Info">User Info</a></li> 
+      </ul> 
+     </div> 
+     <h1>User</h1> 
+     <ul class="module-aliases"> 
+      <li>user</li> 
+     </ul> 
+     <p>Get information or stats on global users! Try 'members' for guild specific commands.</p> 
+     <div class="command-info"> 
+      <div class="command-title"> 
+       <h3 id="User-Info">User Info</h3> 
+       <ul class="command-validators"> 
+        <li class="tooltip"> <span class="tooltiptext">This commands can only be performed in the following channels: `Guild Text Channels`.</span> <img src="./resources/commands/scope.svg" alt="Scope" height="24" width="24"> </li> 
+       </ul> 
+      </div> 
+      <ul class="command-aliases"> 
+       <li>info</li> 
+      </ul> 
+      <p>Get some basic information on the user!</p> 
+     </div> 
+    </div> 
+    <div class="module-info" id="info-Guild-Voice-Channels"> 
+     <div class="module-nav"> 
+      <ul> 
+       <li><a href="#Mention-Members-in-VC">Mention Members in VC</a></li> 
+      </ul> 
+     </div> 
+     <h1>Guild Voice Channels</h1> 
+     <ul class="module-aliases"> 
+      <li>voice</li> 
+      <li>vc</li> 
+     </ul> 
+     <p>Convenience commands for to perform actions against voicechannels.</p> 
+     <div class="command-info"> 
+      <div class="command-title"> 
+       <h3 id="Mention-Members-in-VC">Mention Members in VC</h3> 
+       <ul class="command-validators"> 
+        <li class="tooltip"> <span class="tooltiptext">This commands can only be performed in the following channels: `Guild Text Channels`.</span> <img src="./resources/commands/scope.svg" alt="Scope" height="24" width="24"> </li> 
+       </ul> 
+      </div> 
+      <ul class="command-aliases"> 
+       <li>mention</li> 
+       <li>at</li> 
+      </ul> 
+      <p>Mention all the users in a voice channel.</p> 
+     </div> 
+    </div> 
+    <div class="module-info" id="info-YouTube"> 
+     <div class="module-nav"> 
+      <ul> 
+       <li><a href="#Search-YouTube">Search YouTube</a></li> 
+      </ul> 
+     </div> 
+     <h1>YouTube</h1> 
+     <ul class="module-aliases"> 
+      <li>youtube</li> 
+      <li>yt</li> 
+     </ul> 
+     <p>Commands related to YouTube.</p> 
+     <div class="command-info"> 
+      <div class="command-title"> 
+       <h3 id="Search-YouTube">Search YouTube</h3> 
+       <ul class="command-validators"> 
+       </ul> 
+      </div> 
+      <ul class="command-aliases"> 
+       <li>get</li> 
+      </ul> 
+      <p>Search for a video.</p> 
+     </div> 
+    </div> 
+   </div> 
+  </main>  
+ </body>
+</html>

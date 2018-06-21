@@ -1,10 +1,10 @@
 package com.elypia.alexis.handlers.modules;
 
 import com.elypia.alexis.utils.BotUtils;
-import com.elypia.commandler.CommandHandler;
 import com.elypia.commandler.annotations.*;
 import com.elypia.commandler.annotations.validation.command.Scope;
 import com.elypia.commandler.events.MessageEvent;
+import com.elypia.commandler.modules.CommandHandler;
 import com.elypia.elypiai.utils.Markdown;
 import net.dv8tion.jda.core.*;
 import net.dv8tion.jda.core.entities.*;
@@ -13,11 +13,7 @@ import java.time.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
-@Module(
-    name = "Bot Module",
-	aliases = {"bot", "robot"},
-	description = "Bot commands for stats or information."
-)
+@Module(name = "Bot Module", aliases = {"bot", "robot"}, description = "Bot commands for stats or information.")
 public class BotHandler extends CommandHandler {
 
 	private final OffsetDateTime BOT_TIME;
@@ -32,13 +28,13 @@ public class BotHandler extends CommandHandler {
 	}
 
 	@Static
-	@Command(aliases = "ping", help = "Respond 'pong!' with the number of `ms` it took to fulfil the request!")
+	@Command(name = "Ping!", aliases = "ping", help = "Respond 'pong!' with the number of `ms` it took to fulfil the request!")
 	public void ping(MessageEvent event) {
 		pingPong(event, "pong!");
 	}
 
 	@Static
-	@Command(aliases = "pong")
+	@Command(name = "Pong!", aliases = "pong")
 	public void pong(MessageEvent event) {
 		pingPong(event, "ping!");
 	}
@@ -52,7 +48,7 @@ public class BotHandler extends CommandHandler {
 		});
 	}
 
-	@Command(aliases = {"stats", "info"}, help = "Display stats on Alexis!")
+	@Command(name = "Bot Statistics", aliases = {"stats", "info"}, help = "Display stats on Alexis!")
 	public EmbedBuilder displayStats(MessageEvent event) {
 		JDA jda = event.getMessageEvent().getJDA();
 		User alexis = jda.getSelfUser();
@@ -86,7 +82,7 @@ public class BotHandler extends CommandHandler {
 	}
 
 	@Static
-	@Command(aliases = "say", help = "Have Alexis repeat something you say!")
+	@Command(name = "Say", aliases = "say", help = "Have Alexis repeat something you say!")
 	@Param(name = "body", help = "Text Alexis should repeat!")
 	public String say(MessageEvent event, String body) {
 		event.tryDeleteMessage();
@@ -94,8 +90,8 @@ public class BotHandler extends CommandHandler {
 	}
 
 	@Static
-	@Command(aliases = "invites", help = "Get invites for all the bots in here!")
 	@Scope(ChannelType.TEXT)
+	@Command(name = "Bot Invites", aliases = "invites", help = "Get invites for all the bots in here!")
 	public EmbedBuilder invites(MessageEvent event) {
 		Guild guild = event.getMessageEvent().getGuild();
 		Collection<Member> bots = guild.getMembers();

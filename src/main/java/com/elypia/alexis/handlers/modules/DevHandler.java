@@ -2,9 +2,9 @@ package com.elypia.alexis.handlers.modules;
 
 import com.elypia.alexis.commandler.annotations.validation.command.Developer;
 import com.elypia.alexis.utils.ExitCode;
-import com.elypia.commandler.CommandHandler;
 import com.elypia.commandler.annotations.*;
 import com.elypia.commandler.events.MessageEvent;
+import com.elypia.commandler.modules.CommandHandler;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.entities.Icon;
 
@@ -16,10 +16,10 @@ import java.util.logging.Level;
 import static com.elypia.alexis.utils.BotUtils.log;
 
 @Developer
-@Module(name = "Developer Only Commands", aliases = "dev", description = "Only the developer(s) can perform these.")
+@Module(name = "Developer Only Commands", aliases = "dev")
 public class DevHandler extends CommandHandler {
 
-    @Command(aliases = "name", help = "Change the global name of the chatbot.")
+    @Command(name = "Update Global Name", aliases = "name", help = "Change the global name of the chatbot.")
     @Param(name = "input", help = "The new name to set the chatbot too.")
     public void name(MessageEvent event, String input) {
         event.getMessageEvent().getJDA().getSelfUser().getManager().setName(input).queue(o -> {
@@ -27,7 +27,7 @@ public class DevHandler extends CommandHandler {
         });
     }
 
-    @Command(aliases = "avatar", help = "Change the avatar of the chatbot.")
+    @Command(name = "Update Avatar", aliases = {"avatar", "pp"}, help = "Change the avatar of the chatbot.")
     @Param(name = "url", help = "Location for the new avatar for the chatbot.")
     public void avatar(MessageEvent event, URL url) throws IOException {
         try (InputStream stream = url.openStream()) {
@@ -39,7 +39,7 @@ public class DevHandler extends CommandHandler {
         }
     }
 
-    @Command(aliases = "shutdown", help = "Shutdown Alexis peacefully.")
+    @Command(name = "Shutdown", aliases = "shutdown", help = "Shutdown Alexis peacefully.")
     public void shutdown(MessageEvent event) {
         JDA jda = event.getMessageEvent().getJDA();
         jda.removeEventListener(jda.getRegisteredListeners());
@@ -50,7 +50,7 @@ public class DevHandler extends CommandHandler {
         System.exit(code.getStatusCode());
     }
 
-    @Command(aliases = "guilds", help = "List all the guilds the chatbot is in.")
+    @Command(name = "List all Guilds", aliases = "guilds", help = "List all the guilds the chatbot is in.")
     public String getGuilds(MessageEvent event) {
         StringJoiner joiner = new StringJoiner("\n");
         event.getMessageEvent().getJDA().getGuilds().forEach(o -> joiner.add(o.getName()));

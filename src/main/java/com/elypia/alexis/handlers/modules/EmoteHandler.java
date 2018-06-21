@@ -1,9 +1,9 @@
 package com.elypia.alexis.handlers.modules;
 
-import com.elypia.commandler.CommandHandler;
 import com.elypia.commandler.annotations.*;
 import com.elypia.commandler.annotations.validation.command.Scope;
 import com.elypia.commandler.events.MessageEvent;
+import com.elypia.commandler.modules.CommandHandler;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.*;
 
@@ -16,14 +16,14 @@ import java.util.List;
 )
 public class EmoteHandler extends CommandHandler {
 
-    @CommandGroup("list")
-    @Command(aliases = "list", help = "List all of the custom emotes in this guild.")
+    @Overload("list")
+    @Command(name = "List all Emotes", aliases = "list", help = "List all of the custom emotes in this guild.")
     @Scope(ChannelType.TEXT)
     public void listEmotes(MessageEvent event) {
         listEmotes(event, event.getMessageEvent().getGuild());
     }
 
-    @CommandGroup("list")
+    @Overload("list")
     @Param(name = "guild", help = "The guild to get emotes from.")
     @Scope(ChannelType.PRIVATE)
     public String listEmotes(MessageEvent event, Guild guild) {
@@ -46,8 +46,8 @@ public class EmoteHandler extends CommandHandler {
         return builder.toString();
     }
 
-    @CommandGroup("post")
-    @Command(aliases = {"get", "post"}, help = "Post an emote in the chat!")
+    @Overload("post")
+    @Command(name = "Display Emote", aliases = {"get", "post"}, help = "Post an emote in the chat!")
     @Param(name = "emote", help = "A way to identify the emote you want to post.")
     public EmbedBuilder post(MessageEvent event, Emote emote) {
         EmbedBuilder builder = new EmbedBuilder();

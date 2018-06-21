@@ -10,17 +10,20 @@ import org.json.JSONArray;
 public class DeveloperValidator implements ICommandValidator<Developer> {
 
     @Override
-    public void validate(MessageEvent event, Developer annotation) throws IllegalAccessException {
-        User user = event.getMessageEvent().getAuthor();
+    public boolean validate(MessageEvent event, Developer annotation) {
+        User user = event.getMessage().getAuthor();
         JSONArray array = Config.getConfig("discord").getJSONArray("developers");
-        boolean developer = false;
 
         for (int i = 0; i < array.length(); i++) {
             if (array.getJSONObject(i).getLong("discord_id") == user.getIdLong())
-                developer = true;
+                return true;
         }
 
-        if (!developer)
-            throw new IllegalAccessException("Only the developers of the bot are allowed to perform this command.");
+        return event.invalidate("Only the developers of the bot are allowed to perform this command.");
+    }
+
+    @Override
+    public String help(Developer annotation) {
+        return "Only the developers of the bot can perform this command.";
     }
 }

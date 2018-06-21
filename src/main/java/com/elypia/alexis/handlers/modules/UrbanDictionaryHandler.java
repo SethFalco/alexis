@@ -1,20 +1,16 @@
 package com.elypia.alexis.handlers.modules;
 
 import com.elypia.alexis.utils.BotUtils;
-import com.elypia.commandler.CommandHandler;
 import com.elypia.commandler.annotations.*;
 import com.elypia.commandler.events.MessageEvent;
+import com.elypia.commandler.modules.CommandHandler;
 import com.elypia.elypiai.urbandictionary.*;
 import com.elypia.elypiai.urbandictionary.data.UrbanResultType;
 import net.dv8tion.jda.core.EmbedBuilder;
 
 import java.util.concurrent.*;
 
-@Module(
-	name = "UrbanDictionary",
-	aliases = {"urbandictionary", "urbandict", "urban", "ud"},
-	description = "An online dictionary defined by the community for definitions and examples."
-)
+@Module(name = "UrbanDictionary", aliases = {"urbandictionary", "urbandict", "urban", "ud"}, description = "An online dictionary defined by the community for definitions and examples.")
 public class UrbanDictionaryHandler extends CommandHandler {
 
 	private UrbanDictionary dict;
@@ -24,8 +20,8 @@ public class UrbanDictionaryHandler extends CommandHandler {
 	}
 
 	@Static
-	@CommandGroup("define")
-	@Command(aliases = "define", help = "Return the definition of a word or phrase.")
+	@Overload("define")
+	@Command(name = "Define", aliases = "define", help = "Return the definition of a word or phrase.")
 	@Param(name = "body", help = "Word or phrase to define!")
 	@Reaction(alias = "🔉", help = "Hear an audio clip associtated with this word.")
 	@Reaction(alias = "🎲", help = "Don't like definition? Get a new one!")
@@ -59,7 +55,7 @@ public class UrbanDictionaryHandler extends CommandHandler {
 		event.reply(builder);
 	}
 
-	@CommandGroup("define")
+	@Overload("define")
 	@Param(name = "body", help = "Word or phrase to define!")
 	@Param(name = "random", help = "Random result or top result!")
 	@Reaction(alias = "🔉", help = "Hear an audio clip associtated with this word.")
@@ -93,7 +89,7 @@ public class UrbanDictionaryHandler extends CommandHandler {
 		}, failure -> BotUtils.sendHttpError(event, failure));
 	}
 
-	@Command(aliases = "tags", help = "Return the tags associated with a word.")
+	@Command(name = "Get Associated Tags", aliases = "tags", help = "Return the tags associated with a word.")
 	@Param(name = "body", help = "Word or phrase to define!")
 	public void tags(MessageEvent event, String body) {
 		dict.define(body, results -> {

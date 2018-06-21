@@ -1,18 +1,14 @@
 package com.elypia.alexis.handlers.modules;
 
-import com.elypia.commandler.CommandHandler;
 import com.elypia.commandler.annotations.*;
+import com.elypia.commandler.modules.CommandHandler;
 import com.elypia.elypiai.utils.math.MathUtils;
 import net.dv8tion.jda.core.EmbedBuilder;
 
-@Module(
-	name = "Miscellaneous Utilities",
-	aliases = {"util", "math"},
-	description = "Math commands and fun stuff."
-)
+@Module(name = "Miscellaneous Utilities", aliases = {"util", "math"}, description = "Math commands and fun stuff.")
 public class UtilHandler extends CommandHandler {
 
-	@Command(aliases = {"convert"}, help = "Convert a number to it's written equivelent.")
+	@Command(name = "Number as Written", aliases = {"convert"}, help = "Convert a number to it's written equivelent.")
 	@Param(name = "value", help = "The number to convert to the written form.")
 	public EmbedBuilder asWritten(long values[]) {
 		EmbedBuilder builder = new EmbedBuilder();
@@ -36,7 +32,7 @@ public class UtilHandler extends CommandHandler {
 	}
 
 	@Static
-	@Command(aliases = "count", help = "Cound the number of characters sent.")
+	@Command(name = "Character Counter", aliases = "count", help = "Cound the number of characters sent.")
 	@Param(name = "text", help = "The text to count from.")
 	public String count(String input) {
 		return String.format("There are %,d characters in the input text.", input.length());
