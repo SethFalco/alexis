@@ -3,6 +3,7 @@ package com.elypia.alexis.handlers.modules;
 import com.elypia.alexis.commandler.annotations.validation.command.Database;
 import com.elypia.alexis.utils.BotUtils;
 import com.elypia.commandler.annotations.*;
+import com.elypia.commandler.annotations.validation.command.Secret;
 import com.elypia.commandler.events.MessageEvent;
 import com.elypia.commandler.modules.CommandHandler;
 import com.elypia.elypiai.nanowrimo.Nanowrimo;
@@ -20,14 +21,13 @@ public class NanowrimoHandler extends CommandHandler {
 		nanowrimo = new Nanowrimo();
 	}
 
+	@Secret
 	@Database
 	@Command(name = "Authenticate to NaNoWriMo", aliases = {"authenticate", "auth"}, help = "Auth to your NaNoWriMo account.")
 	@Param(name = "name", help = "Your NaNoWriMo username.")
 	@Param(name = "secret", help = "Your NaNoWriMo secret at: https://nanowrimo.org/api/wordcount")
 	@Param(name = "wordcount", help = "Your total word count to submit.")
 	public void authenticate(MessageEvent event, String name, String secret, int wordcount) {
-
-
 		nanowrimo.updateWordCount(secret, name, wordcount, result -> {
 			switch (result) {
 				case ERROR_NO_ACTIVE_EVENT:
