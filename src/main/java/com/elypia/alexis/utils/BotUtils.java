@@ -7,6 +7,7 @@ import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.guild.GenericGuildEvent;
 import net.dv8tion.jda.core.events.guild.member.GenericGuildMemberEvent;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -54,7 +55,7 @@ public final class BotUtils {
 
 	public static boolean isDatabaseAlive() {
 		boolean config = Config.getConfig("database").getBoolean("enabled");
-		long dev = Config.getConfig("discord").getJSONArray("developers").getJSONObject(0).getLong("discord_id");
+		long dev = Config.getConfig("discord").getJSONArray("authors").getJSONObject(0).getLong("id");
 
 		try {
 			UserData data = UserData.query(dev);
@@ -76,20 +77,25 @@ public final class BotUtils {
 	}
 
 	public static void log(Level level, String message, Object... args) {
-	    String msg = String.format(message, args);
-		LOGGER.log(level, msg, args);
+	    message = String.format(message, args);
+		LOGGER.log(level, message);
 
-		String color = "+";
+		String color = (level == Level.SEVERE || level == Level.WARNING) ? "-" : "+";
 
-		if (level == Level.SEVERE || level == Level.WARNING)
-			color = "-";
+		message = "```diff\n" + level.getName() + ": " + message + "```";
+		message = message.replace("\n", "\n" + color + " ");
 
-		msg = "```diff\n" + msg + "```";
-		msg = msg.replace("\n", "\n" + color + " ");
+		JSONObject discord = Config.getConfig("discord");
+		long channelId = discord.getLong("log_channel");
+		MessageChannel channel = Alexis.getChatbot().getJDA().getTextChannelById(channelId);
 
-		long id = Config.getConfig("discord").getLong("log_channel");
-		MessageChannel channel = Alexis.getChatbot().getJDA().getTextChannelById(id);
-		channel.sendMessage(msg).queue();
+		if (level == Level.SEVERE) {
+			long userId = discord.getJSONArray("authors").getJSONObject(0).getLong("id");
+			User user = Alexis.getChatbot().getJDA().getUserById(userId);
+			channel.sendMessage(user.getAsMention() + "\n" + message).queue();
+		} else {
+			channel.sendMessage(message).queue();
+		}
 	}
 
 	public static void logBotInfo() {

@@ -15,7 +15,7 @@ public class DeveloperValidator implements ICommandValidator<Developer> {
         JSONArray array = Config.getConfig("discord").getJSONArray("developers");
 
         for (int i = 0; i < array.length(); i++) {
-            if (array.getJSONObject(i).getLong("discord_id") == user.getIdLong())
+            if (array.getJSONObject(i).getLong("id") == user.getIdLong())
                 return true;
         }
 

@@ -17,7 +17,6 @@ import net.dv8tion.jda.core.hooks.ListenerAdapter;
 import org.mongodb.morphia.*;
 import org.mongodb.morphia.query.*;
 
-import java.util.*;
 import java.util.logging.Level;
 
 public class EventHandler extends ListenerAdapter {
@@ -27,16 +26,11 @@ public class EventHandler extends ListenerAdapter {
     private Morphia morphia;
 	private Datastore store;
 
-	private InsertOptions insertOption;
-
 	public EventHandler(Chatbot chatbot) {
 		this.chatbot = chatbot;
 		this.client = chatbot.getDatabase();
 		this.morphia = chatbot.getMorphia();
 		this.store = chatbot.getDatastore();
-
-		insertOption = new InsertOptions();
-		insertOption.continueOnError(true);
 	}
 
 	/**
@@ -51,26 +45,6 @@ public class EventHandler extends ListenerAdapter {
 		BotUtils.log(Level.INFO, "Time taken to launch: %,dms", timeElapsed);
 
 		event.getJDA().getPresence().setStatus(OnlineStatus.ONLINE);
-
-		Collection<GuildData> guildData = new ArrayList<>();
-
-		event.getJDA().getGuilds().forEach(guild -> {
-			GuildData data = new GuildData();
-			data.setGuildId(guild.getIdLong());
-			guildData.add(data);
-		});
-
-		store.save(guildData, insertOption);
-
-		Collection<UserData> userData = new ArrayList<>();
-
-		event.getJDA().getUsers().forEach(user -> {
-			UserData data = new UserData();
-			data.setUserId(user.getIdLong());
-			userData.add(data);
-		});
-
-		store.save(userData, insertOption);
 	}
 
 	/**
@@ -95,7 +69,7 @@ public class EventHandler extends ListenerAdapter {
 
 		GuildData data = new GuildData();
 		data.setGuildId(guild.getIdLong());
-		store.save(data, insertOption);
+		store.save(data);
 	}
 
 	@Override

@@ -47,10 +47,16 @@ public class AmazonHandler extends CommandHandler {
         }
     }
 
+    @Default
     @Command(name = "Search for a Product", aliases = {"search", "get"}, help = "Search Amazon for a product and share it.")
     @Param(name = "query", help = "Name of the product you're after.")
     public void getItem(MessageEvent event, String query) {
         amazon.getItems(query, result -> {
+            if (result.isEmpty()) {
+                event.reply("Sorry, Amazon returned no results. :c");
+                return;
+            }
+
             AmazonItem item = result.get(0);
 
             EmbedBuilder builder = new EmbedBuilder();
@@ -58,7 +64,7 @@ public class AmazonHandler extends CommandHandler {
             builder.setThumbnail(item.getImage());
             builder.setDescription(item.getUrl());
             builder.addField("Price", item.getPriceString(), false);
-            builder.setFooter(String.format("This is for %s", item.getAmazon().getEndpoint().getShoppingUrl()), null);
+            builder.setFooter("We get income from purchased under out Amazon links! ^-^", null);
 
             event.reply(builder);
         }, failure -> BotUtils.sendHttpError(event, failure));
