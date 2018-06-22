@@ -48,7 +48,7 @@ public class Chatbot {
 			builder.setFavicon("./resources/favicon.ico");
 			builder.setDescription("Alexis is a multi purpose bot for Discord!");
 
-			builder.build(new File("." + File.separator + "pages" + File.separator));
+			builder.build("." + File.separator + "pages" + File.separator);
 		}
 	}
 

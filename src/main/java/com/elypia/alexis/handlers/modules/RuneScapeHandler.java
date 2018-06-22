@@ -20,11 +20,6 @@ public class RuneScapeHandler extends CommandHandler {
 		runescape = new RuneScape();
 	}
 
-	@Override
-	public boolean test() {
-		return false;
-	}
-
 	@Command(name = "Status", aliases = "status", help = "The total number of created accounts.")
 	public void displayStatus(MessageEvent event) {
 

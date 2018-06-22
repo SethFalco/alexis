@@ -31,21 +31,4 @@ public class YouTubeHandler extends CommandHandler {
             event.reply(builder);
         }, failure -> BotUtils.sendHttpError(event, failure));
     }
-
-    @Overload("get")
-    @Param(name = "query", help = "Search term for the video you want.")
-    @Param(name = "count", help = "How many search results to display.")
-    public void getVideos(MessageEvent event, String query, int count) {
-        EmbedBuilder builder = new EmbedBuilder();
-
-        youtube.getVideos(query, count,  result -> {
-            YouTubeItem first = result.get(0);
-
-            builder.setThumbnail(first.getHighThumbnail());
-            for (int i = 1; i < result.size(); i++) {
-                YouTubeItem item = result.get(i);
-
-            }
-        }, failure -> BotUtils.sendHttpError(event, failure));
-    }
 }

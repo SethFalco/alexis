@@ -13,7 +13,7 @@ import org.mongodb.morphia.*;
 import org.mongodb.morphia.query.*;
 
 @Database
-@Module(name = "Module", aliases = {"cleverbot", "cb"}, description = "Come talk to cleverbot.")
+@Module(name = "CleverBot", aliases = {"cleverbot", "cb"}, description = "Come talk to cleverbot.")
 public class CleverbotHandler extends CommandHandler {
 
     private Cleverbot cleverbot;

@@ -16,7 +16,7 @@ import java.util.logging.Level;
 import static com.elypia.alexis.utils.BotUtils.log;
 
 @Developer
-@Module(name = "Developer Only Commands", aliases = "dev")
+@Module(name = "Developer Only Commands", aliases = "dev", description = "Developer only commands", hidden = true)
 public class DevHandler extends CommandHandler {
 
     @Command(name = "Update Global Name", aliases = "name", help = "Change the global name of the chatbot.")

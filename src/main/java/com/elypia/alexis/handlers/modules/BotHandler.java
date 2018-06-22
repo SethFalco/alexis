@@ -22,11 +22,6 @@ public class BotHandler extends CommandHandler {
 		BOT_TIME = OffsetDateTime.of(2016, 7, 19, 1, 52, 0, 0, ZoneOffset.ofHours(0));
 	}
 
-	@Override
-	public boolean test() {
-		return false;
-	}
-
 	@Static
 	@Command(name = "Ping!", aliases = "ping", help = "Respond 'pong!' with the number of `ms` it took to fulfil the request!")
 	public void ping(MessageEvent event) {

@@ -9,7 +9,7 @@ public class DatabaseValidator implements ICommandValidator<Database> {
 
     @Override
     public boolean validate(MessageEvent event, Database annotation) {
-        if (BotUtils.isDatabaseAlive())
+        if (!BotUtils.isDatabaseAlive())
             return event.invalidate("Sorry! :c For some reason the database is down so you won't be able to perform this command right now.");
 
         return true;

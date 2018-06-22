@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 
 import static com.elypia.commandler.data.SearchScope.LOCAL;
 
-@Module(name = "Guild Voice Channels", aliases = {"voice", "vc"}, description = "Convenience commands for to perform actions against voicechannels.")
+@Module(name = "Guild Voice Channels", aliases = {"voice", "vc"}, description = "Convenience commands for to perform actions against voice channels.")
 public class VoiceHandler extends CommandHandler {
 
     @Scope(ChannelType.TEXT)
