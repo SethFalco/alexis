@@ -9,11 +9,7 @@ import net.dv8tion.jda.core.entities.*;
 
 import java.util.List;
 
-@Module(
-    name = "Emoticons",
-    aliases = {"emote", "emoji", "emoticon"},
-    description = "Check all the emotes or how much they're being used."
-)
+@Module(name = "Emoticons", aliases = {"emote", "emoji", "emoticon"}, description = "Check all the emotes or how much they're being used.")
 public class EmoteHandler extends CommandHandler {
 
     @Overload("list")

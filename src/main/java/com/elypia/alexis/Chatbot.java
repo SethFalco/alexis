@@ -98,7 +98,7 @@ public class Chatbot {
 		commandler = new Commandler(jda, new AlexisConfiler());
 
 		commandler.registerModules(
-			new AmazonHandler(api.getJSONObject("amazon")),
+			new AmazonHandler(api.getJSONArray("amazon").getJSONObject(0)),
 			new BotHandler(),
 			new BrainfuckHandler(),
 			new CleverbotHandler(api.getString("cleverbot")),

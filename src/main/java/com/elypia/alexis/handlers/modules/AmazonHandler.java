@@ -33,22 +33,8 @@ public class AmazonHandler extends CommandHandler {
         }
     }
 
-    public AmazonHandler(String accessKey, String secret, String id, AmazonEndpoint endpoint) {
-        Objects.requireNonNull(accessKey);
-        Objects.requireNonNull(secret);
-        Objects.requireNonNull(id);
-        Objects.requireNonNull(endpoint);
-
-        try {
-            amazon = new Amazon(accessKey, secret, id, endpoint);
-        } catch (InvalidKeyException ex) {
-            ex.printStackTrace();
-            enabled = false;
-        }
-    }
-
     @Default
-    @Command(name = "Search for a Product", aliases = {"search", "get"}, help = "Search Amazon for a product and share it.")
+    @Command(name = "Search Amazon", aliases = {"search", "get"}, help = "Search Amazon for a product and share it.")
     @Param(name = "query", help = "Name of the product you're after.")
     public void getItem(MessageEvent event, String query) {
         amazon.getItems(query, result -> {
@@ -61,8 +47,8 @@ public class AmazonHandler extends CommandHandler {
 
             EmbedBuilder builder = new EmbedBuilder();
 
+            builder.setTitle(item.getTitle(), item.getUrl());
             builder.setThumbnail(item.getImage());
-            builder.setDescription(item.getUrl());
             builder.addField("Price", item.getPriceString(), false);
             builder.setFooter("We get income from purchased under out Amazon links! ^-^", null);
 

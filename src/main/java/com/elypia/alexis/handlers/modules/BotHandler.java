@@ -3,6 +3,7 @@ package com.elypia.alexis.handlers.modules;
 import com.elypia.alexis.utils.*;
 import com.elypia.commandler.annotations.*;
 import com.elypia.commandler.annotations.validation.command.Scope;
+import com.elypia.commandler.annotations.validation.param.Everyone;
 import com.elypia.commandler.events.MessageEvent;
 import com.elypia.commandler.modules.CommandHandler;
 import com.elypia.elypiai.utils.Markdown;
@@ -101,7 +102,7 @@ public class BotHandler extends CommandHandler {
 	@Static
 	@Command(name = "Say", aliases = "say", help = "Have Alexis repeat something you say!")
 	@Param(name = "body", help = "Text Alexis should repeat!")
-	public String say(MessageEvent event, String body) {
+	public String say(MessageEvent event, @Everyone String body) {
 		event.tryDeleteMessage();
 		return body;
 	}

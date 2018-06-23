@@ -3,7 +3,7 @@ package com.elypia.alexis.handlers.modules;
 import com.elypia.commandler.annotations.*;
 import com.elypia.commandler.events.MessageEvent;
 import com.elypia.commandler.modules.CommandHandler;
-import com.elypia.elypiai.Brainfuck;
+import com.elypia.elypiai.brainfuck.Brainfuck;
 
 @Module(name = "Brainfuck", aliases = {"brainfuck", "bf"}, description = "Compile Brainfuck code into Strings.")
 public class BrainfuckHandler extends CommandHandler {

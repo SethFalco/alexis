@@ -9,11 +9,7 @@ import net.dv8tion.jda.core.entities.*;
 
 import java.util.Collection;
 
-@Module(
-    name = "Guild / Server",
-    aliases = "guild",
-    description = "Guild related commands to perform actions or get info."
-)
+@Module(name = "Guild", aliases = "guild", description = "Guild related commands to perform actions or get info.")
 public class GuildHandler extends CommandHandler {
 
     @Overload("info")
