@@ -23,6 +23,9 @@ public class GuildSettings {
     @Embedded("levels")
     private LevelSettings levelSettings;
 
+    @Embedded("music")
+    private MusicSettings musicSettings;
+
     public String getPrefix() {
         return prefix;
     }
@@ -69,5 +72,13 @@ public class GuildSettings {
 
     public void setLevelSettings(LevelSettings levelSettings) {
         this.levelSettings = levelSettings;
+    }
+
+    public MusicSettings getMusicSettings() {
+        return musicSettings;
+    }
+
+    public void setMusicSettings(MusicSettings musicSettings) {
+        this.musicSettings = musicSettings;
     }
 }

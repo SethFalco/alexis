@@ -1,7 +1,9 @@
 package com.elypia.alexis.handlers.modules;
 
+import com.elypia.alexis.Alexis;
 import com.elypia.alexis.audio.*;
 import com.elypia.alexis.audio.controllers.impl.AudioController;
+import com.elypia.alexis.entities.*;
 import com.elypia.commandler.annotations.*;
 import com.elypia.commandler.annotations.validation.command.*;
 import com.elypia.commandler.annotations.validation.param.Limit;
@@ -15,6 +17,8 @@ import net.dv8tion.jda.core.*;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.message.GenericMessageEvent;
 import net.dv8tion.jda.core.managers.AudioManager;
+import org.mongodb.morphia.*;
+import org.mongodb.morphia.query.*;
 
 import java.time.*;
 import java.util.*;
@@ -170,8 +174,21 @@ public class MusicHandler extends CommandHandler {
 	@Permissions(value = Permission.NICKNAME_CHANGE, userRequiresPermission = false)
 	@Command(name = "Sync Nickname with Track", aliases = {"nickname", "nicksync", "ns"}, help = "Should Alexis append the currently playing track to her nickname?")
     @Param(name = "toggle", help = "True or false, should this be enabled or not?")
-	public void nicknameSync(MessageEvent event, boolean enable) {
-		
+	public String nicknameSync(MessageEvent event, boolean enable) {
+		Datastore store = Alexis.getChatbot().getDatastore();
+
+		UpdateOptions options = new UpdateOptions();
+		options.upsert(true);
+
+		Query<GuildData> query = store.createQuery(GuildData.class);
+		query = query.filter("guild_id", event.getMessageEvent().getGuild().getIdLong());
+
+		UpdateOperations<GuildData> update = store.createUpdateOperations(GuildData.class);
+		update.set("settings.music.nickname_sync", enable);
+
+		store.update(query, update, options);
+
+		return "You've succesfully set the nickname sync setting to " + enable + "!";
 	}
 
 	private boolean beforeAny(MessageEvent event) {
