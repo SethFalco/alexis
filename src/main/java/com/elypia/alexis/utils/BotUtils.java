@@ -1,13 +1,13 @@
 package com.elypia.alexis.utils;
 
 import com.elypia.alexis.Alexis;
+import com.elypia.alexis.config.AlexisConfig;
 import com.elypia.alexis.entities.UserData;
 import com.elypia.commandler.events.MessageEvent;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.guild.GenericGuildEvent;
 import net.dv8tion.jda.core.events.guild.member.GenericGuildMemberEvent;
-import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -54,12 +54,13 @@ public final class BotUtils {
 	}
 
 	public static boolean isDatabaseAlive() {
-		boolean config = Config.getConfig("database").getBoolean("enabled");
-		long dev = Config.getConfig("discord").getJSONArray("authors").getJSONObject(0).getLong("id");
+		AlexisConfig config = Alexis.getConfig();
+		boolean databaseEnabled = config.getDatabaseConfig().isEnabled();
+		long dev = config.getDiscordConfig().getAuthors().get(0).getId();
 
 		try {
 			UserData data = UserData.query(dev);
-			return config && data != null;
+			return databaseEnabled && data != null;
 		} catch (NullPointerException ex) {
 			return false;
 		}
@@ -85,12 +86,11 @@ public final class BotUtils {
 		message = "```diff\n" + level.getName() + ": " + message + "```";
 		message = message.replace("\n", "\n" + color + " ");
 
-		JSONObject discord = Config.getConfig("discord");
-		long channelId = discord.getLong("log_channel");
+		long channelId = Alexis.getConfig().getDiscordConfig().getLogChannel();
 		MessageChannel channel = Alexis.getChatbot().getJDA().getTextChannelById(channelId);
 
 		if (level == Level.SEVERE) {
-			long userId = discord.getJSONArray("authors").getJSONObject(0).getLong("id");
+			long userId = Alexis.getConfig().getDiscordConfig().getAuthors().get(0).getId();
 			User user = Alexis.getChatbot().getJDA().getUserById(userId);
 			channel.sendMessage(user.getAsMention() + "\n" + message).queue();
 		} else {

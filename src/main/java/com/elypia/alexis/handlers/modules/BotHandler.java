@@ -1,6 +1,8 @@
 package com.elypia.alexis.handlers.modules;
 
-import com.elypia.alexis.utils.*;
+import com.elypia.alexis.Alexis;
+import com.elypia.alexis.config.*;
+import com.elypia.alexis.utils.BotUtils;
 import com.elypia.commandler.annotations.*;
 import com.elypia.commandler.annotations.validation.command.Scope;
 import com.elypia.commandler.annotations.validation.param.Everyone;
@@ -9,7 +11,6 @@ import com.elypia.commandler.modules.CommandHandler;
 import com.elypia.elypiai.utils.Markdown;
 import net.dv8tion.jda.core.*;
 import net.dv8tion.jda.core.entities.*;
-import org.json.*;
 
 import java.time.*;
 import java.util.*;
@@ -46,8 +47,10 @@ public class BotHandler extends CommandHandler {
 		});
 	}
 
+	@Default
 	@Command(name = "Bot Stats", aliases = {"stats", "info"}, help = "Get stats, info, and support information for Alexis!")
 	public void displayStats(MessageEvent event) {
+
 		EmbedBuilder builder = new EmbedBuilder();
 		JDA jda = event.getMessageEvent().getJDA();
 		User alexis = jda.getSelfUser();
@@ -56,21 +59,21 @@ public class BotHandler extends CommandHandler {
 		builder.setDescription("Alexis is a multi-purpose chatbot with integration and notifiers for many services including Twitch, osu! and RuneScape. It contains fun, music, and moderation functionality.\n_ _");
 		builder.setThumbnail(alexis.getAvatarUrl());
 
-		JSONArray devs = Config.getConfig("discord").getJSONArray("authors");
+		AlexisConfig config = Alexis.getConfig();
+		List<Author> authors = config.getDiscordConfig().getAuthors();
 		StringJoiner joiner = new StringJoiner("\n");
 
-		for (int i = 0; i < devs.length(); i++) {
-			JSONObject dev = devs.getJSONObject(i);
-			long id = dev.getLong("id");
+		for (Author author : authors) {
+			long id = author.getId();
 			User user = jda.getUserById(id);
 
 			if (user != null)
-				joiner.add(Markdown.a(user.getName(), dev.getString("url")) + " - " + dev.getString("role"));
+				joiner.add(Markdown.a(user.getName(), author.getUrl() + " - " + author.getRole()));
 			else
 				BotUtils.log(Level.WARNING, "The developer for id %d couldn't be found.", id);
 		}
 
-		String title = devs.length() > 1 ? "Authors" : "Author";
+		String title = authors.size() > 1 ? "Authors" : "Author";
 		builder.addField(title, joiner.toString(), true);
 
 		joiner = new StringJoiner("\n");
@@ -91,7 +94,7 @@ public class BotHandler extends CommandHandler {
 		String prefix = commandler.getConfiler().getPrefix(event.getMessageEvent());
 		builder.setFooter("You can support the project through the '" + prefix + "amazon' module!", null);
 
-		Guild guild = jda.getGuildById(Config.getConfig("discord").getLong("support_guild"));
+		Guild guild = jda.getGuildById(config.getDiscordConfig().getSupportGuild());
 		guild.getInvites().queue(invites -> {
 			Optional<Invite> invite = invites.stream().max((one, two) -> one.getUses() > two.getUses() ? 1 : -1);
 			invite.ifPresent(o -> builder.addField("Support Guild", Markdown.a("Elypia", o.getURL()), true));

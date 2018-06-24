@@ -37,7 +37,7 @@ dependencies {
     implementation 'com.sedmelluq:lavaplayer:1.3.5'
     implementation 'com.github.DiscordBotList:DBL-Java-Wrapper:v1.0'
     implementation 'com.elypia:elypiai:1.0.6'
-    implementation 'com.elypia:commandler:1.1.9'
+    implementation 'com.elypia:commandler:1.1.10'
     implementation group: 'org.mongodb', name: 'mongodb-driver', version: '3.7.1'
     implementation 'org.mongodb.morphia:morphia:1.3.2'
 

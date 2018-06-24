@@ -1,6 +1,5 @@
-package com.elypia.alexis.commandler.validators.command;
+package com.elypia.alexis.commandler;
 
-import com.elypia.alexis.commandler.annotations.validation.command.Database;
 import com.elypia.alexis.utils.BotUtils;
 import com.elypia.commandler.events.MessageEvent;
 import com.elypia.commandler.validation.ICommandValidator;
@@ -17,6 +16,6 @@ public class DatabaseValidator implements ICommandValidator<Database> {
 
     @Override
     public String help(Database annotation) {
-        return "This module required the database, should it ever go this may be disbaled until that it resolved.";
+        return "This module requires the database, should it ever go this may be disbaled until that it resolved.";
     }
 }

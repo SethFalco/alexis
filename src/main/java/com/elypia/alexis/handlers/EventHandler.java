@@ -1,9 +1,11 @@
 package com.elypia.alexis.handlers;
 
-import com.elypia.alexis.Chatbot;
+import com.elypia.alexis.*;
 import com.elypia.alexis.entities.*;
 import com.elypia.alexis.entities.embedded.*;
-import com.elypia.alexis.utils.*;
+import com.elypia.alexis.utils.BotUtils;
+import com.elypia.elypiai.google.translate.GoogleTranslate;
+import com.elypia.elypiai.utils.*;
 import com.mongodb.MongoClient;
 import net.dv8tion.jda.core.*;
 import net.dv8tion.jda.core.entities.*;
@@ -14,9 +16,11 @@ import net.dv8tion.jda.core.events.guild.voice.*;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.events.message.react.MessageReactionAddEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.mongodb.morphia.*;
 import org.mongodb.morphia.query.*;
 
+import java.util.*;
 import java.util.logging.Level;
 
 public class EventHandler extends ListenerAdapter {
@@ -59,7 +63,7 @@ public class EventHandler extends ListenerAdapter {
 		TextChannel channel = BotUtils.getWriteableChannel(event);
 
 		if (channel != null) {
-			String prefix = Config.getConfig("discord").getString("prefix");
+			String prefix = Alexis.getConfig().getDiscordConfig().getPrefix();
 			String message = "Thank you for inviting me! My default prefix is `" + prefix + "` but you can mention me too!\nFeel free to try my help command!";
 			channel.sendMessage(message).queue();
 		}
@@ -138,30 +142,59 @@ public class EventHandler extends ListenerAdapter {
 
 	@Override
 	public void onMessageReceived(MessageReceivedEvent event) {
-
+		handleXp(event);
 	}
 
 	private void handleXp(MessageReceivedEvent event) {
 		if (!event.isFromType(ChannelType.TEXT))
 			return;
 
-		if (event.getGuild().getMembers().size() == 2)
+		if (event.getGuild().getMembers().stream().filter(o -> !o.getUser().isBot()).count() == 1)
 			return;
 
 		User user = event.getAuthor();
 		UserData data = UserData.query(user.getIdLong());
 
 		int entitlement = data.getXpEntitlement(event);
+		UpdateOperations<UserData> update = store.createUpdateOperations(UserData.class);
 
-		if (entitlement > 0) {
-			UpdateOperations<UserData> update = store.createUpdateOperations(UserData.class);
+		if (entitlement > 0)
 			update.set("xp", data.getXp() + entitlement);
-			store.update(data, update);
-		}
+
+		update.set("last_active", new Date());
+		store.update(data, update);
 	}
 
 	@Override
 	public void onMessageReactionAdd(MessageReactionAddEvent event) {
+		if (event.getUser().isBot())
+			return;
 
+		handleTranslate(event);
+	}
+
+	GoogleTranslate translate = new GoogleTranslate("***REMOVED***");
+
+	private void handleTranslate(MessageReactionAddEvent event) {
+		List<Language> languages = translate.getSupportedLanguages();
+
+		for (Language language : languages) {
+			for (Country country : language.getCountries()) {
+				if (country.getUnicodeEmote().equals(event.getReactionEmote().getName())) {
+					event.getChannel().getMessageById(event.getMessageId()).queue(message -> {
+						translate.translate(message.getContentStripped(), language, result -> {
+							EmbedBuilder builder = new EmbedBuilder();
+							builder.addField("Source (" + result.getSource().getLanguageName() + ")", result.getBody() + "\n_ _", false);
+							String translatedBody = StringEscapeUtils.unescapeHtml4(result.getTranslatedBody());
+							builder.addField("Target (" + result.getTarget().getLanguageName() + ")", translatedBody, false);
+							builder.setImage("https://cdn.discordapp.com/attachments/436154993247256586/460187735936991233/color-short2x.png");
+							builder.setFooter("http://translate.google.com/", null);
+							event.getChannel().sendMessage(builder.build()).queue();
+							message.addReaction(country.getUnicodeEmote()).queue();
+						}, ex -> BotUtils.sendHttpError(null, ex));
+					});
+				}
+			}
+		}
 	}
 }

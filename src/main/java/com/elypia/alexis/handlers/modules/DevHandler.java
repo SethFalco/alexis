@@ -1,6 +1,5 @@
 package com.elypia.alexis.handlers.modules;
 
-import com.elypia.alexis.commandler.annotations.validation.command.Developer;
 import com.elypia.alexis.utils.ExitCode;
 import com.elypia.commandler.annotations.*;
 import com.elypia.commandler.events.MessageEvent;
@@ -15,7 +14,7 @@ import java.util.logging.Level;
 
 import static com.elypia.alexis.utils.BotUtils.log;
 
-@Developer
+//@Developer
 @Module(name = "Developer Only Commands", aliases = "dev", description = "Developer only commands", hidden = true)
 public class DevHandler extends CommandHandler {
 

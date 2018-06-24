@@ -1,32 +1,28 @@
 package com.elypia.alexis.handlers.modules;
 
+import com.elypia.alexis.config.AmazonDetails;
 import com.elypia.alexis.utils.BotUtils;
 import com.elypia.commandler.annotations.*;
 import com.elypia.commandler.events.MessageEvent;
 import com.elypia.commandler.modules.CommandHandler;
 import com.elypia.elypiai.amazon.*;
-import com.elypia.elypiai.amazon.data.AmazonEndpoint;
 import net.dv8tion.jda.core.EmbedBuilder;
-import org.json.JSONObject;
 
 import java.security.InvalidKeyException;
-import java.util.Objects;
+import java.util.*;
 
 @Module(name = "Amazon", aliases = "amazon", description = "Share links and support Elypia! We get a cut from purchases!")
 public class AmazonHandler extends CommandHandler {
 
     private Amazon amazon;
 
-    public AmazonHandler(JSONObject object) {
-        Objects.requireNonNull(object);
+    public AmazonHandler(List<AmazonDetails> details) {
+        Objects.requireNonNull(details);
 
-        String accessKey = object.getString("key");
-        String secret = object.getString("secret");
-        String id = object.getString("tag");
-        AmazonEndpoint endpoint = AmazonEndpoint.US; // Temp
+        AmazonDetails detail = details.get(0);
 
         try {
-            amazon = new Amazon(accessKey, secret, id, endpoint);
+            amazon = new Amazon(detail.getKey(), detail.getSecret(), detail.getTag(), detail.getEndpoint());
         } catch (InvalidKeyException ex) {
             ex.printStackTrace();
             enabled = false;
@@ -44,9 +40,7 @@ public class AmazonHandler extends CommandHandler {
             }
 
             AmazonItem item = result.get(0);
-
             EmbedBuilder builder = new EmbedBuilder();
-
             builder.setTitle(item.getTitle(), item.getUrl());
             builder.setThumbnail(item.getImage());
             builder.addField("Price", item.getPriceString(), false);

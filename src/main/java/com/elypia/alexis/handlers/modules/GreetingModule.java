@@ -1,7 +1,7 @@
 package com.elypia.alexis.handlers.modules;
 
 import com.elypia.alexis.Alexis;
-import com.elypia.alexis.commandler.annotations.validation.command.Database;
+import com.elypia.alexis.commandler.Database;
 import com.elypia.alexis.entities.GuildData;
 import com.elypia.commandler.annotations.*;
 import com.elypia.commandler.annotations.validation.command.Elevated;

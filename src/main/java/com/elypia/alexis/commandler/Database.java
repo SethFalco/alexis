@@ -1,4 +1,4 @@
-package com.elypia.alexis.commandler.annotations.validation.command;
+package com.elypia.alexis.commandler;
 
 import com.elypia.commandler.annotations.Validation;
 

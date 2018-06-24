@@ -13,7 +13,7 @@ public class AlexisConfiler extends DefaultConfiler {
 
     @Override
     public String getPrefix(GenericMessageEvent event) {
-        String defaultPrefix = Config.getConfig("discord").getString("prefix");
+        String defaultPrefix = Alexis.getConfig().getDiscordConfig().getPrefix();
 
         if (event.isFromType(ChannelType.PRIVATE) || !BotUtils.isDatabaseAlive())
             return defaultPrefix;

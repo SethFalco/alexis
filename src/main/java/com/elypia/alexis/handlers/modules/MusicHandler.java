@@ -16,15 +16,11 @@ import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.message.GenericMessageEvent;
 import net.dv8tion.jda.core.managers.AudioManager;
 
-import java.time.Instant;
+import java.time.*;
 import java.util.*;
 
 @Scope(ChannelType.TEXT)
-@Module(
-	name = "Music Player",
-	aliases = {"music", "m"},
-	description = "Music player to listen to music to your hearts content in guilds!"
-)
+@Module(name = "Music Player", aliases = {"music", "m"}, description = "Music player to listen to music to your hearts content in guilds!")
 public class MusicHandler extends CommandHandler {
 
 	private Class<? extends AudioController> clazz;
@@ -38,33 +34,6 @@ public class MusicHandler extends CommandHandler {
 		manager = new DefaultAudioPlayerManager();
 
 		AudioSourceManagers.registerRemoteSources(manager);
-	}
-
-	private boolean beforeAny(MessageEvent event) {
-		GenericMessageEvent e = event.getMessageEvent();
-		Guild guild = e.getGuild();
-		AudioManager audioManager = guild.getAudioManager();
-		VoiceChannel channel = event.getMessage().getMember().getVoiceState().getChannel();
-
-		if (channel == null)
-			return false;
-		else
-			audioManager.openAudioConnection(channel);
-
-		GuildAudioPlayer guildPlayer;
-
-		if (guildPlayers.containsKey(guild.getIdLong())) {
-			guildPlayer = guildPlayers.get(guild.getIdLong());
-		} else {
-			guildPlayer = new GuildAudioPlayer(clazz, manager, event);
-			guildPlayers.put(guild.getIdLong(), guildPlayer);
-		}
-
-		if (audioManager.getSendingHandler() == null)
-			audioManager.setSendingHandler(new AudioPlayerSendHandler(guildPlayer.getPlayer()));
-
-		guildPlayer.setChannel(event.getMessageEvent().getTextChannel());
-		return true;
 	}
 
 	@Command(name = "Play", aliases = {"play", "resume"}, help = "Play if the music if it's paused.")
@@ -170,13 +139,13 @@ public class MusicHandler extends CommandHandler {
 
 	@Command(name = "Fast Forward", aliases = {"forward", "fastforward", "ff"}, help = "Fastforward by a set amount of time.")
 	@Param(name = "time", help = "The time to move forward by, try '@Me help time' for format info.")
-	public void fastForward(MessageEvent event) {
+	public void fastForward(MessageEvent event, Duration time) {
 
 	}
 
 	@Command(name = "Rewind", aliases = {"rewind", "backward", "rw"}, help = "Rewind by a set amount of time.")
 	@Param(name = "time", help = "The time to move rewind by, try '@Me help time' for format info.")
-	public void rewind(MessageEvent event, Instant time) {
+	public void rewind(MessageEvent event, Duration time) {
 
 	}
 
@@ -191,19 +160,48 @@ public class MusicHandler extends CommandHandler {
 
 	}
 
+    @Elevated
 	@Command(name = "Default Playlist", aliases = "default", help = "Specify the default track or playlist to add on join.")
-	@Permissions(Permission.MANAGE_SERVER)
 	public void defaultList(MessageEvent event) {
 
 	}
 
-	@Command(name = "Change Nickname", aliases = {"nickname", "nicksync", "ns"}, help = "Should Alexis append her name with the current song?")
-	@Permissions(Permission.MANAGE_SERVER)
-	public void nicknameSync(MessageEvent event) {
+	@Elevated
+	@Permissions(value = Permission.NICKNAME_CHANGE, userRequiresPermission = false)
+	@Command(name = "Sync Nickname with Track", aliases = {"nickname", "nicksync", "ns"}, help = "Should Alexis append the currently playing track to her nickname?")
+    @Param(name = "toggle", help = "True or false, should this be enabled or not?")
+	public void nicknameSync(MessageEvent event, boolean enable) {
+		
+	}
 
+	private boolean beforeAny(MessageEvent event) {
+		GenericMessageEvent e = event.getMessageEvent();
+		Guild guild = e.getGuild();
+		AudioManager audioManager = guild.getAudioManager();
+		VoiceChannel channel = event.getMessage().getMember().getVoiceState().getChannel();
+
+		if (channel == null)
+			return false;
+		else
+			audioManager.openAudioConnection(channel);
+
+		GuildAudioPlayer guildPlayer;
+
+		if (guildPlayers.containsKey(guild.getIdLong())) {
+			guildPlayer = guildPlayers.get(guild.getIdLong());
+		} else {
+			guildPlayer = new GuildAudioPlayer(clazz, manager, event);
+			guildPlayers.put(guild.getIdLong(), guildPlayer);
+		}
+
+		if (audioManager.getSendingHandler() == null)
+			audioManager.setSendingHandler(new AudioPlayerSendHandler(guildPlayer.getPlayer()));
+
+		guildPlayer.setChannel(event.getMessageEvent().getTextChannel());
+		return true;
 	}
 
 	private GuildAudioPlayer getPlayer(MessageEvent event) {
-		return guildPlayers.get(event.getMessageEvent().getGuild().getIdLong());
+		return guildPlayers.get(event.getMessage().getGuild().getIdLong());
 	}
 }

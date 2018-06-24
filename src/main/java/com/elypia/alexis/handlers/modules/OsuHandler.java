@@ -91,7 +91,7 @@ public class OsuHandler extends CommandHandler {
             return;
         }
 
-        if (builder.length() != players.length)
+        if (builder.getFields().size() != players.length)
             builder.setFooter("Sorry, I couldn't find all the players but I returned what I could.", null);
 
         event.reply(builder);
