@@ -1,121 +1,155 @@
 package com.elypia.alexis.audio;
 
-import com.elypia.alexis.audio.controllers.impl.AudioController;
-import com.elypia.commandler.events.MessageEvent;
+import com.elypia.elypiai.utils.Tuple;
 import com.sedmelluq.discord.lavaplayer.player.*;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.*;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.entities.TextChannel;
 
-import java.util.List;
+import java.util.*;
+import java.util.concurrent.ExecutionException;
 
 public class GuildAudioPlayer {
 
 	private JDA jda;
+	private long channel;
 
 	private AudioPlayerManager manager;
 	private AudioPlayer player;
-	private AudioController controller;
+	private List<AudioTrack> queue;
 
-	public GuildAudioPlayer(Class<? extends AudioController> clazz, AudioPlayerManager manager, MessageEvent event) {
+	public GuildAudioPlayer(JDA jda, AudioPlayerManager manager) {
+		this.jda = jda;
 		this.manager = manager;
-		this.controller = AudioController.getInstance(clazz, this);
 
 		player = manager.createPlayer();
-
-		jda = event.getMessageEvent().getJDA();
-
-		player.addListener(new AudioDispatcher(controller));
+		player.addListener(new AudioDispatcher(this));
+		queue = new ArrayList<>();
 	}
 
 	/**
 	 * Play music from the player if anything in is the playlist.
 	 * If music is already playing, this does nothing.
 	 *
-	 * @return	If it was already playing.
+	 * @return	If this resulting in a change of state.
 	 */
 
 	public boolean play() {
 		boolean paused = player.isPaused();
 
 		if (!paused)
-			return true;
+			return false;
 
 		player.setPaused(false);
-		return false;
+		return true;
 	}
 
 	public boolean pause() {
 		boolean paused = player.isPaused();
 
 		if (paused)
-			return true;
+			return false;
 
 		player.setPaused(true);
-		return false;
+		return true;
 	}
 
-	public void addTrack(String query) {
-		addTrack(query, false);
+	public Tuple<AudioPlaylist, List<AudioTrack>> add(String query, boolean insert) {
+		Tuple<AudioPlaylist, List<AudioTrack>> tuple = getTracks(query);
+
+		if (tuple == null)
+			return null;
+
+		AudioPlaylist playlist = tuple.getValueOne();
+		List<AudioTrack> tracks = tuple.getValueTwo();
+		AudioTrack selectedTrack = playlist != null ? playlist.getSelectedTrack() : null;
+		int position = insert || queue.isEmpty() ? 0 : queue.size() - 1;
+
+		if (selectedTrack != null) {
+			if (isIdle())
+				player.playTrack(selectedTrack);
+			else
+				queue.add(position, selectedTrack);
+
+			return tuple;
+		}
+
+		if (isIdle()) {
+			player.playTrack(tracks.get(0));
+
+			if (tracks.size() > 1)
+				queue.addAll(position, tracks.subList(1, tracks.size()));
+		}
+
+		else
+			queue.addAll(position, tracks);
+
+		return tuple;
 	}
 
-	public void insertTrack(String query) {
-		addTrack(query, true);
+	private Tuple<AudioPlaylist, List<AudioTrack>> getTracks(String query) {
+		Tuple<AudioPlaylist, List<AudioTrack>> tuple = new Tuple<>(null, null);
+
+		try {
+			manager.loadItem(query, new AudioLoadResultHandler() {
+
+				@Override
+				public void trackLoaded(AudioTrack track) {
+					ArrayList<AudioTrack> tracks = new ArrayList<>();
+					tracks.add(track);
+					tuple.setValueTwo(tracks);
+				}
+
+				@Override
+				public void playlistLoaded(AudioPlaylist playlist) {
+					tuple.setValueOne(playlist);
+					tuple.setValueTwo(playlist.getTracks());
+				}
+
+				@Override
+				public void noMatches() {
+
+				}
+
+				@Override
+				public void loadFailed(FriendlyException exception) {
+
+				}
+			}).get();
+		} catch (InterruptedException | ExecutionException e) {
+			e.printStackTrace();
+		}
+
+		return (tuple.getValueOne() == null && tuple.getValueTwo()== null) ? null : tuple;
 	}
 
-	private void addTrack(String query, boolean start) {
-		manager.loadItem(query, new AudioLoadResultHandler() {
-
-			@Override
-			public void trackLoaded(AudioTrack track) {
-				if (controller.getSize() == 0 && player.getPlayingTrack() == null)
-					player.playTrack(track);
-				else
-					controller.add(track, start ? 0 : Integer.MAX_VALUE);
-			}
-
-			@Override
-			public void playlistLoaded(AudioPlaylist playlist) {
-				playlist.getTracks().forEach(o -> {
-					controller.add(o, start ? 0 : Integer.MAX_VALUE);
-				});
-			}
-
-			@Override
-			public void noMatches() {
-
-			}
-
-			@Override
-			public void loadFailed(FriendlyException exception) {
-
-			}
-		});
+	public boolean isIdle() {
+		return player.getPlayingTrack() == null && queue.isEmpty();
 	}
-
-	public void removeTrack(String string) {
-		controller.remove(string);
-	}
-
-	public boolean clearPlaylist() {
-		return controller.clear();
-	}
-
-	public void shuffle() {
-		controller.shuffle();
-	}
+//
+//	public void removeTrack(String string) {
+//		controller.remove(string);
+//	}
+//
+//	public boolean clearPlaylist() {
+//		return controller.clear();
+//	}
+//
+//	public void shuffle() {
+//		controller.shuffle();
+//	}
 
 	public JDA getJDA() {
 		return jda;
 	}
 
 	public TextChannel getChannel() {
-		return controller.getChannel();
+		return jda.getTextChannelById(channel);
 	}
 
-	public void setChannel(TextChannel channel) {
-		controller.setChannel(channel);
+	public void setChannel(long channel) {
+		this.channel = channel;
 	}
 
 	public AudioPlayer getPlayer() {
@@ -126,7 +160,7 @@ public class GuildAudioPlayer {
 		return player.getPlayingTrack();
 	}
 
-	public List<AudioTrack> getTracks() {
-		return controller.getTracks();
+	public List<AudioTrack> getQueue() {
+		return queue;
 	}
 }

@@ -1,11 +1,11 @@
 package com.elypia.alexis;
 
-import com.elypia.alexis.audio.controllers.LocalAudioController;
 import com.elypia.alexis.commandler.*;
 import com.elypia.alexis.config.*;
 import com.elypia.alexis.handlers.EventHandler;
 import com.elypia.alexis.handlers.modules.*;
 import com.elypia.alexis.utils.AlexisConfiler;
+import com.elypia.alexis.youtube.YouTubeHelper;
 import com.elypia.commandler.Commandler;
 import com.elypia.commandler.pages.PageBuilder;
 import com.mongodb.MongoClient;
@@ -92,6 +92,8 @@ public class Chatbot {
 
 		commandler.registerValidator(Database.class, new DatabaseValidator());
 
+		YouTubeHelper youtube = new YouTubeHelper(api.getGoogle(), "Alexis");
+
 		commandler.registerModules(
 			new AmazonHandler(api.getAmazonDetails()),
 			new BotHandler(),
@@ -102,7 +104,7 @@ public class Chatbot {
 			new GreetingModule(),
 			new GuildHandler(),
 			new UtilHandler(),
-			new MusicHandler(LocalAudioController.class),
+			new MusicHandler(youtube),
 			new MyAnimeListHandler(api.getMyAnimeList()),
 			new NanowrimoHandler(),
 			new OsuHandler(api.getOsu()),
@@ -113,7 +115,7 @@ public class Chatbot {
 			new UrbanDictionaryHandler(),
 			new UserHandler(),
 			new VoiceHandler(),
-			new YouTubeHandler(api.getGoogle())
+			new YouTubeHandler(youtube)
 		);
 	}
 

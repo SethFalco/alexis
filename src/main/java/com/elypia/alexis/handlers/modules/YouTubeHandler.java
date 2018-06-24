@@ -1,34 +1,42 @@
 package com.elypia.alexis.handlers.modules;
 
-import com.elypia.alexis.utils.BotUtils;
+import com.elypia.alexis.youtube.*;
 import com.elypia.commandler.annotations.*;
-import com.elypia.commandler.events.MessageEvent;
 import com.elypia.commandler.modules.CommandHandler;
-import com.elypia.elypiai.google.youtube.*;
+import com.google.api.services.youtube.model.*;
 import net.dv8tion.jda.core.EmbedBuilder;
+
+import java.io.IOException;
+import java.util.Optional;
 
 @Module(name = "YouTube", aliases = {"youtube", "yt"}, description = "Commands related to YouTube.")
 public class YouTubeHandler extends CommandHandler {
 
-    private YouTube youtube;
+    private YouTubeHelper youtube;
 
-    public YouTubeHandler(String apikey) {
-        youtube = new YouTube(apikey);
+    public YouTubeHandler(YouTubeHelper youtube) {
+        this.youtube = youtube;
     }
 
-    @Overload("get")
     @Command(name = "Search YouTube", aliases = "get", help = "Search for a video.")
     @Param(name = "query", help = "Search term for the video you want.")
-    public void getVideo(MessageEvent event, String query) {
-        youtube.getVideo(query, result -> {
-            EmbedBuilder builder = new EmbedBuilder();
-            builder.setAuthor(result.getChannelName());
-            builder.setTitle(result.getTitle(), result.getUrl());
-            builder.setDescription(result.getDescription());
-            builder.setImage(result.getHighThumbnail());
-            builder.setFooter("Published at: " + result.getPublishedDate().toString(), null);
+    public Object getVideo(String query) throws IOException {
+        Optional<SearchResult> searchResult = youtube.getSearchResult(query, ResourceType.VIDEO);
 
-            event.reply(builder);
-        }, failure -> BotUtils.sendHttpError(event, failure));
+        if (!searchResult.isPresent())
+            return "Sorry, I couldn't find any results for that on YouTube!";
+
+        SearchResult result = searchResult.get();
+        SearchResultSnippet snippet = result.getSnippet();
+
+        EmbedBuilder builder = new EmbedBuilder();
+        builder.setAuthor(snippet.getChannelTitle());
+        builder.setTitle(snippet.getTitle(), YouTubeHelper.getVideoUrl(result.getId().getVideoId()));
+        builder.setThumbnail(youtube.getChannelThumbnail(snippet.getChannelId()));
+        builder.setDescription(snippet.getDescription());
+        builder.setImage(snippet.getThumbnails().getHigh().getUrl());
+        builder.setFooter("Published at: " + snippet.getPublishedAt().toString(), null);
+
+        return builder;
     }
 }
