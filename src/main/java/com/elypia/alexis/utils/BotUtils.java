@@ -19,7 +19,7 @@ public final class BotUtils {
 	private static final Logger LOGGER = Logger.getLogger(Alexis.class.getName());
 
 	private BotUtils() {
-
+		// Don't construct this
 	}
 
 	public static String buildCustomMessage(GenericGuildMemberEvent event, String message) {
@@ -77,23 +77,33 @@ public final class BotUtils {
 		return String.format(BOT_URL, user.getIdLong());
 	}
 
+	/**
+	 * Call the static
+	 *
+	 * @param level
+	 * @param message
+	 * @param args
+	 */
+
 	public static void log(Level level, String message, Object... args) {
 	    message = String.format(message, args);
 		LOGGER.log(level, message);
 
-		String color = (level == Level.SEVERE || level == Level.WARNING) ? "-" : "+";
+		if (level == Level.INFO || level == Level.WARNING || level == Level.SEVERE) {
+			String color = (level == Level.INFO) ? "+" : "-";
 
-		message = "```diff\n" + level.getName() + ": " + message + "```";
-		message = message.replace("\n", "\n" + color + " ");
+			message = "```diff\n" + level.getName() + ":\n" + message + "```";
+			message = message.replace("\n", "\n" + color + " ");
 
-		long channelId = Alexis.getConfig().getDiscordConfig().getLogChannel();
-		MessageChannel channel = Alexis.getChatbot().getJDA().getTextChannelById(channelId);
+			long channelId = Alexis.getConfig().getDiscordConfig().getLogChannel();
+			MessageChannel channel = Alexis.getChatbot().getJDA().getTextChannelById(channelId);
 
-		if (level == Level.SEVERE) {
-			long userId = Alexis.getConfig().getDiscordConfig().getAuthors().get(0).getId();
-			User user = Alexis.getChatbot().getJDA().getUserById(userId);
-			channel.sendMessage(user.getAsMention() + "\n" + message).queue();
-		} else {
+			if (level == Level.SEVERE) {
+				long userId = Alexis.getConfig().getDiscordConfig().getAuthors().get(0).getId();
+				User user = Alexis.getChatbot().getJDA().getUserById(userId);
+				message = "_ _\n" + user.getAsMention() + "\n\n" + message;
+			}
+
 			channel.sendMessage(message).queue();
 		}
 	}
