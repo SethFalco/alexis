@@ -224,25 +224,22 @@ public class MusicHandler extends CommandHandler {
 	@Command(name = "Sync Nickname with Track", aliases = {"nickname", "nicksync", "ns"}, help = "Should Alexis append the currently playing track to her nickname?")
     @Param(name = "toggle", help = "True or false, should this be enabled or not?")
 	public String nicknameSync(MessageEvent event, boolean enable) {
-        TextChannel channel = event.getMessageEvent().getTextChannel();
-        Guild guild = channel.getGuild();
+        Guild guild = event.getMessageEvent().getGuild();
 
 	    GuildData data = GuildData.query(guild.getIdLong());
         boolean sync = data.getSettings().getMusicSettings().getSyncNickname();
 
 	    if (sync == enable) {
-	        if (sync)
+	        if (enable)
 	            return "That's already enabled, just check my nickname next time you're playing music!";
 	        else
 	            return "That's already disabled, I haven't been changing my nickname anyways.";
         }
 
-	    if (enable) {
-            Member self = guild.getSelfMember();
+        Member self = guild.getSelfMember();
 
-            if (!self.hasPermission(Permission.NICKNAME_CHANGE))
-                return "That wouldn't work out right now since I don't have permission to change my nickname! Please grant me that permission then try again.";
-        }
+	    if (enable && self.hasPermission(Permission.NICKNAME_CHANGE))
+            return "That wouldn't work out right now since I don't have permission to change my nickname! Please grant me that permission then try again.";
 
 		Datastore store = Alexis.getChatbot().getDatastore();
 
