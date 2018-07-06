@@ -9,8 +9,8 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="Gradle: net.dv8tion:JDA:3.6.0_376" level="project" />
     <orderEntry type="module" module-name="commandler_main" />
+    <orderEntry type="library" name="Gradle: net.dv8tion:JDA:3.6.0_376" level="project" />
     <orderEntry type="library" name="Gradle: org.apache.velocity:velocity-engine-core:2.0" level="project" />
     <orderEntry type="library" name="Gradle: org.jsoup:jsoup:1.11.3" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.apache.logging.log4j:log4j-core:2.11.0" level="project" />

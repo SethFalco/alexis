@@ -6,10 +6,10 @@ import com.elypia.alexis.entities.GuildData;
 import com.elypia.commandler.annotations.*;
 import com.elypia.commandler.annotations.validation.command.Elevated;
 import com.elypia.commandler.annotations.validation.param.Option;
-import com.elypia.commandler.events.MessageEvent;
+import com.elypia.commandler.events.AbstractEvent;
 import com.elypia.commandler.modules.CommandHandler;
 import net.dv8tion.jda.core.entities.*;
-import net.dv8tion.jda.core.events.message.*;
+import net.dv8tion.jda.core.events.message.GenericMessageEvent;
 import org.mongodb.morphia.*;
 import org.mongodb.morphia.query.*;
 
@@ -22,7 +22,7 @@ public class GreetingModule extends CommandHandler {
     @Param(name = "greeting", help = "The greeting type, either `welcome` or `farewell`.")
     @Param(name = "account", help = "The account type, either `user` or `bot`.")
     @Param(name = "message", help = "The message to send when this event occurs.")
-    public String setGreeting(MessageEvent event, @Option({"welcome", "farewell"}) String greeting, @Option({"user", "bot"}) String account, String message) {
+    public String setGreeting(AbstractEvent event, @Option({"welcome", "farewell"}) String greeting, @Option({"user", "bot"}) String account, String message) {
         GenericMessageEvent e = event.getMessageEvent();
         Guild guild = e.getGuild();
         TextChannel channel = e.getTextChannel();
@@ -49,7 +49,7 @@ public class GreetingModule extends CommandHandler {
 
     @Command(name = "Set Greeting Channel", aliases = "channel", help = "Change the channel that you display bot messages without affecting other settings.")
     @Param(name = "channel", help = "The channel you want greeting messages to be sent too.")
-    public String setChannel(MessageEvent event, TextChannel channel) {
+    public String setChannel(AbstractEvent event, TextChannel channel) {
         if (!channel.canTalk())
             return "I don't think that's a good idea! I can't send messages to that channel.";
 

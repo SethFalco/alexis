@@ -11,6 +11,10 @@ import org.mongodb.morphia.query.Query;
 
 public class AlexisConfiler extends DefaultConfiler {
 
+    public AlexisConfiler(String prefix) {
+        super(prefix);
+    }
+
     @Override
     public String getPrefix(GenericMessageEvent event) {
         String defaultPrefix = Alexis.getConfig().getDiscordConfig().getPrefix();

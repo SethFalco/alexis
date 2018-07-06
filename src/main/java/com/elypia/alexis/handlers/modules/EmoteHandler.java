@@ -1,8 +1,9 @@
 package com.elypia.alexis.handlers.modules;
 
+import com.elypia.alexis.utils.BotUtils;
 import com.elypia.commandler.annotations.*;
 import com.elypia.commandler.annotations.validation.command.Scope;
-import com.elypia.commandler.events.MessageEvent;
+import com.elypia.commandler.events.AbstractEvent;
 import com.elypia.commandler.modules.CommandHandler;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.*;
@@ -12,17 +13,16 @@ import java.util.List;
 @Module(name = "Emoticons", aliases = {"emote", "emoji", "emoticon"}, description = "Check all the emotes or how much they're being used.")
 public class EmoteHandler extends CommandHandler {
 
-    @Overload("list")
-    @Command(name = "List all Emotes", aliases = "list", help = "List all of the custom emotes in this guild.")
+    @Command(id = 7, name = "List all Emotes", aliases = "list", help = "List all of the custom emotes in this guild.")
     @Scope(ChannelType.TEXT)
-    public void listEmotes(MessageEvent event) {
+    public void listEmotes(AbstractEvent event) {
         listEmotes(event, event.getMessageEvent().getGuild());
     }
 
-    @Overload("list")
-    @Param(name = "guild", help = "The guild to get emotes from.")
     @Scope(ChannelType.PRIVATE)
-    public String listEmotes(MessageEvent event, Guild guild) {
+    @Overload(7)
+    @Param(name = "guild", help = "The guild to get emotes from.")
+    public String listEmotes(AbstractEvent event, Guild guild) {
         List<Emote> emotes = guild.getEmotes();
         int count = emotes.size();
 
@@ -42,11 +42,10 @@ public class EmoteHandler extends CommandHandler {
         return builder.toString();
     }
 
-    @Overload("post")
     @Command(name = "Display Emote", aliases = {"get", "post"}, help = "Post an emote in the chat!")
     @Param(name = "emote", help = "A way to identify the emote you want to post.")
-    public EmbedBuilder post(MessageEvent event, Emote emote) {
-        EmbedBuilder builder = new EmbedBuilder();
+    public EmbedBuilder post(AbstractEvent event, Emote emote) {
+        EmbedBuilder builder = BotUtils.createEmbedBuilder(event.getMessageEvent().getGuild());
         builder.setImage(emote.getImageUrl());
         return builder;
     }

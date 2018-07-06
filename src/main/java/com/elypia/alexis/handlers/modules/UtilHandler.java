@@ -2,7 +2,7 @@ package com.elypia.alexis.handlers.modules;
 
 import com.elypia.commandler.annotations.*;
 import com.elypia.commandler.annotations.validation.command.NSFW;
-import com.elypia.commandler.events.MessageEvent;
+import com.elypia.commandler.events.AbstractEvent;
 import com.elypia.commandler.modules.CommandHandler;
 import com.elypia.elypiai.utils.math.MathUtils;
 import net.dv8tion.jda.core.EmbedBuilder;
@@ -60,7 +60,7 @@ public class UtilHandler extends CommandHandler {
     @Static
     @NSFW
     @Command(name = "Get Pet Neko", aliases = "neko", help = "Get a pet neko sent to you over Discord.")
-    public void neko(MessageEvent event) {
+    public void neko(AbstractEvent event) {
         client.newCall(nekoRequest).enqueue(new Callback() {
 
             @Override

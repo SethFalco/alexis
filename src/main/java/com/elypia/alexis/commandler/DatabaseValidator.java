@@ -1,13 +1,13 @@
 package com.elypia.alexis.commandler;
 
 import com.elypia.alexis.utils.BotUtils;
-import com.elypia.commandler.events.MessageEvent;
+import com.elypia.commandler.events.CommandEvent;
 import com.elypia.commandler.validation.ICommandValidator;
 
 public class DatabaseValidator implements ICommandValidator<Database> {
 
     @Override
-    public boolean validate(MessageEvent event, Database annotation) {
+    public boolean validate(CommandEvent event, Database annotation) {
         if (!BotUtils.isDatabaseAlive())
             return event.invalidate("Sorry! :c For some reason the database is down so you won't be able to perform this command right now.");
 

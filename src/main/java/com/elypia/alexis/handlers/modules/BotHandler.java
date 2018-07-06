@@ -6,9 +6,10 @@ import com.elypia.alexis.utils.BotUtils;
 import com.elypia.commandler.annotations.*;
 import com.elypia.commandler.annotations.validation.command.Scope;
 import com.elypia.commandler.annotations.validation.param.Everyone;
-import com.elypia.commandler.events.MessageEvent;
+import com.elypia.commandler.events.*;
 import com.elypia.commandler.modules.CommandHandler;
 import com.elypia.elypiai.utils.Markdown;
+import com.elypia.elypiai.utils.elyscript.ElyScript;
 import net.dv8tion.jda.core.*;
 import net.dv8tion.jda.core.entities.*;
 
@@ -28,17 +29,17 @@ public class BotHandler extends CommandHandler {
 
 	@Static
 	@Command(name = "Ping!", aliases = "ping", help = "Respond 'pong!' with the number of `ms` it took to fulfil the request!")
-	public void ping(MessageEvent event) {
+	public void ping(AbstractEvent event) {
 		pingPong(event, "pong!");
 	}
 
 	@Static
 	@Command(name = "Pong!", aliases = "pong")
-	public void pong(MessageEvent event) {
+	public void pong(AbstractEvent event) {
 		pingPong(event, "ping!");
 	}
 
-	private void pingPong(MessageEvent event, String text) {
+	private void pingPong(AbstractEvent event, String text) {
 		long startTime = System.currentTimeMillis();
 
 		event.getMessageEvent().getChannel().sendMessage(text).queue(message -> {
@@ -49,9 +50,8 @@ public class BotHandler extends CommandHandler {
 
 	@Default
 	@Command(name = "Bot Stats", aliases = {"stats", "info"}, help = "Get stats, info, and support information for Alexis!")
-	public void displayStats(MessageEvent event) {
-
-		EmbedBuilder builder = new EmbedBuilder();
+	public void displayStats(AbstractEvent event) {
+		EmbedBuilder builder = BotUtils.createEmbedBuilder(event.getMessageEvent().getGuild());
 		JDA jda = event.getMessageEvent().getJDA();
 		User alexis = jda.getSelfUser();
 
@@ -105,7 +105,7 @@ public class BotHandler extends CommandHandler {
 	@Static
 	@Command(name = "Say", aliases = "say", help = "Have Alexis repeat something you say!")
 	@Param(name = "body", help = "Text Alexis should repeat!")
-	public String say(MessageEvent event, @Everyone String body) {
+	public String say(AbstractEvent event, @Everyone String body) {
 		event.tryDeleteMessage();
 		return body;
 	}
@@ -113,7 +113,7 @@ public class BotHandler extends CommandHandler {
 	@Static
 	@Scope(ChannelType.TEXT)
 	@Command(name = "Bot Invites", aliases = {"invite", "invites"}, help = "Get invites for all the bots in here!")
-	public EmbedBuilder invites(MessageEvent event) {
+	public EmbedBuilder invites(AbstractEvent event) {
 		Guild guild = event.getMessageEvent().getGuild();
 		Collection<Member> bots = guild.getMembers();
 
@@ -121,10 +121,18 @@ public class BotHandler extends CommandHandler {
 			return o.getCreationTime().isAfter(BOT_TIME);
 		}).collect(Collectors.toList());
 
-		EmbedBuilder builder = new EmbedBuilder();
+		EmbedBuilder builder = BotUtils.createEmbedBuilder(guild);
 		builder.setThumbnail(guild.getIconUrl() != null ? guild.getIconUrl() : guild.getSelfMember().getUser().getAvatarUrl());
 		users.forEach(o -> builder.addField(o.getName(), Markdown.a("Invite link!", BotUtils.formInviteUrl(o)), true));
 
 		return builder;
+	}
+
+	@Static
+	@Command(name = "ElyScript", aliases = "script", help = "Have Alexis repeat something you say using ElyScript!")
+	@Param(name = "body", help = "Text Alexis should repeat!")
+	public String sayEly(AbstractEvent event, @Everyone String body) {
+		event.tryDeleteMessage();
+		return new ElyScript(body).compile();
 	}
 }

@@ -3,13 +3,12 @@ package com.elypia.alexis.utils;
 import com.elypia.alexis.Alexis;
 import com.elypia.alexis.config.AlexisConfig;
 import com.elypia.alexis.entities.UserData;
-import com.elypia.commandler.events.MessageEvent;
-import net.dv8tion.jda.core.JDA;
+import com.elypia.commandler.events.AbstractEvent;
+import net.dv8tion.jda.core.*;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.guild.GenericGuildEvent;
 import net.dv8tion.jda.core.events.guild.member.GenericGuildMemberEvent;
 
-import java.io.IOException;
 import java.util.Collection;
 import java.util.logging.*;
 
@@ -20,6 +19,19 @@ public final class BotUtils {
 
 	private BotUtils() {
 		// Don't construct this
+	}
+
+	public static EmbedBuilder createEmbedBuilder(AbstractEvent event) {
+		return createEmbedBuilder(event.getMessage().getGuild());
+	}
+
+	public static EmbedBuilder createEmbedBuilder(Guild guild) {
+		EmbedBuilder builder = new EmbedBuilder();
+
+		if (guild != null)
+			builder.setColor(guild.getSelfMember().getColor());
+
+		return builder;
 	}
 
 	public static String buildCustomMessage(GenericGuildMemberEvent event, String message) {
@@ -66,7 +78,7 @@ public final class BotUtils {
 		}
 	}
 
-	public static void sendHttpError(MessageEvent event, IOException failure) {
+	public static void sendHttpError(AbstractEvent event, Throwable failure) {
 		String message = "Sorry, the command failed. I'm reporting this to Seth, perhaps trying again later?";
 		event.getMessageEvent().getChannel().sendMessage(message).queue();
 
@@ -85,6 +97,7 @@ public final class BotUtils {
 	 * @param args
 	 */
 
+	// Add exception for 7777
 	public static void log(Level level, String message, Object... args) {
 	    message = String.format(message, args);
 		LOGGER.log(level, message);

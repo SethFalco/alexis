@@ -6,11 +6,12 @@ import com.elypia.alexis.entities.GuildData;
 import com.elypia.alexis.youtube.YouTubeHelper;
 import com.elypia.commandler.annotations.*;
 import com.elypia.commandler.annotations.validation.command.*;
-import com.elypia.commandler.events.MessageEvent;
+import com.elypia.commandler.confiler.reactions.ReactionRecord;
+import com.elypia.commandler.events.*;
 import com.elypia.commandler.modules.CommandHandler;
 import com.elypia.elypiai.utils.*;
 import com.elypia.elypiai.utils.math.MathUtils;
-import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
+import com.sedmelluq.discord.lavaplayer.player.*;
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 import com.sedmelluq.discord.lavaplayer.track.*;
 import net.dv8tion.jda.core.*;
@@ -67,7 +68,7 @@ public class MusicHandler extends CommandHandler {
 	}
 
 	@Command(name = "Play", aliases = {"play", "resume"}, help = "Play if the music if it's paused.")
-	public String play(MessageEvent event) {
+	public String play(AbstractEvent event) {
 		GuildAudioPlayer player = getAudioPlayer(event);
 
 		if (!event.getMessageEvent().getGuild().getSelfMember().getVoiceState().inVoiceChannel())
@@ -84,7 +85,7 @@ public class MusicHandler extends CommandHandler {
 	}
 
 	@Command(name = "Pause", aliases = {"pause", "stop"}, help = "Pause the music if it's playing.")
-	public String pause(MessageEvent event) {
+	public String pause(AbstractEvent event) {
 		GuildAudioPlayer player = getAudioPlayer(event);
 
 		if (!event.getMessageEvent().getGuild().getSelfMember().getVoiceState().inVoiceChannel() || player.isIdle())
@@ -97,8 +98,12 @@ public class MusicHandler extends CommandHandler {
 		return "I've paused the music now, feel free to do `" + prefix + "music play` whenever you want me to play again!";
 	}
 
-	@Command(name = "Queue", aliases = {"queue", "playing", "np"}, help = "Display the playing track and queue.")
-	public Object queue(MessageEvent event) throws IOException {
+	@Command(id = 101, name = "Queue", aliases = {"queue", "playing", "np"}, help = "Display the playing track and queue.")
+	public Object queue(AbstractEvent event) throws IOException {
+		return queue(event, 0);
+	}
+
+	public Object queue(AbstractEvent event, int offset) throws IOException {
 		GuildAudioPlayer player = getAudioPlayer(event);
 		AudioTrack playing = player.getPlayingTrack();
 		List<AudioTrack> queue = player.getQueue();
@@ -124,7 +129,12 @@ public class MusicHandler extends CommandHandler {
 			StringJoiner joiner = new StringJoiner("\n");
 
 			for (int i = 0; i < queue.size() && i < 8; i++) {
-				AudioTrack track = queue.get(i);
+				int position = i + offset;
+
+				if (position > queue.size() - 1)
+					position -= queue.size();
+
+				AudioTrack track = queue.get(position);
 				AudioTrackInfo info = track.getInfo();
 				String title = String.format(":%s: %s", MathUtils.asWritten(i + 1), formTitle(info.author, info.title, info.uri));
 
@@ -138,21 +148,91 @@ public class MusicHandler extends CommandHandler {
 			builder.setFooter(String.format("There are %,d tracks in the queue!", queue.size()), null);
 		}
 
+		event.addReaction("⬅", "1⃣", "2⃣","3⃣", "4⃣", "5⃣", "6⃣", "7⃣", "8⃣", "➡");
+
+		if (offset == 0)
+			event.storeObject("offset", offset);
+
 		return builder;
 	}
 
-	@Command(name = "Add to Queue", aliases = {"add", "append"}, help = "Add a track to the end of the playlist.")
+	@Reaction(id = 101, emotes = {"1⃣", "2⃣","3⃣", "4⃣", "5⃣", "6⃣", "7⃣", "8⃣"})
+	public Object setTrack(ReactionEvent event) throws IOException {
+		GuildAudioPlayer player = getAudioPlayer(event);
+		int position = 0;
+
+		switch (event.getReactionAddEvent().getReactionEmote().getName()) {
+			case "1⃣": position = 0; break;
+			case "2⃣": position = 1; break;
+			case "3⃣": position = 2; break;
+			case "4⃣": position = 3; break;
+			case "5⃣": position = 4; break;
+			case "6⃣": position = 5; break;
+			case "7⃣": position = 6; break;
+			case "8⃣": position = 7; break;
+		}
+
+		List<AudioTrack> queue = player.getQueue();
+
+		int offset = (int)event.getReactionRecord().getObject("offset");
+		position += offset;
+
+		if (queue.size() > position) {
+			player.getPlayer().playTrack(player.getQueue().remove(position));
+			return queue(event, offset);
+		}
+
+		return null;
+	}
+
+	@Reaction(id = 101, emotes = {"⬅", "➡"})
+	public Object nextOrPreviousPage(ReactionEvent event) throws IOException {
+		ReactionRecord record = event.getReactionRecord();
+		GuildAudioPlayer player = getAudioPlayer(event);
+		List<AudioTrack> queue = player.getQueue();
+		int offset = (int)record.getObject("offset");
+
+		if (event.getReactionAddEvent().getReactionEmote().getName().equals("⬅")) {
+			offset -= 8;
+
+			if (offset < 0)
+				offset = queue.size() - (-offset);
+		} else {
+			offset += 8;
+
+			if (offset > queue.size())
+				offset -= queue.size();
+		}
+
+		record.storeObject("offset", offset);
+		return queue(event, offset);
+	}
+
+
+	@Command(id = 100, name = "Add to Queue", aliases = {"add", "append"}, help = "Add a track to the end of the playlist.")
 	@Param(name = "query", help = "The URL for the audio or what to search for on YouTubeHelper!")
-	public Object addTrack(MessageEvent event, String query) throws IOException {
+	@Emoji(emotes = "\uD83D\uDD01", help = "Add this song to the queue again.")
+	public Object addTrack(AbstractEvent event, String query) throws IOException {
 		if (!joinChannel(event))
 			return null;
+
+//		event.addReaction("\uD83D\uDD01");
+		event.storeObject("query", query);
 
 		return handleSongAdded(event, query, false);
 	}
 
+	@Reaction(id = 100, emotes = "\uD83D\uDD01")
+	public Object addAgain(ReactionEvent event) throws IOException {
+		if (!joinChannel(event))
+			return null;
+
+		return handleSongAdded(event, (String)event.getReactionRecord().getObject("query"), false);
+	}
+
 	@Command(name = "Insert into Queue", aliases = {"insert", "prepend"}, help = "Insert a track to the start of the queue.")
 	@Param(name = "query", help = "The URL for the audio or what to search for on YouTubeHelper!")
-	public Object insertTrack(MessageEvent event, String query) throws IOException {
+	public Object insertTrack(AbstractEvent event, String query) throws IOException {
 		if (!joinChannel(event))
 			return null;
 
@@ -223,7 +303,7 @@ public class MusicHandler extends CommandHandler {
 	@Elevated
 	@Command(name = "Sync Nickname with Track", aliases = {"nickname", "nicksync", "ns"}, help = "Should Alexis append the currently playing track to her nickname?")
     @Param(name = "toggle", help = "True or false, should this be enabled or not?")
-	public String nicknameSync(MessageEvent event, boolean enable) {
+	public String nicknameSync(AbstractEvent event, boolean enable) {
         Guild guild = event.getMessageEvent().getGuild();
 
 	    GuildData data = GuildData.query(guild.getIdLong());
@@ -273,7 +353,7 @@ public class MusicHandler extends CommandHandler {
 	 * @throws IOException
 	 */
 
-	private Object handleSongAdded(MessageEvent event, String query, boolean insert) throws IOException {
+	private Object handleSongAdded(AbstractEvent event, String query, boolean insert) throws IOException {
 		GuildAudioPlayer player = getAudioPlayer(event);
 		Tuple<AudioPlaylist, List<AudioTrack>> tuple = player.add(query, insert);
 
@@ -283,8 +363,8 @@ public class MusicHandler extends CommandHandler {
 		event.tryDeleteMessage();
 
 		String method = insert ? "Inserted" : "Added";
-		AudioPlaylist playlist = tuple.getValueOne();
-		List<AudioTrack> tracks = tuple.getValueTwo();
+		AudioPlaylist playlist = tuple.itemOne();
+		List<AudioTrack> tracks = tuple.itemTwo();
 		AudioTrack single = null;
 
 		if (playlist != null && playlist.getSelectedTrack() != null)
@@ -331,7 +411,7 @@ public class MusicHandler extends CommandHandler {
 	 * @return If to continue processing this command.
 	 */
 
-	private boolean joinChannel(MessageEvent event) {
+	private boolean joinChannel(AbstractEvent event) {
 		Message message = event.getMessage();
 		Member member = message.getMember();
 		VoiceChannel memberChannel = member.getVoiceState().getChannel();
@@ -413,7 +493,7 @@ public class MusicHandler extends CommandHandler {
 	 * instance existed for this guild yet.
 	 */
 
-	private GuildAudioPlayer getAudioPlayer(MessageEvent event) {
+	private GuildAudioPlayer getAudioPlayer(AbstractEvent event) {
 		long id = event.getMessageEvent().getGuild().getIdLong();
 
 		if (!guildPlayers.containsKey(id))

@@ -1,6 +1,6 @@
 package com.elypia.alexis.commandler;
 
-import com.elypia.commandler.annotations.Validation;
+import com.elypia.commandler.annotations.validation.Validation;
 
 import java.lang.annotation.*;
 

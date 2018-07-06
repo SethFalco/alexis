@@ -1,9 +1,8 @@
 package com.elypia.alexis.config;
 
-import com.elypia.alexis.config.deserializers.*;
-import com.elypia.elypiai.amazon.data.AmazonEndpoint;
+import com.elypia.alexis.config.deserializers.GameDeserializer;
 import com.google.gson.*;
-import com.google.gson.annotations.*;
+import com.google.gson.annotations.SerializedName;
 import net.dv8tion.jda.core.entities.Game;
 
 import java.io.IOException;
@@ -25,7 +24,7 @@ public class AlexisConfig {
 
         GsonBuilder builder = new GsonBuilder();
         builder.registerTypeAdapter(Game.class, new GameDeserializer());
-        builder.registerTypeAdapter(AmazonEndpoint.class, new AmazonEndpointDeserializer());
+//        builder.registerTypeAdapter(AmazonEndpoint.class, new AmazonEndpointDeserializer());
         Gson gson = builder.create();
 
         return gson.fromJson(text, AlexisConfig.class);
@@ -35,23 +34,11 @@ public class AlexisConfig {
         return databaseConfig;
     }
 
-    public void setDatabaseConfig(DatabaseConfig databaseConfig) {
-        this.databaseConfig = databaseConfig;
-    }
-
     public DiscordConfig getDiscordConfig() {
         return discordConfig;
     }
 
-    public void setDiscordConfig(DiscordConfig discordConfig) {
-        this.discordConfig = discordConfig;
-    }
-
     public ApiKeys getApiKeys() {
         return apiKeys;
-    }
-
-    public void setApiKeys(ApiKeys apiKeys) {
-        this.apiKeys = apiKeys;
     }
 }

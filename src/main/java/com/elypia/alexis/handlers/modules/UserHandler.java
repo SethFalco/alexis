@@ -5,7 +5,7 @@ import com.elypia.commandler.annotations.*;
 import com.elypia.commandler.annotations.filter.Search;
 import com.elypia.commandler.annotations.validation.command.Scope;
 import com.elypia.commandler.data.SearchScope;
-import com.elypia.commandler.events.MessageEvent;
+import com.elypia.commandler.events.*;
 import com.elypia.commandler.modules.CommandHandler;
 import com.elypia.elypiai.utils.Markdown;
 import net.dv8tion.jda.core.EmbedBuilder;
@@ -17,16 +17,15 @@ import java.util.*;
 @Module(name = "User", aliases = "user", description = "Get information or stats on global users! Try 'members' for guild specific commands.")
 public class UserHandler extends CommandHandler {
 
-	@Overload("info")
-	public void getInfo(MessageEvent event) {
+	@Overload(5)
+	public void getInfo(AbstractEvent event) {
 		getInfo(event, event.getMessage().getAuthor());
 	}
 
-	@Overload("info")
-	@Command(name = "User Info", aliases = "info", help = "Get some basic information on the user!")
+	@Command(id = 5, name = "User Info", aliases = "info", help = "Get some basic information on the user!")
 	@Param(name = "user", help = "The user to display information for.")
 	@Scope(ChannelType.TEXT)
-	public EmbedBuilder getInfo(MessageEvent event, @Search(SearchScope.LOCAL) User user) {
+	public EmbedBuilder getInfo(AbstractEvent event, @Search(SearchScope.LOCAL) User user) {
 		EmbedBuilder builder = new EmbedBuilder();
 		String avatar = user.getEffectiveAvatarUrl();
 		DateTimeFormatter format = DateTimeFormatter.ISO_LOCAL_DATE;

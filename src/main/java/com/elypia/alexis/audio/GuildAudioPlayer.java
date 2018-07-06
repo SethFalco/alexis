@@ -61,8 +61,8 @@ public class GuildAudioPlayer {
 		if (tuple == null)
 			return null;
 
-		AudioPlaylist playlist = tuple.getValueOne();
-		List<AudioTrack> tracks = tuple.getValueTwo();
+		AudioPlaylist playlist = tuple.itemOne();
+		List<AudioTrack> tracks = tuple.itemTwo();
 		AudioTrack selectedTrack = playlist != null ? playlist.getSelectedTrack() : null;
 		int position = insert || queue.isEmpty() ? 0 : queue.size() - 1;
 
@@ -89,7 +89,7 @@ public class GuildAudioPlayer {
 	}
 
 	private Tuple<AudioPlaylist, List<AudioTrack>> getTracks(String query) {
-		Tuple<AudioPlaylist, List<AudioTrack>> tuple = new Tuple<>(null, null);
+		Tuple<AudioPlaylist, List<AudioTrack>> tuple = Tuple.of(null, null);
 
 		try {
 			manager.loadItem(query, new AudioLoadResultHandler() {
@@ -98,13 +98,13 @@ public class GuildAudioPlayer {
 				public void trackLoaded(AudioTrack track) {
 					ArrayList<AudioTrack> tracks = new ArrayList<>();
 					tracks.add(track);
-					tuple.setValueTwo(tracks);
+					tuple.itemTwo(tracks);
 				}
 
 				@Override
 				public void playlistLoaded(AudioPlaylist playlist) {
-					tuple.setValueOne(playlist);
-					tuple.setValueTwo(playlist.getTracks());
+					tuple.itemOne(playlist);
+					tuple.itemTwo(playlist.getTracks());
 				}
 
 				@Override
@@ -121,7 +121,7 @@ public class GuildAudioPlayer {
 			e.printStackTrace();
 		}
 
-		return (tuple.getValueOne() == null && tuple.getValueTwo()== null) ? null : tuple;
+		return (tuple.itemOne() == null && tuple.itemTwo() == null) ? null : tuple;
 	}
 
 	public boolean isIdle() {

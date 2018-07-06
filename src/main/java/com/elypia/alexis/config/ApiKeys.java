@@ -31,55 +31,27 @@ public class ApiKeys {
         return myAnimeList;
     }
 
-    public void setMyAnimeList(String myAnimeList) {
-        this.myAnimeList = myAnimeList;
-    }
-
     public String getOsu() {
         return osu;
-    }
-
-    public void setOsu(String osu) {
-        this.osu = osu;
     }
 
     public String getTwitch() {
         return twitch;
     }
 
-    public void setTwitch(String twitch) {
-        this.twitch = twitch;
-    }
-
     public String getGoogle() {
         return google;
-    }
-
-    public void setGoogle(String google) {
-        this.google = google;
     }
 
     public String getSteam() {
         return steam;
     }
 
-    public void setSteam(String steam) {
-        this.steam = steam;
-    }
-
     public String getCleverbot() {
         return cleverbot;
     }
 
-    public void setCleverbot(String cleverbot) {
-        this.cleverbot = cleverbot;
-    }
-
     public List<AmazonDetails> getAmazonDetails() {
         return amazonDetails;
-    }
-
-    public void setAmazonDetails(List<AmazonDetails> amazonDetails) {
-        this.amazonDetails = amazonDetails;
     }
 }

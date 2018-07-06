@@ -4,8 +4,6 @@ import com.elypia.alexis.*;
 import com.elypia.alexis.entities.*;
 import com.elypia.alexis.entities.embedded.*;
 import com.elypia.alexis.utils.BotUtils;
-import com.elypia.elypiai.google.translate.GoogleTranslate;
-import com.elypia.elypiai.utils.*;
 import com.mongodb.MongoClient;
 import net.dv8tion.jda.core.*;
 import net.dv8tion.jda.core.entities.*;
@@ -16,11 +14,10 @@ import net.dv8tion.jda.core.events.guild.voice.*;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.events.message.react.MessageReactionAddEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
-import org.apache.commons.lang3.StringEscapeUtils;
 import org.mongodb.morphia.*;
 import org.mongodb.morphia.query.*;
 
-import java.util.*;
+import java.util.Date;
 import java.util.logging.Level;
 
 public class EventHandler extends ListenerAdapter {
@@ -170,31 +167,32 @@ public class EventHandler extends ListenerAdapter {
 		if (event.getUser().isBot())
 			return;
 
-		handleTranslate(event);
+//		handleTranslate(event);
 	}
 
-	GoogleTranslate translate = new GoogleTranslate("***REMOVED***");
-
-	private void handleTranslate(MessageReactionAddEvent event) {
-		List<Language> languages = translate.getSupportedLanguages();
-
-		for (Language language : languages) {
-			for (Country country : language.getCountries()) {
-				if (country.getUnicodeEmote().equals(event.getReactionEmote().getName())) {
-					event.getChannel().getMessageById(event.getMessageId()).queue(message -> {
-						translate.translate(message.getContentStripped(), language, result -> {
-							EmbedBuilder builder = new EmbedBuilder();
-							builder.addField("Source (" + result.getSource().getLanguageName() + ")", result.getBody() + "\n_ _", false);
-							String translatedBody = StringEscapeUtils.unescapeHtml4(result.getTranslatedBody());
-							builder.addField("Target (" + result.getTarget().getLanguageName() + ")", translatedBody, false);
-							builder.setImage("https://cdn.discordapp.com/attachments/436154993247256586/460187735936991233/color-short2x.png");
-							builder.setFooter("http://translate.google.com/", null);
-							event.getChannel().sendMessage(builder.build()).queue();
-							message.addReaction(country.getUnicodeEmote()).queue();
-						}, ex -> BotUtils.sendHttpError(null, ex));
-					});
-				}
-			}
-		}
-	}
+//	GoogleTranslate translate = new GoogleTranslate("***REMOVED***");
+//
+//	private void handleTranslate(MessageReactionAddEvent event) {
+//		List<Language> languages = translate.getSupportedLanguages();
+//
+//		for (Language language : languages) {
+//			for (Country country : language.getCountries()) {
+//				if (country.getUnicodeEmote().equals(event.getReactionEmote().getName())) {
+//					event.getChannel().getMessageById(event.getMessageId()).queue(message -> {
+//						translate.translate(message.getContentStripped(), language, result -> {
+//							EmbedBuilder builder = new EmbedBuilder();
+//							builder.addField("Source (" + result.getSource().getLanguageName() + ")", result.getBody() + "\n_ _", false);
+//							String translatedBody = StringEscapeUtils.unescapeHtml4(result.getTranslatedBody());
+//							builder.addField("Target (" + result.getTarget().getLanguageName() + ")", translatedBody, false);
+//							builder.setImage("https://cdn.discordapp.com/attachments/436154993247256586/460187735936991233/color-short2x.png");
+//							builder.setFooter("http://translate.google.com/", null);
+//							builder.setColor(event.getGuild().getSelfMember().getColor());
+//							event.getChannel().sendMessage(builder.build()).queue();
+//							message.addReaction(country.getUnicodeEmote()).queue();
+//						}, ex -> BotUtils.sendHttpError(null, ex));
+//					});
+//				}
+//			}
+//		}
+//	}
 }
