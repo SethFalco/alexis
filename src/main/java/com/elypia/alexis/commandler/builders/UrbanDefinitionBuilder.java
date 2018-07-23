@@ -1,16 +1,15 @@
 package com.elypia.alexis.commandler.builders;
 
 import com.elypia.alexis.utils.BotUtils;
-import com.elypia.commandler.events.AbstractEvent;
-import com.elypia.commandler.sending.IMessageBuilder;
+import com.elypia.commandler.*;
 import com.elypia.elypiai.urbandictionary.UrbanDefinition;
-import net.dv8tion.jda.core.EmbedBuilder;
-import net.dv8tion.jda.core.entities.MessageEmbed;
+import net.dv8tion.jda.core.*;
+import net.dv8tion.jda.core.entities.*;
 
-public class UrbanDefinitionBuilder implements IMessageBuilder<UrbanDefinition> {
+public class UrbanDefinitionBuilder implements IJDABuilder<UrbanDefinition> {
 
     @Override
-    public MessageEmbed buildAsEmbed(AbstractEvent event, UrbanDefinition toSend) {
+    public Message buildEmbed(JDACommand event, UrbanDefinition toSend) {
         EmbedBuilder builder = BotUtils.createEmbedBuilder(event);
 
         builder.setAuthor(toSend.getAuthor());
@@ -31,21 +30,11 @@ public class UrbanDefinitionBuilder implements IMessageBuilder<UrbanDefinition> 
         );
         builder.addField("Example", descText, true);
 
-        return builder.build();
+        return new MessageBuilder(builder.build()).build();
     }
 
     @Override
-    public MessageEmbed buildAsEmbed(AbstractEvent event, UrbanDefinition... toSend) {
-        return null;
-    }
-
-    @Override
-    public String buildAsString(AbstractEvent event, UrbanDefinition toSend) {
-        return null;
-    }
-
-    @Override
-    public String buildAsString(AbstractEvent event, UrbanDefinition... toSend) {
+    public Message build(JDACommand event, UrbanDefinition output) {
         return null;
     }
 }

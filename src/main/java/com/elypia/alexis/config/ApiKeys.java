@@ -6,9 +6,6 @@ import java.util.List;
 
 public class ApiKeys {
 
-    @SerializedName("mal")
-    private String myAnimeList;
-
     @SerializedName("osu")
     private String osu;
 
@@ -26,10 +23,6 @@ public class ApiKeys {
 
     @SerializedName("amazon")
     private List<AmazonDetails> amazonDetails;
-
-    public String getMyAnimeList() {
-        return myAnimeList;
-    }
 
     public String getOsu() {
         return osu;

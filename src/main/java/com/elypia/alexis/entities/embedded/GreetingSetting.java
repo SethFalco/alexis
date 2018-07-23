@@ -12,6 +12,9 @@ public class GreetingSetting {
     private MessageSettings bot;
 
     public MessageSettings getUser() {
+        if (user == null)
+            user = new MessageSettings();
+
         return user;
     }
 
@@ -20,6 +23,9 @@ public class GreetingSetting {
     }
 
     public MessageSettings getBot() {
+        if (bot == null)
+            bot = new MessageSettings();
+
         return bot;
     }
 

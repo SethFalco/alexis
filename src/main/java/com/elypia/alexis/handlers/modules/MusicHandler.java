@@ -3,15 +3,14 @@ package com.elypia.alexis.handlers.modules;
 import com.elypia.alexis.Alexis;
 import com.elypia.alexis.audio.*;
 import com.elypia.alexis.entities.GuildData;
-import com.elypia.alexis.youtube.YouTubeHelper;
+import com.elypia.alexis.google.youtube.YouTubeHelper;
+import com.elypia.commandler.*;
 import com.elypia.commandler.annotations.*;
+import com.elypia.commandler.annotations.Module;
 import com.elypia.commandler.annotations.validation.command.*;
-import com.elypia.commandler.confiler.reactions.ReactionRecord;
-import com.elypia.commandler.events.*;
-import com.elypia.commandler.modules.CommandHandler;
 import com.elypia.elypiai.utils.*;
 import com.elypia.elypiai.utils.math.MathUtils;
-import com.sedmelluq.discord.lavaplayer.player.*;
+import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 import com.sedmelluq.discord.lavaplayer.track.*;
 import net.dv8tion.jda.core.*;
@@ -25,8 +24,8 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 @Scope(ChannelType.TEXT)
-@Module(name = "Music Player", aliases = {"music", "m"}, description = "Music player to listen to music to your hearts content in guilds!")
-public class MusicHandler extends CommandHandler {
+@Module(name = "Music Player", aliases = {"music", "m"}, help = "Music player to listen to music to your hearts content in guilds!")
+public class MusicHandler extends JDAHandler {
 
 	private static final int LINE_MAX_LENGTH = 55;
 
@@ -68,10 +67,10 @@ public class MusicHandler extends CommandHandler {
 	}
 
 	@Command(name = "Play", aliases = {"play", "resume"}, help = "Play if the music if it's paused.")
-	public String play(AbstractEvent event) {
+	public String play(JDACommand event) {
 		GuildAudioPlayer player = getAudioPlayer(event);
 
-		if (!event.getMessageEvent().getGuild().getSelfMember().getVoiceState().inVoiceChannel())
+		if (!event.getSource().getGuild().getSelfMember().getVoiceState().inVoiceChannel())
 			return "There is nothing to play though? Perhaps add a song instead, I'll join you as soon as you do!";
 
 		else if (player.isIdle())
@@ -85,25 +84,25 @@ public class MusicHandler extends CommandHandler {
 	}
 
 	@Command(name = "Pause", aliases = {"pause", "stop"}, help = "Pause the music if it's playing.")
-	public String pause(AbstractEvent event) {
+	public String pause(JDACommand event) {
 		GuildAudioPlayer player = getAudioPlayer(event);
 
-		if (!event.getMessageEvent().getGuild().getSelfMember().getVoiceState().inVoiceChannel() || player.isIdle())
+		if (!event.getSource().getGuild().getSelfMember().getVoiceState().inVoiceChannel() || player.isIdle())
 			return "There is nothing to pause though? Perhaps you meant to do that to another bot?";
 
 		if (!player.pause())
 			return "I'm already paused though? You'd have to teach me how to double pause before I could do that. :c";
 
-		String prefix = confiler.getPrefix(event.getMessageEvent());
+		String prefix = confiler.getPrefixes(commandler, event.getSource())[0];
 		return "I've paused the music now, feel free to do `" + prefix + "music play` whenever you want me to play again!";
 	}
 
 	@Command(id = 101, name = "Queue", aliases = {"queue", "playing", "np"}, help = "Display the playing track and queue.")
-	public Object queue(AbstractEvent event) throws IOException {
+	public Object queue(JDACommand event) throws IOException {
 		return queue(event, 0);
 	}
 
-	public Object queue(AbstractEvent event, int offset) throws IOException {
+	public Object queue(JDACommand event, int offset) throws IOException {
 		GuildAudioPlayer player = getAudioPlayer(event);
 		AudioTrack playing = player.getPlayingTrack();
 		List<AudioTrack> queue = player.getQueue();
@@ -148,91 +147,90 @@ public class MusicHandler extends CommandHandler {
 			builder.setFooter(String.format("There are %,d tracks in the queue!", queue.size()), null);
 		}
 
-		event.addReaction("⬅", "1⃣", "2⃣","3⃣", "4⃣", "5⃣", "6⃣", "7⃣", "8⃣", "➡");
+//		event.addReaction("⬅", "1⃣", "2⃣","3⃣", "4⃣", "5⃣", "6⃣", "7⃣", "8⃣", "➡");
 
-		if (offset == 0)
-			event.storeObject("offset", offset);
+//		if (offset == 0)
+//			event.storeObject("offset", offset);
 
 		return builder;
 	}
 
-	@Reaction(id = 101, emotes = {"1⃣", "2⃣","3⃣", "4⃣", "5⃣", "6⃣", "7⃣", "8⃣"})
-	public Object setTrack(ReactionEvent event) throws IOException {
-		GuildAudioPlayer player = getAudioPlayer(event);
-		int position = 0;
+//	@Reaction(id = 101, emotes = {"1⃣", "2⃣","3⃣", "4⃣", "5⃣", "6⃣", "7⃣", "8⃣"})
+//	public Object setTrack(ReactionEvent event) throws IOException {
+//		GuildAudioPlayer player = getAudioPlayer(event);
+//		int position = 0;
+//
+//		switch (event.getReactionAddEvent().getReactionEmote().getName()) {
+//			case "1⃣": position = 0; break;
+//			case "2⃣": position = 1; break;
+//			case "3⃣": position = 2; break;
+//			case "4⃣": position = 3; break;
+//			case "5⃣": position = 4; break;
+//			case "6⃣": position = 5; break;
+//			case "7⃣": position = 6; break;
+//			case "8⃣": position = 7; break;
+//		}
+//
+//		List<AudioTrack> queue = player.getQueue();
+//
+//		int offset = (int)event.getReactionRecord().getObject("offset");
+//		position += offset;
+//
+//		if (queue.size() > position) {
+//			player.getPlayer().playTrack(player.getQueue().remove(position));
+//			return queue(event, offset);
+//		}
+//
+//		return null;
+//	}
 
-		switch (event.getReactionAddEvent().getReactionEmote().getName()) {
-			case "1⃣": position = 0; break;
-			case "2⃣": position = 1; break;
-			case "3⃣": position = 2; break;
-			case "4⃣": position = 3; break;
-			case "5⃣": position = 4; break;
-			case "6⃣": position = 5; break;
-			case "7⃣": position = 6; break;
-			case "8⃣": position = 7; break;
-		}
-
-		List<AudioTrack> queue = player.getQueue();
-
-		int offset = (int)event.getReactionRecord().getObject("offset");
-		position += offset;
-
-		if (queue.size() > position) {
-			player.getPlayer().playTrack(player.getQueue().remove(position));
-			return queue(event, offset);
-		}
-
-		return null;
-	}
-
-	@Reaction(id = 101, emotes = {"⬅", "➡"})
-	public Object nextOrPreviousPage(ReactionEvent event) throws IOException {
-		ReactionRecord record = event.getReactionRecord();
-		GuildAudioPlayer player = getAudioPlayer(event);
-		List<AudioTrack> queue = player.getQueue();
-		int offset = (int)record.getObject("offset");
-
-		if (event.getReactionAddEvent().getReactionEmote().getName().equals("⬅")) {
-			offset -= 8;
-
-			if (offset < 0)
-				offset = queue.size() - (-offset);
-		} else {
-			offset += 8;
-
-			if (offset > queue.size())
-				offset -= queue.size();
-		}
-
-		record.storeObject("offset", offset);
-		return queue(event, offset);
-	}
-
+//	@Reaction(id = 101, emotes = {"⬅", "➡"})
+//	public Object nextOrPreviousPage(ReactionEvent event) throws IOException {
+//		ReactionRecord record = event.getReactionRecord();
+//		GuildAudioPlayer player = getAudioPlayer(event);
+//		List<AudioTrack> queue = player.getQueue();
+//		int offset = (int)record.getObject("offset");
+//
+//		if (event.getReactionAddEvent().getReactionEmote().getName().equals("⬅")) {
+//			offset -= 8;
+//
+//			if (offset < 0)
+//				offset = queue.size() - (-offset);
+//		} else {
+//			offset += 8;
+//
+//			if (offset > queue.size())
+//				offset -= queue.size();
+//		}
+//
+//		record.storeObject("offset", offset);
+//		return queue(event, offset);
+//	}
 
 	@Command(id = 100, name = "Add to Queue", aliases = {"add", "append"}, help = "Add a track to the end of the playlist.")
 	@Param(name = "query", help = "The URL for the audio or what to search for on YouTubeHelper!")
 	@Emoji(emotes = "\uD83D\uDD01", help = "Add this song to the queue again.")
-	public Object addTrack(AbstractEvent event, String query) throws IOException {
+	public Object addTrack(JDACommand event, String query) throws IOException {
 		if (!joinChannel(event))
 			return null;
 
 //		event.addReaction("\uD83D\uDD01");
-		event.storeObject("query", query);
+//		event.storeObject("query", query);
 
 		return handleSongAdded(event, query, false);
 	}
 
-	@Reaction(id = 100, emotes = "\uD83D\uDD01")
-	public Object addAgain(ReactionEvent event) throws IOException {
-		if (!joinChannel(event))
-			return null;
-
-		return handleSongAdded(event, (String)event.getReactionRecord().getObject("query"), false);
-	}
+//	@Reaction(id = 100, emotes = "\uD83D\uDD01")
+//	public Object addAgain(ReactionEvent event) throws IOException {
+//		if (!joinChannel(event))
+//			return null;
+//
+//		return handleSongAdded(event, (String)event.getReactionRecord().getObject("query"), false);
+//	}
 
 	@Command(name = "Insert into Queue", aliases = {"insert", "prepend"}, help = "Insert a track to the start of the queue.")
 	@Param(name = "query", help = "The URL for the audio or what to search for on YouTubeHelper!")
-	public Object insertTrack(AbstractEvent event, String query) throws IOException {
+	public Object insertTrack(JDACommand event, String query) throws IOException {
 		if (!joinChannel(event))
 			return null;
 
@@ -303,8 +301,8 @@ public class MusicHandler extends CommandHandler {
 	@Elevated
 	@Command(name = "Sync Nickname with Track", aliases = {"nickname", "nicksync", "ns"}, help = "Should Alexis append the currently playing track to her nickname?")
     @Param(name = "toggle", help = "True or false, should this be enabled or not?")
-	public String nicknameSync(AbstractEvent event, boolean enable) {
-        Guild guild = event.getMessageEvent().getGuild();
+	public String nicknameSync(JDACommand event, boolean enable) {
+        Guild guild = event.getSource().getGuild();
 
 	    GuildData data = GuildData.query(guild.getIdLong());
         boolean sync = data.getSettings().getMusicSettings().getSyncNickname();
@@ -327,7 +325,7 @@ public class MusicHandler extends CommandHandler {
 		options.upsert(true);
 
 		Query<GuildData> query = store.createQuery(GuildData.class);
-		query = query.filter("guild_id", event.getMessageEvent().getGuild().getIdLong());
+		query = query.filter("guild_id", event.getSource().getGuild().getIdLong());
 
 		UpdateOperations<GuildData> update = store.createUpdateOperations(GuildData.class);
 		update.set("settings.music.nickname_sync", enable);
@@ -353,14 +351,14 @@ public class MusicHandler extends CommandHandler {
 	 * @throws IOException
 	 */
 
-	private Object handleSongAdded(AbstractEvent event, String query, boolean insert) throws IOException {
+	private Object handleSongAdded(JDACommand event, String query, boolean insert) throws IOException {
 		GuildAudioPlayer player = getAudioPlayer(event);
 		Tuple<AudioPlaylist, List<AudioTrack>> tuple = player.add(query, insert);
 
 		if (tuple == null)
 			return "Sorry, I couldn't find any results with your input.";
 
-		event.tryDeleteMessage();
+		event.deleteMessage();
 
 		String method = insert ? "Inserted" : "Added";
 		AudioPlaylist playlist = tuple.itemOne();
@@ -411,7 +409,7 @@ public class MusicHandler extends CommandHandler {
 	 * @return If to continue processing this command.
 	 */
 
-	private boolean joinChannel(AbstractEvent event) {
+	private boolean joinChannel(JDACommand event) {
 		Message message = event.getMessage();
 		Member member = message.getMember();
 		VoiceChannel memberChannel = member.getVoiceState().getChannel();
@@ -450,7 +448,7 @@ public class MusicHandler extends CommandHandler {
 		if (audioManager.getSendingHandler() == null)
 			audioManager.setSendingHandler(new AudioPlayerSendHandler(guildPlayer.getPlayer()));
 
-		guildPlayer.setChannel(event.getMessageEvent().getTextChannel().getIdLong());
+		guildPlayer.setChannel(event.getSource().getTextChannel().getIdLong());
 		return true;
 	}
 
@@ -493,11 +491,11 @@ public class MusicHandler extends CommandHandler {
 	 * instance existed for this guild yet.
 	 */
 
-	private GuildAudioPlayer getAudioPlayer(AbstractEvent event) {
-		long id = event.getMessageEvent().getGuild().getIdLong();
+	private GuildAudioPlayer getAudioPlayer(JDACommand event) {
+		long id = event.getSource().getGuild().getIdLong();
 
 		if (!guildPlayers.containsKey(id))
-			guildPlayers.put(id, new GuildAudioPlayer(jda, manager));
+			guildPlayers.put(id, new GuildAudioPlayer(client, manager));
 
 		return guildPlayers.get(id);
 	}

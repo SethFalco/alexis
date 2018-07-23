@@ -6,14 +6,8 @@
     <content url="file://$MODULE_DIR$/../../../Elypiai/src/main">
       <sourceFolder url="file://$MODULE_DIR$/../../../Elypiai/src/main/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/../../../Elypiai/src/main/resources" type="java-resource" />
-      <excludeFolder url="file://$MODULE_DIR$/../../../Elypiai/src/main/java/com/elypia/elypiai/amazon" />
-      <excludeFolder url="file://$MODULE_DIR$/../../../Elypiai/src/main/java/com/elypia/elypiai/bing" />
-      <excludeFolder url="file://$MODULE_DIR$/../../../Elypiai/src/main/java/com/elypia/elypiai/cleverbot" />
-      <excludeFolder url="file://$MODULE_DIR$/../../../Elypiai/src/main/java/com/elypia/elypiai/dailymotion" />
       <excludeFolder url="file://$MODULE_DIR$/../../../Elypiai/src/main/java/com/elypia/elypiai/duolingo" />
       <excludeFolder url="file://$MODULE_DIR$/../../../Elypiai/src/main/java/com/elypia/elypiai/edamam" />
-      <excludeFolder url="file://$MODULE_DIR$/../../../Elypiai/src/main/java/com/elypia/elypiai/google" />
-      <excludeFolder url="file://$MODULE_DIR$/../../../Elypiai/src/main/java/com/elypia/elypiai/myanimelist" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

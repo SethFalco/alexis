@@ -12,6 +12,9 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/894298062/commandler_example.iml" filepath="$PROJECT_DIR$/.idea/modules/894298062/commandler_example.iml" group="commandler" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/894298062/commandler_main.iml" filepath="$PROJECT_DIR$/.idea/modules/894298062/commandler_main.iml" group="commandler" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/894298062/commandler_test.iml" filepath="$PROJECT_DIR$/.idea/modules/894298062/commandler_test.iml" group="commandler" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/elyscript.iml" filepath="$PROJECT_DIR$/.idea/modules/elyscript.iml" group="elyscript" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/1039467293/elyscript_main.iml" filepath="$PROJECT_DIR$/.idea/modules/1039467293/elyscript_main.iml" group="elyscript" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/1039467293/elyscript_test.iml" filepath="$PROJECT_DIR$/.idea/modules/1039467293/elyscript_test.iml" group="elyscript" />
     </modules>
   </component>
 </project>

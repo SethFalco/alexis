@@ -2,24 +2,25 @@ package com.elypia.alexis.handlers.modules;
 
 import com.elypia.alexis.Alexis;
 import com.elypia.alexis.config.*;
-import com.elypia.alexis.utils.BotUtils;
+import com.elypia.alexis.utils.*;
+import com.elypia.commandler.*;
 import com.elypia.commandler.annotations.*;
+import com.elypia.commandler.annotations.Module;
 import com.elypia.commandler.annotations.validation.command.Scope;
 import com.elypia.commandler.annotations.validation.param.Everyone;
-import com.elypia.commandler.events.*;
-import com.elypia.commandler.modules.CommandHandler;
 import com.elypia.elypiai.utils.Markdown;
-import com.elypia.elypiai.utils.elyscript.ElyScript;
+import com.elypia.elyscript.ElyScript;
 import net.dv8tion.jda.core.*;
 import net.dv8tion.jda.core.entities.*;
+import net.dv8tion.jda.core.events.message.GenericMessageEvent;
 
 import java.time.*;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
 
-@Module(name = "Bot", aliases = {"bot", "robot"}, description = "Bot commands for stats or information.")
-public class BotHandler extends CommandHandler {
+@Module(name = "Bot", aliases = {"bot", "robot"}, help = "help.bot")
+public class BotHandler extends JDAHandler {
 
 	private final OffsetDateTime BOT_TIME;
 
@@ -28,35 +29,36 @@ public class BotHandler extends CommandHandler {
 	}
 
 	@Static
-	@Command(name = "Ping!", aliases = "ping", help = "Respond 'pong!' with the number of `ms` it took to fulfil the request!")
-	public void ping(AbstractEvent event) {
+	@Command(name = "Ping!", aliases = "ping", help = "help.bot.ping")
+	public void ping(JDACommand event) {
 		pingPong(event, "pong!");
 	}
 
 	@Static
 	@Command(name = "Pong!", aliases = "pong")
-	public void pong(AbstractEvent event) {
+	public void pong(JDACommand event) {
 		pingPong(event, "ping!");
 	}
 
-	private void pingPong(AbstractEvent event, String text) {
+	private void pingPong(JDACommand event, String text) {
 		long startTime = System.currentTimeMillis();
 
-		event.getMessageEvent().getChannel().sendMessage(text).queue(message -> {
+		event.getSource().getChannel().sendMessage(text).queue(message -> {
 			long endTime = System.currentTimeMillis() - startTime;
 			message.editMessage(String.format("%s `%,dms`", message.getContentRaw(), endTime)).queue();
 		});
 	}
 
 	@Default
-	@Command(name = "Bot Stats", aliases = {"stats", "info"}, help = "Get stats, info, and support information for Alexis!")
-	public void displayStats(AbstractEvent event) {
-		EmbedBuilder builder = BotUtils.createEmbedBuilder(event.getMessageEvent().getGuild());
-		JDA jda = event.getMessageEvent().getJDA();
+	@Command(name = "Bot Stats", aliases = {"stats", "info"}, help = "help.bot.info")
+	public void displayStats(JDACommand event) {
+		GenericMessageEvent source = event.getSource();
+		EmbedBuilder builder = BotUtils.createEmbedBuilder(source.getGuild());
+		JDA jda = source.getJDA();
 		User alexis = jda.getSelfUser();
 
 		builder.setTitle(alexis.getName());
-		builder.setDescription("Alexis is a multi-purpose chatbot with integration and notifiers for many services including Twitch, osu! and RuneScape. It contains fun, music, and moderation functionality.\n_ _");
+		builder.setDescription(BotUtils.getScript("bot.description", source) + "\n_ _");
 		builder.setThumbnail(alexis.getAvatarUrl());
 
 		AlexisConfig config = Alexis.getConfig();
@@ -68,19 +70,22 @@ public class BotHandler extends CommandHandler {
 			User user = jda.getUserById(id);
 
 			if (user != null)
-				joiner.add(Markdown.a(user.getName(), author.getUrl() + " - " + author.getRole()));
+				joiner.add(Markdown.a(user.getName(), author.getUrl()) + " - " + author.getRole());
 			else
-				BotUtils.log(Level.WARNING, "The developer for id %d couldn't be found.", id);
+				BotLogger.log(event, Level.INFO, "The developer for id %d couldn't be found.", id);
 		}
 
-		String title = authors.size() > 1 ? "Authors" : "Author";
+		Map<String, Object> authorParams = new HashMap<>();
+		authorParams.put("total_authors", authors.size());
+
+		String title = BotUtils.getScript("bot.authors.title", source, authorParams);
 		builder.addField(title, joiner.toString(), true);
 
 		joiner = new StringJoiner("\n");
 
 		joiner.add("Language - Java");
 		joiner.add("Library - " + Markdown.a("JDA", "https://github.com/DV8FromTheWorld/JDA"));
-		joiner.add("Invite - " + Markdown.a("Invite me!", BotUtils.formInviteUrl(alexis)));
+		joiner.add("Invite - " + Markdown.a(BotUtils.getScript("bot.invite_me.value", source), BotUtils.formInviteUrl(alexis)));
 
 		builder.addField("Info", joiner.toString(), true);
 
@@ -91,8 +96,10 @@ public class BotHandler extends CommandHandler {
 		String userField = String.format("%,d (%,d)", users.size() - bots, bots);
 		builder.addField("Total Users (Bots)", userField, true);
 
-		String prefix = commandler.getConfiler().getPrefix(event.getMessageEvent());
-		builder.setFooter("You can support the project through the '" + prefix + "amazon' module!", null);
+		Map<String, Object> supportParams = new HashMap<>();
+		supportParams.put("prefix", commandler.getConfiler().getPrefixes(commandler, source)[0]);
+
+		builder.setFooter(BotUtils.getScript("bot.support", source, supportParams), null);
 
 		Guild guild = jda.getGuildById(config.getDiscordConfig().getSupportGuild());
 		guild.getInvites().queue(invites -> {
@@ -103,18 +110,18 @@ public class BotHandler extends CommandHandler {
 	}
 
 	@Static
-	@Command(name = "Say", aliases = "say", help = "Have Alexis repeat something you say!")
-	@Param(name = "body", help = "Text Alexis should repeat!")
-	public String say(AbstractEvent event, @Everyone String body) {
-		event.tryDeleteMessage();
+	@Command(name = "Say", aliases = "say", help = "help.bot.say")
+	@Param(name = "body", help = "help.bot.say.body")
+	public String say(JDACommand event, @Everyone String body) {
+		event.deleteMessage();
 		return body;
 	}
 
 	@Static
 	@Scope(ChannelType.TEXT)
-	@Command(name = "Bot Invites", aliases = {"invite", "invites"}, help = "Get invites for all the bots in here!")
-	public EmbedBuilder invites(AbstractEvent event) {
-		Guild guild = event.getMessageEvent().getGuild();
+	@Command(name = "Bot Invites", aliases = {"invite", "invites"}, help = "help.bot.invites")
+	public EmbedBuilder invites(JDACommand event) {
+		Guild guild = event.getSource().getGuild();
 		Collection<Member> bots = guild.getMembers();
 
 		Collection<User> users = bots.stream().map(Member::getUser).filter(User::isBot).filter(o -> {
@@ -129,10 +136,10 @@ public class BotHandler extends CommandHandler {
 	}
 
 	@Static
-	@Command(name = "ElyScript", aliases = "script", help = "Have Alexis repeat something you say using ElyScript!")
-	@Param(name = "body", help = "Text Alexis should repeat!")
-	public String sayEly(AbstractEvent event, @Everyone String body) {
-		event.tryDeleteMessage();
+	@Command(name = "ElyScript", aliases = "script", help = "help.bot.script")
+	@Param(name = "body", help = "help.bot.script.body")
+	public String sayEly(JDACommand event, @Everyone String body) {
+		event.deleteMessage();
 		return new ElyScript(body).compile();
 	}
 }

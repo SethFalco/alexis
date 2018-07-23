@@ -31,10 +31,13 @@ public class MessageSettings {
     }
 
     public String getMessage() {
+        if (message == null)
+            return "Congratulations, ($user.mention) just advanced a ($user.role) level.\nYour ($user.role) level is now ($user.level).";
+
         return message;
     }
 
-    public void setMessages(String message) {
+    public void setMessage(String message) {
         this.message = message;
     }
 }

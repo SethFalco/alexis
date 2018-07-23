@@ -1,12 +1,11 @@
 package com.elypia.alexis.handlers.modules;
 
 import com.elypia.alexis.utils.BotUtils;
+import com.elypia.commandler.*;
 import com.elypia.commandler.annotations.*;
-import com.elypia.commandler.annotations.filter.Search;
+import com.elypia.commandler.annotations.Module;
 import com.elypia.commandler.annotations.validation.command.Scope;
-import com.elypia.commandler.data.SearchScope;
-import com.elypia.commandler.events.*;
-import com.elypia.commandler.modules.CommandHandler;
+import com.elypia.commandler.annotations.validation.param.Search;
 import com.elypia.elypiai.utils.Markdown;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.*;
@@ -14,22 +13,22 @@ import net.dv8tion.jda.core.entities.*;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-@Module(name = "User", aliases = "user", description = "Get information or stats on global users! Try 'members' for guild specific commands.")
-public class UserHandler extends CommandHandler {
+@Module(name = "User", aliases = "user", help = "Get information or stats on global users! Try 'members' for guild specific commands.")
+public class UserHandler extends JDAHandler {
 
-	@Overload(5)
-	public void getInfo(AbstractEvent event) {
+	@Overload(value = 5, params = {})
+	public void getInfo(JDACommand event) {
 		getInfo(event, event.getMessage().getAuthor());
 	}
 
 	@Command(id = 5, name = "User Info", aliases = "info", help = "Get some basic information on the user!")
 	@Param(name = "user", help = "The user to display information for.")
 	@Scope(ChannelType.TEXT)
-	public EmbedBuilder getInfo(AbstractEvent event, @Search(SearchScope.LOCAL) User user) {
+	public EmbedBuilder getInfo(JDACommand event, @Search(SearchScope.LOCAL) User user) {
 		EmbedBuilder builder = new EmbedBuilder();
 		String avatar = user.getEffectiveAvatarUrl();
 		DateTimeFormatter format = DateTimeFormatter.ISO_LOCAL_DATE;
-		Guild guild = event.getMessageEvent().getGuild();
+		Guild guild = event.getSource().getGuild();
 
 		if (guild != null) {
 			Member member = guild.getMember(user);

@@ -1,9 +1,9 @@
 package com.elypia.alexis.handlers.modules;
 
+import com.elypia.commandler.*;
 import com.elypia.commandler.annotations.*;
-import com.elypia.commandler.annotations.validation.command.NSFW;
-import com.elypia.commandler.events.AbstractEvent;
-import com.elypia.commandler.modules.CommandHandler;
+import com.elypia.commandler.annotations.Module;
+import com.elypia.commandler.annotations.validation.command.Nsfw;
 import com.elypia.elypiai.utils.math.MathUtils;
 import net.dv8tion.jda.core.EmbedBuilder;
 import okhttp3.*;
@@ -13,8 +13,8 @@ import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
-@Module(name = "Miscellaneous", aliases = {"util", "utils"}, description = "Miscellaneous commands that don't fit into another module. All of these are static.")
-public class UtilHandler extends CommandHandler {
+@Module(name = "Miscellaneous", aliases = {"util", "utils"}, help = "Miscellaneous commands that don't fit into another module. All of these are static.")
+public class UtilHandler extends JDAHandler {
 
     private OkHttpClient client;
     private Request nekoRequest;
@@ -58,9 +58,9 @@ public class UtilHandler extends CommandHandler {
 	}
 
     @Static
-    @NSFW
+    @Nsfw
     @Command(name = "Get Pet Neko", aliases = "neko", help = "Get a pet neko sent to you over Discord.")
-    public void neko(AbstractEvent event) {
+    public void neko(JDACommand event) {
         client.newCall(nekoRequest).enqueue(new Callback() {
 
             @Override

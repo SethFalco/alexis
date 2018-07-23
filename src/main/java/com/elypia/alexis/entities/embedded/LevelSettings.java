@@ -20,6 +20,9 @@ public class LevelSettings {
     }
 
     public MessageSettings getNotifySettings() {
+        if (notifySettings == null)
+            notifySettings = new MessageSettings();
+
         return notifySettings;
     }
 

@@ -1,16 +1,15 @@
 package com.elypia.alexis.commandler.builders;
 
+import com.elypia.alexis.google.youtube.YouTubeHelper;
 import com.elypia.alexis.utils.BotUtils;
-import com.elypia.alexis.youtube.YouTubeHelper;
-import com.elypia.commandler.events.AbstractEvent;
-import com.elypia.commandler.sending.IMessageBuilder;
+import com.elypia.commandler.*;
 import com.google.api.services.youtube.model.*;
-import net.dv8tion.jda.core.EmbedBuilder;
-import net.dv8tion.jda.core.entities.MessageEmbed;
+import net.dv8tion.jda.core.*;
+import net.dv8tion.jda.core.entities.Message;
 
 import java.io.IOException;
 
-public class YouTubeSearchResultBuilder implements IMessageBuilder<SearchResult> {
+public class YouTubeSearchResultBuilder implements IJDABuilder<SearchResult> {
 
     private YouTubeHelper youtube;
 
@@ -19,12 +18,12 @@ public class YouTubeSearchResultBuilder implements IMessageBuilder<SearchResult>
     }
 
     @Override
-    public MessageEmbed buildAsEmbed(AbstractEvent event, SearchResult toSend) {
-        SearchResultSnippet snippet = toSend.getSnippet();
+    public Message buildEmbed(JDACommand event, SearchResult output) {
+        SearchResultSnippet snippet = output.getSnippet();
 
         EmbedBuilder builder = BotUtils.createEmbedBuilder(event);
         builder.setAuthor(snippet.getChannelTitle());
-        builder.setTitle(snippet.getTitle(), YouTubeHelper.getVideoUrl(toSend.getId().getVideoId()));
+        builder.setTitle(snippet.getTitle(), YouTubeHelper.getVideoUrl(output.getId().getVideoId()));
         builder.setDescription(snippet.getDescription());
         builder.setImage(snippet.getThumbnails().getHigh().getUrl());
         builder.setFooter("Published at: " + snippet.getPublishedAt().toString(), null);
@@ -35,21 +34,11 @@ public class YouTubeSearchResultBuilder implements IMessageBuilder<SearchResult>
             e.printStackTrace();
         }
 
-        return builder.build();
+        return new MessageBuilder(builder.build()).build();
     }
 
     @Override
-    public MessageEmbed buildAsEmbed(AbstractEvent event, SearchResult... toSend) {
-        return null;
-    }
-
-    @Override
-    public String buildAsString(AbstractEvent event, SearchResult toSend) {
-        return null;
-    }
-
-    @Override
-    public String buildAsString(AbstractEvent event, SearchResult... toSend) {
+    public Message build(JDACommand event, SearchResult output) {
         return null;
     }
 }

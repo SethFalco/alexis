@@ -12,6 +12,9 @@ public class GreetingSettings {
     private GreetingSetting farewell;
 
     public GreetingSetting getWelcome() {
+        if (welcome == null)
+            welcome = new GreetingSetting();
+
         return welcome;
     }
 
@@ -20,6 +23,9 @@ public class GreetingSettings {
     }
 
     public GreetingSetting getFarewell() {
+        if (farewell == null)
+            farewell = new GreetingSetting();
+
         return farewell;
     }
 

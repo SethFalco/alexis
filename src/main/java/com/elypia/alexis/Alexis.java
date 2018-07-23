@@ -5,7 +5,6 @@ import com.elypia.alexis.utils.*;
 
 import javax.security.auth.login.LoginException;
 import java.io.IOException;
-import java.util.logging.Level;
 
 import static com.elypia.alexis.utils.ExitCode.*;
 
@@ -20,7 +19,7 @@ public class Alexis {
 			bot = new Chatbot(args.length > 0 && args[0].equalsIgnoreCase("-doc"));
 		} catch (LoginException | IOException ex) {
 			ExitCode code = ex instanceof IOException ? FAILED_TO_READ_CONFIG : FAILED_TO_INIT_BOT;
-			BotUtils.log(Level.SEVERE, code.getMessage());
+			BotLogger.log(ex);
 			System.exit(code.getStatusCode());
 		}
 	}

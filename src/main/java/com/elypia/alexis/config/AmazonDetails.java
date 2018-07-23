@@ -1,5 +1,6 @@
 package com.elypia.alexis.config;
 
+import com.elypia.elypiai.amazon.data.AmazonEndpoint;
 import com.google.gson.annotations.SerializedName;
 
 public class AmazonDetails {
@@ -13,8 +14,8 @@ public class AmazonDetails {
     @SerializedName("tag")
     private String tag;
 
-//    @SerializedName("endpoint")
-//    private AmazonEndpoint endpoint;
+    @SerializedName("endpoint")
+    private AmazonEndpoint endpoint;
 
     public String getKey() {
         return key;
@@ -28,7 +29,7 @@ public class AmazonDetails {
         return tag;
     }
 
-//    public AmazonEndpoint getEndpoint() {
-//        return endpoint;
-//    }
+    public AmazonEndpoint getEndpoint() {
+        return endpoint;
+    }
 }

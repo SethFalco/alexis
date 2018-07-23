@@ -8,6 +8,9 @@ public class GuildSettings {
     @Property("prefix")
     private String prefix;
 
+    @Embedded("log_settings")
+    private GuildLogSettings logSettings;
+
     @Property("previous_roles")
     private boolean previousRoles;
 
@@ -34,6 +37,17 @@ public class GuildSettings {
         this.prefix = prefix;
     }
 
+    public GuildLogSettings getLogSettings() {
+        if (logSettings == null)
+            logSettings = new GuildLogSettings();
+
+        return logSettings;
+    }
+
+    public void setLogSettings(GuildLogSettings logSettings) {
+        this.logSettings = logSettings;
+    }
+
     public boolean isPreviousRoles() {
         return previousRoles;
     }
@@ -51,6 +65,9 @@ public class GuildSettings {
     }
 
     public GreetingSettings getGreetingSettings() {
+        if (greetingSettings == null)
+            greetingSettings = new GreetingSettings();
+
         return greetingSettings;
     }
 
@@ -59,6 +76,9 @@ public class GuildSettings {
     }
 
     public JoinRoleSettings getJoinRoleSettings() {
+        if (joinRoleSettings == null)
+            joinRoleSettings = new JoinRoleSettings();
+
         return joinRoleSettings;
     }
 
@@ -67,6 +87,9 @@ public class GuildSettings {
     }
 
     public LevelSettings getLevelSettings() {
+        if (levelSettings == null)
+            levelSettings = new LevelSettings();
+
         return levelSettings;
     }
 
@@ -75,6 +98,9 @@ public class GuildSettings {
     }
 
     public MusicSettings getMusicSettings() {
+        if (musicSettings == null)
+            musicSettings = new MusicSettings();
+
         return musicSettings;
     }
 

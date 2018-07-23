@@ -3,7 +3,11 @@ package com.elypia.alexis.handlers;
 import com.elypia.alexis.*;
 import com.elypia.alexis.entities.*;
 import com.elypia.alexis.entities.embedded.*;
-import com.elypia.alexis.utils.BotUtils;
+import com.elypia.alexis.google.translate.TranslateHelper;
+import com.elypia.alexis.utils.*;
+import com.elypia.elypiai.runescape.RuneScape;
+import com.elypia.elypiai.utils.Country;
+import com.google.cloud.translate.*;
 import com.mongodb.MongoClient;
 import net.dv8tion.jda.core.*;
 import net.dv8tion.jda.core.entities.*;
@@ -15,9 +19,8 @@ import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.events.message.react.MessageReactionAddEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 import org.mongodb.morphia.*;
-import org.mongodb.morphia.query.*;
+import org.mongodb.morphia.query.Query;
 
-import java.util.Date;
 import java.util.logging.Level;
 
 public class EventHandler extends ListenerAdapter {
@@ -43,7 +46,7 @@ public class EventHandler extends ListenerAdapter {
 	@Override
 	public void onReady(ReadyEvent event) {
 		long timeElapsed = System.currentTimeMillis() - chatbot.getStartUpTime();
-		BotUtils.log(Level.INFO, "Time taken to launch: %,dms", timeElapsed);
+		BotLogger.log(event, Level.FINER, "Time taken to launch: %,dms", timeElapsed);
 
 		event.getJDA().getPresence().setStatus(OnlineStatus.ONLINE);
 	}
@@ -65,8 +68,8 @@ public class EventHandler extends ListenerAdapter {
 			channel.sendMessage(message).queue();
 		}
 
-		BotUtils.log(Level.INFO, "The guild " + guild.getName() + " just invited me!");
-		BotUtils.logBotInfo();
+		BotLogger.log(event, Level.INFO, "The guild  %s just invited me!", guild.getName());
+		BotLogger.log(event.getJDA());
 
 		GuildData data = new GuildData();
 		data.setGuildId(guild.getIdLong());
@@ -77,8 +80,8 @@ public class EventHandler extends ListenerAdapter {
 	public void onGuildLeave(GuildLeaveEvent event) {
 		Guild guild = event.getGuild();
 
-		BotUtils.log(Level.INFO, "The guild " + guild.getName() + " just kicked me!");
-		BotUtils.logBotInfo();
+		BotLogger.log(event, Level.INFO, "The guild %s just kicked me!", guild.getName());
+		BotLogger.log(event.getJDA());
 	}
 
 	@Override
@@ -106,7 +109,7 @@ public class EventHandler extends ListenerAdapter {
 			JDA jda = event.getJDA();
 			TextChannel channel = jda.getTextChannelById(settings.getChannel());
 			String message = settings.getMessage();
-			message = BotUtils.buildCustomMessage(event, message);
+			message = BotUtils.buildScript(message, event);
 
 			channel.sendMessage(message).queue();
 		}
@@ -143,23 +146,43 @@ public class EventHandler extends ListenerAdapter {
 	}
 
 	private void handleXp(MessageReceivedEvent event) {
-		if (!event.isFromType(ChannelType.TEXT))
+		User author = event.getAuthor();
+
+		if (!event.isFromType(ChannelType.TEXT) || author.isBot())
 			return;
 
 		if (event.getGuild().getMembers().stream().filter(o -> !o.getUser().isBot()).count() == 1)
 			return;
 
-		User user = event.getAuthor();
-		UserData data = UserData.query(user.getIdLong());
+		long userId = author.getIdLong();
 
-		int entitlement = data.getXpEntitlement(event);
-		UpdateOperations<UserData> update = store.createUpdateOperations(UserData.class);
+		UserData userData = UserData.query(userId);
+		userData.grantXp(event);
+		userData.commit();
 
-		if (entitlement > 0)
-			update.set("xp", data.getXp() + entitlement);
+		if (!event.getChannelType().isGuild())
+			return;
 
-		update.set("last_active", new Date());
-		store.update(data, update);
+		long guildId = event.getGuild().getIdLong();
+
+		GuildData guildData = GuildData.query(guildId);
+
+		MemberData memberData = MemberData.query(userId, guildId);
+		int currentLevel = RuneScape.parseXpAsLevel(memberData.getXp());
+
+		if (memberData.grantXp(event)) {
+			int newLevel = RuneScape.parseXpAsLevel(memberData.getXp());
+
+			if (currentLevel != newLevel) {
+				boolean enabled = guildData.getSettings().getLevelSettings().getNotifySettings().isEnabled();
+
+				if (enabled) {
+					event.getChannel().sendMessage("Well done you went from level " + currentLevel + " to level " + newLevel + "!").queue();
+				}
+			}
+		}
+
+		memberData.commit();
 	}
 
 	@Override
@@ -167,32 +190,40 @@ public class EventHandler extends ListenerAdapter {
 		if (event.getUser().isBot())
 			return;
 
-//		handleTranslate(event);
+		handleTranslate(event);
 	}
 
-//	GoogleTranslate translate = new GoogleTranslate("***REMOVED***");
-//
-//	private void handleTranslate(MessageReactionAddEvent event) {
-//		List<Language> languages = translate.getSupportedLanguages();
-//
-//		for (Language language : languages) {
-//			for (Country country : language.getCountries()) {
-//				if (country.getUnicodeEmote().equals(event.getReactionEmote().getName())) {
-//					event.getChannel().getMessageById(event.getMessageId()).queue(message -> {
-//						translate.translate(message.getContentStripped(), language, result -> {
-//							EmbedBuilder builder = new EmbedBuilder();
-//							builder.addField("Source (" + result.getSource().getLanguageName() + ")", result.getBody() + "\n_ _", false);
-//							String translatedBody = StringEscapeUtils.unescapeHtml4(result.getTranslatedBody());
-//							builder.addField("Target (" + result.getTarget().getLanguageName() + ")", translatedBody, false);
-//							builder.setImage("https://cdn.discordapp.com/attachments/436154993247256586/460187735936991233/color-short2x.png");
-//							builder.setFooter("http://translate.google.com/", null);
-//							builder.setColor(event.getGuild().getSelfMember().getColor());
-//							event.getChannel().sendMessage(builder.build()).queue();
-//							message.addReaction(country.getUnicodeEmote()).queue();
-//						}, ex -> BotUtils.sendHttpError(null, ex));
-//					});
-//				}
-//			}
-//		}
-//	}
+	private TranslateHelper translate = new TranslateHelper();
+
+	private void handleTranslate(MessageReactionAddEvent event) {
+		String code = event.getReactionEmote().getName();
+		var languages = translate.getSupportedLangauges();
+
+		for (var entry : languages.entrySet()) {
+			Language value = entry.getValue();
+
+			for (Country country : entry.getKey().getCountries()) {
+				if (country.getUnicodeEmote().equals(code)) {
+					event.getChannel().getMessageById(event.getMessageIdLong()).queue(message -> {
+						String content = message.getContentStripped();
+						Translation translation = translate.translate(content, value);
+						var source = translate.getLanguage(translation.getSourceLanguage()).getKey();
+
+						EmbedBuilder builder = new EmbedBuilder();
+						builder.addField("Source (" + source.getLanguageName() + ")", content + "\n_ _", false);
+						builder.addField("Target (" + value.getName() + ")", translation.getTranslatedText(), false);
+						builder.setImage("https://cdn.discordapp.com/attachments/436154993247256586/460187735936991233/color-short2x.png");
+						builder.setFooter("http://translate.google.com/", null);
+
+						if (event.getGuild() != null)
+							builder.setColor(event.getGuild().getSelfMember().getColor());
+
+						event.getChannel().sendMessage(builder.build()).queue();
+					});
+
+					return;
+				}
+			}
+		}
+	}
 }

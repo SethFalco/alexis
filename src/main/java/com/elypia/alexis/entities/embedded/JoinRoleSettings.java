@@ -23,6 +23,9 @@ public class JoinRoleSettings {
     }
 
     public RoleSettings getUserSettings() {
+        if (userSettings == null)
+            userSettings = new RoleSettings();
+
         return userSettings;
     }
 
@@ -31,6 +34,9 @@ public class JoinRoleSettings {
     }
 
     public RoleSettings getBotSettings() {
+        if (botSettings == null)
+            botSettings = new RoleSettings();
+
         return botSettings;
     }
 

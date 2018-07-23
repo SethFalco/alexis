@@ -2,15 +2,23 @@ package com.elypia.alexis.utils;
 
 import com.elypia.alexis.Alexis;
 import com.elypia.alexis.config.AlexisConfig;
-import com.elypia.alexis.entities.UserData;
-import com.elypia.commandler.events.AbstractEvent;
-import net.dv8tion.jda.core.*;
+import com.elypia.alexis.entities.*;
+import com.elypia.alexis.entities.embedded.NanowrimoLink;
+import com.elypia.commandler.JDACommand;
+import com.elypia.elypiai.runescape.RuneScape;
+import com.elypia.elypiai.utils.Language;
+import com.elypia.elyscript.ElyScriptStore;
+import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.*;
+import net.dv8tion.jda.core.events.Event;
+import net.dv8tion.jda.core.events.channel.text.GenericTextChannelEvent;
 import net.dv8tion.jda.core.events.guild.GenericGuildEvent;
 import net.dv8tion.jda.core.events.guild.member.GenericGuildMemberEvent;
+import net.dv8tion.jda.core.events.message.*;
+import net.dv8tion.jda.core.events.user.GenericUserEvent;
 
-import java.util.Collection;
-import java.util.logging.*;
+import java.util.*;
+import java.util.logging.Logger;
 
 public final class BotUtils {
 
@@ -21,7 +29,7 @@ public final class BotUtils {
 		// Don't construct this
 	}
 
-	public static EmbedBuilder createEmbedBuilder(AbstractEvent event) {
+	public static EmbedBuilder createEmbedBuilder(JDACommand event) {
 		return createEmbedBuilder(event.getMessage().getGuild());
 	}
 
@@ -32,18 +40,6 @@ public final class BotUtils {
 			builder.setColor(guild.getSelfMember().getColor());
 
 		return builder;
-	}
-
-	public static String buildCustomMessage(GenericGuildMemberEvent event, String message) {
-		Guild guild = event.getGuild();
-		Member member = event.getMember();
-
-		message = message.replace("{guild.name}", guild.getName());
-
-		message = message.replace("{user.name}", member.getEffectiveName());
-		message = message.replace("{user.mention}", member.getAsMention());
-
-		return message;
 	}
 
 	public static TextChannel getWriteableChannel(GenericGuildEvent event) {
@@ -68,66 +64,121 @@ public final class BotUtils {
 	public static boolean isDatabaseAlive() {
 		AlexisConfig config = Alexis.getConfig();
 		boolean databaseEnabled = config.getDatabaseConfig().isEnabled();
+
+		if (!databaseEnabled)
+			return false;
+
 		long dev = config.getDiscordConfig().getAuthors().get(0).getId();
 
 		try {
 			UserData data = UserData.query(dev);
-			return databaseEnabled && data != null;
+			return data != null;
 		} catch (NullPointerException ex) {
 			return false;
 		}
-	}
-
-	public static void sendHttpError(AbstractEvent event, Throwable failure) {
-		String message = "Sorry, the command failed. I'm reporting this to Seth, perhaps trying again later?";
-		event.getMessageEvent().getChannel().sendMessage(message).queue();
-
-		log(Level.SEVERE, failure.getMessage(), failure);
 	}
 
 	public static String formInviteUrl(User user) {
 		return String.format(BOT_URL, user.getIdLong());
 	}
 
-	/**
-	 * Call the static
-	 *
-	 * @param level
-	 * @param message
-	 * @param args
-	 */
+	public static String getChannelLanguage(Event event) {
+		MessageChannel channel;
 
-	// Add exception for 7777
-	public static void log(Level level, String message, Object... args) {
-	    message = String.format(message, args);
-		LOGGER.log(level, message);
+		if (event instanceof GenericMessageEvent)
+			channel = ((GenericMessageEvent)event).getChannel();
 
-		if (level == Level.INFO || level == Level.WARNING || level == Level.SEVERE) {
-			String color = (level == Level.INFO) ? "+" : "-";
+		else if (event instanceof GenericTextChannelEvent)
+			channel = ((GenericTextChannelEvent)event).getChannel();
 
-			message = "```diff\n" + level.getName() + ":\n" + message + "```";
-			message = message.replace("\n", "\n" + color + " ");
+		else
+			return Language.ENGLISH.getCode();
 
-			long channelId = Alexis.getConfig().getDiscordConfig().getLogChannel();
-			MessageChannel channel = Alexis.getChatbot().getJDA().getTextChannelById(channelId);
-
-			if (level == Level.SEVERE) {
-				long userId = Alexis.getConfig().getDiscordConfig().getAuthors().get(0).getId();
-				User user = Alexis.getChatbot().getJDA().getUserById(userId);
-				message = "_ _\n" + user.getAsMention() + "\n\n" + message;
-			}
-
-			channel.sendMessage(message).queue();
-		}
+		MessageChannelData data = MessageChannelData.query(channel.getIdLong());
+		return data.getLanguage();
 	}
 
-	public static void logBotInfo() {
-		JDA jda = Alexis.getChatbot().getJDA();
+	public static String buildScript(String markup, Event event) {
+		return buildScript(markup, event, new HashMap<>());
+	}
 
-		int guilds = jda.getGuilds().size();
-		int users = jda.getUsers().size();
-		String format = "I'm in %,d guilds and can currently see %,d users!";
+	public static String buildScript(String markup, Event event, Map<String, Object> params) {
+		addEventParams(event, params);
+		return Alexis.getChatbot().getScriptStore().build(markup, params);
+	}
 
-		log(Level.INFO, format, guilds, users);
+	public static String getScript(String key, Event event) {
+		return getScript(key, event, new HashMap<>());
+	}
+
+	public static String getScript(String key, Event event, Map<String, Object> params) {
+		String language = getChannelLanguage(event);
+
+		addEventParams(event, params);
+		return Alexis.getChatbot().getScriptStore().get(ElyScriptStore.combineKeys(key, language), params);
+	}
+
+	private static void addEventParams(Event event, Map<String, Object> params) {
+		boolean database = isDatabaseAlive();
+
+		if (event instanceof MessageReceivedEvent) {
+			Message message = ((MessageReceivedEvent)event).getMessage();
+			params.put("message.content", message.getContentRaw());
+			params.put("message.id", message.getId());
+		}
+
+		if (event instanceof GenericUserEvent) {
+			User user = ((GenericUserEvent)event).getUser();
+			params.put("user.name", user.getName());
+			params.put("user.mention", user.getAsMention());
+			params.put("user.type", user.isBot() ? "bot" : "user");
+			params.put("user.id", user.getId());
+			params.put("user.avatar", user.getEffectiveAvatarUrl());
+			params.put("user.discriminator", user.getDiscriminator());
+
+			if (database) {
+				UserData userData = UserData.query(user.getIdLong());
+				params.put("user.xp", userData.getXp());
+				params.put("user.level", RuneScape.parseXpAsLevel(userData.getXp()));
+				params.put("user.last_message", userData.getLastMessage().toString());
+
+				NanowrimoLink nano = userData.getNanoLink();
+				if (nano.getUsername() != null && !nano.isPrivate())
+					params.put("user.nano.name", nano.getUsername());
+			}
+		}
+
+		if (event instanceof GenericGuildMemberEvent) {
+			Member member = ((GenericGuildMemberEvent)event).getMember();
+			params.put("member.nickname", member.getEffectiveName());
+			params.put("member.role", member.getRoles());
+
+			Game game = member.getGame();
+			if (game != null)
+				params.put("member.game", game.getName());
+
+			if (database) {
+				long userId = member.getUser().getIdLong();
+				long guildId = member.getGuild().getIdLong();
+				MemberData memberData = MemberData.query(userId, guildId);
+				params.put("member.xp", memberData.getXp());
+				params.put("member.level", RuneScape.parseXpAsLevel(memberData.getXp()));
+				params.put("member.last_message", memberData.getLastMessage());
+			}
+		}
+
+		if (event instanceof GenericGuildEvent) {
+			Guild guild = ((GenericGuildEvent)event).getGuild();
+			params.put("guild.name", guild.getName());
+			params.put("guild.id", guild.getId());
+			params.put("guild.icon", guild.getIconUrl());
+
+			if (database) {
+				GuildData guildData = GuildData.query(guild.getIdLong());
+				params.put("guild.xp", guildData.getXp());
+				params.put("guild.level", RuneScape.parseXpAsLevel(guildData.getXp()));
+				params.put("guild.prefix", guildData.getSettings().getPrefix());
+			}
+		}
 	}
 }

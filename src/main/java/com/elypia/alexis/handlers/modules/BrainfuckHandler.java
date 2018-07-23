@@ -1,22 +1,22 @@
 package com.elypia.alexis.handlers.modules;
 
+import com.elypia.commandler.JDAHandler;
 import com.elypia.commandler.annotations.*;
-import com.elypia.commandler.modules.CommandHandler;
+import com.elypia.commandler.annotations.Module;
 import com.elypia.elypiai.brainfuck.Brainfuck;
 
-@Module(name = "Brainfuck", aliases = {"brainfuck", "bf"}, description = "Compile Brainfuck code into Strings.")
-public class BrainfuckHandler extends CommandHandler {
+@Module(name = "Brainfuck", aliases = {"brainfuck", "bf"}, help = "help.brainfuck")
+public class BrainfuckHandler extends JDAHandler {
 
     @Default
-    @Command(id = 6, name = "Interpret Code", aliases = {"compile", "interpret"}, help = "Compile Brainfuck code into something non-nerds understand.")
-    @Param(name = "code", help = "The code to compile.")
+    @Command(id = 6, name = "Interpret Code", aliases = {"compile", "interpret"}, help = "help.brainfuck.compile")
+    @Param(name = "code", help = "help.brainfuck.compile.code")
     public String interpretBrainfuck(String code) {
         return interpretBrainfuck(code, new byte[0]);
     }
 
     @Overload(6)
-    @Param(name = "code", help = "The code to compile.")
-    @Param(name = "args", help = "The arguments for input, represented by a , in brainfuck.")
+    @Param(name = "args", help = "help.brainfuck.compile.args")
     public String interpretBrainfuck(String code, byte[] args) {
         try {
             Brainfuck brainfuck = Brainfuck.compile(code, args);

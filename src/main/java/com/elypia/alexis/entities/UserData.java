@@ -1,13 +1,16 @@
 package com.elypia.alexis.entities;
 
 import com.elypia.alexis.Alexis;
+import com.elypia.alexis.entities.data.Achievement;
+import com.elypia.alexis.entities.embedded.NanowrimoLink;
+import com.elypia.alexis.entities.impl.DatabaseEntity;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.annotations.*;
 import org.mongodb.morphia.query.Query;
 
-import java.util.Date;
+import java.util.*;
 
 /**
  * This is the data on the <strong>global</strong> instance of a user
@@ -15,7 +18,7 @@ import java.util.Date;
  */
 
 @Entity(value = "users", noClassnameStored = true)
-public class UserData {
+public class UserData extends DatabaseEntity {
 
     @Id
     private ObjectId id;
@@ -34,25 +37,43 @@ public class UserData {
     @Property("xp")
     private int xp;
 
-    /**
-     * The last time this user sent a message on Discord globally.
-     * Used to determine if they earn XP or not.
-     */
+    @Property("achivements")
+    private Set<Achievement> achievements;
 
-    @Property("last_active")
-    private Date lastActive;
+    @Embedded("nanowrimo")
+    private NanowrimoLink nanoLink;
 
-    public static UserData query(long userId) {
+    @Property("last_message")
+    private Date lastMessage;
+
+    public static UserData query(long id) {
         Datastore store = Alexis.getChatbot().getDatastore();
         Query<UserData> query = store.createQuery(UserData.class);
-        UserData data = query.filter("user_id ==", userId).get();
+        UserData data = query.filter("user_id ==", id).get();
 
         if (data == null) {
             data = new UserData();
-            data.userId = userId;
+            data.userId = id;
         }
 
+        if (data.achievements == null)
+            data.achievements = new HashSet<>();
+
         return data;
+    }
+
+    public static UserData query(String field, String value) {
+        Datastore store = Alexis.getChatbot().getDatastore();
+        Query<UserData> query = store.createQuery(UserData.class);
+        return query.filter(field + " ==", value).get();
+    }
+
+    public void grantAchievement(Achievement achievement) {
+        achievements.add(achievement);
+    }
+
+    public void revokeAchievement(Achievement achievement) {
+        achievements.remove(achievement);
     }
 
     /**
@@ -63,25 +84,21 @@ public class UserData {
      * (10 characters in a second.)
      *
      * @param event The generic event which rewards XP.
-     * @return Amount of XP user is entitled to, or -1 if deemed cheating.
+     * @return If they were entitled to xp.
      */
 
-    public int getXpEntitlement(MessageReceivedEvent event) {
-        // Split the message for every set of whitespace characters.
+    public boolean grantXp(MessageReceivedEvent event) {
         String content = event.getMessage().getContentRaw();
         int length = content.split("\\s+").length;
-
-        if (lastActive == null)
-            return length;
-
         long current = System.currentTimeMillis();
-        long previous = lastActive.getTime();
+        boolean earned = lastMessage == null || length <= ((current - lastMessage.getTime()) / 100);
 
-        // Divide by 1,000 to get milliseconds from seconds
-        // Multiply by 10 for max chars allowed for the # of seconds passed.
-        int allowableLength = (int)((current - previous) / 100);
+        lastMessage = new Date();
 
-        return length <= allowableLength ? length : 0;
+        if (earned)
+            xp += length;
+
+        return earned;
     }
 
     public ObjectId getId() {
@@ -108,11 +125,30 @@ public class UserData {
         this.xp = xp;
     }
 
-    public Date getLastActive() {
-        return lastActive;
+    public Set<Achievement> getAchievements() {
+        return achievements;
     }
 
-    public void setLastActive(Date lastActive) {
-        this.lastActive = lastActive;
+    public void setAchievements(Set<Achievement> achievments) {
+        this.achievements = achievments;
+    }
+
+    public NanowrimoLink getNanoLink() {
+        if (nanoLink == null)
+            nanoLink = new NanowrimoLink();
+
+        return nanoLink;
+    }
+
+    public void setNanoLink(NanowrimoLink nanoLink) {
+        this.nanoLink = nanoLink;
+    }
+
+    public Date getLastMessage() {
+        return lastMessage;
+    }
+
+    public void setLastMessage(Date lastMessage) {
+        this.lastMessage = lastMessage;
     }
 }

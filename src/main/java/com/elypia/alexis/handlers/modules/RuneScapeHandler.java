@@ -1,12 +1,12 @@
 package com.elypia.alexis.handlers.modules;
 
+import com.elypia.commandler.*;
 import com.elypia.commandler.annotations.*;
-import com.elypia.commandler.events.AbstractEvent;
-import com.elypia.commandler.modules.CommandHandler;
+import com.elypia.commandler.annotations.Module;
 import com.elypia.elypiai.runescape.RuneScape;
 
-@Module(name = "RuneScape", aliases = {"runescape", "rs"}, description = "Integration with the popular MMORPG, RuneScape!")
-public class RuneScapeHandler extends CommandHandler {
+@Module(name = "RuneScape", aliases = {"runescape", "rs"}, help = "Integration with the popular MMORPG, RuneScape!")
+public class RuneScapeHandler extends JDAHandler {
 
 	private RuneScape runescape;
 
@@ -15,13 +15,13 @@ public class RuneScapeHandler extends CommandHandler {
 	}
 
 	@Command(name = "Status", aliases = "status", help = "The total number of created accounts.")
-	public void displayStatus(AbstractEvent event) {
+	public void displayStatus(JDACommand event) {
 
 	}
 
 	@Command(name = "Player Stats", aliases = "stats", help = "Get stats for a particular user.")
 	@Param(name = "username", help = "RuneScape players username.")
-	public void getPlayerStats(AbstractEvent event, String username) {
+	public void getPlayerStats(JDACommand event, String username) {
 
 	}
 

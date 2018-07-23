@@ -9,6 +9,8 @@
       <module name="commandler_test" target="1.8" />
       <module name="Elypiai_main" target="1.8" />
       <module name="Elypiai_test" target="1.8" />
+      <module name="elyscript_main" target="1.8" />
+      <module name="elyscript_test" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>

@@ -2,13 +2,14 @@ package com.elypia.alexis.entities;
 
 import com.elypia.alexis.Alexis;
 import com.elypia.alexis.entities.embedded.GuildSettings;
+import com.elypia.alexis.entities.impl.DatabaseEntity;
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.annotations.*;
 import org.mongodb.morphia.query.Query;
 
 @Entity(value = "guilds", noClassnameStored = true)
-public class GuildData {
+public class GuildData extends DatabaseEntity {
 
     @Id
     private ObjectId id;
