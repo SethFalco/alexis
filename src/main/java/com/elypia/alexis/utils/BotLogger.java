@@ -2,7 +2,7 @@ package com.elypia.alexis.utils;
 
 import com.elypia.alexis.Alexis;
 import com.elypia.alexis.config.DiscordConfig;
-import com.elypia.commandler.JDACommand;
+import com.elypia.commandler.jda.JDACommand;
 import net.dv8tion.jda.core.*;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.Event;

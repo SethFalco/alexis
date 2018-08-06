@@ -1,10 +1,10 @@
 package com.elypia.alexis.handlers.modules;
 
-import com.elypia.commandler.*;
 import com.elypia.commandler.annotations.*;
 import com.elypia.commandler.annotations.Module;
-import com.elypia.commandler.annotations.validation.command.Scope;
-import com.elypia.commandler.annotations.validation.param.Search;
+import com.elypia.commandler.jda.annotations.validation.command.Scope;
+import com.elypia.commandler.jda.annotations.validation.param.Search;
+import com.elypia.commandler.jda.*;
 import com.elypia.elyscript.ElyScript;
 import net.dv8tion.jda.core.entities.*;
 
@@ -26,11 +26,8 @@ public class VoiceHandler extends JDAHandler {
         Set<User> users = members.stream().map(Member::getUser).filter(o -> !o.isBot()).collect(Collectors.toSet());
 
         if (users.remove(event.getMessage().getAuthor())) {
-            if (users.size() == 0) {
-                Map<String, Object> params = new HashMap<>();
-                params.put("total_channels", channels.length);
-                return ALONE_MENTION.compile(params);
-            }
+            if (users.size() == 0)
+                return ALONE_MENTION.compile(Map.of("total_channels", channels.length));
         }
 
         StringJoiner joiner = new StringJoiner(" | ");

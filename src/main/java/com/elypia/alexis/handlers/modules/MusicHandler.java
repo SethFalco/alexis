@@ -3,11 +3,13 @@ package com.elypia.alexis.handlers.modules;
 import com.elypia.alexis.Alexis;
 import com.elypia.alexis.audio.*;
 import com.elypia.alexis.entities.GuildData;
+import com.elypia.alexis.entities.embedded.MusicSettings;
 import com.elypia.alexis.google.youtube.YouTubeHelper;
-import com.elypia.commandler.*;
 import com.elypia.commandler.annotations.*;
 import com.elypia.commandler.annotations.Module;
-import com.elypia.commandler.annotations.validation.command.*;
+import com.elypia.commandler.jda.*;
+import com.elypia.commandler.jda.annotations.Emoji;
+import com.elypia.commandler.jda.annotations.validation.command.*;
 import com.elypia.elypiai.utils.*;
 import com.elypia.elypiai.utils.math.MathUtils;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
@@ -93,7 +95,7 @@ public class MusicHandler extends JDAHandler {
 		if (!player.pause())
 			return "I'm already paused though? You'd have to teach me how to double pause before I could do that. :c";
 
-		String prefix = confiler.getPrefixes(commandler, event.getSource())[0];
+		String prefix = confiler.getPrefixes(event.getSource())[0];
 		return "I've paused the music now, feel free to do `" + prefix + "music play` whenever you want me to play again!";
 	}
 
@@ -208,7 +210,7 @@ public class MusicHandler extends JDAHandler {
 //	}
 
 	@Command(id = 100, name = "Add to Queue", aliases = {"add", "append"}, help = "Add a track to the end of the playlist.")
-	@Param(name = "query", help = "The URL for the audio or what to search for on YouTubeHelper!")
+	@Param(name = "query", help = "The URL for the audio or what to search for on YouTube!")
 	@Emoji(emotes = "\uD83D\uDD01", help = "Add this song to the queue again.")
 	public Object addTrack(JDACommand event, String query) throws IOException {
 		if (!joinChannel(event))
@@ -229,7 +231,7 @@ public class MusicHandler extends JDAHandler {
 //	}
 
 	@Command(name = "Insert into Queue", aliases = {"insert", "prepend"}, help = "Insert a track to the start of the queue.")
-	@Param(name = "query", help = "The URL for the audio or what to search for on YouTubeHelper!")
+	@Param(name = "query", help = "The URL for the audio or what to search for on YouTube!")
 	public Object insertTrack(JDACommand event, String query) throws IOException {
 		if (!joinChannel(event))
 			return null;
@@ -265,7 +267,7 @@ public class MusicHandler extends JDAHandler {
 //
 //	@Command(name = "Set Track Position", aliases = {"position", "pos", "time"}, help = "Set the time to go to in the current song.")
 //	@Param(name = "time", help = "The time to move to, try '@Me help time' for format info.")
-//	public void setTime(MessageEvent event, Instant time) {
+//	public void setTime(MessageEvent event, Duration time) {
 //
 //	}
 //
@@ -299,38 +301,25 @@ public class MusicHandler extends JDAHandler {
 //	}
 
 	@Elevated
-	@Command(name = "Sync Nickname with Track", aliases = {"nickname", "nicksync", "ns"}, help = "Should Alexis append the currently playing track to her nickname?")
+	@Permissions(Permission.MANAGE_CHANNEL)
+	@Command(name = "Sync Channel Name with Track", aliases = {"sync", "rename"}, help = "Should Alexis append the currently playing track to the current voice channel's name?")
     @Param(name = "toggle", help = "True or false, should this be enabled or not?")
 	public String nicknameSync(JDACommand event, boolean enable) {
         Guild guild = event.getSource().getGuild();
 
 	    GuildData data = GuildData.query(guild.getIdLong());
-        boolean sync = data.getSettings().getMusicSettings().getSyncNickname();
+		MusicSettings settings = data.getSettings().getMusicSettings();
+        boolean sync = settings.getSyncChannelName();
 
 	    if (sync == enable) {
 	        if (enable)
-	            return "That's already enabled, just check my nickname next time you're playing music!";
+	            return "That's already enabled, just check the channel name next time you're playing music!";
 	        else
-	            return "That's already disabled, I haven't been changing my nickname anyways.";
+	            return "That's already disabled, I haven't been changing the channel name anyways.";
         }
 
-        Member self = guild.getSelfMember();
-
-	    if (enable && self.hasPermission(Permission.NICKNAME_CHANGE))
-            return "That wouldn't work out right now since I don't have permission to change my nickname! Please grant me that permission then try again.";
-
-		Datastore store = Alexis.getChatbot().getDatastore();
-
-		UpdateOptions options = new UpdateOptions();
-		options.upsert(true);
-
-		Query<GuildData> query = store.createQuery(GuildData.class);
-		query = query.filter("guild_id", event.getSource().getGuild().getIdLong());
-
-		UpdateOperations<GuildData> update = store.createUpdateOperations(GuildData.class);
-		update.set("settings.music.nickname_sync", enable);
-
-		store.update(query, update, options);
+        settings.setSyncChannelName(enable);
+		data.commit();
 
 		return "You've succesfully set the nickname sync setting to " + enable + "!";
 	}

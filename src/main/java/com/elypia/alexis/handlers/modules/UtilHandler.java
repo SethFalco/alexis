@@ -1,9 +1,9 @@
 package com.elypia.alexis.handlers.modules;
 
-import com.elypia.commandler.*;
 import com.elypia.commandler.annotations.*;
 import com.elypia.commandler.annotations.Module;
-import com.elypia.commandler.annotations.validation.command.Nsfw;
+import com.elypia.commandler.jda.annotations.validation.command.Nsfw;
+import com.elypia.commandler.jda.*;
 import com.elypia.elypiai.utils.math.MathUtils;
 import net.dv8tion.jda.core.EmbedBuilder;
 import okhttp3.*;

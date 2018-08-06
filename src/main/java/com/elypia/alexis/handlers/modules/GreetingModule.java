@@ -3,22 +3,26 @@ package com.elypia.alexis.handlers.modules;
 import com.elypia.alexis.commandler.validators.Database;
 import com.elypia.alexis.entities.GuildData;
 import com.elypia.alexis.entities.embedded.*;
-import com.elypia.commandler.*;
+import com.elypia.alexis.utils.BotUtils;
 import com.elypia.commandler.annotations.*;
 import com.elypia.commandler.annotations.Module;
-import com.elypia.commandler.annotations.validation.command.Elevated;
+import com.elypia.commandler.jda.annotations.validation.command.Elevated;
 import com.elypia.commandler.annotations.validation.param.*;
+import com.elypia.commandler.jda.*;
+import com.elypia.commandler.jda.annotations.validation.param.Talkable;
 import net.dv8tion.jda.core.entities.*;
+
+import java.util.HashMap;
 
 @Elevated
 @Database
-@Module(name = "Welcome and Farewell", aliases = {"greeting", "greetings", "welcome"}, help = "Configure where and what is sent when a user or bot joins and leaves the guild.")
+@Module(name = "greeting.title", aliases = {"greeting", "greetings", "welcome"}, help = "greeting.help")
 public class GreetingModule extends JDAHandler {
 
-    @Command(name = "Set Greeting Message", aliases = "message", help = "Set a greeting messages for the given event and account type.")
-    @Param(name = "greeting", help = "The greeting type, either `welcome` or `farewell`.")
-    @Param(name = "account", help = "The account type, either `user` or `bot`.")
-    @Param(name = "message", help = "The message to send when this event occurs.")
+    @Command(name = "greeting.message.title", aliases = "message", help = "greeting.message.help")
+    @Param(name = "greeting", help = "greeting.message.greeting.help")
+    @Param(name = "account", help = "greeting.message.account.help")
+    @Param(name = "message", help = "greeting.message.message.help")
     public String setGreeting(JDACommand event, @Option({"welcome", "farewell"}) String greeting, @Option({"user", "bot"}) String account, String message) {
         Message eventMessage = event.getMessage();
         Guild guild = eventMessage.getGuild();
@@ -44,11 +48,16 @@ public class GreetingModule extends JDAHandler {
             messageSettings.setChannel(eventMessage.getChannel().getIdLong());
 
         data.commit();
-        return "I've enabled " + account + " " + greeting + " messages on this channel!";
+
+        HashMap<String, Object> params = new HashMap<>();
+        params.put("account", account);
+        params.put("greeting", greeting);
+
+        return BotUtils.getScript("greeting.message.response", event.getSource(), params);
     }
 
-    @Command(name = "Set Greeting Channel", aliases = "channel", help = "Change the channel that you display bot messages without affecting other settings.")
-    @Param(name = "channel", help = "The channel you want greeting messages to be sent too.")
+    @Command(name = "greeting.channel.title", aliases = "channel", help = "greeting.channel.help")
+    @Param(name = "channel", help = "greeting.channel.channel.help")
     public String setChannel(JDACommand event, @Talkable TextChannel channel) {
         GuildData data = GuildData.query(event.getMessage().getGuild().getIdLong());
         GreetingSettings greetingSettings = data.getSettings().getGreetingSettings();
@@ -63,6 +72,10 @@ public class GreetingModule extends JDAHandler {
         farewell.getBot().setChannel(channelId);
 
         data.commit();
-        return "I've set the channel for all messages to go through to " + channel.getAsMention() + ".";
+
+        HashMap<String, Object> params = new HashMap<>();
+        params.put("mention", channel.getAsMention());
+
+        return BotUtils.getScript("greeting.channel.response", event.getSource(), params);
     }
 }

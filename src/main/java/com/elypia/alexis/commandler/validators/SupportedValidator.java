@@ -1,7 +1,7 @@
 package com.elypia.alexis.commandler.validators;
 
 import com.elypia.alexis.Alexis;
-import com.elypia.commandler.*;
+import com.elypia.commandler.jda.*;
 import com.elypia.commandler.metadata.MetaParam;
 import com.elypia.elypiai.utils.Language;
 

@@ -41,7 +41,7 @@ public class AudioDispatcher extends AudioEventAdapter {
 //			builder.setImage(YouTube.getVideoUrl(info.identifier));
 //		}
 
-		if (data.getSettings().getMusicSettings().getSyncNickname()) {
+		if (data.getSettings().getMusicSettings().getSyncChannelName()) {
 			Member member = guild.getSelfMember();
 			String name = member.getUser().getName() + " \uD83C\uDFB5 ";
 			String title = info.title + " - " + info.author;

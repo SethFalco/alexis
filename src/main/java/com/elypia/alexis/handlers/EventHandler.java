@@ -21,6 +21,7 @@ import net.dv8tion.jda.core.hooks.ListenerAdapter;
 import org.mongodb.morphia.*;
 import org.mongodb.morphia.query.Query;
 
+import java.time.OffsetDateTime;
 import java.util.logging.Level;
 
 public class EventHandler extends ListenerAdapter {
@@ -59,6 +60,10 @@ public class EventHandler extends ListenerAdapter {
 
 	@Override
 	public void onGuildJoin(GuildJoinEvent event) {
+		// ? Check if we actually joined the guild now or did Discord just dish out an extra event again. ^-^'
+		if (event.getGuild().getSelfMember().getJoinDate().isBefore(OffsetDateTime.now().minusMinutes(10)))
+			return;
+
 		Guild guild = event.getGuild();
 		TextChannel channel = BotUtils.getWriteableChannel(event);
 

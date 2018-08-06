@@ -1,10 +1,10 @@
 package com.elypia.alexis.handlers.modules;
 
 import com.elypia.alexis.utils.BotLogger;
-import com.elypia.commandler.*;
 import com.elypia.commandler.annotations.*;
 import com.elypia.commandler.annotations.Module;
 import com.elypia.commandler.annotations.validation.param.Length;
+import com.elypia.commandler.jda.*;
 import com.elypia.elypiai.osu.Osu;
 import com.elypia.elypiai.osu.data.OsuMode;
 import com.elypia.elyscript.ElyScript;

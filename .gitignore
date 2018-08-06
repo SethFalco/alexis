@@ -10,8 +10,7 @@
 build/
 
 # IntelliJ
-workspace.xml
-tasks.xml
+.idea/
 out/
 
 # Output Files

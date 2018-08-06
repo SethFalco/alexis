@@ -1,6 +1,6 @@
 package com.elypia.alexis.commandler.parsers;
 
-import com.elypia.commandler.*;
+import com.elypia.commandler.jda.*;
 import com.elypia.elypiai.utils.*;
 
 public class LanguageParser implements IJDAParser<Language> {

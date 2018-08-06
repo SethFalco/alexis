@@ -8,7 +8,7 @@ import com.elypia.alexis.google.youtube.YouTubeHelper;
 import com.elypia.alexis.handlers.EventHandler;
 import com.elypia.alexis.handlers.modules.*;
 import com.elypia.alexis.utils.AlexisConfiler;
-import com.elypia.commandler.JDACommandler;
+import com.elypia.commandler.jda.JDACommandler;
 import com.elypia.elypiai.nanowrimo.NanoUser;
 import com.elypia.elypiai.osu.OsuPlayer;
 import com.elypia.elypiai.steam.SteamGame;
@@ -108,7 +108,7 @@ public class Chatbot {
 
 					Language language = supportedLanguages.get(ii - 1);
 
-					scriptStore.store(ElyScriptStore.combineKeys(key, language.getCode()), content);
+					scriptStore.store(content, key, language.getCode());
 				}
 			}
 		}
@@ -168,27 +168,28 @@ public class Chatbot {
 		commandler.registerBuilder(new NanoUserBuilder(), NanoUser.class);
 
 		commandler.registerModules(
-			new AmazonHandler(api.getAmazonDetails()),
-			new BotHandler(),
-			new BrainfuckHandler(),
-			new CleverbotHandler(api.getCleverbot()),
-			new DevHandler(),
-			new EmoteHandler(),
-			new GreetingModule(),
-			new GuildHandler(),
-			new UtilHandler(),
-			new LanguageHandler(),
-			new MusicHandler(youtube),
-			new NanowrimoHandler(),
-			new OsuHandler(api.getOsu()),
-			new PrefixHandler(),
-			new RuneScapeHandler(),
-			new SteamHandler(api.getSteam()),
-			new TwitchHandler(api.getTwitch()),
-			new UrbanDictionaryHandler(),
-			new UserHandler(),
-			new VoiceHandler(),
-			new YouTubeHandler(youtube)
+			new HelpModule(this),
+			new AmazonHandler(this, api.getAmazonDetails()),
+			new BotHandler(this),
+			new BrainfuckHandler(this),
+			new CleverbotHandler(this, api.getCleverbot()),
+			new DevHandler(this),
+			new EmoteHandler(this),
+			new GreetingModule(this),
+			new GuildHandler(this),
+			new UtilHandler(this),
+			new LanguageHandler(this),
+			new MusicHandler(this, youtube),
+			new NanowrimoHandler(this),
+			new OsuHandler(this, api.getOsu()),
+			new PrefixHandler(this),
+			new RuneScapeHandler(this),
+			new SteamHandler(this, api.getSteam()),
+			new TwitchHandler(this, api.getTwitch()),
+			new UrbanDictionaryHandler(this),
+			new UserHandler(this),
+			new VoiceHandler(this),
+			new YouTubeHandler(this, youtube)
 		);
 	}
 

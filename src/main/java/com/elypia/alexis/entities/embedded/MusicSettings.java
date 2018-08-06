@@ -6,13 +6,13 @@ import org.mongodb.morphia.annotations.*;
 public class MusicSettings {
 
     @Property("nickname_sync")
-    private boolean syncNickname;
+    private boolean syncChannelName;
 
-    public boolean getSyncNickname() {
-        return syncNickname;
+    public boolean getSyncChannelName() {
+        return syncChannelName;
     }
 
-    public void setSyncNickname(boolean syncNickname) {
-        this.syncNickname = syncNickname;
+    public void setSyncChannelName(boolean syncChannelName) {
+        this.syncChannelName = syncChannelName;
     }
 }

@@ -2,18 +2,22 @@ package com.elypia.alexis.handlers.modules;
 
 import com.elypia.alexis.config.AmazonDetails;
 import com.elypia.alexis.utils.*;
-import com.elypia.commandler.*;
 import com.elypia.commandler.annotations.*;
 import com.elypia.commandler.annotations.Module;
+import com.elypia.commandler.jda.*;
 import com.elypia.elypiai.amazon.Amazon;
+import com.elypia.elyscript.ElyScriptStore;
 
 import java.security.InvalidKeyException;
 import java.util.*;
 
-@Module(name = "Amazon", aliases = "amazon", help = "help.amazon")
+@Module(name = "Amazon", aliases = "amazon", help = "amazon.help")
 public class AmazonHandler extends JDAHandler {
 
     private Amazon amazon;
+
+    @Inject
+    private ElyScriptStore scripts;
 
     public AmazonHandler(List<AmazonDetails> details) {
         Objects.requireNonNull(details);
@@ -29,8 +33,8 @@ public class AmazonHandler extends JDAHandler {
     }
 
     @Default
-    @Command(name = "Search Amazon", aliases = {"search", "get"}, help = "help.amazon.search")
-    @Param(name = "query", help = "help.amazon.search.query")
+    @Command(name = "amazon.search.title", aliases = {"search", "get"}, help = "amazon.search.help")
+    @Param(name = "amazon.param.query.name", help = "amazon.param.query.help")
     public void getItem(JDACommand event, String query) {
         amazon.getItems(query).queue((result) -> {
             if (result != null)

@@ -1,8 +1,8 @@
 package com.elypia.alexis.handlers.modules;
 
-import com.elypia.commandler.*;
 import com.elypia.commandler.annotations.*;
 import com.elypia.commandler.annotations.Module;
+import com.elypia.commandler.jda.*;
 import com.elypia.elypiai.runescape.RuneScape;
 
 @Module(name = "RuneScape", aliases = {"runescape", "rs"}, help = "Integration with the popular MMORPG, RuneScape!")

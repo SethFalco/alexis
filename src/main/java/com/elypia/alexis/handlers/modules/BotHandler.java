@@ -3,11 +3,11 @@ package com.elypia.alexis.handlers.modules;
 import com.elypia.alexis.Alexis;
 import com.elypia.alexis.config.*;
 import com.elypia.alexis.utils.*;
-import com.elypia.commandler.*;
 import com.elypia.commandler.annotations.*;
 import com.elypia.commandler.annotations.Module;
-import com.elypia.commandler.annotations.validation.command.Scope;
-import com.elypia.commandler.annotations.validation.param.Everyone;
+import com.elypia.commandler.jda.annotations.validation.command.Scope;
+import com.elypia.commandler.jda.annotations.validation.param.Everyone;
+import com.elypia.commandler.jda.*;
 import com.elypia.elypiai.utils.Markdown;
 import com.elypia.elyscript.ElyScript;
 import net.dv8tion.jda.core.*;
@@ -97,7 +97,7 @@ public class BotHandler extends JDAHandler {
 		builder.addField("Total Users (Bots)", userField, true);
 
 		Map<String, Object> supportParams = new HashMap<>();
-		supportParams.put("prefix", commandler.getConfiler().getPrefixes(commandler, source)[0]);
+		supportParams.put("prefix", commandler.getConfiler().getPrefixes(source)[0]);
 
 		builder.setFooter(BotUtils.getScript("bot.support", source, supportParams), null);
 

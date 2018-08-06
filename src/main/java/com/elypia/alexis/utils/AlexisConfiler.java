@@ -3,8 +3,7 @@ package com.elypia.alexis.utils;
 import com.elypia.alexis.*;
 import com.elypia.alexis.entities.GuildData;
 import com.elypia.alexis.entities.embedded.GuildSettings;
-import com.elypia.commandler.*;
-import net.dv8tion.jda.core.JDA;
+import com.elypia.commandler.jda.JDAConfiler;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.message.GenericMessageEvent;
 import org.mongodb.morphia.Datastore;
@@ -17,8 +16,8 @@ public class AlexisConfiler extends JDAConfiler {
     }
 
     @Override
-    public String[] getPrefixes(Commandler<JDA, GenericMessageEvent, Message> commandler, GenericMessageEvent event) {
-        String id = commandler.getClient().getSelfUser().getId();
+    public String[] getPrefixes(GenericMessageEvent event) {
+        String id = event.getJDA().getSelfUser().getId();
         String defaultPrefix = Alexis.getConfig().getDiscordConfig().getPrefix();
 
         if (event.isFromType(ChannelType.PRIVATE) || !BotUtils.isDatabaseAlive())
@@ -37,12 +36,13 @@ public class AlexisConfiler extends JDAConfiler {
     }
 
     @Override
-    public String getHelpUrl(Commandler<JDA, GenericMessageEvent, Message> commandler, GenericMessageEvent event) {
+    public String getHelpUrl(GenericMessageEvent event) {
         return "https://alexis.elypia.com/";
     }
 
     @Override
-    public String getHelp(Commandler<JDA, GenericMessageEvent, Message> commandler, GenericMessageEvent event, String key) {
-        return BotUtils.getScript(key, event);
+    public String getScript(GenericMessageEvent event, String key) {
+        String script = BotUtils.getScript(key, event);
+        return script != null ? script : key;
     }
 }

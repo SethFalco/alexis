@@ -1,15 +1,16 @@
 package com.elypia.alexis.handlers.modules;
 
 import com.elypia.alexis.utils.BotLogger;
-import com.elypia.commandler.*;
 import com.elypia.commandler.annotations.*;
 import com.elypia.commandler.annotations.Module;
+import com.elypia.commandler.jda.*;
+import com.elypia.commandler.jda.annotations.Emoji;
 import com.elypia.elypiai.urbandictionary.*;
 import com.elypia.elypiai.urbandictionary.data.UrbanResultType;
 import com.elypia.elypiai.utils.okhttp.RestLatch;
 import com.elypia.elyscript.ElyScript;
 
-@Module(name = "UrbanDictionary", aliases = {"urbandictionary", "urbandict", "urban", "ud"}, help = "An online dictionary defined by the community for definitions and examples.")
+@Module(name = "Urban Dictionary", aliases = {"urbandictionary", "urbandict", "urban", "ud"}, help = "An online dictionary defined by the community for definitions and examples.")
 public class UrbanDictionaryHandler extends JDAHandler {
 
     private ElyScript NO_RESULTS = new ElyScript("(Sorry|I apologise)(,|...) I (didn't|couldn't|(did|could) not|was unable to) find( any){?} results( for that){?}( on UrbanDictionary){?}.( :c){?}");

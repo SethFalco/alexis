@@ -1,4 +1,12 @@
 ,en,fr,de,nl,pl,no,da
+help.help.module,The name of the module you'd like to query for help.,,,,,,
+help.modules,Learn about the various modules and what functionality they bring to Discord.,,,,,,
+,,,,,,,
+modules.title,Thank you for using me! ^-^,,,,,,
+modules.description.prefix,The prefix in this channel is: `($prefix)`,,,,,,
+modules.description.disabled,Crossed out modules are disabled due to live issues.,,,,,,
+modules.field.aliases,($aliases_count ? 1: Alias : Aliases),,,,,,
+,,,,,,,
 help.amazon,Share links and support Elypia! We get a cut from purchases!,Partager des liens et soutenir Elypia! Nous obtenons une réduction des achats!,Teile Links und unterstütze Elypia! Wir bekommen einen Anteil der Erträge!,Deel links en steun Elypia! We krijgen een korting op aankopen!,Udostępniaj linki oraz wspieraj Elypię! Dostajemy działkę z waszych zakupów!,,Del links og støt Elypia! Vi får et snit hver gang du køber!
 ,,,,,,,
 help.amazon.search,Search Amazon for a product and share it.,Recherchez Amazon pour un produit et partagez-le.,Durchsuche Amazon nach einem Produkt und teile es.,Zoek op Amazon naar een product en deel het.,Znajdź produkt na Amazonie oraz podziel się nim z innymi.,,Søg Amazon for et produkt og del.
@@ -31,13 +39,14 @@ help.brainfuck.compile,Compile Brainfuck code into something non-nerds understan
 help.brainfuck.compile.code,The code to compile.,Le code à compiler.,Der zu kompilierende Code.,Compileer Brainfuck-code.,Kod do skompilowania.,,Koden der skal compiles.
 help.brainfuck.compile.args,"The arguments for input, represented by a , in brainfuck.","Les arguments pour l'entrée, représentée par a, dans Brainfuck.","Die Argumente für die Eingabe , repräsentiert durch ein , im Brainfuck","De argumenten voor invoer, voorgesteld bij a, in Brainfuck.","Argumenty dla wejścia reprezentowane przez , w Brainfucku.",,"Argumentet for input repræsenteret af et a , i Brainfuck."
 ,,,,,,,
-throwable_error,"Sorry, this command failed! The issue has been logged, please try again later.",ondersteuningsinformatie,,,,,
-,,,,,,,
 help.language,Configure language settings.,,,,,,
 ,,,,,,,
 help.language.global,Change the language Alexis uses in this guild!,,,,,,
+help.language.local,Change the language Alexis uses in thie channel!,,,,,,
 help.language.global.language,The language you want to use if it's supported.,,,,,,
 ,,,,,,,
 language.changed,Language has been changed to ($language)!,,,,,,
 ,,,,,,,
 language.unsupported,Sorry! I currently don't support ($language). :c,,,,,,
+,,,,,,,
+throwable_error,"Sorry, this command failed! The issue has been logged, please try again later.",,,,,,

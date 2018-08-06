@@ -2,7 +2,7 @@ package com.elypia.alexis.commandler.builders;
 
 import com.elypia.alexis.google.youtube.YouTubeHelper;
 import com.elypia.alexis.utils.BotUtils;
-import com.elypia.commandler.*;
+import com.elypia.commandler.jda.*;
 import com.google.api.services.youtube.model.*;
 import net.dv8tion.jda.core.*;
 import net.dv8tion.jda.core.entities.Message;

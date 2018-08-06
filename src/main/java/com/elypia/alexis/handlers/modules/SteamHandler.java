@@ -1,9 +1,10 @@
 package com.elypia.alexis.handlers.modules;
 
 import com.elypia.alexis.utils.BotLogger;
-import com.elypia.commandler.*;
 import com.elypia.commandler.annotations.*;
 import com.elypia.commandler.annotations.Module;
+import com.elypia.commandler.jda.*;
+import com.elypia.commandler.jda.annotations.Emoji;
 import com.elypia.elypiai.steam.*;
 
 import java.util.concurrent.ThreadLocalRandom;

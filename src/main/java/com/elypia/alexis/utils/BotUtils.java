@@ -4,10 +4,11 @@ import com.elypia.alexis.Alexis;
 import com.elypia.alexis.config.AlexisConfig;
 import com.elypia.alexis.entities.*;
 import com.elypia.alexis.entities.embedded.NanowrimoLink;
-import com.elypia.commandler.JDACommand;
+import com.elypia.commandler.jda.JDACommand;
 import com.elypia.elypiai.runescape.RuneScape;
 import com.elypia.elypiai.utils.Language;
-import com.elypia.elyscript.ElyScriptStore;
+import com.elypia.elyscript.*;
+import com.mongodb.event.CommandEvent;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.Event;
@@ -30,7 +31,7 @@ public final class BotUtils {
 	}
 
 	public static EmbedBuilder createEmbedBuilder(JDACommand event) {
-		return createEmbedBuilder(event.getMessage().getGuild());
+		return createEmbedBuilder(event.getSource().getGuild());
 	}
 
 	public static EmbedBuilder createEmbedBuilder(Guild guild) {
@@ -99,26 +100,26 @@ public final class BotUtils {
 	}
 
 	public static String buildScript(String markup, Event event) {
-		return buildScript(markup, event, new HashMap<>());
+		return buildScript(markup, event, Map.of());
 	}
 
-	public static String buildScript(String markup, Event event, Map<String, Object> params) {
-		addEventParams(event, params);
-		return Alexis.getChatbot().getScriptStore().build(markup, params);
+	public static String buildScript(String markup, Event event, Map<String, Object> p) {
+		Map<String, Object> params = addEventParams(event, p);
+		return new ElyScript(markup).compile(params);
 	}
 
 	public static String getScript(String key, Event event) {
-		return getScript(key, event, new HashMap<>());
+		return getScript(key, event, Map.of());
 	}
 
-	public static String getScript(String key, Event event, Map<String, Object> params) {
+	public static String getScript(String key, Event event, Map<String, Object> p) {
 		String language = getChannelLanguage(event);
-
-		addEventParams(event, params);
-		return Alexis.getChatbot().getScriptStore().get(ElyScriptStore.combineKeys(key, language), params);
+		Map<String, Object> params = addEventParams(event, p);
+		return Alexis.getChatbot().getScriptStore().get(params, key, language);
 	}
 
-	private static void addEventParams(Event event, Map<String, Object> params) {
+	private static Map<String, Object> addEventParams(Event event, Map<String, Object> p) {
+		Map<String, Object> params = new HashMap<>(p);
 		boolean database = isDatabaseAlive();
 
 		if (event instanceof MessageReceivedEvent) {
@@ -180,5 +181,12 @@ public final class BotUtils {
 				params.put("guild.prefix", guildData.getSettings().getPrefix());
 			}
 		}
+
+		if (params.containsKey("guild.prefix"))
+			params.put("prefix", params.get("guild.prefix"));
+		else
+			params.put("prefix", Alexis.getConfig().getDiscordConfig().getPrefix());
+
+		return params;
 	}
 }
