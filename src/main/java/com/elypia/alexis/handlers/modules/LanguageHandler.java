@@ -5,8 +5,8 @@ import com.elypia.alexis.entities.MessageChannelData;
 import com.elypia.alexis.utils.BotUtils;
 import com.elypia.commandler.annotations.*;
 import com.elypia.commandler.annotations.Module;
-import com.elypia.commandler.jda.annotations.validation.command.Scope;
 import com.elypia.commandler.jda.*;
+import com.elypia.commandler.jda.annotations.validation.command.Scope;
 import com.elypia.elypiai.utils.Language;
 import net.dv8tion.jda.core.entities.*;
 

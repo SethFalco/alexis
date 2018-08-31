@@ -4,12 +4,12 @@ import com.elypia.alexis.commandler.validators.*;
 import com.elypia.alexis.entities.UserData;
 import com.elypia.alexis.entities.data.Achievement;
 import com.elypia.alexis.entities.embedded.NanowrimoLink;
-import com.elypia.alexis.utils.BotLogger;
+import com.elypia.alexis.utils.DiscordLogger;
 import com.elypia.commandler.annotations.*;
 import com.elypia.commandler.annotations.Module;
+import com.elypia.commandler.annotations.validation.param.*;
 import com.elypia.commandler.jda.*;
 import com.elypia.commandler.jda.annotations.validation.command.Secret;
-import com.elypia.commandler.annotations.validation.param.*;
 import com.elypia.elypiai.nanowrimo.Nanowrimo;
 import com.elypia.elyscript.ElyScript;
 
@@ -85,6 +85,6 @@ public class NanowrimoHandler extends JDAHandler {
                     event.reply("There is no information to display as that user does not have a current novel!");
                 }
             }
-        }, (ex) -> BotLogger.log(event, ex));
+        }, (ex) -> DiscordLogger.log(event, ex));
     }
 }

@@ -33,8 +33,7 @@ public class GuildData extends DatabaseEntity {
     private GuildSettings settings;
 
     public static GuildData query(long guildId) {
-        Datastore store = Alexis.getChatbot().getDatastore();
-        Query<GuildData> query = store.createQuery(GuildData.class);
+        Query<GuildData> query = Alexis.store.createQuery(GuildData.class);
         GuildData data = query.filter("guild_id ==", guildId).get();
 
         if (data == null) {

@@ -5,15 +5,14 @@ import com.elypia.commandler.jda.*;
 import com.elypia.commandler.metadata.MetaParam;
 import com.elypia.elypiai.utils.Language;
 
-public class SupportedValidator implements IJDAParamValidator<Language, Supported> {
+public class SupportedValidator extends IJDAParamValidator<Language, Supported> {
 
-    @Override
-    public boolean validate(JDACommand event, Language language, Supported supported, MetaParam param) {
-        return Alexis.getChatbot().getSupportedLanguages().contains(language);
+    public SupportedValidator() {
+        super((o) -> "This must be a language that Alexis supports!");
     }
 
     @Override
-    public String help(Supported annotation) {
-        return "This must be a language that Alexis supports!";
+    public boolean validate(JDACommand event, Language language, Supported supported, MetaParam param) {
+        return Alexis.supportedLanguages.contains(language);
     }
 }

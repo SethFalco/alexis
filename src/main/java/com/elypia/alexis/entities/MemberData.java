@@ -19,7 +19,6 @@ public class MemberData extends DatabaseEntity {
     /**
      * The ID of the user on Discord and as stored in the database.
      */
-
     @Property("user_id")
     private long userId;
 
@@ -29,7 +28,6 @@ public class MemberData extends DatabaseEntity {
     /**
      * The total XP this user has.
      */
-
     @Property("xp")
     private int xp;
 
@@ -37,7 +35,7 @@ public class MemberData extends DatabaseEntity {
     private Date lastMessage;
 
     public static MemberData query(long userId, long guildId) {
-        Datastore store = Alexis.getChatbot().getDatastore();
+        Datastore store = Alexis.store;
         Query<MemberData> query = store.createQuery(MemberData.class);
         MemberData data = query.filter("user_id ==", userId).filter("guild_id ==", guildId).get();
 

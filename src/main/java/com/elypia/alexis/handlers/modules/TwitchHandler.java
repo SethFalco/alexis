@@ -1,6 +1,7 @@
 package com.elypia.alexis.handlers.modules;
 
-import com.elypia.alexis.utils.BotLogger;
+import com.elypia.alexis.Alexis;
+import com.elypia.alexis.utils.DiscordLogger;
 import com.elypia.commandler.annotations.*;
 import com.elypia.commandler.annotations.Module;
 import com.elypia.commandler.jda.*;
@@ -11,8 +12,8 @@ public class TwitchHandler extends JDAHandler {
 
     private Twitch twitch;
 
-    public TwitchHandler(String clientId) {
-        twitch = new Twitch(clientId);
+    public TwitchHandler() {
+        twitch = new Twitch(Alexis.config.getApiKeys().getTwitch());
     }
 
     @Command(name = "Streamer Info", aliases = {"get", "info"}, help = "Get information on streamers.")
@@ -23,6 +24,6 @@ public class TwitchHandler extends JDAHandler {
 
         twitch.getUsers(query).queue(users -> {
             event.reply(!users.isEmpty() ? users.get(0) : "Sorry I couldn't find " + username + ".");
-        }, failure -> BotLogger.log(event, failure));
+        }, failure -> DiscordLogger.log(event, failure));
     }
 }

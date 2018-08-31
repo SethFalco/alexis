@@ -1,5 +1,6 @@
 package com.elypia.alexis.handlers.modules;
 
+import com.elypia.alexis.Alexis;
 import com.elypia.alexis.utils.*;
 import com.elypia.commandler.annotations.*;
 import com.elypia.commandler.annotations.Module;
@@ -12,7 +13,7 @@ import java.net.URL;
 import java.util.*;
 import java.util.logging.Level;
 
-// @Developer // ! Removed this for now
+@Developer
 @Module(name = "Developer Only Commands", aliases = "dev")
 public class DevHandler extends JDAHandler {
 
@@ -45,7 +46,7 @@ public class DevHandler extends JDAHandler {
         client.shutdown();
 
         ExitCode code = ExitCode.PEACEFUL;
-        BotLogger.log(event, Level.ALL, code.getMessage());
+        DiscordLogger.log(event, Level.ALL, code.getMessage());
         System.exit(code.getStatusCode());
     }
 

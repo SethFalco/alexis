@@ -1,6 +1,6 @@
 package com.elypia.alexis.handlers.modules;
 
-import com.elypia.alexis.utils.BotLogger;
+import com.elypia.alexis.utils.DiscordLogger;
 import com.elypia.commandler.annotations.*;
 import com.elypia.commandler.annotations.Module;
 import com.elypia.commandler.jda.*;
@@ -17,9 +17,9 @@ public class UrbanDictionaryHandler extends JDAHandler {
 
 	private UrbanDictionary ud;
 
-	public UrbanDictionaryHandler() {
+    public UrbanDictionaryHandler() {
         ud = new UrbanDictionary();
-	}
+    }
 
 	@Static
 	@Command(id = 50, name = "Define", aliases = "define", help = "Return the definition of a word or phrase.")
@@ -50,7 +50,7 @@ public class UrbanDictionaryHandler extends JDAHandler {
 
             UrbanDefinition definition = result.getDefinition(random);
             event.reply(definition);
-        }, (ex) -> BotLogger.log(event, ex));
+        }, (ex) -> DiscordLogger.log(event, ex));
     }
 
 	private void defineMulti(JDACommand event, String[] terms, boolean random) {

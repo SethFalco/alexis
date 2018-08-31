@@ -1,5 +1,6 @@
 package com.elypia.alexis.handlers.modules;
 
+import com.elypia.alexis.Alexis;
 import com.elypia.alexis.config.AmazonDetails;
 import com.elypia.alexis.utils.*;
 import com.elypia.commandler.annotations.*;
@@ -16,13 +17,10 @@ public class AmazonHandler extends JDAHandler {
 
     private Amazon amazon;
 
-    @Inject
     private ElyScriptStore scripts;
 
-    public AmazonHandler(List<AmazonDetails> details) {
-        Objects.requireNonNull(details);
-
-        AmazonDetails detail = details.get(0);
+    public AmazonHandler() {
+        AmazonDetails detail = Alexis.config.getApiKeys().getAmazonDetails().get(0);
 
         try {
             amazon = new Amazon(detail.getKey(), detail.getSecret(), detail.getTag(), detail.getEndpoint());
@@ -41,6 +39,6 @@ public class AmazonHandler extends JDAHandler {
                 event.reply(result.getItems().get(0));
             else
                 event.reply(BotUtils.getScript("amazon.no_results", event.getSource()));
-        }, (failure) -> BotLogger.log(event, failure));
+        }, (failure) -> DiscordLogger.log(event, failure));
     }
 }

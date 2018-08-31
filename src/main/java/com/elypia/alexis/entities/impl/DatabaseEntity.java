@@ -9,8 +9,7 @@ public abstract class DatabaseEntity {
      * inside of a document should have a commit method. <br>
      * This will just save the object into the database.
      */
-
     public void commit() {
-        Alexis.getChatbot().getDatastore().save(this);
+        Alexis.store.save(this);
     }
 }

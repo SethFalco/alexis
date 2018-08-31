@@ -1,6 +1,7 @@
 package com.elypia.alexis.handlers.modules;
 
-import com.elypia.alexis.utils.BotLogger;
+import com.elypia.alexis.Alexis;
+import com.elypia.alexis.utils.DiscordLogger;
 import com.elypia.commandler.annotations.*;
 import com.elypia.commandler.annotations.Module;
 import com.elypia.commandler.annotations.validation.param.Length;
@@ -16,8 +17,8 @@ public class OsuHandler extends JDAHandler {
 
     private Osu osu;
 
-    public OsuHandler(String apikey) {
-        osu = new Osu(apikey);
+    public OsuHandler() {
+        osu = new Osu(Alexis.config.getApiKeys().getOsu());
     }
 
     @Command(id = 10, name = "Player Stats", aliases = "get", help = "Get stats on osu! players.")
@@ -31,6 +32,6 @@ public class OsuHandler extends JDAHandler {
     public void getPlayers(JDACommand event, String username, OsuMode mode) {
         osu.getPlayer(username, mode, 31).queue(player -> {
             event.reply(player != null ? player : PLAYER_NOT_FOUND.compile());
-        }, (ex) -> BotLogger.log(event, ex));
+        }, (ex) -> DiscordLogger.log(event, ex));
     }
 }

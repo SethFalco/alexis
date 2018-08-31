@@ -11,27 +11,18 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 import java.util.*;
 import java.util.logging.*;
 
-public final class BotLogger {
+public final class DiscordLogger {
 
     /**
      * A predefined list of levels which will allow us to log to
      * Discord if the logging level is set to one of these. <br>
-     * (We just do this 'cause it's probably faster to do a contains check.)
+     * (We just do this 'cause it's probably faster to do a contains check.)<br>
+     * <br>
+     * ? WARNING: Log and mention with red text.
+     * ? INFO: Log with red text.
+     * ? FINE: Log with green text.
      */
-
-    private static final Collection<Level> DISCORD_LEVELS = new ArrayList<>();
-
-    // ? Performed first time this class is access statically.
-    static {
-        // ? On warning, log and mention with red text.
-        DISCORD_LEVELS.add(Level.WARNING);
-
-        // ? On info, log with red text.
-        DISCORD_LEVELS.add(Level.INFO);
-
-        // ? On fine, log with green text.
-        DISCORD_LEVELS.add(Level.FINE);
-    }
+    private static final Collection<Level> DISCORD_LEVELS = List.of(Level.WARNING, Level.INFO, Level.FINE);
 
     /**
      * This is the default level we'll apply when we're logging an Exception.
@@ -39,31 +30,27 @@ public final class BotLogger {
      * {@link DiscordConfig#getLogChannel()} and mention the lead
      * {@link DiscordConfig#getAuthors() developer}.
      */
-
     private static final Level EXCEPTION_LEVEL = Level.WARNING;
 
     /**
      * When making a diff, lines prepended with a
      * <strong>+</strong> appear in green.
      */
-
     private static final String GREEN = "+";
 
     /**
      * When making a diff, lines prepended with a
      * <strong>-</strong> appear in red.
      */
-
     private static final String RED = "-";
 
     /**
      * The native Java {@link Logger} instance to produce logs.
      */
-
     private static Logger logger = Logger.getLogger(Alexis.class.getName());
 
 
-    private BotLogger() {
+    private DiscordLogger() {
         // ! Don't construct this!
     }
 
@@ -108,8 +95,8 @@ public final class BotLogger {
             MessageChannel channel = getLogChannel(event.getJDA());
 
             if (level == Level.WARNING) {
-                long userId = Alexis.getConfig().getDiscordConfig().getAuthors().get(0).getId();
-                User user = Alexis.getChatbot().getJDA().getUserById(userId);
+                long userId = Alexis.config.getDiscordConfig().getAuthors().get(0).getId();
+                User user = Alexis.jda.getUserById(userId);
                 message = "_ _\n" + user.getAsMention() + "\n\n" + message;
             }
 
@@ -141,7 +128,7 @@ public final class BotLogger {
     }
 
     private static MessageChannel getLogChannel(JDA jda) {
-        long channelId = Alexis.getConfig().getDiscordConfig().getLogChannel();
+        long channelId = Alexis.config.getDiscordConfig().getLogChannel();
         return jda.getTextChannelById(channelId);
     }
 }

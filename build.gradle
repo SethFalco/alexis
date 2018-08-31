@@ -39,7 +39,7 @@ dependencies {
 //    implementation 'com.elypia:commandler:1.1.11'
 
     // Discord
-    implementation 'net.dv8tion:JDA:3.7.1_407'
+    implementation 'net.dv8tion:JDA:3.7.1_408'
     implementation 'com.sedmelluq:lavaplayer:1.3.7'
     implementation 'com.github.DiscordBotList:DBL-Java-Library:2.0.1'
 

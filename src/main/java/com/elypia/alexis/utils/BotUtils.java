@@ -1,14 +1,13 @@
 package com.elypia.alexis.utils;
 
 import com.elypia.alexis.Alexis;
-import com.elypia.alexis.config.AlexisConfig;
+import com.elypia.alexis.config.BotConfiguration;
 import com.elypia.alexis.entities.*;
 import com.elypia.alexis.entities.embedded.NanowrimoLink;
 import com.elypia.commandler.jda.JDACommand;
 import com.elypia.elypiai.runescape.RuneScape;
 import com.elypia.elypiai.utils.Language;
-import com.elypia.elyscript.*;
-import com.mongodb.event.CommandEvent;
+import com.elypia.elyscript.ElyScript;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.Event;
@@ -63,7 +62,7 @@ public final class BotUtils {
 	}
 
 	public static boolean isDatabaseAlive() {
-		AlexisConfig config = Alexis.getConfig();
+		BotConfiguration config = Alexis.config;
 		boolean databaseEnabled = config.getDatabaseConfig().isEnabled();
 
 		if (!databaseEnabled)
@@ -115,7 +114,7 @@ public final class BotUtils {
 	public static String getScript(String key, Event event, Map<String, Object> p) {
 		String language = getChannelLanguage(event);
 		Map<String, Object> params = addEventParams(event, p);
-		return Alexis.getChatbot().getScriptStore().get(params, key, language);
+		return Alexis.scriptStore.get(params, key, language);
 	}
 
 	private static Map<String, Object> addEventParams(Event event, Map<String, Object> p) {
@@ -185,7 +184,7 @@ public final class BotUtils {
 		if (params.containsKey("guild.prefix"))
 			params.put("prefix", params.get("guild.prefix"));
 		else
-			params.put("prefix", Alexis.getConfig().getDiscordConfig().getPrefix());
+			params.put("prefix", Alexis.config.getDiscordConfig().getPrefix());
 
 		return params;
 	}

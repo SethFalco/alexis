@@ -16,7 +16,6 @@ import java.util.*;
  * This is the data on the <strong>global</strong> instance of a user
  * and is in no way guild specific.
  */
-
 @Entity(value = "users", noClassnameStored = true)
 public class UserData extends DatabaseEntity {
 
@@ -26,14 +25,12 @@ public class UserData extends DatabaseEntity {
     /**
      * The ID of the user on Discord and as stored in the database.
      */
-
     @Property("user_id")
     private long userId;
 
     /**
      * The total XP this user has.
      */
-
     @Property("xp")
     private int xp;
 
@@ -47,7 +44,7 @@ public class UserData extends DatabaseEntity {
     private Date lastMessage;
 
     public static UserData query(long id) {
-        Datastore store = Alexis.getChatbot().getDatastore();
+        Datastore store = Alexis.store;
         Query<UserData> query = store.createQuery(UserData.class);
         UserData data = query.filter("user_id ==", id).get();
 
@@ -63,7 +60,7 @@ public class UserData extends DatabaseEntity {
     }
 
     public static UserData query(String field, String value) {
-        Datastore store = Alexis.getChatbot().getDatastore();
+        Datastore store = Alexis.store;
         Query<UserData> query = store.createQuery(UserData.class);
         return query.filter(field + " ==", value).get();
     }

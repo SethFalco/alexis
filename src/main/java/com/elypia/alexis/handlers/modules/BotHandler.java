@@ -5,9 +5,9 @@ import com.elypia.alexis.config.*;
 import com.elypia.alexis.utils.*;
 import com.elypia.commandler.annotations.*;
 import com.elypia.commandler.annotations.Module;
+import com.elypia.commandler.jda.*;
 import com.elypia.commandler.jda.annotations.validation.command.Scope;
 import com.elypia.commandler.jda.annotations.validation.param.Everyone;
-import com.elypia.commandler.jda.*;
 import com.elypia.elypiai.utils.Markdown;
 import com.elypia.elyscript.ElyScript;
 import net.dv8tion.jda.core.*;
@@ -22,11 +22,7 @@ import java.util.stream.Collectors;
 @Module(name = "Bot", aliases = {"bot", "robot"}, help = "help.bot")
 public class BotHandler extends JDAHandler {
 
-	private final OffsetDateTime BOT_TIME;
-
-	public BotHandler() {
-		BOT_TIME = OffsetDateTime.of(2016, 7, 19, 1, 52, 0, 0, ZoneOffset.ofHours(0));
-	}
+	private static final OffsetDateTime BOT_TIME = OffsetDateTime.of(2016, 7, 19, 1, 52, 0, 0, ZoneOffset.ofHours(0));
 
 	@Static
 	@Command(name = "Ping!", aliases = "ping", help = "help.bot.ping")
@@ -61,7 +57,7 @@ public class BotHandler extends JDAHandler {
 		builder.setDescription(BotUtils.getScript("bot.description", source) + "\n_ _");
 		builder.setThumbnail(alexis.getAvatarUrl());
 
-		AlexisConfig config = Alexis.getConfig();
+		BotConfiguration config = Alexis.config;
 		List<Author> authors = config.getDiscordConfig().getAuthors();
 		StringJoiner joiner = new StringJoiner("\n");
 
@@ -72,7 +68,7 @@ public class BotHandler extends JDAHandler {
 			if (user != null)
 				joiner.add(Markdown.a(user.getName(), author.getUrl()) + " - " + author.getRole());
 			else
-				BotLogger.log(event, Level.INFO, "The developer for id %d couldn't be found.", id);
+				DiscordLogger.log(event, Level.INFO, "The developer for id %d couldn't be found.", id);
 		}
 
 		Map<String, Object> authorParams = new HashMap<>();

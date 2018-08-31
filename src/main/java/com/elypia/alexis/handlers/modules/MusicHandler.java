@@ -1,6 +1,5 @@
 package com.elypia.alexis.handlers.modules;
 
-import com.elypia.alexis.Alexis;
 import com.elypia.alexis.audio.*;
 import com.elypia.alexis.entities.GuildData;
 import com.elypia.alexis.entities.embedded.MusicSettings;
@@ -10,16 +9,15 @@ import com.elypia.commandler.annotations.Module;
 import com.elypia.commandler.jda.*;
 import com.elypia.commandler.jda.annotations.Emoji;
 import com.elypia.commandler.jda.annotations.validation.command.*;
-import com.elypia.elypiai.utils.*;
+import com.elypia.elypiai.utils.Markdown;
 import com.elypia.elypiai.utils.math.MathUtils;
+import com.google.cloud.Tuple;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 import com.sedmelluq.discord.lavaplayer.track.*;
 import net.dv8tion.jda.core.*;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.managers.AudioManager;
-import org.mongodb.morphia.*;
-import org.mongodb.morphia.query.*;
 
 import java.io.IOException;
 import java.util.*;
@@ -35,21 +33,18 @@ public class MusicHandler extends JDAHandler {
 	 * This allows us to query YouTube for information on videos,
 	 * channels or playlists.
 	 */
-
 	private YouTubeHelper youtube;
 
 	/**
 	 * The manager class which allows us to create new audio players
 	 * (for each guild) and parse tracks as {@link AudioTrack}s.
 	 */
-
 	private DefaultAudioPlayerManager manager;
 
 	/**
 	 * A map of Guild IDs to audio players, as each guild owns their own
 	 * independent music player seperate from others.
 	 */
-
 	private Map<Long, GuildAudioPlayer> guildPlayers;
 
 	/**
@@ -59,7 +54,6 @@ public class MusicHandler extends JDAHandler {
 	 *
 	 * @param youtube The YouTubeHelper for making HTTP requests to YouTube.
 	 */
-
 	public MusicHandler(YouTubeHelper youtube) {
 		this.youtube = youtube;
 		manager = new DefaultAudioPlayerManager();
@@ -339,7 +333,6 @@ public class MusicHandler extends JDAHandler {
 	 * @return The reply for the user.
 	 * @throws IOException
 	 */
-
 	private Object handleSongAdded(JDACommand event, String query, boolean insert) throws IOException {
 		GuildAudioPlayer player = getAudioPlayer(event);
 		Tuple<AudioPlaylist, List<AudioTrack>> tuple = player.add(query, insert);

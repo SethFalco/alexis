@@ -1,6 +1,7 @@
 package com.elypia.alexis.handlers.modules;
 
-import com.elypia.alexis.utils.BotLogger;
+import com.elypia.alexis.Alexis;
+import com.elypia.alexis.utils.DiscordLogger;
 import com.elypia.commandler.annotations.*;
 import com.elypia.commandler.annotations.Module;
 import com.elypia.commandler.jda.*;
@@ -14,8 +15,8 @@ public class SteamHandler extends JDAHandler {
 
 	private Steam steam;
 
-	public SteamHandler(String apiKey) {
-		steam = new Steam(apiKey);
+	public SteamHandler() {
+		steam = new Steam(Alexis.config.getApiKeys().getSteam());
 	}
 
 	@Command(name = "Steam Profile", aliases = {"get", "user", "profile"}, help = "Get information on a Steam user!")
@@ -30,7 +31,7 @@ public class SteamHandler extends JDAHandler {
 			steam.getUsers(search.getId()).queue(users -> {
 				SteamUser user = users.get(0);
 				event.reply(user);
-			}, failure -> BotLogger.log(event, failure));
+			}, failure -> DiscordLogger.log(event, failure));
 		});
 	}
 
@@ -60,7 +61,7 @@ public class SteamHandler extends JDAHandler {
 
 //				String message = ElyUtils.generateTable(1992, games);
 //				event.reply(String.format("```\n%s\n```", message));
-			}, failure -> BotLogger.log(event, failure));
+			}, failure -> DiscordLogger.log(event, failure));
 		});
 	}
 
@@ -80,7 +81,7 @@ public class SteamHandler extends JDAHandler {
 				SteamGame game = library.get(ThreadLocalRandom.current().nextInt(library.size()));
 //				event.addReaction("🎲");
 				event.reply(game);
-			}, failure -> BotLogger.log(event, failure));
+			}, failure -> DiscordLogger.log(event, failure));
 		});
 	}
 

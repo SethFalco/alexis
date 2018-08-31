@@ -26,18 +26,6 @@ import java.util.logging.Level;
 
 public class EventHandler extends ListenerAdapter {
 
-    private Chatbot chatbot;
-    private MongoClient client;
-    private Morphia morphia;
-	private Datastore store;
-
-	public EventHandler(Chatbot chatbot) {
-		this.chatbot = chatbot;
-		this.client = chatbot.getDatabase();
-		this.morphia = chatbot.getMorphia();
-		this.store = chatbot.getDatastore();
-	}
-
 	/**
 	 * Occurs when the bot succesfully logs in.
 	 *
@@ -46,7 +34,7 @@ public class EventHandler extends ListenerAdapter {
 
 	@Override
 	public void onReady(ReadyEvent event) {
-		long timeElapsed = System.currentTimeMillis() - chatbot.getStartUpTime();
+		long timeElapsed = System.currentTimeMillis() - Alexis.START_TIME;
 		BotLogger.log(event, Level.FINER, "Time taken to launch: %,dms", timeElapsed);
 
 		event.getJDA().getPresence().setStatus(OnlineStatus.ONLINE);
@@ -68,7 +56,7 @@ public class EventHandler extends ListenerAdapter {
 		TextChannel channel = BotUtils.getWriteableChannel(event);
 
 		if (channel != null) {
-			String prefix = Alexis.getConfig().getDiscordConfig().getPrefix();
+			String prefix = Alexis.config.getDiscordConfig().getPrefix();
 			String message = "Thank you for inviting me! My default prefix is `" + prefix + "` but you can mention me too!\nFeel free to try my help command!";
 			channel.sendMessage(message).queue();
 		}
@@ -78,7 +66,7 @@ public class EventHandler extends ListenerAdapter {
 
 		GuildData data = new GuildData();
 		data.setGuildId(guild.getIdLong());
-		store.save(data);
+		Alexis.store.save(data);
 	}
 
 	@Override
@@ -103,7 +91,7 @@ public class EventHandler extends ListenerAdapter {
 		boolean bot = event.getUser().isBot();
 
 		Guild guild = event.getGuild();
-		Query<GuildData> query = store.createQuery(GuildData.class);
+		Query<GuildData> query = Alexis.store.createQuery(GuildData.class);
 		GuildData data = query.filter("guild_id ==", guild.getIdLong()).get();
 
 		GreetingSettings greetings = data.getSettings().getGreetingSettings();

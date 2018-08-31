@@ -1,7 +1,6 @@
 package com.elypia.alexis.handlers.modules;
 
 import com.elypia.alexis.utils.BotUtils;
-import com.elypia.commandler.CommandEvent;
 import com.elypia.commandler.annotations.*;
 import com.elypia.commandler.annotations.Module;
 import com.elypia.commandler.impl.IHandler;
@@ -13,7 +12,7 @@ import net.dv8tion.jda.core.events.message.GenericMessageEvent;
 
 import java.util.*;
 
-// ! For not this is in Alexis, we should come up with a generic help module for Commandler though.
+// ! For now this is in Alexis, we should come up with a generic help module for Commandler though.
 @Module(name = "Help", aliases = "help")
 public class HelpModule extends JDAHandler {
 

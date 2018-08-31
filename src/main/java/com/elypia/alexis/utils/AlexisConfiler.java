@@ -18,13 +18,12 @@ public class AlexisConfiler extends JDAConfiler {
     @Override
     public String[] getPrefixes(GenericMessageEvent event) {
         String id = event.getJDA().getSelfUser().getId();
-        String defaultPrefix = Alexis.getConfig().getDiscordConfig().getPrefix();
+        String defaultPrefix = Alexis.config.getDiscordConfig().getPrefix();
 
         if (event.isFromType(ChannelType.PRIVATE) || !BotUtils.isDatabaseAlive())
             return new String[]{defaultPrefix, "<@" + id + ">", "<@!" + id + ">"};
 
-        Chatbot bot = Alexis.getChatbot();
-        Datastore store = bot.getDatastore();
+        Datastore store = Alexis.store;
         Guild guild = event.getGuild();
 
         Query<GuildData> query = store.createQuery(GuildData.class);

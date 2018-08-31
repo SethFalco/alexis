@@ -1,8 +1,9 @@
 package com.elypia.alexis.handlers.modules;
 
+import com.elypia.alexis.Alexis;
 import com.elypia.alexis.commandler.validators.Database;
 import com.elypia.alexis.entities.MessageChannelData;
-import com.elypia.alexis.utils.BotLogger;
+import com.elypia.alexis.utils.DiscordLogger;
 import com.elypia.commandler.annotations.*;
 import com.elypia.commandler.annotations.Module;
 import com.elypia.commandler.jda.*;
@@ -16,8 +17,8 @@ public class CleverbotHandler extends JDAHandler {
 
     private Cleverbot cleverbot;
 
-    public CleverbotHandler(String apiKey) {
-        cleverbot = new Cleverbot(apiKey);
+    public CleverbotHandler() {
+        cleverbot = new Cleverbot(Alexis.config.getApiKeys().getCleverbot());
     }
 
     @Command(name = "Talk to Cleverbot", aliases = {"say", "ask"}, help = "help.cleverbot.say")
@@ -32,7 +33,7 @@ public class CleverbotHandler extends JDAHandler {
 
             data.setCleverState(response.getCs());
             data.commit();
-        }, failure -> BotLogger.log(event, failure));
+        }, failure -> DiscordLogger.log(event, failure));
     }
 
 // ! This is disabled for now until we have caching available

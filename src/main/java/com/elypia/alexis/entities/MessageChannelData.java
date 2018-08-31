@@ -24,7 +24,7 @@ public class MessageChannelData extends DatabaseEntity {
     private String cleverState;
 
     public static MessageChannelData query(long channelId) {
-        Datastore store = Alexis.getChatbot().getDatastore();
+        Datastore store = Alexis.store;
         Query<MessageChannelData> query = store.createQuery(MessageChannelData.class);
         MessageChannelData data = query.filter("channel_id ==", channelId).get();
 
