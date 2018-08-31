@@ -86,7 +86,6 @@ public class UserData extends DatabaseEntity {
      * @param event The generic event which rewards XP.
      * @return If they were entitled to xp.
      */
-
     public boolean grantXp(MessageReceivedEvent event) {
         String content = event.getMessage().getContentRaw();
         int length = content.split("\\s+").length;
