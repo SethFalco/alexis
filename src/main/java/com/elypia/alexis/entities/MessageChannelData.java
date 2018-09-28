@@ -1,6 +1,7 @@
 package com.elypia.alexis.entities;
 
 import com.elypia.alexis.Alexis;
+import com.elypia.alexis.entities.embedded.TranslateSettings;
 import com.elypia.alexis.entities.impl.DatabaseEntity;
 import com.elypia.elypiai.utils.Language;
 import org.bson.types.ObjectId;
@@ -9,7 +10,7 @@ import org.mongodb.morphia.annotations.*;
 import org.mongodb.morphia.query.Query;
 
 @Entity(value = "message_channels", noClassnameStored = true)
-public class MessageChannelData extends DatabaseEntity {
+public class MessageChannelData implements DatabaseEntity {
 
     @Id
     private ObjectId id;
@@ -23,17 +24,25 @@ public class MessageChannelData extends DatabaseEntity {
     @Property("clever_state")
     private String cleverState;
 
-    public static MessageChannelData query(long channelId) {
-        Datastore store = Alexis.store;
-        Query<MessageChannelData> query = store.createQuery(MessageChannelData.class);
-        MessageChannelData data = query.filter("channel_id ==", channelId).get();
+    public MessageChannelData() {
 
-        if (data == null) {
-            data = new MessageChannelData();
-            data.channelId = channelId;
-        }
+    }
+
+    public MessageChannelData(long channelId) {
+        this.channelId = channelId;
+    }
+
+    public static MessageChannelData query(long channelId) {
+        var data = Alexis.getDatabaseManager().query(MessageChannelData.class, "channel_id", channelId);
+
+        if (data == null)
+            data = new MessageChannelData(channelId);
 
         return data;
+    }
+
+    public static MessageChannelData query(String field, String value) {
+        return Alexis.getDatabaseManager().query(MessageChannelData.class, field, value);
     }
 
     public ObjectId getId() {

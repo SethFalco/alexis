@@ -9,6 +9,8 @@ import net.dv8tion.jda.core.events.message.GenericMessageEvent;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.query.Query;
 
+import java.util.Map;
+
 public class AlexisConfiler extends JDAConfiler {
 
     public AlexisConfiler(String prefix) {
@@ -20,17 +22,14 @@ public class AlexisConfiler extends JDAConfiler {
         String id = event.getJDA().getSelfUser().getId();
         String defaultPrefix = Alexis.config.getDiscordConfig().getPrefix();
 
-        if (event.isFromType(ChannelType.PRIVATE) || !BotUtils.isDatabaseAlive())
+        if (!event.getChannelType().isGuild() || !BotUtils.isDatabaseAlive())
             return new String[]{defaultPrefix, "<@" + id + ">", "<@!" + id + ">"};
 
-        Datastore store = Alexis.store;
         Guild guild = event.getGuild();
-
-        Query<GuildData> query = store.createQuery(GuildData.class);
-        GuildData data = query.filter("guild_id ==", guild.getIdLong()).get();
+        var data = GuildData.query(guild.getIdLong());
         GuildSettings settings = data.getSettings();
-
         String prefix = settings.getPrefix();
+
         return new String[]{(prefix == null ? defaultPrefix : prefix), "<@" + id + ">", "<@!" + id + ">"};
     }
 
@@ -40,8 +39,8 @@ public class AlexisConfiler extends JDAConfiler {
     }
 
     @Override
-    public String getScript(GenericMessageEvent event, String key) {
-        String script = BotUtils.getScript(key, event);
+    public <T> String getScript(GenericMessageEvent event, String key, Map<String, T> params) {
+        String script = BotUtils.getScript(key, event, params);
         return script != null ? script : key;
     }
 }

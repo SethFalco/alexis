@@ -34,7 +34,6 @@ public class GuildAudioPlayer {
 	 *
 	 * @return	If this resulting in a change of state.
 	 */
-
 	public boolean play() {
 		boolean paused = player.isPaused();
 

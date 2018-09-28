@@ -13,6 +13,7 @@ public class SupportedValidator extends IJDAParamValidator<Language, Supported> 
 
     @Override
     public boolean validate(JDACommand event, Language language, Supported supported, MetaParam param) {
-        return Alexis.supportedLanguages.contains(language);
+//        return Alexis.supportedLanguages.contains(language);
+        return false;
     }
 }

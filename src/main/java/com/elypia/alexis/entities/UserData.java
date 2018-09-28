@@ -3,12 +3,10 @@ package com.elypia.alexis.entities;
 import com.elypia.alexis.Alexis;
 import com.elypia.alexis.entities.data.Achievement;
 import com.elypia.alexis.entities.embedded.NanowrimoLink;
-import com.elypia.alexis.entities.impl.DatabaseEntity;
+import com.elypia.alexis.entities.impl.*;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import org.bson.types.ObjectId;
-import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.annotations.*;
-import org.mongodb.morphia.query.Query;
 
 import java.util.*;
 
@@ -17,7 +15,7 @@ import java.util.*;
  * and is in no way guild specific.
  */
 @Entity(value = "users", noClassnameStored = true)
-public class UserData extends DatabaseEntity {
+public class UserData extends Experienceable implements DatabaseEntity {
 
     @Id
     private ObjectId id;
@@ -28,12 +26,6 @@ public class UserData extends DatabaseEntity {
     @Property("user_id")
     private long userId;
 
-    /**
-     * The total XP this user has.
-     */
-    @Property("xp")
-    private int xp;
-
     @Property("achivements")
     private Set<Achievement> achievements;
 
@@ -43,26 +35,25 @@ public class UserData extends DatabaseEntity {
     @Property("last_message")
     private Date lastMessage;
 
-    public static UserData query(long id) {
-        Datastore store = Alexis.store;
-        Query<UserData> query = store.createQuery(UserData.class);
-        UserData data = query.filter("user_id ==", id).get();
+    public UserData() {
 
-        if (data == null) {
-            data = new UserData();
-            data.userId = id;
-        }
+    }
 
-        if (data.achievements == null)
-            data.achievements = new HashSet<>();
+    public UserData(long userId) {
+        this.userId = userId;
+    }
 
-        return data;
+    public static UserData query(long userId) {
+        var userData = Alexis.getDatabaseManager().query(UserData.class, "user_id", userId);
+
+        if (userData == null)
+            userData = new UserData(userId);
+
+        return userData;
     }
 
     public static UserData query(String field, String value) {
-        Datastore store = Alexis.store;
-        Query<UserData> query = store.createQuery(UserData.class);
-        return query.filter(field + " ==", value).get();
+        return Alexis.getDatabaseManager().query(UserData.class, field, value);
     }
 
     public void grantAchievement(Achievement achievement) {
@@ -73,28 +64,29 @@ public class UserData extends DatabaseEntity {
         achievements.remove(achievement);
     }
 
-    /**
-     * Checks if the user is entitled to XP based on
-     * the last time they sent a message. <br>
-     * The return value with be -1 if it appears the user
-     * has been typing faster than physically possible.
-     * (10 characters in a second.)
-     *
-     * @param event The generic event which rewards XP.
-     * @return If they were entitled to xp.
-     */
-    public boolean grantXp(MessageReceivedEvent event) {
+    public boolean isEligibleForXp(MessageReceivedEvent event) {
         String content = event.getMessage().getContentRaw();
         int length = content.split("\\s+").length;
         long current = System.currentTimeMillis();
-        boolean earned = lastMessage == null || length <= ((current - lastMessage.getTime()) / 100);
 
-        lastMessage = new Date();
+        if (lastMessage == null)
+            return true;
 
-        if (earned)
-            xp += length;
+        // ? Maximum of 1 character per 100 milliseconds.
+        return length < ((current - lastMessage.getTime()) / 100);
+    }
 
-        return earned;
+
+    /**
+     * Calculate how much XP this entity is entitled to getting based on
+     * the message received.
+     *
+     * @param event The message event to reward for.
+     * @return The amount of XP the user is entitled to.
+     */
+    public int calculateXp(MessageReceivedEvent event) {
+        String content = event.getMessage().getContentRaw();
+        return content.split("\\s+").length;
     }
 
     public ObjectId getId() {
@@ -111,14 +103,6 @@ public class UserData extends DatabaseEntity {
 
     public void setUserId(long userId) {
         this.userId = userId;
-    }
-
-    public int getXp() {
-        return xp;
-    }
-
-    public void setXp(int xp) {
-        this.xp = xp;
     }
 
     public Set<Achievement> getAchievements() {

@@ -7,28 +7,39 @@ import com.elypia.elypiai.nanowrimo.NanoUser;
 import net.dv8tion.jda.core.*;
 import net.dv8tion.jda.core.entities.*;
 
-import java.util.List;
+import java.util.*;
 
 public class NanoUserBuilder implements IJDABuilder<NanoUser> {
 
     @Override
     public Message buildEmbed(JDACommand event, NanoUser output) {
+        String name = output.getUsername();
+        String wordcount = event.getScript("b.nano.wordcount");
+
         EmbedBuilder builder = BotUtils.createEmbedBuilder(event);
+        builder.setAuthor(name, output.getUrl());
+
         User user = getUserByNano(event, output);
 
-        builder.setAuthor(output.getUsername(), output.getUrl());
-
         if (user != null) {
+            String desc = event.getScript("b.nano.description", Map.of(
+                "name", name,
+                "mention", user.getAsMention()
+            ));
+
             builder.setThumbnail(user.getAvatarUrl());
-            builder.setDescription("They are " + user.getAsMention() + " on Discord!");
+            builder.setDescription(desc);
         }
 
         String fieldString = String.format("%,d", output.getWordCount());
-        builder.addField("Total Word Count", fieldString, true);
+        builder.addField(wordcount, fieldString, true);
 
         if (output.isWinner()) {
-            String footerFormat = "%s is a winner of the last NaNoWriMo event!";
-            builder.setFooter(String.format(footerFormat, output.getUsername()), null);
+            String winner = event.getScript("b.nano.winner", Map.of(
+                "name", name
+            ));
+
+            builder.setFooter(winner, null);
         }
 
         return new MessageBuilder(builder.build()).build();

@@ -1,7 +1,7 @@
 package com.elypia.alexis.utils;
 
 import com.elypia.alexis.Alexis;
-import com.elypia.alexis.config.BotConfiguration;
+import com.elypia.alexis.config.BotConfig;
 import com.elypia.alexis.entities.*;
 import com.elypia.alexis.entities.embedded.NanowrimoLink;
 import com.elypia.commandler.jda.JDACommand;
@@ -16,14 +16,15 @@ import net.dv8tion.jda.core.events.guild.GenericGuildEvent;
 import net.dv8tion.jda.core.events.guild.member.GenericGuildMemberEvent;
 import net.dv8tion.jda.core.events.message.*;
 import net.dv8tion.jda.core.events.user.GenericUserEvent;
+import org.slf4j.*;
 
 import java.util.*;
-import java.util.logging.Logger;
 
 public final class BotUtils {
 
 	private static final String BOT_URL = "https://discordapp.com/oauth2/authorize?client_id=%s&scope=bot";
-	private static final Logger LOGGER = Logger.getLogger(Alexis.class.getName());
+
+	private static final Logger logger = LoggerFactory.getLogger(BotUtils.class);
 
 	private BotUtils() {
 		// Don't construct this
@@ -62,8 +63,8 @@ public final class BotUtils {
 	}
 
 	public static boolean isDatabaseAlive() {
-		BotConfiguration config = Alexis.config;
-		boolean databaseEnabled = config.getDatabaseConfig().isEnabled();
+		BotConfig config = Alexis.config;
+		boolean databaseEnabled = config.getDebugConfig().isDatabaseEnabled();
 
 		if (!databaseEnabled)
 			return false;
@@ -78,7 +79,12 @@ public final class BotUtils {
 		}
 	}
 
-	public static String formInviteUrl(User user) {
+	public static String getInviteUrl(User user) {
+		Objects.requireNonNull(user);
+
+		if (!user.isBot())
+			throw new RuntimeException("User is not a bot.");
+
 		return String.format(BOT_URL, user.getIdLong());
 	}
 
@@ -102,7 +108,7 @@ public final class BotUtils {
 		return buildScript(markup, event, Map.of());
 	}
 
-	public static String buildScript(String markup, Event event, Map<String, Object> p) {
+	public static <T> String buildScript(String markup, Event event, Map<String, T> p) {
 		Map<String, Object> params = addEventParams(event, p);
 		return new ElyScript(markup).compile(params);
 	}
@@ -111,13 +117,13 @@ public final class BotUtils {
 		return getScript(key, event, Map.of());
 	}
 
-	public static String getScript(String key, Event event, Map<String, Object> p) {
+	public static <T> String getScript(String key, Event event, Map<String, T> p) {
 		String language = getChannelLanguage(event);
 		Map<String, Object> params = addEventParams(event, p);
-		return Alexis.scriptStore.get(params, key, language);
+		return Alexis.scripts.get(new String[]{key, language}, params);
 	}
 
-	private static Map<String, Object> addEventParams(Event event, Map<String, Object> p) {
+	private static <T> Map<String, Object> addEventParams(Event event, Map<String, T> p) {
 		Map<String, Object> params = new HashMap<>(p);
 		boolean database = isDatabaseAlive();
 

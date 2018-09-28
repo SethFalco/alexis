@@ -5,31 +5,31 @@ import org.mongodb.morphia.annotations.Embedded;
 @Embedded
 public class GreetingSettings {
 
-    @Embedded("welcome")
-    private GreetingSetting welcome;
+    @Embedded("join")
+    private GreetingSetting join;
 
-    @Embedded("farewell")
-    private GreetingSetting farewell;
+    @Embedded("leave")
+    private GreetingSetting leave;
 
-    public GreetingSetting getWelcome() {
-        if (welcome == null)
-            welcome = new GreetingSetting();
+    public GreetingSetting getJoin() {
+        if (join == null)
+            join = new GreetingSetting();
 
-        return welcome;
+        return join;
     }
 
-    public void setWelcome(GreetingSetting welcome) {
-        this.welcome = welcome;
+    public void setWelcome(GreetingSetting join) {
+        this.join = join;
     }
 
-    public GreetingSetting getFarewell() {
-        if (farewell == null)
-            farewell = new GreetingSetting();
+    public GreetingSetting getLeave() {
+        if (leave == null)
+            leave = new GreetingSetting();
 
-        return farewell;
+        return leave;
     }
 
-    public void setFarewell(GreetingSetting farewell) {
-        this.farewell = farewell;
+    public void setFarewell(GreetingSetting leave) {
+        this.leave = leave;
     }
 }

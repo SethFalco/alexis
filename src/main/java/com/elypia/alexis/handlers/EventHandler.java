@@ -1,14 +1,13 @@
 package com.elypia.alexis.handlers;
 
-import com.elypia.alexis.*;
+import com.elypia.alexis.Alexis;
 import com.elypia.alexis.entities.*;
 import com.elypia.alexis.entities.embedded.*;
 import com.elypia.alexis.google.translate.TranslateHelper;
-import com.elypia.alexis.utils.*;
+import com.elypia.alexis.utils.BotUtils;
 import com.elypia.elypiai.runescape.RuneScape;
 import com.elypia.elypiai.utils.Country;
 import com.google.cloud.translate.*;
-import com.mongodb.MongoClient;
 import net.dv8tion.jda.core.*;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.ReadyEvent;
@@ -18,24 +17,26 @@ import net.dv8tion.jda.core.events.guild.voice.*;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.events.message.react.MessageReactionAddEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
-import org.mongodb.morphia.*;
-import org.mongodb.morphia.query.Query;
+import org.slf4j.*;
 
 import java.time.OffsetDateTime;
-import java.util.logging.Level;
+import java.util.*;
 
 public class EventHandler extends ListenerAdapter {
+
+	private static final Logger logger = LoggerFactory.getLogger(EventHandler.class);
+
+	private TranslateHelper translate = new TranslateHelper();
 
 	/**
 	 * Occurs when the bot succesfully logs in.
 	 *
 	 * @param event ReadyEvent
 	 */
-
 	@Override
 	public void onReady(ReadyEvent event) {
 		long timeElapsed = System.currentTimeMillis() - Alexis.START_TIME;
-		BotLogger.log(event, Level.FINER, "Time taken to launch: %,dms", timeElapsed);
+		logger.info("Time taken to launch: {}ms", String.format("%,d", timeElapsed));
 
 		event.getJDA().getPresence().setStatus(OnlineStatus.ONLINE);
 	}
@@ -48,33 +49,43 @@ public class EventHandler extends ListenerAdapter {
 
 	@Override
 	public void onGuildJoin(GuildJoinEvent event) {
-		// ? Check if we actually joined the guild now or did Discord just dish out an extra event again. ^-^'
-		if (event.getGuild().getSelfMember().getJoinDate().isBefore(OffsetDateTime.now().minusMinutes(10)))
-			return;
-
 		Guild guild = event.getGuild();
 		TextChannel channel = BotUtils.getWriteableChannel(event);
 
-		if (channel != null) {
-			String prefix = Alexis.config.getDiscordConfig().getPrefix();
-			String message = "Thank you for inviting me! My default prefix is `" + prefix + "` but you can mention me too!\nFeel free to try my help command!";
-			channel.sendMessage(message).queue();
-		}
+		// ? Did we actually join a guild or did Discord screw up.
+		if (guild.getSelfMember().getJoinDate().isBefore(OffsetDateTime.now().minusMinutes(10)))
+			return;
 
-		BotLogger.log(event, Level.INFO, "The guild  %s just invited me!", guild.getName());
-		BotLogger.log(event.getJDA());
+		if (channel == null)
+			return;
+
+		String prefix = Alexis.config.getDiscordConfig().getPrefix();
+		String message = "Thank you for inviting me! My default prefix is `" + prefix + "` but you can mention me too!\nFeel free to try my help command!";
+		channel.sendMessage(message).queue();
+
+		logger.info("The guild {} just invited me!\n{}", guild.getName(), statsMessage(event.getJDA()));
 
 		GuildData data = new GuildData();
 		data.setGuildId(guild.getIdLong());
-		Alexis.store.save(data);
+		Alexis.getDatabaseManager().commit(data);
 	}
 
 	@Override
 	public void onGuildLeave(GuildLeaveEvent event) {
 		Guild guild = event.getGuild();
+		logger.info("The guild %s just kicked me!\n{}", guild.getName(), statsMessage(event.getJDA()));
+	}
 
-		BotLogger.log(event, Level.INFO, "The guild %s just kicked me!", guild.getName());
-		BotLogger.log(event.getJDA());
+	private String statsMessage(JDA jda) {
+		final String MESSAGE = "I'm now in %,d guilds, totalling %,d users, and %,d bots!";
+
+		int guildCount = jda.getGuilds().size();
+
+		List<User> users = jda.getUsers();
+		long botCount = users.stream().filter(User::isBot).count();
+		long userCount = users.size() - botCount;
+
+		return String.format(MESSAGE, guildCount, userCount, botCount);
 	}
 
 	@Override
@@ -91,11 +102,10 @@ public class EventHandler extends ListenerAdapter {
 		boolean bot = event.getUser().isBot();
 
 		Guild guild = event.getGuild();
-		Query<GuildData> query = Alexis.store.createQuery(GuildData.class);
-		GuildData data = query.filter("guild_id ==", guild.getIdLong()).get();
+		GuildData data = Alexis.getDatabaseManager().query(GuildData.class, "guild_id", guild.getIdLong());
 
 		GreetingSettings greetings = data.getSettings().getGreetingSettings();
-		GreetingSetting greeting = join ? greetings.getWelcome() : greetings.getFarewell();
+		GreetingSetting greeting = join ? greetings.getJoin() : greetings.getLeave();
 		MessageSettings settings = bot ? greeting.getBot() : greeting.getUser();
 
 		if (settings.isEnabled()) {
@@ -135,67 +145,117 @@ public class EventHandler extends ListenerAdapter {
 
 	@Override
 	public void onMessageReceived(MessageReceivedEvent event) {
-		handleXp(event);
+		if (event.getChannelType().isGuild() && !event.getAuthor().isBot())
+			xp(event);
 	}
 
-	private void handleXp(MessageReceivedEvent event) {
-		User author = event.getAuthor();
-
-		if (!event.isFromType(ChannelType.TEXT) || author.isBot())
-			return;
-
+	private void xp(MessageReceivedEvent event) {
 		if (event.getGuild().getMembers().stream().filter(o -> !o.getUser().isBot()).count() == 1)
 			return;
 
-		long userId = author.getIdLong();
-
+		long userId = event.getAuthor().getIdLong();
 		UserData userData = UserData.query(userId);
-		userData.grantXp(event);
-		userData.commit();
 
-		if (!event.getChannelType().isGuild())
+		if (!userData.isEligibleForXp(event)) {
+			userData.setLastMessage(new Date());
+			userData.commit();
 			return;
+		}
+
+		userData.setLastMessage(new Date());
 
 		long guildId = event.getGuild().getIdLong();
-
 		GuildData guildData = GuildData.query(guildId);
+		GuildSettings settings = guildData.getSettings();
 
 		MemberData memberData = MemberData.query(userId, guildId);
+
+		int reward = userData.calculateXp(event);
+
+		userData.incrementXp(reward);
+		userData.commit();
+
+		guildData.incrementXp(reward);
+		guildData.commit();
+
 		int currentLevel = RuneScape.parseXpAsLevel(memberData.getXp());
+		int newLevel = RuneScape.parseXpAsLevel(memberData.incrementXp(reward));
 
-		if (memberData.grantXp(event)) {
-			int newLevel = RuneScape.parseXpAsLevel(memberData.getXp());
+		if (currentLevel != newLevel) {
+			boolean enabled = settings.getLevelSettings().getNotifySettings().isEnabled();
 
-			if (currentLevel != newLevel) {
-				boolean enabled = guildData.getSettings().getLevelSettings().getNotifySettings().isEnabled();
+			if (enabled)
+				event.getChannel().sendMessage("Well done you went from level " + currentLevel + " to level " + newLevel + "!").queue();
+		}
 
-				if (enabled) {
-					event.getChannel().sendMessage("Well done you went from level " + currentLevel + " to level " + newLevel + "!").queue();
+		List<SkillEntry> skills = settings.getSkills();
+		List<MemberSkill> memberSkills = memberData.getSkills();
+
+		skills.forEach((skill) -> {
+			if (skill.getChannels().contains(event.getChannel().getIdLong())) {
+				if (memberSkills.stream().noneMatch(o -> o.getName().equalsIgnoreCase(skill.getName())))
+					memberSkills.add(new MemberSkill(skill.getName()));
+
+				for (MemberSkill mSkill : memberSkills) {
+					if (mSkill.getName().equalsIgnoreCase(skill.getName())) {
+						int skillLevel = RuneScape.parseXpAsLevel(mSkill.getXp());
+						int newSkillLevel = RuneScape.parseXpAsLevel(mSkill.incrementXp(reward));
+
+						if (skillLevel != newSkillLevel && skill.isNotify()) {
+							var params = Map.of("skill", skill.getName(), "level", newSkillLevel);
+							event.getChannel().sendMessage(BotUtils.getScript("skill.level_up", event, params)).queue();
+						}
+
+						return;
+					}
 				}
 			}
-		}
+		});
 
 		memberData.commit();
 	}
 
 	@Override
 	public void onMessageReactionAdd(MessageReactionAddEvent event) {
-		if (event.getUser().isBot())
+		boolean isBot = event.getUser().isBot();
+		boolean isGuild = event.getChannelType().isGuild();
+
+		if (isBot || !isGuild)
 			return;
 
-		handleTranslate(event);
+		Guild guild = event.getGuild();
+		long id = guild.getIdLong();
+		GuildData data = GuildData.query(id);
+		TranslateSettings settings = data.getSettings().getTranslateSettings();
+
+		if (settings.isEnabled())
+			translate(event, settings);
 	}
 
-	private TranslateHelper translate = new TranslateHelper();
+	/**
+	 * If the translate feature is enabled for the Guild we should check
+	 * reactions for if they're flags and if so, respond to the message
+	 * by translating the message to an appropriate languages the flag
+	 * may represent. <br>
+	 * <br>
+	 * <strong>Note:</strong> We pass the settings over so we don't have
+	 * to query them again.
+	 *
+	 * @param event The source event which may have request translating.
+	 * @param settings The guild settings regarding translation.
+	 */
+	private void translate(MessageReactionAddEvent event, TranslateSettings settings) {
+		if (!settings.isEnabled())
+			return;
 
-	private void handleTranslate(MessageReactionAddEvent event) {
 		String code = event.getReactionEmote().getName();
 		var languages = translate.getSupportedLangauges();
 
 		for (var entry : languages.entrySet()) {
+			Country[] countries = entry.getKey().getCountries();
 			Language value = entry.getValue();
 
-			for (Country country : entry.getKey().getCountries()) {
+			for (Country country : countries) {
 				if (country.getUnicodeEmote().equals(code)) {
 					event.getChannel().getMessageById(event.getMessageIdLong()).queue(message -> {
 						String content = message.getContentStripped();
@@ -203,15 +263,21 @@ public class EventHandler extends ListenerAdapter {
 						var source = translate.getLanguage(translation.getSourceLanguage()).getKey();
 
 						EmbedBuilder builder = new EmbedBuilder();
-						builder.addField("Source (" + source.getLanguageName() + ")", content + "\n_ _", false);
+						builder.addField("Source (" + source.getName() + ")", content + "\n_ _", false);
 						builder.addField("Target (" + value.getName() + ")", translation.getTranslatedText(), false);
-						builder.setImage("https://cdn.discordapp.com/attachments/436154993247256586/460187735936991233/color-short2x.png");
+						builder.setImage("https://elypia.com/resources/google.png");
 						builder.setFooter("http://translate.google.com/", null);
 
 						if (event.getGuild() != null)
 							builder.setColor(event.getGuild().getSelfMember().getColor());
 
-						event.getChannel().sendMessage(builder.build()).queue();
+						if (!settings.isPrivate())
+							event.getChannel().sendMessage(builder.build()).queue();
+						else {
+							event.getMember().getUser().openPrivateChannel().queue(o -> {
+								o.sendMessage(builder.build()).queue();
+							});
+						}
 					});
 
 					return;

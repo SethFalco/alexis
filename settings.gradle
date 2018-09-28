@@ -1,6 +1,1 @@
 rootProject.name = 'Alexis'
-includeFlat 'Commandler'
-findProject(':Commandler')?.name = 'commandler'
-includeFlat 'ElyScript'
-findProject(':ElyScript')?.name = 'elyscript'
-

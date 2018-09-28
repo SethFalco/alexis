@@ -3,13 +3,18 @@ package com.elypia.alexis.commandler.builders;
 import com.elypia.alexis.google.youtube.YouTubeHelper;
 import com.elypia.alexis.utils.BotUtils;
 import com.elypia.commandler.jda.*;
+import com.google.api.client.util.DateTime;
 import com.google.api.services.youtube.model.*;
 import net.dv8tion.jda.core.*;
 import net.dv8tion.jda.core.entities.Message;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class YouTubeSearchResultBuilder implements IJDABuilder<SearchResult> {
+
+    private static final SimpleDateFormat FORMAT = new SimpleDateFormat("dd MMM YYYY");
 
     private YouTubeHelper youtube;
 
@@ -20,13 +25,19 @@ public class YouTubeSearchResultBuilder implements IJDABuilder<SearchResult> {
     @Override
     public Message buildEmbed(JDACommand event, SearchResult output) {
         SearchResultSnippet snippet = output.getSnippet();
+        String videoId = output.getId().getVideoId();
 
         EmbedBuilder builder = BotUtils.createEmbedBuilder(event);
         builder.setAuthor(snippet.getChannelTitle());
-        builder.setTitle(snippet.getTitle(), YouTubeHelper.getVideoUrl(output.getId().getVideoId()));
+        builder.setTitle(snippet.getTitle(), YouTubeHelper.getVideoUrl(videoId));
         builder.setDescription(snippet.getDescription());
-        builder.setImage(snippet.getThumbnails().getHigh().getUrl());
-        builder.setFooter("Published at: " + snippet.getPublishedAt().toString(), null);
+        builder.setImage(YouTubeHelper.getThumbnailUrl(videoId));
+
+        DateTime datetime = snippet.getPublishedAt();
+        long milli = datetime.getValue();
+        Date date = new Date(milli);
+
+        builder.setFooter("Published on " + FORMAT.format(date), null);
 
         try {
             builder.setThumbnail(youtube.getChannelThumbnail(snippet.getChannelId()));
@@ -39,6 +50,8 @@ public class YouTubeSearchResultBuilder implements IJDABuilder<SearchResult> {
 
     @Override
     public Message build(JDACommand event, SearchResult output) {
-        return null;
+        String videoId = output.getId().getVideoId();
+        String url = YouTubeHelper.getVideoUrl(videoId);
+        return new MessageBuilder(url).build();
     }
 }

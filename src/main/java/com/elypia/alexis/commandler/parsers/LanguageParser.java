@@ -11,7 +11,7 @@ public class LanguageParser implements IJDAParser<Language> {
             if (language.getCode().equalsIgnoreCase(input))
                 return language;
 
-            if (language.getLanguageName().equalsIgnoreCase(input))
+            if (language.getName().equalsIgnoreCase(input))
                 return language;
 
             for (Country country : language.getCountries()) {

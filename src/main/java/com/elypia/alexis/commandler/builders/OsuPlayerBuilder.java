@@ -35,7 +35,7 @@ public class OsuPlayerBuilder implements IJDABuilder<OsuPlayer> {
             builder.addField("Latest Activity - " + osuEvent.getDate(), osuEvent.getMessage(), false);
         }
 
-        return new MessageBuilder(builder.toString()).build();
+        return new MessageBuilder(builder.build()).build();
     }
 
     @Override

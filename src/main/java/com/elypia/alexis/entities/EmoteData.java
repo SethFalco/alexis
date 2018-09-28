@@ -1,13 +1,14 @@
 package com.elypia.alexis.entities;
 
+import com.elypia.alexis.entities.embedded.EmoteEntry;
 import com.elypia.alexis.entities.impl.DatabaseEntity;
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.annotations.*;
 
 import java.util.*;
 
-@Entity(value = "emote", noClassnameStored = true)
-public class EmoteData extends DatabaseEntity {
+@Entity(value = "emotes", noClassnameStored = true)
+public class EmoteData implements DatabaseEntity {
 
     @Id
     private ObjectId id;
@@ -18,9 +19,8 @@ public class EmoteData extends DatabaseEntity {
     @Property("guild_id")
     private long guildId;
 
-// ! Turn this into an embedded array with date -> number of uses
-    @Property("uses")
-    private List<Date> uses;
+    @Embedded("uses")
+    private List<EmoteEntry> entry;
 
     public ObjectId getId() {
         return id;
@@ -46,11 +46,11 @@ public class EmoteData extends DatabaseEntity {
         this.guildId = guildId;
     }
 
-    public List<Date> getUses() {
-        return uses;
+    public List<EmoteEntry> getUses() {
+        return entry;
     }
 
-    public void setUses(List<Date> uses) {
-        this.uses = uses;
+    public void setUses(List<EmoteEntry> entry) {
+        this.entry = entry;
     }
 }

@@ -2,51 +2,52 @@ package com.elypia.alexis.handlers.modules;
 
 import com.elypia.alexis.Alexis;
 import com.elypia.alexis.config.*;
-import com.elypia.alexis.utils.*;
+import com.elypia.alexis.config.embedded.Author;
+import com.elypia.alexis.utils.BotUtils;
 import com.elypia.commandler.annotations.*;
 import com.elypia.commandler.annotations.Module;
 import com.elypia.commandler.jda.*;
-import com.elypia.commandler.jda.annotations.validation.command.Scope;
+import com.elypia.commandler.jda.annotations.validation.command.Channel;
 import com.elypia.commandler.jda.annotations.validation.param.Everyone;
 import com.elypia.elypiai.utils.Markdown;
 import com.elypia.elyscript.ElyScript;
 import net.dv8tion.jda.core.*;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.message.GenericMessageEvent;
+import org.slf4j.*;
 
 import java.time.*;
 import java.util.*;
-import java.util.logging.Level;
 import java.util.stream.Collectors;
 
-@Module(name = "Bot", aliases = {"bot", "robot"}, help = "help.bot")
+@Module(name = "bot.title", aliases = {"bot", "robot"}, help = "bot.help")
 public class BotHandler extends JDAHandler {
 
+	private static final Logger logger = LoggerFactory.getLogger(BotHandler.class);
+
+	/**
+	 * After this time bots had the same client id as user id which allows
+	 * us to generate invite links for them, bots before this time however
+	 * didn't have matching client/user ids and so their links would appear.
+	 * dead. We have this here to make sure we only generate links for bots
+	 * made after this time.
+	 */
 	private static final OffsetDateTime BOT_TIME = OffsetDateTime.of(2016, 7, 19, 1, 52, 0, 0, ZoneOffset.ofHours(0));
 
 	@Static
-	@Command(name = "Ping!", aliases = "ping", help = "help.bot.ping")
+	@Command(name = "bot.ping.name", aliases = "ping", help = "bot.ping.help")
 	public void ping(JDACommand event) {
-		pingPong(event, "pong!");
+		event.replyScript("bot.pong.name");
 	}
 
 	@Static
-	@Command(name = "Pong!", aliases = "pong")
+	@Command(name = "bot.pong.name", aliases = "pong")
 	public void pong(JDACommand event) {
-		pingPong(event, "ping!");
-	}
-
-	private void pingPong(JDACommand event, String text) {
-		long startTime = System.currentTimeMillis();
-
-		event.getSource().getChannel().sendMessage(text).queue(message -> {
-			long endTime = System.currentTimeMillis() - startTime;
-			message.editMessage(String.format("%s `%,dms`", message.getContentRaw(), endTime)).queue();
-		});
+		event.replyScript("bot.ping.name");
 	}
 
 	@Default
-	@Command(name = "Bot Stats", aliases = {"stats", "info"}, help = "help.bot.info")
+	@Command(name = "bot.info.name", aliases = {"stats", "info"}, help = "bot.info.help")
 	public void displayStats(JDACommand event) {
 		GenericMessageEvent source = event.getSource();
 		EmbedBuilder builder = BotUtils.createEmbedBuilder(source.getGuild());
@@ -57,7 +58,7 @@ public class BotHandler extends JDAHandler {
 		builder.setDescription(BotUtils.getScript("bot.description", source) + "\n_ _");
 		builder.setThumbnail(alexis.getAvatarUrl());
 
-		BotConfiguration config = Alexis.config;
+		BotConfig config = Alexis.config;
 		List<Author> authors = config.getDiscordConfig().getAuthors();
 		StringJoiner joiner = new StringJoiner("\n");
 
@@ -68,54 +69,55 @@ public class BotHandler extends JDAHandler {
 			if (user != null)
 				joiner.add(Markdown.a(user.getName(), author.getUrl()) + " - " + author.getRole());
 			else
-				DiscordLogger.log(event, Level.INFO, "The developer for id %d couldn't be found.", id);
+				logger.warn("The developer for id {} couldn't be found.", id);
 		}
 
 		Map<String, Object> authorParams = new HashMap<>();
-		authorParams.put("total_authors", authors.size());
+		authorParams.put("authors", authors.size());
 
-		String title = BotUtils.getScript("bot.authors.title", source, authorParams);
+		String title = BotUtils.getScript("bot.authors", source, authorParams);
 		builder.addField(title, joiner.toString(), true);
 
 		joiner = new StringJoiner("\n");
 
-		joiner.add("Language - Java");
-		joiner.add("Library - " + Markdown.a("JDA", "https://github.com/DV8FromTheWorld/JDA"));
-		joiner.add("Invite - " + Markdown.a(BotUtils.getScript("bot.invite_me.value", source), BotUtils.formInviteUrl(alexis)));
+		joiner.add(Markdown.a(BotUtils.getScript("bot.invite_me", source), BotUtils.getInviteUrl(alexis)));
 
-		builder.addField("Info", joiner.toString(), true);
+		builder.addField("bot.info", joiner.toString(), true);
 
-		builder.addField("Total Guilds", String.valueOf(jda.getGuilds().size()), true);
+		builder.addField("bot.total_guilds", String.valueOf(jda.getGuilds().size()), true);
 
 		Collection<User> users = jda.getUsers();
 		long bots = users.stream().filter(User::isBot).count();
 		String userField = String.format("%,d (%,d)", users.size() - bots, bots);
-		builder.addField("Total Users (Bots)", userField, true);
-
-		Map<String, Object> supportParams = new HashMap<>();
-		supportParams.put("prefix", commandler.getConfiler().getPrefixes(source)[0]);
-
-		builder.setFooter(BotUtils.getScript("bot.support", source, supportParams), null);
+		builder.addField("bot.total_users", userField, true);
 
 		Guild guild = jda.getGuildById(config.getDiscordConfig().getSupportGuild());
 		guild.getInvites().queue(invites -> {
 			Optional<Invite> invite = invites.stream().max((one, two) -> one.getUses() > two.getUses() ? 1 : -1);
-			invite.ifPresent(o -> builder.addField("Support Guild", Markdown.a("Elypia", o.getURL()), true));
+			invite.ifPresent(o -> builder.addField("bot.support_guild", Markdown.a("Elypia", o.getURL()), true));
 			event.reply(builder);
 		});
 	}
 
 	@Static
-	@Command(name = "Say", aliases = "say", help = "help.bot.say")
-	@Param(name = "body", help = "help.bot.say.body")
+	@Command(name = "bot.script.name", aliases = "script", help = "bot.script.help")
+	@Param(name = "common.body", help = "bot.param.body.script.help")
+	public String sayEly(JDACommand event, @Everyone String body) {
+		event.deleteMessage();
+		return new ElyScript(body).compile();
+	}
+
+	@Static
+	@Command(name = "bot.say.name", aliases = "say", help = "bot.say.help")
+	@Param(name = "common.body", help = "bot.param.body.say.help")
 	public String say(JDACommand event, @Everyone String body) {
 		event.deleteMessage();
 		return body;
 	}
 
 	@Static
-	@Scope(ChannelType.TEXT)
-	@Command(name = "Bot Invites", aliases = {"invite", "invites"}, help = "help.bot.invites")
+	@Channel(ChannelType.TEXT)
+	@Command(name = "bot.invites.name", aliases = {"invite", "invites"}, help = "bot.invites.help")
 	public EmbedBuilder invites(JDACommand event) {
 		Guild guild = event.getSource().getGuild();
 		Collection<Member> bots = guild.getMembers();
@@ -126,16 +128,8 @@ public class BotHandler extends JDAHandler {
 
 		EmbedBuilder builder = BotUtils.createEmbedBuilder(guild);
 		builder.setThumbnail(guild.getIconUrl() != null ? guild.getIconUrl() : guild.getSelfMember().getUser().getAvatarUrl());
-		users.forEach(o -> builder.addField(o.getName(), Markdown.a("Invite link!", BotUtils.formInviteUrl(o)), true));
+		users.forEach(o -> builder.addField(o.getName(), Markdown.a("Invite link!", BotUtils.getInviteUrl(o)), true));
 
 		return builder;
-	}
-
-	@Static
-	@Command(name = "ElyScript", aliases = "script", help = "help.bot.script")
-	@Param(name = "body", help = "help.bot.script.body")
-	public String sayEly(JDACommand event, @Everyone String body) {
-		event.deleteMessage();
-		return new ElyScript(body).compile();
 	}
 }

@@ -1,10 +1,16 @@
 package com.elypia.alexis.audio;
 
+import com.elypia.alexis.Alexis;
 import com.elypia.alexis.entities.GuildData;
+import com.elypia.alexis.google.youtube.YouTubeHelper;
+import com.elypia.elypiai.utils.Markdown;
+import com.google.api.services.youtube.YouTube;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter;
+import com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeAudioSourceManager;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.*;
+import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.*;
 
 public class AudioDispatcher extends AudioEventAdapter {
@@ -30,16 +36,16 @@ public class AudioDispatcher extends AudioEventAdapter {
 		TextChannel channel = guildAudioPlayer.getChannel();
 		Guild guild = channel.getGuild();
 		AudioTrackInfo info = track.getInfo();
-		GuildData data = GuildData.query(guild.getIdLong());
+		GuildData data = Alexis.getDatabaseManager().query(GuildData.class, "guild_id", guild.getIdLong());
 
-//		EmbedBuilder builder = new EmbedBuilder();
-//		builder.setTitle("Now Playing");
-//		builder.setDescription(Markdown.a(info.author + " - " + info.title, info.uri));
-//
-//		if (track.getSourceManager() instanceof YoutubeAudioSourceManager) {
-//			builder.setThumbnail("");
-//			builder.setImage(YouTube.getVideoUrl(info.identifier));
-//		}
+		EmbedBuilder builder = new EmbedBuilder();
+		builder.setTitle("Now Playing");
+		builder.setDescription(Markdown.a(info.author + " - " + info.title, info.uri));
+
+		if (track.getSourceManager() instanceof YoutubeAudioSourceManager) {
+			builder.setThumbnail("");
+			builder.setImage(YouTubeHelper.getVideoUrl(info.identifier));
+		}
 
 		if (data.getSettings().getMusicSettings().getSyncChannelName()) {
 			Member member = guild.getSelfMember();

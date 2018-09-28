@@ -1,26 +1,25 @@
 package com.elypia.alexis.handlers.modules;
 
 import com.elypia.alexis.Alexis;
-import com.elypia.alexis.config.AmazonDetails;
-import com.elypia.alexis.utils.*;
+import com.elypia.alexis.config.embedded.AmazonCredentials;
+import com.elypia.alexis.utils.BotUtils;
 import com.elypia.commandler.annotations.*;
 import com.elypia.commandler.annotations.Module;
 import com.elypia.commandler.jda.*;
 import com.elypia.elypiai.amazon.Amazon;
-import com.elypia.elyscript.ElyScriptStore;
+import org.slf4j.*;
 
 import java.security.InvalidKeyException;
-import java.util.*;
 
-@Module(name = "Amazon", aliases = "amazon", help = "amazon.help")
+@Module(name = "amazon.title", aliases = "amazon", help = "amazon.help")
 public class AmazonHandler extends JDAHandler {
+
+    private static final Logger logger = LoggerFactory.getLogger(AmazonHandler.class);
 
     private Amazon amazon;
 
-    private ElyScriptStore scripts;
-
     public AmazonHandler() {
-        AmazonDetails detail = Alexis.config.getApiKeys().getAmazonDetails().get(0);
+        AmazonCredentials detail = Alexis.config.getApiCredentials().getAmazonCredentials().get(0);
 
         try {
             amazon = new Amazon(detail.getKey(), detail.getSecret(), detail.getTag(), detail.getEndpoint());
@@ -31,14 +30,14 @@ public class AmazonHandler extends JDAHandler {
     }
 
     @Default
-    @Command(name = "amazon.search.title", aliases = {"search", "get"}, help = "amazon.search.help")
-    @Param(name = "amazon.param.query.name", help = "amazon.param.query.help")
+    @Command(name = "amazon.search.name", aliases = {"search", "get"}, help = "amazon.search.help")
+    @Param(name = "common.query", help = "amazon.param.query.help")
     public void getItem(JDACommand event, String query) {
         amazon.getItems(query).queue((result) -> {
             if (result != null)
                 event.reply(result.getItems().get(0));
             else
                 event.reply(BotUtils.getScript("amazon.no_results", event.getSource()));
-        }, (failure) -> DiscordLogger.log(event, failure));
+        }, (ex) -> logger.error("Failed to perform HTTP request!", ex));
     }
 }

@@ -1,29 +1,33 @@
 package com.elypia.alexis.google.youtube;
 
+import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
+import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
-import com.google.api.services.youtube.YouTube;
+import com.google.api.services.youtube.*;
 import com.google.api.services.youtube.model.*;
 
 import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 public class YouTubeHelper {
 
+    private static final List<String> SCOPES = List.of(YouTubeScopes.YOUTUBE_READONLY);
+
     private static final String VIDEO_URL = "https://www.youtube.com/watch?v=";
-    private static final String THUMBNAIL_FORMAT = "http://img.youtube.com/vi/%s/hqdefault.jpg";
+    private static final String THUMBNAIL_FORMAT = "http://img.youtube.com/vi/%s/maxresdefault.jpg";
 
     private final YouTube youtube;
-    private final String key;
     private final Map<String, String> channelThumbnailCache;
 
-    public YouTubeHelper(final String key, String applicationName) {
-        this.key = Objects.requireNonNull(key);
-
-        YouTube.Builder builder = new YouTube.Builder(new NetHttpTransport(), new JacksonFactory(), null);
-        builder.setApplicationName(applicationName);
-        youtube = builder.build();
+    public YouTubeHelper(String applicationName) throws IOException, GeneralSecurityException {
+        youtube = new YouTube.Builder(
+            GoogleNetHttpTransport.newTrustedTransport(),
+            JacksonFactory.getDefaultInstance(),
+            GoogleCredential.getApplicationDefault().createScoped(SCOPES)
+        ).setApplicationName(applicationName).build();
 
         channelThumbnailCache = new HashMap<>();
     }
@@ -35,7 +39,6 @@ public class YouTubeHelper {
 
     public List<SearchResult> getSearchResults(String query, ResourceType type, long limit) throws IOException {
         YouTube.Search.List search = youtube.search().list("snippet");
-        search.setKey(key);
         search.setQ(query);
         search.setMaxResults(limit);
         search.setType(type.getName());
