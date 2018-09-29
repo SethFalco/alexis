@@ -22,7 +22,7 @@ import java.util.*;
 
 public final class BotUtils {
 
-	private static final String BOT_URL = "https://discordapp.com/oauth2/authorize?client_id=%s&scope=bot";
+	private static final String BOT_URL = "https://discordapp.com/oauth2/authorize?scope=bot&client_id=";
 
 	private static final Logger logger = LoggerFactory.getLogger(BotUtils.class);
 
@@ -85,7 +85,7 @@ public final class BotUtils {
 		if (!user.isBot())
 			throw new RuntimeException("User is not a bot.");
 
-		return String.format(BOT_URL, user.getIdLong());
+		return BOT_URL + user.getId();
 	}
 
 	public static String getChannelLanguage(Event event) {
