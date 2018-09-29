@@ -28,7 +28,9 @@ import org.slf4j.*;
 
 import javax.security.auth.login.LoginException;
 import java.io.*;
+import java.net.*;
 import java.security.GeneralSecurityException;
+import java.util.Enumeration;
 
 /**
  * This is the main class for the bot which initialised everything Alexis
@@ -65,45 +67,67 @@ public class Alexis {
 	private static DatabaseManager dbManager;
 
 	public static void main(String[] args) throws IOException, GeneralSecurityException {
+		// Alexis Configuration
 		config = BotConfig.load("./alexis.toml");
 
-		// 2055 entries
-		ScriptsConfig sConfig = config.getScriptsConfig();
-		scripts = new SheetsLoader(config.getApplicationName(), sConfig.getId(), sConfig.getRange()).load();
-
-		// 3232 entries
-//		scripts = new CsvLoader("/scripts.csv").load();
+		// Alexis Scripts
+		scripts = new SheetsLoader(
+			config.getApplicationName(),
+			config.getScriptsConfig().getId(),
+			config.getScriptsConfig().getRange()
+		).load();
 
 		initJDA();
 		initCommandler();
 
 		DebugConfig debug = config.getDebugConfig();
 
-		if (debug.isDatabaseEnabled())
+		if (debug.isDatabaseEnabled()) {
 			dbManager = new DatabaseManager(config.getDatabaseConfig());
+
+		}
+	}
+
+	private void registerValidators(final String path) {
+		ClassLoader loader = Thread.currentThread().getContextClassLoader();
+		String packagePath = path.replace('.', '/');
+
+		try {
+			Enumeration<URL> classes = loader.getResources(packagePath);
+
+			while (classes.hasMoreElements()) {
+				URL url = classes.nextElement();
+
+
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	private static void initCommandler() throws IOException, GeneralSecurityException {
 		commandler = new JDACommandler(jda, new AlexisConfiler("<"));
+		commandler.init("com.elypia.alexis.commandler");
 
-		commandler.registerParser(new LanguageParser(), Language.class);
 
-		commandler.registerValidator(Database.class, new DatabaseValidator());
-		commandler.registerValidator(Achievements.class, new AchievementsValidator());
-		commandler.registerValidator(Supported.class, new SupportedValidator());
-		commandler.registerValidator(Elevated.class, new ElevatedValidator(127578559790186497L));
+		commandler.addParser(new LanguageParser(), Language.class);
+
+		commandler.addValidator(Database.class, new DatabaseValidator());
+		commandler.addValidator(Achievements.class, new AchievementsValidator());
+		commandler.addValidator(Supported.class, new SupportedValidator());
+		commandler.addValidator(Elevated.class, new ElevatedValidator(127578559790186497L));
 
 		YouTubeHelper youtube = new YouTubeHelper("Alexis");
 
-		commandler.registerBuilder(new YouTubeSearchResultBuilder(youtube), SearchResult.class);
-		commandler.registerBuilder(new UrbanDefinitionBuilder(), UrbanDefinition.class);
-		commandler.registerBuilder(new OsuPlayerBuilder(), OsuPlayer.class);
-		commandler.registerBuilder(new SteamGameBuilder(), SteamGame.class);
-		commandler.registerBuilder(new NanoUserBuilder(), NanoUser.class);
+		commandler.addBuilder(new YouTubeSearchResultBuilder(youtube), SearchResult.class);
+		commandler.addBuilder(new UrbanDefinitionBuilder(), UrbanDefinition.class);
+		commandler.addBuilder(new OsuPlayerBuilder(), OsuPlayer.class);
+		commandler.addBuilder(new SteamGameBuilder(), SteamGame.class);
+		commandler.addBuilder(new NanoUserBuilder(), NanoUser.class);
 
-		commandler.registerModules(
+		commandler.addModules(
 			new HelpModule(),
-//			new AmazonHandler(),
+			new AmazonHandler(),
 			new BotHandler(),
 			new BrainfuckHandler(),
 			new CleverbotHandler(),
@@ -128,6 +152,8 @@ public class Alexis {
 			new VoiceHandler(),
 			new YouTubeHandler(youtube)
 		);
+
+		commandler.registerModules("com.elypia.alexis.handlers.modules");
 	}
 
 	private static void initJDA() throws LoginException {
