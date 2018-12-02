@@ -4,7 +4,6 @@ import com.elypia.alexis.Alexis;
 import com.elypia.alexis.entities.GuildData;
 import com.elypia.alexis.google.youtube.YouTubeHelper;
 import com.elypia.elypiai.utils.Markdown;
-import com.google.api.services.youtube.YouTube;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter;
 import com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeAudioSourceManager;

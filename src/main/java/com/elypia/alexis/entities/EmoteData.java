@@ -5,7 +5,7 @@ import com.elypia.alexis.entities.impl.DatabaseEntity;
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.annotations.*;
 
-import java.util.*;
+import java.util.List;
 
 @Entity(value = "emotes", noClassnameStored = true)
 public class EmoteData implements DatabaseEntity {

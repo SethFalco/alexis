@@ -5,7 +5,7 @@ import org.mongodb.morphia.annotations.*;
 @Embedded
 public class MusicSettings {
 
-    @Property("nickname_sync")
+    @Property("name_sync")
     private boolean syncChannelName;
 
     public boolean getSyncChannelName() {

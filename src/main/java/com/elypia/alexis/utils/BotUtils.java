@@ -6,7 +6,6 @@ import com.elypia.alexis.entities.*;
 import com.elypia.alexis.entities.embedded.NanowrimoLink;
 import com.elypia.commandler.jda.JDACommand;
 import com.elypia.elypiai.runescape.RuneScape;
-import com.elypia.elypiai.utils.Language;
 import com.elypia.elyscript.ElyScript;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.*;

@@ -1,13 +1,11 @@
 package com.elypia.alexis.utils;
 
-import com.elypia.alexis.*;
+import com.elypia.alexis.Alexis;
 import com.elypia.alexis.entities.GuildData;
 import com.elypia.alexis.entities.embedded.GuildSettings;
 import com.elypia.commandler.jda.JDAConfiler;
-import net.dv8tion.jda.core.entities.*;
+import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.events.message.GenericMessageEvent;
-import org.mongodb.morphia.Datastore;
-import org.mongodb.morphia.query.Query;
 
 import java.util.Map;
 

@@ -3,13 +3,9 @@ package com.elypia.alexis.entities;
 import com.elypia.alexis.Alexis;
 import com.elypia.alexis.entities.embedded.GuildSettings;
 import com.elypia.alexis.entities.impl.*;
-import com.elypia.commandler.jda.JDACommand;
 import net.dv8tion.jda.core.entities.Guild;
-import net.dv8tion.jda.core.events.guild.GenericGuildEvent;
-import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.annotations.*;
-import org.mongodb.morphia.query.Query;
 
 @Entity(value = "guilds", noClassnameStored = true)
 public class GuildData extends Experienceable implements DatabaseEntity {
@@ -39,15 +35,15 @@ public class GuildData extends Experienceable implements DatabaseEntity {
     }
 
     public static GuildData query(long guildId) {
-        var data = Alexis.getDatabaseManager().query(GuildData.class, "guild_id", guildId);
+        GuildData data = query("guild_id", guildId);
 
         if (data == null)
-            data = new GuildData(guildId);
+            return new GuildData(guildId);
 
         return data;
     }
 
-    public static GuildData query(String field, String value) {
+    public static <T> GuildData query(String field, T value) {
         return Alexis.getDatabaseManager().query(GuildData.class, field, value);
     }
 

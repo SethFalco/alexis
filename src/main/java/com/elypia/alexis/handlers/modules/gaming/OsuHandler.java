@@ -1,8 +1,8 @@
 package com.elypia.alexis.handlers.modules.gaming;
 
 import com.elypia.alexis.Alexis;
-import com.elypia.commandler.annotations.*;
 import com.elypia.commandler.annotations.Module;
+import com.elypia.commandler.annotations.*;
 import com.elypia.commandler.annotations.validation.param.Length;
 import com.elypia.commandler.jda.*;
 import com.elypia.elypiai.osu.Osu;

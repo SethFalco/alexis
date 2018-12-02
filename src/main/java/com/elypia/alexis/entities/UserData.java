@@ -44,15 +44,15 @@ public class UserData extends Experienceable implements DatabaseEntity {
     }
 
     public static UserData query(long userId) {
-        var userData = Alexis.getDatabaseManager().query(UserData.class, "user_id", userId);
+        UserData data = query("user_id", userId);
 
-        if (userData == null)
-            userData = new UserData(userId);
+        if (data == null)
+            return new UserData(userId);
 
-        return userData;
+        return data;
     }
 
-    public static UserData query(String field, String value) {
+    public static <T> UserData query(String field, T value) {
         return Alexis.getDatabaseManager().query(UserData.class, field, value);
     }
 

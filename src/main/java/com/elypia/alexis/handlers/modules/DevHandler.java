@@ -3,11 +3,11 @@ package com.elypia.alexis.handlers.modules;
 import com.elypia.alexis.entities.GuildData;
 import com.elypia.alexis.entities.embedded.AssignableRole;
 import com.elypia.alexis.utils.*;
-import com.elypia.commandler.annotations.*;
 import com.elypia.commandler.annotations.Module;
+import com.elypia.commandler.annotations.*;
 import com.elypia.commandler.jda.*;
-import net.dv8tion.jda.core.*;
-import net.dv8tion.jda.core.entities.*;
+import net.dv8tion.jda.core.EmbedBuilder;
+import net.dv8tion.jda.core.entities.Icon;
 import org.slf4j.*;
 
 import java.io.*;

@@ -2,7 +2,7 @@ package com.elypia.alexis.commandler.builders;
 
 import com.elypia.alexis.utils.BotUtils;
 import com.elypia.commandler.jda.*;
-import com.elypia.elypiai.osu.*;
+import com.elypia.elypiai.osu.OsuEvent;
 import com.elypia.elypiai.utils.Markdown;
 import net.dv8tion.jda.core.*;
 import net.dv8tion.jda.core.entities.Message;

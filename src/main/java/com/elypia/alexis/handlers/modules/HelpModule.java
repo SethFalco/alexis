@@ -1,8 +1,8 @@
 package com.elypia.alexis.handlers.modules;
 
 import com.elypia.alexis.utils.BotUtils;
-import com.elypia.commandler.annotations.*;
 import com.elypia.commandler.annotations.Module;
+import com.elypia.commandler.annotations.*;
 import com.elypia.commandler.impl.IHandler;
 import com.elypia.commandler.jda.*;
 import com.elypia.commandler.metadata.MetaModule;

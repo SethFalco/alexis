@@ -1,7 +1,7 @@
 package com.elypia.alexis.handlers.modules.gaming;
 
-import com.elypia.commandler.annotations.*;
 import com.elypia.commandler.annotations.Module;
+import com.elypia.commandler.annotations.*;
 import com.elypia.commandler.jda.*;
 import com.elypia.elypiai.runescape.RuneScape;
 

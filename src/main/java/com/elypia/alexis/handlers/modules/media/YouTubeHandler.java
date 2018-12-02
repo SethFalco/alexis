@@ -1,10 +1,9 @@
 package com.elypia.alexis.handlers.modules.media;
 
 import com.elypia.alexis.google.youtube.*;
-import com.elypia.commandler.annotations.*;
 import com.elypia.commandler.annotations.Module;
+import com.elypia.commandler.annotations.*;
 import com.elypia.commandler.jda.*;
-import com.elypia.commandler.jda.annotations.Emoji;
 import com.google.api.services.youtube.model.SearchResult;
 
 import java.io.IOException;

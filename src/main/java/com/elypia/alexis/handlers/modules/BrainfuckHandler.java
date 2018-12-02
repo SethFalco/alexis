@@ -1,7 +1,7 @@
 package com.elypia.alexis.handlers.modules;
 
-import com.elypia.commandler.annotations.*;
 import com.elypia.commandler.annotations.Module;
+import com.elypia.commandler.annotations.*;
 import com.elypia.commandler.jda.JDAHandler;
 import com.elypia.elypiai.brainfuck.Brainfuck;
 

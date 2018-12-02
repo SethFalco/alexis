@@ -1,13 +1,10 @@
 package com.elypia.alexis.entities;
 
 import com.elypia.alexis.Alexis;
-import com.elypia.alexis.entities.embedded.TranslateSettings;
 import com.elypia.alexis.entities.impl.DatabaseEntity;
-import com.elypia.elypiai.utils.Language;
+import com.elypia.alexis.utils.Language;
 import org.bson.types.ObjectId;
-import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.annotations.*;
-import org.mongodb.morphia.query.Query;
 
 @Entity(value = "message_channels", noClassnameStored = true)
 public class MessageChannelData implements DatabaseEntity {
@@ -33,15 +30,15 @@ public class MessageChannelData implements DatabaseEntity {
     }
 
     public static MessageChannelData query(long channelId) {
-        var data = Alexis.getDatabaseManager().query(MessageChannelData.class, "channel_id", channelId);
+        MessageChannelData data = query("channel_id", channelId);
 
         if (data == null)
-            data = new MessageChannelData(channelId);
+            return new MessageChannelData(channelId);
 
         return data;
     }
 
-    public static MessageChannelData query(String field, String value) {
+    public static <T> MessageChannelData query(String field, T value) {
         return Alexis.getDatabaseManager().query(MessageChannelData.class, field, value);
     }
 

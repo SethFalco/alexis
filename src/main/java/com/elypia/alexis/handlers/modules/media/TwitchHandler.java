@@ -1,8 +1,8 @@
 package com.elypia.alexis.handlers.modules.media;
 
 import com.elypia.alexis.Alexis;
-import com.elypia.commandler.annotations.*;
 import com.elypia.commandler.annotations.Module;
+import com.elypia.commandler.annotations.*;
 import com.elypia.commandler.jda.*;
 import com.elypia.elypiai.twitch.*;
 import org.slf4j.*;

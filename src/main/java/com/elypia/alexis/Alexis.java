@@ -4,7 +4,7 @@ import com.elypia.alexis.commandler.builders.*;
 import com.elypia.alexis.commandler.parsers.LanguageParser;
 import com.elypia.alexis.commandler.validators.*;
 import com.elypia.alexis.config.BotConfig;
-import com.elypia.alexis.config.embedded.*;
+import com.elypia.alexis.config.embedded.DiscordConfig;
 import com.elypia.alexis.google.youtube.YouTubeHelper;
 import com.elypia.alexis.handlers.EventHandler;
 import com.elypia.alexis.handlers.modules.*;
@@ -20,17 +20,16 @@ import com.elypia.elypiai.osu.OsuPlayer;
 import com.elypia.elypiai.steam.SteamGame;
 import com.elypia.elypiai.urbandictionary.UrbanDefinition;
 import com.elypia.elypiai.utils.Language;
-import com.elypia.elyscript.*;
+import com.elypia.elyscript.ScriptStore;
+import com.elypia.elyscript.sheets.SheetsLoader;
 import com.google.api.services.youtube.model.SearchResult;
 import net.dv8tion.jda.core.*;
 import net.dv8tion.jda.core.entities.Game;
 import org.slf4j.*;
 
 import javax.security.auth.login.LoginException;
-import java.io.*;
-import java.net.*;
+import java.io.IOException;
 import java.security.GeneralSecurityException;
-import java.util.Enumeration;
 
 /**
  * This is the main class for the bot which initialised everything Alexis
@@ -67,42 +66,21 @@ public class Alexis {
 	private static DatabaseManager dbManager;
 
 	public static void main(String[] args) throws IOException, GeneralSecurityException {
-		// Alexis Configuration
-		config = BotConfig.load("./alexis.toml");
+        // Alexis Configuration
+        config = BotConfig.load("./alexis.toml");
 
-		// Alexis Scripts
-		scripts = new SheetsLoader(
-			config.getApplicationName(),
-			config.getScriptsConfig().getId(),
-			config.getScriptsConfig().getRange()
-		).load();
+        // Alexis Scripts
+        scripts = new SheetsLoader(
+            config.getApplicationName(),
+            config.getScriptsConfig().getId(),
+            config.getScriptsConfig().getRange()
+        ).load();
 
 		initJDA();
 		initCommandler();
 
-		DebugConfig debug = config.getDebugConfig();
-
-		if (debug.isDatabaseEnabled()) {
+		if (config.getDebugConfig().isDatabaseEnabled())
 			dbManager = new DatabaseManager(config.getDatabaseConfig());
-
-		}
-	}
-
-	private void registerValidators(final String path) {
-		ClassLoader loader = Thread.currentThread().getContextClassLoader();
-		String packagePath = path.replace('.', '/');
-
-		try {
-			Enumeration<URL> classes = loader.getResources(packagePath);
-
-			while (classes.hasMoreElements()) {
-				URL url = classes.nextElement();
-
-
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 	}
 
 	private static void initCommandler() throws IOException, GeneralSecurityException {

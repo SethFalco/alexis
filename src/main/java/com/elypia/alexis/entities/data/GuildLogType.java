@@ -5,7 +5,6 @@ package com.elypia.alexis.entities.data;
  * if one is specified, this allows them to essentially subscribe or
  * unsubscribe from specific events.
  */
-
 public enum GuildLogType {
 
     /**
@@ -13,23 +12,20 @@ public enum GuildLogType {
      * in the guild such as applying a role, or
      * renaming a user.
      */
-
     GUILD_ACTION("Guild Action"),
 
     /**
-     * This refers to whenever the performs an action
+     * This refers to whenever the bot performs an action
      * which involves the guild but doesn't directly affect it.
      * For example a user earning an achievement or leveling up.
      */
-
-    ACTION("Action"),
+    INTERNAL_ACTION("Internal Action"),
 
     /**
      * This refers to when a user may perform a command at limited
      * functionality or do something wrong that could cause some
      * kind of negative consequence.
      */
-
     WARNING("Warning"),
 
     /**
@@ -37,14 +33,12 @@ public enum GuildLogType {
      * to all guilds accepting annoucements. This could be a new feature
      * or a problem.
      */
-
     ANNOUCEMENT("Annoucement"),
 
     /**
      * This refers to technical difficulties, for example
      * if there is problems with the database or a module goes down.
      */
-
     TECHINCAL_ISSUE("Technical Issue");
 
     private final String NAME;

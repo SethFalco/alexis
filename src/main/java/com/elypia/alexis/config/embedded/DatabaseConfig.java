@@ -1,6 +1,6 @@
 package com.elypia.alexis.config.embedded;
 
-import com.electronwill.nightconfig.core.conversion.*;
+import com.electronwill.nightconfig.core.conversion.Path;
 
 public class DatabaseConfig {
 

@@ -1,9 +1,8 @@
 package com.elypia.alexis.commandler.validators;
 
-import com.elypia.alexis.utils.BotUtils;
 import com.elypia.commandler.jda.*;
 import net.dv8tion.jda.core.Permission;
-import net.dv8tion.jda.core.events.message.*;
+import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
 public class ElevatedValidator implements IJDACommandValidator<Elevated> {
 

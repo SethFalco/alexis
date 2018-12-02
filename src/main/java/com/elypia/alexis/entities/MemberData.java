@@ -3,11 +3,8 @@ package com.elypia.alexis.entities;
 import com.elypia.alexis.Alexis;
 import com.elypia.alexis.entities.embedded.MemberSkill;
 import com.elypia.alexis.entities.impl.*;
-import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import org.bson.types.ObjectId;
-import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.annotations.*;
-import org.mongodb.morphia.query.Query;
 
 import java.util.*;
 
@@ -23,11 +20,11 @@ public class MemberData extends Experienceable implements DatabaseEntity {
     @Property("user_id")
     private long userId;
 
+    /**
+     * The ID of the guild this member is in.
+     */
     @Property("guild_id")
     private long guildId;
-
-    @Property("last_message")
-    private Date lastMessage;
 
     @Embedded("skills")
     private List<MemberSkill> skills;
@@ -41,12 +38,25 @@ public class MemberData extends Experienceable implements DatabaseEntity {
         this.guildId = guildId;
     }
 
+    /**
+     * Query the database for the data that represents the respective member.
+     * If a member is not found, create a new instance with the
+     * {@link #userId} and {@link #guildId} initialised.
+     *
+     * @param userId The Discord ID of the user.
+     * @param guildId The Discord ID of the guild this use is in.
+     * @return The data this bot stores for this object.
+     */
     public static MemberData query(long userId, long guildId) {
-        Map<String, Object> params = Map.of("user_id", userId, "guild_id", guildId);
-        var data = Alexis.getDatabaseManager().query(MemberData.class, params);
+        var params = Map.of(
+            "user_id" , userId,
+            "guild_id", guildId
+        );
+
+        MemberData data = Alexis.getDatabaseManager().query(MemberData.class, params);
 
         if (data == null)
-            data = new MemberData(userId, guildId);
+            return new MemberData(userId, guildId);
 
         return data;
     }
@@ -73,14 +83,6 @@ public class MemberData extends Experienceable implements DatabaseEntity {
 
     public void setGuildId(long guildId) {
         this.guildId = guildId;
-    }
-
-    public Date getLastMessage() {
-        return lastMessage;
-    }
-
-    public void setLastMessage(Date lastMessage) {
-        this.lastMessage = lastMessage;
     }
 
     public List<MemberSkill> getSkills() {

@@ -1,9 +1,8 @@
 package com.elypia.alexis.handlers.modules;
 
-import com.elypia.commandler.annotations.*;
 import com.elypia.commandler.annotations.Module;
+import com.elypia.commandler.annotations.*;
 import com.elypia.commandler.jda.*;
-import com.elypia.commandler.jda.annotations.Emoji;
 import com.elypia.elypiai.urbandictionary.*;
 import com.elypia.elypiai.urbandictionary.data.UrbanResultType;
 import com.elypia.elypiai.utils.okhttp.RestLatch;

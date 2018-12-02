@@ -15,3 +15,4 @@ RUN \[ -f $GOOGLE_APPLICATION_CREDENTIALS ] || (echo "$GOOGLE_APPLICATION_CREDEN
 RUN ls
 
 ENTRYPOINT ["java", "-Djavax.net.ssl.trustStore=$JKS_PATH", "-jar", "alexis.jar"]
+
