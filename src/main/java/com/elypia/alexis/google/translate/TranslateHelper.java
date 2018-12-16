@@ -7,7 +7,7 @@ import java.util.*;
 public class TranslateHelper {
 
     private Translate translate;
-    private Map<com.elypia.elypiai.utils.Language, Language> languages;
+    private Map<com.elypia.alexis.utils.Language, Language> languages;
 
     public TranslateHelper() {
         translate = TranslateOptions.getDefaultInstance().getService();
@@ -16,7 +16,7 @@ public class TranslateHelper {
 
         List<Language> supportedLanguages = translate.listSupportedLanguages();
         supportedLanguages.forEach(lang -> {
-            for (com.elypia.elypiai.utils.Language eLang : com.elypia.elypiai.utils.Language.values()) {
+            for (com.elypia.alexis.utils.Language eLang : com.elypia.alexis.utils.Language.values()) {
                 if (eLang.getCode().equalsIgnoreCase(lang.getCode())) {
                     languages.put(eLang, lang);
                     return;
@@ -29,8 +29,8 @@ public class TranslateHelper {
         return translate.translate(text, Translate.TranslateOption.targetLanguage(language.getCode()));
     }
 
-    public Map.Entry<com.elypia.elypiai.utils.Language, Language> getLanguage(String code) {
-        for (Map.Entry<com.elypia.elypiai.utils.Language, Language> entry : languages.entrySet()) {
+    public Map.Entry<com.elypia.alexis.utils.Language, Language> getLanguage(String code) {
+        for (Map.Entry<com.elypia.alexis.utils.Language, Language> entry : languages.entrySet()) {
             if (entry.getKey().getCode().equalsIgnoreCase(code))
                 return entry;
         }
@@ -38,7 +38,7 @@ public class TranslateHelper {
         return null;
     }
 
-    public Map<com.elypia.elypiai.utils.Language, Language> getSupportedLangauges() {
+    public Map<com.elypia.alexis.utils.Language, Language> getSupportedLangauges() {
         return languages;
     }
 }

@@ -16,7 +16,7 @@ public class NanoUserBuilder implements IJDABuilder<NanoUser> {
         String name = output.getUsername();
         String wordcount = event.getScript("b.nano.wordcount");
 
-        EmbedBuilder builder = BotUtils.createEmbedBuilder(event);
+        EmbedBuilder builder = BotUtils.newEmbed(event);
         builder.setAuthor(name, output.getUrl());
 
         User user = getUserByNano(event, output);

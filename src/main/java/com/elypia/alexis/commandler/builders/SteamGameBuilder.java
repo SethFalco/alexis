@@ -12,7 +12,7 @@ public class SteamGameBuilder implements IJDABuilder<SteamGame> {
 
     @Override
     public Message buildEmbed(JDACommand event, SteamGame output) {
-        EmbedBuilder builder = BotUtils.createEmbedBuilder(event);
+        EmbedBuilder builder = BotUtils.newEmbed(event);
 
         builder.setTitle(output.getName(), output.getUrl());
         builder.setThumbnail(output.getIconUrl());

@@ -1,6 +1,6 @@
 package com.elypia.alexis.entities.embedded;
 
-import org.mongodb.morphia.annotations.Embedded;
+import xyz.morphia.annotations.Embedded;
 
 @Embedded
 public class GreetingSettings {

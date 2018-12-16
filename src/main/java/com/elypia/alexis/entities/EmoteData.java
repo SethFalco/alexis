@@ -3,7 +3,7 @@ package com.elypia.alexis.entities;
 import com.elypia.alexis.entities.embedded.EmoteEntry;
 import com.elypia.alexis.entities.impl.DatabaseEntity;
 import org.bson.types.ObjectId;
-import org.mongodb.morphia.annotations.*;
+import xyz.morphia.annotations.*;
 
 import java.util.List;
 

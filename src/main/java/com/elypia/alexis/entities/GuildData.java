@@ -5,7 +5,7 @@ import com.elypia.alexis.entities.embedded.GuildSettings;
 import com.elypia.alexis.entities.impl.*;
 import net.dv8tion.jda.core.entities.Guild;
 import org.bson.types.ObjectId;
-import org.mongodb.morphia.annotations.*;
+import xyz.morphia.annotations.*;
 
 @Entity(value = "guilds", noClassnameStored = true)
 public class GuildData extends Experienceable implements DatabaseEntity {

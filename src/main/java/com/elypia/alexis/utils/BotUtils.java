@@ -4,9 +4,9 @@ import com.elypia.alexis.Alexis;
 import com.elypia.alexis.config.BotConfig;
 import com.elypia.alexis.entities.*;
 import com.elypia.alexis.entities.embedded.NanowrimoLink;
-import com.elypia.commandler.jda.JDACommand;
 import com.elypia.elypiai.runescape.RuneScape;
 import com.elypia.elyscript.ElyScript;
+import com.elypia.jdac.alias.JDACEvent;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.Event;
@@ -29,11 +29,11 @@ public final class BotUtils {
 		// Don't construct this
 	}
 
-	public static EmbedBuilder createEmbedBuilder(JDACommand event) {
-		return createEmbedBuilder(event.getSource().getGuild());
+	public static EmbedBuilder newEmbed(JDACEvent event) {
+		return newEmbed(event.getSource().getGuild());
 	}
 
-	public static EmbedBuilder createEmbedBuilder(Guild guild) {
+	public static EmbedBuilder newEmbed(Guild guild) {
 		EmbedBuilder builder = new EmbedBuilder();
 
 		if (guild != null)
@@ -168,7 +168,6 @@ public final class BotUtils {
 				MemberData memberData = MemberData.query(userId, guildId);
 				params.put("member.xp", memberData.getXp());
 				params.put("member.level", RuneScape.parseXpAsLevel(memberData.getXp()));
-				params.put("member.last_message", memberData.getLastMessage());
 			}
 		}
 

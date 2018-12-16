@@ -14,7 +14,7 @@ public class AmazonEndpointConverter implements Converter<AmazonEndpoint, String
             if (endpoint.getTld().equals(value))
                 return endpoint;
 
-            if (endpoint.getEndpoint().equalsIgnoreCase(value))
+            if (endpoint.getEndpoint().toString().equalsIgnoreCase(value))
                 return endpoint;
 
             if (endpoint.getShoppingUrl().equalsIgnoreCase(value))

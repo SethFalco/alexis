@@ -3,19 +3,15 @@ package com.elypia.alexis.managers;
 import com.elypia.alexis.config.embedded.DatabaseConfig;
 import com.elypia.alexis.entities.impl.DatabaseEntity;
 import com.mongodb.MongoClient;
-import org.mongodb.morphia.*;
-import org.mongodb.morphia.query.*;
 import org.slf4j.*;
+import xyz.morphia.*;
+import xyz.morphia.query.Query;
 
 import java.util.*;
 
 public class DatabaseManager {
 
-    private static final String INITIALIZED = "Succesfully initialised instance of {} and connected to database.";
-
     private static final Logger logger = LoggerFactory.getLogger(DatabaseManager.class);
-
-    private static final String ENTITY_PACKAGE = "com.elypia.alexis.entities";
 
     private final DatabaseConfig config;
 
@@ -41,13 +37,12 @@ public class DatabaseManager {
 
         client = new MongoClient(config.getIp(), config.getPort());
 
-        morphia = new Morphia().mapPackage(ENTITY_PACKAGE);
-        new ValidationExtension(morphia);
+        morphia = new Morphia().mapPackage("com.elypia.alexis.entities");
 
         store = morphia.createDatastore(client, config.getDatabase());
         store.ensureIndexes();
 
-        logger.info(INITIALIZED, this.getClass().getSimpleName());
+        logger.info("Succesfully initialised instance of {} and connected to database.", this.getClass().getSimpleName());
     }
 
     /**
@@ -55,9 +50,9 @@ public class DatabaseManager {
      *
      * @param type The type of object to query for.
      * @param key The key to filter by.
-     * @param value The value this key should <strong>{@link FieldEnd#equal(Object)}</strong>
-     * @param <E> The type of <strong>e</strong>tity to query.
-     * @param <V> The type of <strong>v</strong>alue to compare to.
+     * @param value The value this key should.</strong>
+     * @param <E> The type of entity to query.
+     * @param <V> The type of value to compare to.
      * @return The first entity found in the database that matches.
      */
     public <E, V>  E query(Class<E> type, String key, V value) {

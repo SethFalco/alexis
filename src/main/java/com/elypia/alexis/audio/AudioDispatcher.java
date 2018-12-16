@@ -14,10 +14,10 @@ import net.dv8tion.jda.core.entities.*;
 
 public class AudioDispatcher extends AudioEventAdapter {
 
-	private GuildAudioPlayer guildAudioPlayer;
+	private ElyAudioPlayer elyAudioPlayer;
 
-	public AudioDispatcher(GuildAudioPlayer guildAudioPlayer) {
-		this.guildAudioPlayer = guildAudioPlayer;
+	public AudioDispatcher(ElyAudioPlayer elyAudioPlayer) {
+		this.elyAudioPlayer = elyAudioPlayer;
 	}
 
 	@Override
@@ -32,7 +32,7 @@ public class AudioDispatcher extends AudioEventAdapter {
 
 	@Override
 	public void onTrackStart(AudioPlayer player, AudioTrack track) {
-		TextChannel channel = guildAudioPlayer.getChannel();
+		TextChannel channel = elyAudioPlayer.getChannel();
 		Guild guild = channel.getGuild();
 		AudioTrackInfo info = track.getInfo();
 		GuildData data = Alexis.getDatabaseManager().query(GuildData.class, "guild_id", guild.getIdLong());

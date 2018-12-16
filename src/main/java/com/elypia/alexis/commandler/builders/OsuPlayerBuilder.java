@@ -17,7 +17,7 @@ public class OsuPlayerBuilder implements IJDABuilder<OsuPlayer> {
 
     @Override
     public Message buildEmbed(JDACommand event, OsuPlayer output) {
-        EmbedBuilder builder = BotUtils.createEmbedBuilder(event);
+        EmbedBuilder builder = BotUtils.newEmbed(event);
 
         builder.setThumbnail(output.getAvatarUrl());
 

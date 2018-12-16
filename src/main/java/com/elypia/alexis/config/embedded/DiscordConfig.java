@@ -17,9 +17,8 @@ public class DiscordConfig {
     @Path("support_guild")
     private long supportGuild;
 
-    // ! We are temp loading only 1 Author until the bug in NightConfig is fixed.
     @Path("author")
-    private Author authors;
+    private List<Author> authors;
 
     public String getToken() {
         return token;
@@ -34,6 +33,6 @@ public class DiscordConfig {
     }
 
     public List<Author> getAuthors() {
-        return List.of(authors);
+        return authors;
     }
 }

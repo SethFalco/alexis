@@ -1,7 +1,7 @@
 package com.elypia.alexis.entities.embedded;
 
 import com.elypia.alexis.entities.data.Achievement;
-import org.mongodb.morphia.annotations.Embedded;
+import xyz.morphia.annotations.Embedded;
 
 @Embedded
 public class AssignableRole {

@@ -1,7 +1,7 @@
 package com.elypia.alexis.entities.embedded;
 
 import net.dv8tion.jda.core.entities.Guild;
-import org.mongodb.morphia.annotations.*;
+import xyz.morphia.annotations.*;
 
 import java.util.*;
 

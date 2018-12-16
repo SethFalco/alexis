@@ -1,7 +1,7 @@
 package com.elypia.alexis.entities.embedded;
 
 import com.elypia.alexis.entities.impl.Experienceable;
-import org.mongodb.morphia.annotations.Embedded;
+import xyz.morphia.annotations.Embedded;
 
 @Embedded
 public class MemberSkill extends Experienceable {

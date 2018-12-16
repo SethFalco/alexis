@@ -1,17 +1,28 @@
 package com.elypia.alexis.commandler.parsers;
 
-import com.elypia.commandler.jda.*;
-import com.elypia.elypiai.utils.*;
+import com.elypia.alexis.utils.*;
+import com.elypia.commandler.metadata.ParamData;
+import com.elypia.jdac.alias.*;
 
-public class LanguageParser implements IJDAParser<Language> {
+import java.util.Map;
+
+public class LanguageParser implements IJDACParser<Language> {
+
+    private static final Map<String, Language> OTHER = Map.of(
+        "baguette", Language.FRENCH,
+        "tea", Language.ENGLISH,
+        "butt stuff", Language.GERMAN,
+        "kurwa", Language.POLISH,
+        "pizza", Language.ITALIAN
+    );
 
     @Override
-    public Language parse(JDACommand event, Class<? extends Language> type, String input) {
+    public Language parse(JDACEvent event, ParamData data, Class<? extends Language> type, String input) {
         for (Language language : Language.values()) {
-            if (language.getCode().equalsIgnoreCase(input))
+            if (language.getName().equalsIgnoreCase(input))
                 return language;
 
-            if (language.getName().equalsIgnoreCase(input))
+            if (language.getCode().equalsIgnoreCase(input))
                 return language;
 
             for (Country country : language.getCountries()) {
@@ -29,24 +40,11 @@ public class LanguageParser implements IJDAParser<Language> {
             }
         }
 
-        // Some bonus ones. <3
+        for (Map.Entry<String, Language> entry : OTHER.entrySet()) {
+            if (entry.getKey().equalsIgnoreCase(input))
+                return entry.getValue();
+        }
 
-        if (input.equalsIgnoreCase("baguette"))
-            return Language.FRENCH;
-
-        if (input.equalsIgnoreCase("tea"))
-            return Language.ENGLISH;
-
-        if (input.equalsIgnoreCase("butt stuff"))
-            return Language.GERMAN;
-
-        if (input.equalsIgnoreCase("kurwa"))
-            return Language.POLISH;
-
-        if (input.equalsIgnoreCase("pizza"))
-            return Language.ITALIAN;
-
-        event.invalidate("Couldn't find a langauge to match up with your input.");
         return null;
     }
 }

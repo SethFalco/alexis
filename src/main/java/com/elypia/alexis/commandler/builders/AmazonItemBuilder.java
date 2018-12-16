@@ -15,7 +15,7 @@ public class AmazonItemBuilder implements IJDABuilder<AmazonItem> {
         String price = event.getScript("b.amazon.price");
         String footer = event.getScript("b.amazon.footer");
 
-        EmbedBuilder builder = BotUtils.createEmbedBuilder(event);
+        EmbedBuilder builder = BotUtils.newEmbed(event);
 
         builder.setTitle(output.getTitle(), output.getUrl());
         builder.setThumbnail(output.getImage());

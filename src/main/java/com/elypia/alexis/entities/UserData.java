@@ -6,7 +6,7 @@ import com.elypia.alexis.entities.embedded.NanowrimoLink;
 import com.elypia.alexis.entities.impl.*;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import org.bson.types.ObjectId;
-import org.mongodb.morphia.annotations.*;
+import xyz.morphia.annotations.*;
 
 import java.util.*;
 

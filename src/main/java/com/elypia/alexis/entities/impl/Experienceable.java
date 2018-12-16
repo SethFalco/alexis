@@ -1,6 +1,6 @@
 package com.elypia.alexis.entities.impl;
 
-import org.mongodb.morphia.annotations.Property;
+import xyz.morphia.annotations.Property;
 
 public abstract class Experienceable {
 

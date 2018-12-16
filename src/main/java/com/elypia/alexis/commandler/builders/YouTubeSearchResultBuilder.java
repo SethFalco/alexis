@@ -27,7 +27,7 @@ public class YouTubeSearchResultBuilder implements IJDABuilder<SearchResult> {
         SearchResultSnippet snippet = output.getSnippet();
         String videoId = output.getId().getVideoId();
 
-        EmbedBuilder builder = BotUtils.createEmbedBuilder(event);
+        EmbedBuilder builder = BotUtils.newEmbed(event);
         builder.setAuthor(snippet.getChannelTitle());
         builder.setTitle(snippet.getTitle(), YouTubeHelper.getVideoUrl(videoId));
         builder.setDescription(snippet.getDescription());

@@ -10,7 +10,7 @@ public class SteamUserBuilder implements IJDABuilder<SteamUser> {
 
     @Override
     public Message buildEmbed(JDACommand event, SteamUser toSend) {
-        EmbedBuilder builder = BotUtils.createEmbedBuilder(event);
+        EmbedBuilder builder = BotUtils.newEmbed(event);
 
         builder.setTitle(toSend.getUsername(), toSend.getProfileUrl());
         builder.setThumbnail(toSend.getAvatarHigh());

@@ -1,0 +1,54 @@
+package com.elypia.alexis.audio;
+
+import com.sedmelluq.discord.lavaplayer.player.*;
+import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
+import com.sedmelluq.discord.lavaplayer.track.*;
+
+import java.util.*;
+
+public class AudioLoader implements AudioLoadResultHandler {
+
+    private List<AudioTrack> tracks;
+    private boolean noResults;
+    private FriendlyException ex;
+
+    public AudioLoader() {
+        tracks = new ArrayList<>();
+    }
+
+    @Override
+    public void trackLoaded(AudioTrack track) {
+        tracks.add(track);
+    }
+
+    @Override
+    public void playlistLoaded(AudioPlaylist playlist) {
+        AudioTrack track = playlist.getSelectedTrack();
+        tracks.addAll(playlist.getTracks());
+
+        if (track != null)
+            tracks.add(0, tracks.remove(tracks.indexOf(track)));
+    }
+
+    @Override
+    public void noMatches() {
+        noResults = true;
+    }
+
+    @Override
+    public void loadFailed(FriendlyException exception) {
+        ex = exception;
+    }
+
+    public List<AudioTrack> getTracks() {
+        return tracks;
+    }
+
+    public boolean isResults() {
+        return !noResults;
+    }
+
+    public FriendlyException getException() {
+        return ex;
+    }
+}

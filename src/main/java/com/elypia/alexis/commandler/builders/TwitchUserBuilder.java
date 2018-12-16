@@ -10,7 +10,7 @@ public class TwitchUserBuilder implements IJDABuilder<TwitchUser> {
 
     @Override
     public Message buildEmbed(JDACommand event, TwitchUser output) {
-        EmbedBuilder builder = BotUtils.createEmbedBuilder(event);
+        EmbedBuilder builder = BotUtils.newEmbed(event);
 
         builder.setAuthor(output.getDisplayName(), output.getUrl());
         builder.setThumbnail(output.getAvatar());

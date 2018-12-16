@@ -4,7 +4,7 @@ import com.elypia.alexis.Alexis;
 import com.elypia.alexis.entities.impl.DatabaseEntity;
 import com.elypia.alexis.utils.Language;
 import org.bson.types.ObjectId;
-import org.mongodb.morphia.annotations.*;
+import xyz.morphia.annotations.*;
 
 @Entity(value = "message_channels", noClassnameStored = true)
 public class MessageChannelData implements DatabaseEntity {

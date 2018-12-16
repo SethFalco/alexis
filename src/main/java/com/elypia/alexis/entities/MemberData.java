@@ -4,7 +4,7 @@ import com.elypia.alexis.Alexis;
 import com.elypia.alexis.entities.embedded.MemberSkill;
 import com.elypia.alexis.entities.impl.*;
 import org.bson.types.ObjectId;
-import org.mongodb.morphia.annotations.*;
+import xyz.morphia.annotations.*;
 
 import java.util.*;
 

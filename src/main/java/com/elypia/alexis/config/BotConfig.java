@@ -25,15 +25,12 @@ public class BotConfig {
     /**
      * The database configuration, this must be present as it
      * has core settings that wouldn't allow the bot to run if
-     * not known such as the {@link DiscordConfig#token the bot token}.
+     * not known such as the {@link DiscordConfig#getToken()}  the bot token}.
      */
     @Path("discord")
     @SpecNotNull
     private DiscordConfig discordConfig;
 
-    /**
-     *
-     */
     @Path("api")
     private ApiCredentials apiCredentials;
 

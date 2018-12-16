@@ -10,7 +10,7 @@ public class UrbanDefinitionBuilder implements IJDABuilder<UrbanDefinition> {
 
     @Override
     public Message buildEmbed(JDACommand event, UrbanDefinition toSend) {
-        EmbedBuilder builder = BotUtils.createEmbedBuilder(event);
+        EmbedBuilder builder = BotUtils.newEmbed(event);
 
         builder.setAuthor(toSend.getAuthor());
         String titleText = toSend.getWord();
