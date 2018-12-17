@@ -1,9 +1,9 @@
-package com.elypia.alexis.modules;
+package com.elypia.alexis.commandler.modules;
 
 import com.elypia.commandler.annotations.Module;
 import com.elypia.jdac.alias.JDACHandler;
 
-@Module(id = "brainfuck.title", aliases = {"brainfuck", "bf"}, help = "brainfuck.help")
+@Module(id = "Brainfuck", aliases = {"brainfuck", "bf"}, help = "brainfuck.help")
 public class BrainfuckModule extends JDACHandler {
 
 //    @Default

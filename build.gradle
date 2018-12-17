@@ -52,6 +52,19 @@ dependencies {
 //    runtimeOnly "com.elypia.jdac:logback-logger:${jdacVersion}"
     implementation files("C:\\Users\\Seth\\Google Drive\\IntelliJ\\Commandler\\core\\build\\libs\\core.jar")
     implementation files("C:\\Users\\Seth\\Google Drive\\IntelliJ\\JDACommandler\\core\\build\\libs\\core.jar")
+    implementation files("C:\\Users\\Seth\\Google Drive\\IntelliJ\\Commandler\\doc\\build\\libs\\doc.jar")
+
+    ///TEMP
+    // Configuration
+
+    // HTML Parsing
+    implementation "org.apache.velocity:velocity-engine-core:2.0"
+    implementation "org.jsoup:jsoup:1.11.3"
+
+    // Common-Mark
+    implementation "com.atlassian.commonmark:commonmark:0.12.1"
+    implementation "com.atlassian.commonmark:commonmark-ext-gfm-tables:0.12.1"
+    ///
 
     // Elypiai
     implementation "com.elypia.elypiai:amazon-product-api:${elypiaiVersion}"

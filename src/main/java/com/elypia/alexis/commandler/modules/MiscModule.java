@@ -1,4 +1,4 @@
-package com.elypia.alexis.modules;
+package com.elypia.alexis.commandler.modules;
 
 import com.elypia.commandler.annotations.Module;
 import com.elypia.commandler.annotations.*;
@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
-@Module(id = "misc", aliases = {"util", "utils"}, help = "misc.h")
+@Module(id = "Miscellaneous", aliases = {"util", "utils"}, help = "misc.h")
 public class MiscModule extends JDACHandler {
 
     private OkHttpClient client;

@@ -1,4 +1,4 @@
-package com.elypia.alexis.modules;
+package com.elypia.alexis.commandler.modules;
 
 import com.elypia.alexis.entities.GuildData;
 import com.elypia.alexis.entities.embedded.AssignableRole;
@@ -16,7 +16,7 @@ import java.net.URL;
 import java.util.*;
 
 
-@Module(id = "dev", aliases = "dev")
+@Module(id = "Developer", aliases = "dev")
 public class DeveloperModule extends JDACHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(DeveloperModule.class);

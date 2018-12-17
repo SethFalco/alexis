@@ -1,4 +1,4 @@
-package com.elypia.alexis.modules.gaming;
+package com.elypia.alexis.commandler.modules.gaming;
 
 import com.elypia.alexis.Alexis;
 import com.elypia.commandler.annotations.Module;
@@ -9,7 +9,7 @@ import org.slf4j.*;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-@Module(id = "steam.title", group = "Gaming", aliases = "steam", help = "steam.help")
+@Module(id = "Steam", group = "Gaming", aliases = "steam", help = "steam.help")
 public class SteamModule extends JDACHandler {
 
 	private static final Logger logger = LoggerFactory.getLogger(SteamModule.class);

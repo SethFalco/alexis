@@ -1,4 +1,4 @@
-package com.elypia.alexis.modules;
+package com.elypia.alexis.commandler.modules;
 
 import com.elypia.alexis.Alexis;
 import com.elypia.alexis.config.BotConfig;
@@ -18,7 +18,7 @@ import java.time.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
-@Module(id = "bot.title", aliases = {"bot", "robot"}, help = "bot.help")
+@Module(id = "Bot", aliases = {"bot", "robot"}, help = "bot.help")
 public class BotModule extends JDACHandler {
 
 	private static final Logger logger = LoggerFactory.getLogger(BotModule.class);

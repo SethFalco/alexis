@@ -65,7 +65,7 @@ public class Alexis {
 		YouTubeHelper youtube = new YouTubeHelper("Alexis");
 
 		ModulesContext context = new ModulesContext();
-		context.addPackage("com.elypia.alexis.modules");
+		context.addPackage("com.elypia.alexis.commandler.modules");
 
 		JDAC.Builder jdacBuilder = new JDAC.Builder();
 		jdacBuilder.setPrefix(">");

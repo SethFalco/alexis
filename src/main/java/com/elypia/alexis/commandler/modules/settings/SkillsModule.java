@@ -1,4 +1,4 @@
-package com.elypia.alexis.modules.settings;
+package com.elypia.alexis.commandler.modules.settings;
 
 import com.elypia.alexis.entities.GuildData;
 import com.elypia.alexis.entities.embedded.SkillEntry;
@@ -12,7 +12,7 @@ import net.dv8tion.jda.core.entities.*;
 
 import java.util.*;
 
-@Module(id = "skills", group = "Settings", aliases = {"skill", "skills"}, help = "skills.h")
+@Module(id = "Skills", group = "Settings", aliases = {"skill", "skills"}, help = "skills.h")
 public class SkillsModule extends JDACHandler {
 
     @Command(id = "skills.list", aliases = {"list", "show"}, help = "skills.list.h")

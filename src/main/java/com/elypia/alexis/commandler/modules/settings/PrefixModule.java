@@ -1,4 +1,4 @@
-package com.elypia.alexis.modules.settings;
+package com.elypia.alexis.commandler.modules.settings;
 
 import com.elypia.alexis.commandler.validation.Database;
 import com.elypia.alexis.entities.GuildData;
@@ -10,7 +10,7 @@ import net.dv8tion.jda.core.entities.ChannelType;
 
 import javax.validation.constraints.Size;
 
-@Module(id = "prefix", group = "Settings", aliases = "prefix", help = "prefix.h")
+@Module(id = "Prefix", group = "Settings", aliases = "prefix", help = "prefix.h")
 public class PrefixModule extends JDACHandler {
 
     @Command(id = "prefix.mention", aliases = {"mention", "mentiononly"}, help = "prefix.mention.h")

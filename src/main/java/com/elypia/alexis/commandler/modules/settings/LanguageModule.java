@@ -1,4 +1,4 @@
-package com.elypia.alexis.modules.settings;
+package com.elypia.alexis.commandler.modules.settings;
 
 import com.elypia.alexis.commandler.validation.Supported;
 import com.elypia.alexis.entities.MessageChannelData;
@@ -11,7 +11,7 @@ import net.dv8tion.jda.core.entities.*;
 
 import java.util.*;
 
-@Module(id = "lang.title", group = "Settings", aliases = {"language", "languages", "lang"}, help = "lang.help")
+@Module(id = "Language", group = "Settings", aliases = {"language", "languages", "lang"}, help = "lang.help")
 public class LanguageModule extends JDACHandler {
 
 

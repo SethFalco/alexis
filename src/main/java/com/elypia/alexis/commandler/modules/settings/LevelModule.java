@@ -1,4 +1,4 @@
-package com.elypia.alexis.modules.settings;
+package com.elypia.alexis.commandler.modules.settings;
 
 import com.elypia.alexis.entities.GuildData;
 import com.elypia.alexis.entities.embedded.MessageSettings;
@@ -10,7 +10,7 @@ import com.elypia.jdac.validation.Channels;
 import net.dv8tion.jda.core.entities.ChannelType;
 import net.dv8tion.jda.core.events.message.GenericMessageEvent;
 
-@Module(id = "Level Settings", group = "Settings", aliases = {"level", "lvl"}, help = "level.help")
+@Module(id = "Levels", group = "Settings", aliases = {"level", "lvl"}, help = "level.help")
 public class LevelModule extends JDACHandler {
 
     @Command(id = "level.message.name", aliases = "message", help = "level.message.help")

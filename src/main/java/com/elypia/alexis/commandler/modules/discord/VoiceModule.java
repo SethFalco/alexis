@@ -1,4 +1,4 @@
-package com.elypia.alexis.modules.discord;
+package com.elypia.alexis.commandler.modules.discord;
 
 import com.elypia.commandler.annotations.Module;
 import com.elypia.commandler.annotations.*;

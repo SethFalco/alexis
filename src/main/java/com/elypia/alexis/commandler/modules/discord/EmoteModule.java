@@ -1,8 +1,9 @@
-package com.elypia.alexis.modules.discord;
+package com.elypia.alexis.commandler.modules.discord;
 
 import com.elypia.alexis.utils.BotUtils;
 import com.elypia.commandler.annotations.Module;
 import com.elypia.commandler.annotations.*;
+import com.elypia.commandler.doc.annotations.Icon;
 import com.elypia.jdac.alias.*;
 import com.elypia.jdac.validation.Channels;
 import net.dv8tion.jda.core.EmbedBuilder;
@@ -10,7 +11,8 @@ import net.dv8tion.jda.core.entities.*;
 
 import java.util.List;
 
-@Module(id = "Emote", group = "Discord", aliases = {"emote", "emoji", "emoticon"}, help = "emote.help")
+@Icon("fas fa-surprise")
+@Module(id = "Emotes", group = "Discord", aliases = {"emote", "emoji", "emoticon"}, help = "emote.help")
 public class EmoteModule extends JDACHandler {
 
     @Command(id = "Emote", aliases = "list", help = "emote.list.help")

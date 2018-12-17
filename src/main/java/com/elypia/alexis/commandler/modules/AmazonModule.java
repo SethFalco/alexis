@@ -1,4 +1,4 @@
-package com.elypia.alexis.modules;
+package com.elypia.alexis.commandler.modules;
 
 import com.elypia.alexis.Alexis;
 import com.elypia.alexis.config.embedded.AmazonCredentials;
@@ -10,7 +10,7 @@ import org.slf4j.*;
 
 import java.security.InvalidKeyException;
 
-@Module(id = "amazon.title", aliases = "amazon", help = "amazon.help")
+@Module(id = "Amazon", aliases = "amazon", help = "amazon.help")
 public class AmazonModule extends JDACHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(AmazonModule.class);

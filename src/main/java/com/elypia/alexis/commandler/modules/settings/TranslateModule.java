@@ -1,4 +1,4 @@
-package com.elypia.alexis.modules.settings;
+package com.elypia.alexis.commandler.modules.settings;
 
 import com.elypia.alexis.entities.GuildData;
 import com.elypia.alexis.entities.embedded.TranslateSettings;
@@ -11,7 +11,7 @@ import net.dv8tion.jda.core.entities.*;
 import java.util.Map;
 
 
-@Module(id = "translate", group = "Settings", aliases = {"translate", "trans", "tran"}, help = "translate.h")
+@Module(id = "Translate", group = "Settings", aliases = {"translate", "trans", "tran"}, help = "translate.h")
 public class TranslateModule extends JDACHandler {
 
     @Command(id = "translate.toggle", aliases = "toggle", help = "translate.toggle.h")

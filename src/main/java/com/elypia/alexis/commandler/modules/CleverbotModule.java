@@ -1,4 +1,4 @@
-package com.elypia.alexis.modules;
+package com.elypia.alexis.commandler.modules;
 
 import com.elypia.alexis.Alexis;
 import com.elypia.alexis.commandler.validation.Database;
@@ -10,7 +10,7 @@ import com.elypia.jdac.alias.*;
 import net.dv8tion.jda.core.entities.MessageChannel;
 import org.slf4j.*;
 
-@Module(id = "cb.title", aliases = {"cleverbot", "cb"}, help = "cb.help")
+@Module(id = "Cleverbot", aliases = {"cleverbot", "cb"}, help = "cb.help")
 public class CleverbotModule extends JDACHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(CleverbotModule.class);

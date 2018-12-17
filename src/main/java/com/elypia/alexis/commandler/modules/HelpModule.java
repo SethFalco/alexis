@@ -1,4 +1,4 @@
-package com.elypia.alexis.modules;
+package com.elypia.alexis.commandler.modules;
 
 import com.elypia.alexis.utils.BotUtils;
 import com.elypia.commandler.ModulesContext;
@@ -13,7 +13,7 @@ import net.dv8tion.jda.core.events.message.GenericMessageEvent;
 
 import java.util.*;
 
-@Module(id = "help.title", aliases = "help")
+@Module(id = "Help", aliases = "help")
 public class HelpModule extends JDACHandler {
 
     @Override

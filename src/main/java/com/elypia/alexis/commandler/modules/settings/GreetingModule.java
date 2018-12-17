@@ -1,4 +1,4 @@
-package com.elypia.alexis.modules.settings;
+package com.elypia.alexis.commandler.modules.settings;
 
 import com.elypia.alexis.commandler.validation.Database;
 import com.elypia.alexis.entities.GuildData;
@@ -14,7 +14,7 @@ import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
 import java.util.Map;
 
-@Module(id = "greeting", group = "Settings", aliases = {"greeting", "greetings", "welcome"}, help = "greeting.h")
+@Module(id = "Greetings", group = "Settings", aliases = {"greeting", "greetings", "welcome"}, help = "greeting.h")
 public class GreetingModule extends JDACHandler {
 
     @Command(id = "greeting.message", aliases = "message", help = "greeting.message.h")

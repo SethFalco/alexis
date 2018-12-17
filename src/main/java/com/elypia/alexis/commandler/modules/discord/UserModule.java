@@ -1,4 +1,4 @@
-package com.elypia.alexis.modules.discord;
+package com.elypia.alexis.commandler.modules.discord;
 
 import com.elypia.alexis.utils.*;
 import com.elypia.commandler.annotations.Module;
@@ -12,7 +12,7 @@ import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-@Module(id = "user", group = "Discord", aliases = "user", help = "user.h")
+@Module(id = "Users", group = "Discord", aliases = "user", help = "user.h")
 public class UserModule extends JDACHandler {
 
 	@Command(id = "User Info", aliases = "info", help = "user.info.h")

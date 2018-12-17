@@ -1,4 +1,4 @@
-package com.elypia.alexis.modules.settings;
+package com.elypia.alexis.commandler.modules.settings;
 
 import com.elypia.alexis.entities.GuildData;
 import com.elypia.alexis.entities.embedded.AssignableRole;
@@ -13,7 +13,7 @@ import net.dv8tion.jda.core.entities.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
-@Module(id = "roles", group = "group.settings", aliases = {"role", "roles"}, help = "roles.h")
+@Module(id = "Roles", group = "Settings", aliases = {"role", "roles"}, help = "roles.h")
 public class RolesModule extends JDACHandler {
 
     @Command(id = "common.list", aliases = {"list", "show"}, help = "roles.list.h")

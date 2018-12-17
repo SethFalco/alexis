@@ -1,4 +1,4 @@
-package com.elypia.alexis.modules;
+package com.elypia.alexis.commandler.modules;
 
 import com.elypia.alexis.commandler.validation.*;
 import com.elypia.alexis.entities.UserData;
@@ -13,7 +13,7 @@ import org.slf4j.*;
 import javax.validation.constraints.*;
 import java.io.IOException;
 
-@Module(id = "nano", aliases = {"nanowrimo", "nano", "nnwm"}, help = "nano.h")
+@Module(id = "NaNoWriMo", aliases = {"nanowrimo", "nano", "nnwm"}, help = "nano.h")
 public class NanowrimoModule extends JDACHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(NanowrimoModule.class);

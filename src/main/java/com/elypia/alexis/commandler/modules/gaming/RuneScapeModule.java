@@ -1,4 +1,4 @@
-package com.elypia.alexis.modules.gaming;
+package com.elypia.alexis.commandler.modules.gaming;
 
 import com.elypia.commandler.annotations.Module;
 import com.elypia.commandler.annotations.*;

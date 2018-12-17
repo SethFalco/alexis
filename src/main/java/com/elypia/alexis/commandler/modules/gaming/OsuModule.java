@@ -1,4 +1,4 @@
-package com.elypia.alexis.modules.gaming;
+package com.elypia.alexis.commandler.modules.gaming;
 
 import com.elypia.alexis.Alexis;
 import com.elypia.commandler.annotations.Module;
@@ -10,7 +10,7 @@ import org.slf4j.*;
 
 import javax.validation.constraints.Size;
 
-@Module(id = "osu.title", group = "Gaming", aliases = {"osu"}, help = "osu.help")
+@Module(id = "osu!", group = "Gaming", aliases = {"osu"}, help = "osu.help")
 public class OsuModule extends JDACHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(OsuModule.class);
