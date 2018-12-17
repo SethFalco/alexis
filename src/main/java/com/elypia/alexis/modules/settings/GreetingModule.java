@@ -1,16 +1,16 @@
 package com.elypia.alexis.modules.settings;
 
+import com.elypia.alexis.commandler.validation.Database;
 import com.elypia.alexis.entities.GuildData;
 import com.elypia.alexis.entities.embedded.*;
 import com.elypia.alexis.utils.BotUtils;
-import com.elypia.alexis.validation.Database;
 import com.elypia.commandler.annotations.Module;
 import com.elypia.commandler.annotations.*;
-import com.elypia.commandler.jda.*;
 import com.elypia.commandler.validation.Option;
 import com.elypia.jdac.alias.*;
 import com.elypia.jdac.validation.*;
 import net.dv8tion.jda.core.entities.*;
+import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
 import java.util.Map;
 
@@ -27,7 +27,8 @@ public class GreetingModule extends JDACHandler {
         @Option({"user", "bot"}) String account,
         String message
     ) {
-        Message eventMessage = event.getMessage();
+        MessageReceivedEvent source = (MessageReceivedEvent) event.getSource();
+        Message eventMessage = source.getMessage();
         Guild guild = eventMessage.getGuild();
         GuildData data = GuildData.query(guild.getIdLong());
         GreetingSettings greetingSettings = data.getSettings().getGreetingSettings();
@@ -63,7 +64,8 @@ public class GreetingModule extends JDACHandler {
     @Command(id = "greeting.channel", aliases = "channel", help = "greeting.channel.h")
     @Param(id = "common.channel", help = "greeting.channel.p.channel.h")
     public String setChannel(@Database @Elevated JDACEvent event, @Talkable TextChannel channel) {
-        GuildData data = GuildData.query(event.getMessage().getGuild().getIdLong());
+        MessageReceivedEvent source = (MessageReceivedEvent) event.getSource();
+        GuildData data = GuildData.query(source.getMessage().getGuild().getIdLong());
         GreetingSettings greetingSettings = data.getSettings().getGreetingSettings();
         long channelId = channel.getIdLong();
 

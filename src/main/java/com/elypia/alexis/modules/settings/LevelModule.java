@@ -5,7 +5,6 @@ import com.elypia.alexis.entities.embedded.MessageSettings;
 import com.elypia.alexis.utils.BotUtils;
 import com.elypia.commandler.annotations.Module;
 import com.elypia.commandler.annotations.*;
-import com.elypia.commandler.jda.*;
 import com.elypia.jdac.alias.*;
 import com.elypia.jdac.validation.Channels;
 import net.dv8tion.jda.core.entities.ChannelType;
@@ -16,18 +15,18 @@ public class LevelModule extends JDACHandler {
 
     @Command(id = "level.message.name", aliases = "message", help = "level.message.help")
     @Param(id = "level.param.message.help", help = "level.message.message.help")
-    public void setMessage(@Channels(ChannelType.TEXT) JDACEvent event, String message) {
+    public String setMessage(@Channels(ChannelType.TEXT) JDACEvent event, String message) {
         long id = event.getSource().getGuild().getIdLong();
 
         GuildData data = GuildData.query(id);
         MessageSettings settings = data.getSettings().getLevelSettings().getNotifySettings();
         settings.setEnabled(true);
-        settings.setChannel(event.getMessage().getChannel().getIdLong());
+        settings.setChannel(event.asMessageRecieved().getChannel().getIdLong());
         settings.setMessage(message);
 
         data.commit();
 
-        event.reply(BotUtils.getScript("level.message.response", event.getSource()));
+        return scripts.get(event.getSource(), "level.message.response");
     }
 
     @Command(id = "level.test.name", aliases = "test", help = "level.test.help")

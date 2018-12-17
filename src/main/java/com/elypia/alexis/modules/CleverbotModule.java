@@ -1,18 +1,16 @@
 package com.elypia.alexis.modules;
 
 import com.elypia.alexis.Alexis;
-import com.elypia.alexis.commandler.validators.Database;
+import com.elypia.alexis.commandler.validation.Database;
 import com.elypia.alexis.entities.MessageChannelData;
 import com.elypia.commandler.annotations.Module;
 import com.elypia.commandler.annotations.*;
-import com.elypia.commandler.jda.*;
 import com.elypia.elypiai.cleverbot.Cleverbot;
-import com.elypia.jdac.alias.JDACHandler;
+import com.elypia.jdac.alias.*;
 import net.dv8tion.jda.core.entities.MessageChannel;
 import org.slf4j.*;
 
-@Database
-@Module(name = "cb.title", aliases = {"cleverbot", "cb"}, help = "cb.help")
+@Module(id = "cb.title", aliases = {"cleverbot", "cb"}, help = "cb.help")
 public class CleverbotModule extends JDACHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(CleverbotModule.class);
@@ -23,15 +21,15 @@ public class CleverbotModule extends JDACHandler {
         cleverbot = new Cleverbot(Alexis.config.getApiCredentials().getCleverbot());
     }
 
-    @Command(name = "cb.say.name", aliases = {"say", "ask"}, help = "cb.say.help")
-    @Param(name = "common.body", help = "cb.param.body.help")
-    public void say(JDACommand event, String body) {
+    @Command(id = "cb.say.name", aliases = {"say", "ask"}, help = "cb.say.help")
+    @Param(id = "common.body", help = "cb.param.body.help")
+    public void say(@Database JDACEvent event, String body) {
         MessageChannel channel = event.getSource().getChannel();
         MessageChannelData data = MessageChannelData.query(channel.getIdLong());
         String cs = data.getCleverState();
 
         cleverbot.say(body, cs).queue(response -> {
-            event.reply(response.getOutput());
+            event.send(response.getOutput());
 
             data.setCleverState(response.getCs());
             data.commit();

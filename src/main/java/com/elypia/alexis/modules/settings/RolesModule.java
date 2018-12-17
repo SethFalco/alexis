@@ -4,74 +4,76 @@ import com.elypia.alexis.entities.GuildData;
 import com.elypia.alexis.entities.embedded.AssignableRole;
 import com.elypia.commandler.annotations.Module;
 import com.elypia.commandler.annotations.*;
-import com.elypia.commandler.jda.*;
-import com.elypia.commandler.jda.annotations.validation.command.*;
-import com.elypia.commandler.jda.annotations.validation.param.Search;
-import com.elypia.jdac.alias.JDACHandler;
+import com.elypia.jdac.*;
+import com.elypia.jdac.alias.*;
+import com.elypia.jdac.validation.*;
 import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.*;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
-@Channel(ChannelType.TEXT)
-@Module(name = "roles", group = "group.settings", aliases = {"role", "roles"}, help = "roles.h")
+@Module(id = "roles", group = "group.settings", aliases = {"role", "roles"}, help = "roles.h")
 public class RolesModule extends JDACHandler {
 
-    @Command(name = "common.list", aliases = {"list", "show"}, help = "roles.list.h")
-    public Object list(JDACommand command) {
-        Guild guild = command.getSource().getGuild();
+    @Command(id = "common.list", aliases = {"list", "show"}, help = "roles.list.h")
+    public Object list(@Channels(ChannelType.TEXT) JDACEvent event) {
+        Guild guild = event.getSource().getGuild();
         List<AssignableRole> allowed = getAssignableRoles(guild);
 
         if (allowed.isEmpty())
-            return command.getScript("roles.list.no_roles");
+            return scripts.get("roles.list.no_roles");
 
-        String script = command.getScript("roles.list.title");
+        String script = scripts.get("roles.list.title");
         String string = asString(guild, allowed);
 
         return String.format("** %s**\n%s", script, string);
     }
 
     @Static
-    @Permissions(value = Permission.MANAGE_ROLES, userRequiresPermission = false)
-    @Command(name = "roles.assign", aliases = {"iam", "assign"}, help = "roles.assign.h")
-    @Param(name = "common.roles", help = "roles.assign.roles.h")
-    public Object assign(JDACommand command, @Search(Scope.LOCAL) Role[] roles) {
+    @Command(id = "roles.assign", aliases = {"iam", "assign"}, help = "roles.assign.h")
+    @Param(id = "common.roles", help = "roles.assign.roles.h")
+    public Object assign(
+            @Channels(ChannelType.TEXT) @Permissions(value = Permission.MANAGE_ROLES, user = false) JDACEvent command,
+            @Search(Scope.LOCAL) Role[] roles
+    ) {
         Guild guild = command.getSource().getGuild();
         List<AssignableRole> allowed = getAssignableRoles(guild);
 
         if (hasDuplicates(roles))
-            return command.getScript("roles.assign.duplicates");
+            return scripts.get("roles.assign.duplicates");
 
         List<Role> rolesToAdd = getRoles(allowed, roles, true);
         List<Role> rolesDenied = getRoles(allowed, roles, false);
 
         if (rolesToAdd.isEmpty())
-            return command.getScript("roles.assign.denied");
+            return scripts.get("roles.assign.denied");
 
-        Member member = command.getMessage().getMember();
+        Member member = command.asMessageRecieved().getMember();
         guild.getController().addRolesToMember(member, rolesToAdd).queue(o -> {
-            String response = command.getScript("roles.assign.success");
+            String response = scripts.get("roles.assign.success");
 
             if (!rolesDenied.isEmpty())
-                response += "\n" + command.getScript("roles.assign.partial") + asString(rolesDenied);
+                response += "\n" + scripts.get("roles.assign.partial") + asString(rolesDenied);
 
-            command.reply(response);
+            command.send(response);
         });
 
         return null;
     }
 
-    @Elevated
-    @Permissions(value = Permission.MANAGE_ROLES)
-    @Command(name = "roles.allow", aliases = "allow", help = "roles.allow.h")
-    @Param(name = "common.roles", help = "roles.allow.roles.h")
-    public Object allow(JDACommand command, @Search(Scope.LOCAL) Role[] roles) {
+
+    @Command(id = "roles.allow", aliases = "allow", help = "roles.allow.h")
+    @Param(id = "common.roles", help = "roles.allow.roles.h")
+    public Object allow(
+        @Channels(ChannelType.TEXT) @Permissions(value = Permission.MANAGE_ROLES) @Elevated JDACEvent command,
+        @Search(Scope.LOCAL) Role[] roles
+    ) {
         GuildData data = GuildData.query(command.getSource().getGuild());
         List<AssignableRole> allowed = getAssignableRoles(data);
 
         if (hasDuplicates(roles))
-            return command.getScript("roles.assign.duplicate");
+            return scripts.get("roles.assign.duplicate");
 
         List<Role> rolesAllowed = getRoles(allowed, roles, false);
         List<Role> alreadyAllowed = getRoles(allowed, roles, true);
@@ -79,27 +81,26 @@ public class RolesModule extends JDACHandler {
         rolesAllowed.forEach((role) -> allowed.add(new AssignableRole(role.getIdLong())));
 
         if (alreadyAllowed.size() == roles.length)
-            return command.getScript("roles.allow.already_allowed");
+            return scripts.get("roles.allow.already_allowed");
 
         data.commit();
 
-        String response = command.getScript("roles.allow.success");
+        String response = scripts.get("roles.allow.success");
 
         if (!alreadyAllowed.isEmpty())
-            response += "\n" + command.getScript("roles.allow.partial") + asString(alreadyAllowed);
+            response += "\n" + scripts.get("roles.allow.partial") + asString(alreadyAllowed);
 
         return response;
     }
 
-    @Elevated
-    @Command(name = "roles.deny", aliases = "deny", help = "roles.deny.h")
-    @Param(name = "common.roles", help = "roles.deny.roles.h")
-    public Object deny(JDACommand command, @Search(Scope.LOCAL) Role[] roles) {
+    @Command(id = "roles.deny", aliases = "deny", help = "roles.deny.h")
+    @Param(id = "common.roles", help = "roles.deny.roles.h")
+    public Object deny(@Channels(ChannelType.TEXT) @Elevated JDACEvent command, @Search(Scope.LOCAL) Role[] roles) {
         GuildData data = GuildData.query(command.getSource().getGuild());
         List<AssignableRole> allowed = getAssignableRoles(data);
 
         if (hasDuplicates(roles))
-            return command.getScript("roles.assign.duplicate");
+            return scripts.get("roles.assign.duplicate");
 
         List<Role> rolesToRemove = getRoles(allowed, roles, true);
         List<Role> rolesCantRemove = getRoles(allowed, roles, false);
@@ -107,14 +108,14 @@ public class RolesModule extends JDACHandler {
         rolesToRemove.forEach((role) -> allowed.removeIf(o -> role.getIdLong() == o.getRoleId()));
 
         if (rolesCantRemove.size() == roles.length)
-            return command.getScript("roles.deny.not_assignable");
+            return scripts.get("roles.deny.not_assignable");
 
         data.commit();
 
-        String response = command.getScript("roles.deny.success");
+        String response = scripts.get("roles.deny.success");
 
         if (!rolesCantRemove.isEmpty())
-            response += "\n" + command.getScript("roles.deny.partial") + asString(rolesCantRemove);
+            response += "\n" + scripts.get("roles.deny.partial") + asString(rolesCantRemove);
 
         return response;
     }

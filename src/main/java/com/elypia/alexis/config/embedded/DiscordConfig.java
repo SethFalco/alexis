@@ -17,8 +17,8 @@ public class DiscordConfig {
     @Path("support_guild")
     private long supportGuild;
 
-    @Path("author")
-    private List<Author> authors;
+//    @Path("author")
+//    private List<Author> authors;
 
     public String getToken() {
         return token;
@@ -33,6 +33,7 @@ public class DiscordConfig {
     }
 
     public List<Author> getAuthors() {
-        return authors;
+        return null;
+        //        return authors;
     }
 }

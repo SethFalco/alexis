@@ -1,34 +1,39 @@
 package com.elypia.alexis.commandler.builders;
 
-import com.elypia.alexis.utils.BotUtils;
-import com.elypia.commandler.jda.*;
-import com.elypia.elypiai.osu.OsuEvent;
-import com.elypia.elypiai.utils.Markdown;
+import com.elypia.alexis.utils.*;
+import com.elypia.commandler.annotations.Compatible;
+import com.elypia.elypiai.osu.*;
+import com.elypia.jdac.alias.*;
 import net.dv8tion.jda.core.*;
 import net.dv8tion.jda.core.entities.Message;
 
 import java.util.StringJoiner;
 
-public class OsuPlayerBuilder implements IJDABuilder<OsuPlayer> {
+@Compatible(Player.class)
+public class OsuPlayerBuilder implements IJDACBuilder<Player> {
 
     private static final String INT_FORMAT = "%,d";
     private static final String DEC_FORMAT = "%.2f";
     private static final String PERCENT_FORMAT = "%02.2f%%";
 
     @Override
-    public Message buildEmbed(JDACommand event, OsuPlayer output) {
+    public Message buildEmbed(JDACEvent event, Player output) {
         EmbedBuilder builder = BotUtils.newEmbed(event);
 
         builder.setThumbnail(output.getAvatarUrl());
 
-        builder.addField("Username", Markdown.a(output.getUsername(), output.getProfileUrl()) + " " + output.getCountry().getUnicodeEmote(), true);
+        String playerCountry = output.getCountry();
+        Country country = Country.get(playerCountry);
+        String cPrint = (country != null) ? country.getUnicodeEmote() : playerCountry;
+
+        builder.addField("Username", Md.a(output.getUsername(), output.getProfileUrl()) + " " + cPrint, true);
         builder.addField("Level", String.valueOf((int)output.getLevel()), true);
-        builder.addField("Ranked Score", String.format(INT_FORMAT, output.getRankedScore()), true);
-        builder.addField("Total Score", String.format(INT_FORMAT, output.getTotalScore()), true);
-        builder.addField("Performance Points", String.format(DEC_FORMAT, output.getPp()), true);
-        builder.addField("Rank (Country)", String.format(INT_FORMAT, output.getRank()) + " (" + String.format(INT_FORMAT, output.getCountryRank()) + ")", true);
-        builder.addField("Accuracy", String.format(PERCENT_FORMAT, output.getAccuracy()), true);
-        builder.addField("Play Count", String.format(INT_FORMAT, output.getPlayCount()) + "\n_ _", true);
+        builder.addField("Ranked Score", intf(output.getRankedScore()), true);
+        builder.addField("Total Score", intf(output.getTotalScore()), true);
+        builder.addField("Performance Points", decf(output.getPp()), true);
+        builder.addField("Rank (Country)", intf(output.getRank()) + " (" + intf(output.getCountryRank()) + ")", true);
+        builder.addField("Accuracy", perf(output.getAccuracy()), true);
+        builder.addField("Play Count", intf(output.getPlayCount()) + "\n_ _", true);
 
         if (!output.getEvents().isEmpty()) {
             OsuEvent osuEvent = output.getEvents().get(0);
@@ -39,21 +44,37 @@ public class OsuPlayerBuilder implements IJDABuilder<OsuPlayer> {
     }
 
     @Override
-    public Message build(JDACommand event, OsuPlayer output) {
+    public Message build(JDACEvent event, Player output) {
         StringJoiner joiner = new StringJoiner("\n");
 
-        joiner.add("**__" + output.getUsername() + "__** " + output.getCountry().getUnicodeEmote());
+        String playerCountry = output.getCountry();
+        Country country = Country.get(playerCountry);
+        String cPrint = (country != null) ? country.getUnicodeEmote() : playerCountry;
+
+        joiner.add(Md.bu(output.getUsername()) + cPrint);
         joiner.add("");
-        joiner.add("**Level:** " + (int)output.getLevel());
-        joiner.add("**Ranked Score:** " + String.format(INT_FORMAT, output.getRankedScore()));
-        joiner.add("**Total Score:** " + String.format(INT_FORMAT, output.getTotalScore()));
-        joiner.add("**Performance Points:** " + String.format(DEC_FORMAT, output.getPp()));
-        joiner.add("**Rank (Country):** " + String.format(INT_FORMAT, output.getRank()) + " (" + String.format(INT_FORMAT, output.getCountryRank()) + ")");
-        joiner.add("**Accuracy:** " + String.format(PERCENT_FORMAT, output.getAccuracy()));
-        joiner.add("**Play Count:** " + String.format("%,d", output.getPlayCount()));
+        joiner.add(Md.b("Level: ") + (int)output.getLevel());
+        joiner.add(Md.b("Ranked Score: ") + intf(output.getRankedScore()));
+        joiner.add(Md.b("Total Score: ") + intf(output.getTotalScore()));
+        joiner.add(Md.b("Performance Points: ") + decf(output.getPp()));
+        joiner.add(Md.b("Rank (Country): ") + intf(output.getRank()) + " (" + intf(output.getCountryRank()) + ")");
+        joiner.add(Md.b("Accuracy: ") + perf(output.getAccuracy()));
+        joiner.add(Md.b("Play Count: ") + intf(output.getPlayCount()));
         joiner.add("");
         joiner.add(output.getProfileUrl());
 
         return new MessageBuilder(joiner.toString()).build();
+    }
+
+    private String intf(long i) {
+        return String.format(INT_FORMAT, i);
+    }
+
+    private String decf(double d) {
+        return String.format(DEC_FORMAT, d);
+    }
+
+    private String perf(double d) {
+        return String.format(PERCENT_FORMAT, d);
     }
 }

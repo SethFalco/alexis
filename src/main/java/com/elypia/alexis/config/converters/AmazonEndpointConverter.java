@@ -8,6 +8,9 @@ public class AmazonEndpointConverter implements Converter<AmazonEndpoint, String
     @Override
     public AmazonEndpoint convertToField(String value) {
         for (AmazonEndpoint endpoint : AmazonEndpoint.values()) {
+            if (endpoint == AmazonEndpoint.UNKNOWN)
+                continue;
+
             if (endpoint.name().equalsIgnoreCase(value))
                 return endpoint;
 

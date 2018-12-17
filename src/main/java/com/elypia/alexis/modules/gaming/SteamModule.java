@@ -3,7 +3,6 @@ package com.elypia.alexis.modules.gaming;
 import com.elypia.alexis.Alexis;
 import com.elypia.commandler.annotations.Module;
 import com.elypia.commandler.annotations.*;
-import com.elypia.commandler.jda.*;
 import com.elypia.elypiai.steam.*;
 import com.elypia.jdac.alias.*;
 import org.slf4j.*;
@@ -26,13 +25,13 @@ public class SteamModule extends JDACHandler {
 	public void displayProfile(JDACEvent event, String username) {
 		steam.getIdFromVanityUrl(username).queue((search) -> {
 			if (!search.isSuccess()) {
-				event.replyScript("steam.get.no_user");
+				event.send("steam.get.no_user");
 				return;
 			}
 
 			steam.getUsers(search.getId()).queue(users -> {
 				SteamUser user = users.get(0);
-				event.reply(user);
+				event.send(user);
 			}, (ex) -> logger.error("Failed to perform HTTP request!", ex));
 		});
 	}
@@ -42,7 +41,7 @@ public class SteamModule extends JDACHandler {
 	public void listLibrary(JDACEvent event, String username) {
 		steam.getIdFromVanityUrl(username).queue((search) -> {
 			if (!search.isSuccess()) {
-				event.reply("Sorry, I couldn't find that user.");
+				event.send("Sorry, I couldn't find that user.");
 				return;
 			}
 
@@ -67,13 +66,13 @@ public class SteamModule extends JDACHandler {
 		});
 	}
 
-	@Command(id = 3, name = "Game Roulette", aliases = {"random", "rand", "game", "r"}, help = "Select a random game from the players library!")
+	@Command(id = "Game Roulette", aliases = {"random", "rand", "game", "r"}, help = "Select a random game from the players library!")
 	@Param(id = "username", help = "The username or ID of the user!")
 //	@Emoji(emotes = "🎲", help = "Reroll for a different game.")
 	public void randomGame(JDACEvent event, String username) {
 		steam.getIdFromVanityUrl(username).queue((search) -> {
 			if (!search.isSuccess()) {
-				event.reply("Sorry, I couldn't find that user.");
+				event.send("Sorry, I couldn't find that user.");
 				return;
 			}
 
@@ -82,7 +81,7 @@ public class SteamModule extends JDACHandler {
 
 				SteamGame game = library.get(ThreadLocalRandom.current().nextInt(library.size()));
 //				event.addReaction("🎲");
-				event.reply(game);
+				event.send(game);
 			}, (ex) -> logger.error("Failed to perform HTTP request!", ex));
 		});
 	}

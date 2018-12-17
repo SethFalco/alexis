@@ -2,7 +2,6 @@ package com.elypia.alexis.modules.discord;
 
 import com.elypia.commandler.annotations.Module;
 import com.elypia.commandler.annotations.*;
-import com.elypia.commandler.jda.*;
 import com.elypia.jdac.*;
 import com.elypia.jdac.alias.*;
 import com.elypia.jdac.validation.Channels;
@@ -29,12 +28,12 @@ public class VoiceModule extends JDACHandler {
 
         if (users.remove(source.getMessage().getAuthor())) {
             if (users.size() == 0)
-                return event.getScript("voice.mention.alone", Map.of("channels", channels.length));
+                return scripts.get("voice.mention.alone", Map.of("channels", channels.length));
         }
 
         StringJoiner joiner = new StringJoiner(" | ");
         users.forEach(o -> joiner.add(o.getAsMention()));
 
-        return joiner.length() == 0 ? event.getScript("voice.mention.empty") : joiner.toString();
+        return joiner.length() == 0 ? scripts.get("voice.mention.empty") : joiner.toString();
     }
 }

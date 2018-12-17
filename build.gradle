@@ -52,7 +52,6 @@ dependencies {
 //    runtimeOnly "com.elypia.jdac:logback-logger:${jdacVersion}"
     implementation files("C:\\Users\\Seth\\Google Drive\\IntelliJ\\Commandler\\core\\build\\libs\\core.jar")
     implementation files("C:\\Users\\Seth\\Google Drive\\IntelliJ\\JDACommandler\\core\\build\\libs\\core.jar")
-    runtimeOnly files("C:\\Users\\Seth\\Google Drive\\IntelliJ\\JDACommandler\\logback-logger\\src\\main\\java\\com\\elypia\\jdac\\log\\DiscordAppender.java")
 
     // Elypiai
     implementation "com.elypia.elypiai:amazon-product-api:${elypiaiVersion}"
@@ -92,7 +91,7 @@ dependencies {
 
     // Logging
     implementation "org.slf4j:slf4j-api:1.7.25"
-    runtimeOnly "ch.qos.logback:logback-classic:1.2.3"
+    implementation "ch.qos.logback:logback-classic:1.2.3"
 
     // Testing
     testImplementation "org.junit.jupiter:junit-jupiter-api:${junitVersion}"

@@ -2,12 +2,12 @@ package com.elypia.alexis.modules;
 
 import com.elypia.alexis.entities.GuildData;
 import com.elypia.alexis.entities.embedded.AssignableRole;
-import com.elypia.alexis.utils.*;
+import com.elypia.alexis.utils.ExitCode;
 import com.elypia.commandler.annotations.Module;
 import com.elypia.commandler.annotations.*;
-import com.elypia.commandler.jda.*;
-import com.elypia.jdac.alias.JDACHandler;
-import net.dv8tion.jda.core.EmbedBuilder;
+import com.elypia.jdac.alias.*;
+import com.elypia.jdac.validation.Developer;
+import net.dv8tion.jda.core.*;
 import net.dv8tion.jda.core.entities.Icon;
 import org.slf4j.*;
 
@@ -15,37 +15,38 @@ import java.io.*;
 import java.net.URL;
 import java.util.*;
 
-//@Developer
-@Module(name = "dev", aliases = "dev")
+
+@Module(id = "dev", aliases = "dev")
 public class DeveloperModule extends JDACHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(DeveloperModule.class);
 
-    @Command(name = "dev.rename", aliases = "name", help = "dev.name.h")
-    @Param(name = "dev.name.p.name", help = "dev.name.p.name.h")
-    public void name(JDACommand event, String input) {
-        client.getSelfUser().getManager().setName(input).queue(o -> {
+    @Command(id = "dev.rename", aliases = "name", help = "dev.name.h")
+    @Param(id = "dev.name.p.name", help = "dev.name.p.name.h")
+    public void name(@Developer JDACEvent event, String input) {
+        event.getSource().getJDA().getSelfUser().getManager().setName(input).queue(o -> {
             var params = Map.of("name", input);
-            event.reply(BotUtils.getScript("dev.name.success", event.getSource()));
-        }, failure -> event.replyScript("dev.name.failure"));
+            event.send("dev.name.success");
+        }, failure -> event.send("dev.name.failure"));
     }
 
-    @Command(name = "dev.avatar", aliases = {"avatar", "pp"}, help = "dev.avatar.h")
-    @Param(name = "common.url", help = "dev.avatar.p.url.h")
-    public void avatar(JDACommand event, URL url) throws IOException {
+    @Command(id = "dev.avatar", aliases = {"avatar", "pp"}, help = "dev.avatar.h")
+    @Param(id = "common.url", help = "dev.avatar.p.url.h")
+    public void avatar(@Developer JDACEvent event, URL url) throws IOException {
         try (InputStream stream = url.openStream()) {
             Icon icon = Icon.from(stream);
 
-            client.getSelfUser().getManager().setAvatar(icon).queue(o -> {
-                event.replyScript("dev.avatar.success");
-            }, failure -> event.replyScript("dev.name.failure"));
+            event.getSource().getJDA().getSelfUser().getManager().setAvatar(icon).queue(o -> {
+                event.send("dev.avatar.success");
+            }, failure -> event.send("dev.name.failure"));
         }
     }
 
-    @Command(name = "dev.shutdown", aliases = "shutdown", help = "dev.shutdown.h")
-    public void shutdown(JDACommand event) {
-        client.removeEventListener(client.getRegisteredListeners());
-        client.shutdown();
+    @Command(id = "dev.shutdown", aliases = "shutdown", help = "dev.shutdown.h")
+    public void shutdown(@Developer JDACEvent event) {
+        JDA jda = event.getSource().getJDA();
+        jda.removeEventListener(jda.getRegisteredListeners());
+        jda.shutdown();
 
         ExitCode code = ExitCode.PEACEFUL;
 
@@ -53,15 +54,15 @@ public class DeveloperModule extends JDACHandler {
         System.exit(code.getStatusCode());
     }
 
-    @Command(name = "dev.embed", aliases = "embed", help = "dev.embed.h")
-    @Param(name = "common.url", help = "dev.embed.p.url.h")
-    public EmbedBuilder embedTest(String url) {
+    @Command(id = "dev.embed", aliases = "embed", help = "dev.embed.h")
+    @Param(id = "common.url", help = "dev.embed.p.url.h")
+    public EmbedBuilder embedTest(@Developer String url) {
         return new EmbedBuilder().setImage(url);
     }
 
-    @Command(name = "dev.clean", aliases = "clean")
-    public String clean() {
-        client.getGuilds().forEach((guild) -> {
+    @Command(id = "dev.clean", aliases = "clean")
+    public String clean(@Developer JDACEvent event) {
+        event.getSource().getJDA().getGuilds().forEach((guild) -> {
             GuildData data = GuildData.query(guild);
             List<AssignableRole> roles = data.getSettings().getAssignableRoles();
             int originalSize = roles.size();

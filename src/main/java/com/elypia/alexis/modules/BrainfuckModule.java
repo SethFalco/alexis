@@ -1,29 +1,26 @@
 package com.elypia.alexis.modules;
 
 import com.elypia.commandler.annotations.Module;
-import com.elypia.commandler.annotations.*;
-import com.elypia.commandler.jda.JDAHandler;
-import com.elypia.elypiai.brainfuck.Brainfuck;
 import com.elypia.jdac.alias.JDACHandler;
 
-@Module(name = "brainfuck.title", aliases = {"brainfuck", "bf"}, help = "brainfuck.help")
+@Module(id = "brainfuck.title", aliases = {"brainfuck", "bf"}, help = "brainfuck.help")
 public class BrainfuckModule extends JDACHandler {
 
-    @Default
-    @Command(id = 6, name = "brainfuck.compile.name", aliases = {"compile", "interpret"}, help = "brainfuck.help")
-    @Param(name = "code", help = "brainfuck.param.code.help")
-    public String interpretBrainfuck(String code) {
-        return interpretBrainfuck(code, new byte[0]);
-    }
-
-    @Overload(6)
-    @Param(name = "brainfuck.param.args.name", help = "brainfuck.param.args.help")
-    public String interpretBrainfuck(String code, byte[] args) {
-        try {
-            Brainfuck brainfuck = Brainfuck.compile(code, args);
-            return brainfuck.interpret();
-        } catch (IllegalArgumentException ex) {
-            return ex.getMessage();
-        }
-    }
+//    @Default
+//    @Command(id = "brainfuck.compile.name", aliases = {"compile", "interpret"}, help = "brainfuck.help")
+//    @Param(id = "code", help = "brainfuck.param.code.help")
+//    public String interpretBrainfuck(String code) {
+//        return interpretBrainfuck(code, new byte[0]);
+//    }
+//
+//    @Overload("brainfuck.compile.name")
+//    @Param(id = "brainfuck.param.args.name", help = "brainfuck.param.args.help")
+//    public String interpretBrainfuck(String code, byte[] args) {
+//        try {
+//            Brainfuck brainfuck = Brainfuck.compile(code, args);
+//            return brainfuck.interpret();
+//        } catch (IllegalArgumentException ex) {
+//            return ex.getMessage();
+//        }
+//    }
 }

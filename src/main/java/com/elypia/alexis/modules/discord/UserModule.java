@@ -1,14 +1,13 @@
 package com.elypia.alexis.modules.discord;
 
-import com.elypia.alexis.utils.BotUtils;
+import com.elypia.alexis.utils.*;
 import com.elypia.commandler.annotations.Module;
 import com.elypia.commandler.annotations.*;
-import com.elypia.commandler.jda.*;
-import com.elypia.elypiai.utils.Markdown;
 import com.elypia.jdac.*;
 import com.elypia.jdac.alias.*;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.*;
+import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -29,14 +28,14 @@ public class UserModule extends JDACHandler {
 			builder.setAuthor(member.getEffectiveName());
 			builder.addField("user.info.online_status", member.getOnlineStatus().toString(), true);
 			builder.addField("user.info.status", member.getGame().getName(), true);
-			builder.addField(event.getScript("user.info.joined_guild", Map.of("guild", guild.getName())), member.getJoinDate().format(format), true);
+			builder.addField(scripts.get("user.info.joined_guild", Map.of("guild", guild.getName())), member.getJoinDate().format(format), true);
 
 			Collection<Role> roles = member.getRoles();
 
 			if (!roles.isEmpty()) {
 				StringJoiner joiner = new StringJoiner(", ");
 				member.getRoles().forEach(o -> joiner.add(o.getName()));
-				builder.addField(event.getScript("user.info.roles", Map.of("roles", member.getRoles().size())), joiner.toString(), false);
+				builder.addField(scripts.get("user.info.roles", Map.of("roles", member.getRoles().size())), joiner.toString(), false);
 			}
 		} else {
 			builder.setAuthor(user.getName());
@@ -46,15 +45,15 @@ public class UserModule extends JDACHandler {
 		builder.addField("user.info.joined_discord", user.getCreationTime().format(format), true);
 
 		if (user.isBot())
-			builder.addField("user.info.bot", Markdown.a("common.invite_link", BotUtils.getInviteUrl(user)), false);
+			builder.addField("user.info.bot", Md.a("common.invite_link", BotUtils.getInviteUrl(user)), false);
 
-		builder.setFooter(event.getScript("user.info.id", Map.of("id", user.getId())), null);
+		builder.setFooter(scripts.get("user.info.id", Map.of("id", user.getId())), null);
 
 		return builder;
 	}
 
 	@Overload(value = "User Info", params = {})
 	public void getInfo(JDACEvent event) {
-		getInfo(event, event.getMessage().getAuthor());
+		getInfo(event, ((MessageReceivedEvent)event.getSource()).getMessage().getAuthor());
 	}
 }

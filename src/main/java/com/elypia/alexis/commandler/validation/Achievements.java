@@ -1,4 +1,4 @@
-package com.elypia.alexis.validation;
+package com.elypia.alexis.commandler.validation;
 
 import com.elypia.alexis.entities.UserData;
 import com.elypia.alexis.entities.data.Achievement;
@@ -9,7 +9,7 @@ import javax.validation.*;
 import java.lang.annotation.*;
 import java.util.*;
 
-@Target({ElementType.TYPE, ElementType.METHOD})
+@Target({ElementType.PARAMETER, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = {Achievements.Validator.class})
 @Database

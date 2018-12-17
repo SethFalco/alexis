@@ -156,4 +156,14 @@ public enum Country {
     public String getUnicodeEmote() {
         return UNICODE_EMOTE;
     }
+
+    public static Country get(String value) {
+        for (Country c : values()) {
+            if (c.COUNTRY.equalsIgnoreCase(value) || c.ISO_3166.equalsIgnoreCase(value) ||
+                    c.ISO_CODE.equalsIgnoreCase(value) || c.UNICODE_EMOTE.equalsIgnoreCase(value))
+                return c;
+        }
+
+        return null;
+    }
 }

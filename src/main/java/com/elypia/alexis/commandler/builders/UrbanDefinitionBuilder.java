@@ -1,15 +1,17 @@
 package com.elypia.alexis.commandler.builders;
 
 import com.elypia.alexis.utils.BotUtils;
-import com.elypia.commandler.jda.*;
-import com.elypia.elypiai.urbandictionary.UrbanDefinition;
+import com.elypia.commandler.annotations.Compatible;
+import com.elypia.elypiai.urbandictionary.Definition;
+import com.elypia.jdac.alias.*;
 import net.dv8tion.jda.core.*;
 import net.dv8tion.jda.core.entities.*;
 
-public class UrbanDefinitionBuilder implements IJDABuilder<UrbanDefinition> {
+@Compatible(Definition.class)
+public class UrbanDefinitionBuilder implements IJDACBuilder<Definition> {
 
     @Override
-    public Message buildEmbed(JDACommand event, UrbanDefinition toSend) {
+    public Message buildEmbed(JDACEvent event, Definition toSend) {
         EmbedBuilder builder = BotUtils.newEmbed(event);
 
         builder.setAuthor(toSend.getAuthor());
@@ -34,7 +36,7 @@ public class UrbanDefinitionBuilder implements IJDABuilder<UrbanDefinition> {
     }
 
     @Override
-    public Message build(JDACommand event, UrbanDefinition output) {
+    public Message build(JDACEvent event, Definition output) {
         return null;
     }
 }

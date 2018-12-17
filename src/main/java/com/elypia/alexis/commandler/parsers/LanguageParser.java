@@ -1,11 +1,13 @@
 package com.elypia.alexis.commandler.parsers;
 
 import com.elypia.alexis.utils.*;
+import com.elypia.commandler.annotations.Compatible;
 import com.elypia.commandler.metadata.ParamData;
 import com.elypia.jdac.alias.*;
 
 import java.util.Map;
 
+@Compatible(Language.class)
 public class LanguageParser implements IJDACParser<Language> {
 
     private static final Map<String, Language> OTHER = Map.of(

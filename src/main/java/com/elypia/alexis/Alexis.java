@@ -4,12 +4,11 @@ import com.elypia.alexis.config.BotConfig;
 import com.elypia.alexis.config.embedded.DiscordConfig;
 import com.elypia.alexis.google.youtube.YouTubeHelper;
 import com.elypia.alexis.managers.DatabaseManager;
-import com.elypia.alexis.modules.media.*;
 import com.elypia.commandler.ModulesContext;
 import com.elypia.elyscript.ScriptStore;
 import com.elypia.elyscript.sheets.SheetsLoader;
 import com.elypia.jdac.JDACDispatcher;
-import com.elypia.jdac.alias.JDAC;
+import com.elypia.jdac.alias.*;
 import net.dv8tion.jda.core.*;
 import net.dv8tion.jda.core.entities.Game;
 import org.slf4j.*;
@@ -75,8 +74,11 @@ public class Alexis {
 
 		JDAC jdac = jdacBuilder.build();
 
-		jdac.addInstance(new MusicModule(youtube));
-		jdac.addInstance(new YouTubeModule(youtube));
+		jdac.getParser().addPackage("com.elypia.alexis.commadnelr.parsers");
+		jdac.getBuilder().addPackage("com.elypia.alexis.commandler.builders", IJDACBuilder.class);
+
+//		jdac.addInstance(new MusicModule(youtube));
+//		jdac.addInstance(new YouTubeModule(youtube));
 
 		// JDA
 		DiscordConfig discord = config.getDiscordConfig();

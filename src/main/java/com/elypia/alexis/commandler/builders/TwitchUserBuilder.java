@@ -1,15 +1,17 @@
 package com.elypia.alexis.commandler.builders;
 
 import com.elypia.alexis.utils.BotUtils;
-import com.elypia.commandler.jda.*;
-import com.elypia.elypiai.twitch.TwitchUser;
+import com.elypia.commandler.annotations.Compatible;
+import com.elypia.elypiai.twitch.User;
+import com.elypia.jdac.alias.*;
 import net.dv8tion.jda.core.*;
 import net.dv8tion.jda.core.entities.Message;
 
-public class TwitchUserBuilder implements IJDABuilder<TwitchUser> {
+@Compatible(User.class)
+public class TwitchUserBuilder implements IJDACBuilder<User> {
 
     @Override
-    public Message buildEmbed(JDACommand event, TwitchUser output) {
+    public Message buildEmbed(JDACEvent event, User output) {
         EmbedBuilder builder = BotUtils.newEmbed(event);
 
         builder.setAuthor(output.getDisplayName(), output.getUrl());
@@ -22,7 +24,7 @@ public class TwitchUserBuilder implements IJDABuilder<TwitchUser> {
     }
 
     @Override
-    public Message build(JDACommand event, TwitchUser output) {
+    public Message build(JDACEvent event, User output) {
         return null;
     }
 }

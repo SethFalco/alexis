@@ -63,7 +63,7 @@ public class UrbanDictionaryModule extends JDACHandler {
             builder.setTitle(titleText);
 
             String tagsText = String.join(", ", results.getTags());
-            builder.addField(event.getScript("urban.tags.tags"), tagsText, true);
+            builder.addField(scripts.get("urban.tags.tags"), tagsText, true);
 
             event.send(builder);
         }, failure -> logger.error("HTTP request failed.", failure));

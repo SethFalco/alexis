@@ -8,11 +8,8 @@
     </appender>
 
     <appender name="DISCORD" class="com.elypia.alexis.logging.DiscordAppender">
-        <name>${name}</name>
         <token>${token}</token>
         <id>${id}</id>
-        <guild>${guild}</guild>
-        <bot>true</bot>
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
             <level>WARN</level>
         </filter>
@@ -23,7 +20,9 @@
         <appender-ref ref="DISCORD"/>
     </root>
 
+    <logger name="org.hibernate" level="WARN"/>
     <logger name="org.mongodb" level="WARN"/>
+    <logger name="xyz.morphia" level="WARN"/>
     <logger name="net.dv8tion" level="WARN"/>
     <logger name="com.sedmelluq" level="WARN"/>
 </configuration>

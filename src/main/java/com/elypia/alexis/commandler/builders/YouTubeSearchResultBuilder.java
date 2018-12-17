@@ -2,7 +2,8 @@ package com.elypia.alexis.commandler.builders;
 
 import com.elypia.alexis.google.youtube.YouTubeHelper;
 import com.elypia.alexis.utils.BotUtils;
-import com.elypia.commandler.jda.*;
+import com.elypia.commandler.annotations.Compatible;
+import com.elypia.jdac.alias.*;
 import com.google.api.client.util.DateTime;
 import com.google.api.services.youtube.model.*;
 import net.dv8tion.jda.core.*;
@@ -12,7 +13,8 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class YouTubeSearchResultBuilder implements IJDABuilder<SearchResult> {
+@Compatible(SearchResult.class)
+public class YouTubeSearchResultBuilder implements IJDACBuilder<SearchResult> {
 
     private static final SimpleDateFormat FORMAT = new SimpleDateFormat("dd MMM YYYY");
 
@@ -23,7 +25,7 @@ public class YouTubeSearchResultBuilder implements IJDABuilder<SearchResult> {
     }
 
     @Override
-    public Message buildEmbed(JDACommand event, SearchResult output) {
+    public Message buildEmbed(JDACEvent event, SearchResult output) {
         SearchResultSnippet snippet = output.getSnippet();
         String videoId = output.getId().getVideoId();
 
@@ -49,7 +51,7 @@ public class YouTubeSearchResultBuilder implements IJDABuilder<SearchResult> {
     }
 
     @Override
-    public Message build(JDACommand event, SearchResult output) {
+    public Message build(JDACEvent event, SearchResult output) {
         String videoId = output.getId().getVideoId();
         String url = YouTubeHelper.getVideoUrl(videoId);
         return new MessageBuilder(url).build();

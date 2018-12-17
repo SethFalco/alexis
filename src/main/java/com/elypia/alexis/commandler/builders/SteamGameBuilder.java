@@ -1,17 +1,19 @@
 package com.elypia.alexis.commandler.builders;
 
 import com.elypia.alexis.utils.BotUtils;
-import com.elypia.commandler.jda.*;
+import com.elypia.commandler.annotations.Compatible;
 import com.elypia.elypiai.steam.SteamGame;
+import com.elypia.jdac.alias.*;
 import net.dv8tion.jda.core.*;
 import net.dv8tion.jda.core.entities.Message;
 
 import java.util.StringJoiner;
 
-public class SteamGameBuilder implements IJDABuilder<SteamGame> {
+@Compatible(SteamGame.class)
+public class SteamGameBuilder implements IJDACBuilder<SteamGame> {
 
     @Override
-    public Message buildEmbed(JDACommand event, SteamGame output) {
+    public Message buildEmbed(JDACEvent event, SteamGame output) {
         EmbedBuilder builder = BotUtils.newEmbed(event);
 
         builder.setTitle(output.getName(), output.getUrl());
@@ -28,7 +30,7 @@ public class SteamGameBuilder implements IJDABuilder<SteamGame> {
     }
 
     @Override
-    public Message build(JDACommand event, SteamGame output) {
+    public Message build(JDACEvent event, SteamGame output) {
         StringJoiner joiner = new StringJoiner("\n");
 
         joiner.add("**__" + output.getName() + "__**");
