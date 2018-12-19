@@ -48,7 +48,7 @@ public class ElyAudioPlayer {
 		return true;
 	}
 
-	public void add(String query, boolean insert) {
+	public AudioLoader add(String query, boolean insert) {
 		AudioLoader loader = new AudioLoader();
 		manager.loadItem(query, loader);
 
@@ -60,6 +60,7 @@ public class ElyAudioPlayer {
 			player.playTrack(tracks.remove(0));
 
 		queue.addAll(position, tracks);
+		return loader;
 	}
 
 	public boolean isIdle() {
@@ -70,13 +71,13 @@ public class ElyAudioPlayer {
 		queue.remove(string);
 	}
 
-	public boolean clearPlaylist() {
-		return queue.clear();
-	}
-
-	public void shuffle() {
-		controller.shuffle();
-	}
+//	public boolean clearPlaylist() {
+//		return queue.clear();
+//	}
+//
+//	public void shuffle() {
+//		controller.shuffle();
+//	}
 
 	public JDA getJDA() {
 		return jda;

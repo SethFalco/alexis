@@ -56,9 +56,9 @@ public class Alexis {
 
 		// ElyScript
 		scripts = new SheetsLoader(
-				config.getApplicationName(),
-				config.getScriptsConfig().getId(),
-				config.getScriptsConfig().getRange()
+			config.getApplicationName(),
+			config.getScriptsConfig().getId(),
+			config.getScriptsConfig().getRange()
 		).load();
 
 		// JDAC

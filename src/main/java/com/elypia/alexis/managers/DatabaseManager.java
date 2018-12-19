@@ -2,7 +2,7 @@ package com.elypia.alexis.managers;
 
 import com.elypia.alexis.config.embedded.DatabaseConfig;
 import com.elypia.alexis.entities.impl.DatabaseEntity;
-import com.mongodb.MongoClient;
+import com.mongodb.*;
 import org.slf4j.*;
 import xyz.morphia.*;
 import xyz.morphia.query.Query;
@@ -35,7 +35,16 @@ public class DatabaseManager {
     public DatabaseManager(final DatabaseConfig config) {
         this.config = Objects.requireNonNull(config);
 
-        client = new MongoClient(config.getIp(), config.getPort());
+        client = new MongoClient(
+            new ServerAddress(config.getIp(),
+            config.getPort()),
+            List.of(
+                MongoCredential.createCredential(
+                    config.getUser(),
+                    config.getAuthDatabase(),
+                    config.getPassword().toCharArray()
+            ))
+        );
 
         morphia = new Morphia().mapPackage("com.elypia.alexis.entities");
 

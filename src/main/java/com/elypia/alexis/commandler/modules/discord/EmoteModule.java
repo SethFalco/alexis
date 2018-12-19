@@ -1,9 +1,9 @@
 package com.elypia.alexis.commandler.modules.discord;
 
 import com.elypia.alexis.utils.BotUtils;
+import com.elypia.commandler.annotations.Icon;
 import com.elypia.commandler.annotations.Module;
 import com.elypia.commandler.annotations.*;
-import com.elypia.commandler.doc.annotations.Icon;
 import com.elypia.jdac.alias.*;
 import com.elypia.jdac.validation.Channels;
 import net.dv8tion.jda.core.EmbedBuilder;

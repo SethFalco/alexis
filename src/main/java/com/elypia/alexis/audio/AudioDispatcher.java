@@ -3,7 +3,7 @@ package com.elypia.alexis.audio;
 import com.elypia.alexis.Alexis;
 import com.elypia.alexis.entities.GuildData;
 import com.elypia.alexis.google.youtube.YouTubeHelper;
-import com.elypia.elypiai.utils.Markdown;
+import com.elypia.alexis.utils.Md;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter;
 import com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeAudioSourceManager;
@@ -39,7 +39,7 @@ public class AudioDispatcher extends AudioEventAdapter {
 
 		EmbedBuilder builder = new EmbedBuilder();
 		builder.setTitle("Now Playing");
-		builder.setDescription(Markdown.a(info.author + " - " + info.title, info.uri));
+		builder.setDescription(Md.a(info.author + " - " + info.title, info.uri));
 
 		if (track.getSourceManager() instanceof YoutubeAudioSourceManager) {
 			builder.setThumbnail("");

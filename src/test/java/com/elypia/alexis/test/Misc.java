@@ -3,6 +3,7 @@ package com.elypia.alexis.test;
 import com.elypia.commandler.ModulesContext;
 import com.elypia.commandler.doc.DocBuilder;
 import com.elypia.commandler.doc.entities.*;
+import com.elypia.commandler.export.DocExporter;
 import org.junit.jupiter.api.Test;
 
 import java.awt.*;
@@ -37,6 +38,16 @@ public class Misc {
             .setData(data);
 
         builder.build();
+    }
+
+    @Test
+    public void exportTest() {
+        ModulesContext context = new ModulesContext();
+        context.addPackage("com.elypia.alexis.commandler.modules");
+
+        DocExporter exporter = new DocExporter().setContext(context);
+
+        System.out.println(exporter.toJson());
     }
 }
 

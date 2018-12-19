@@ -2,7 +2,6 @@ package com.elypia.alexis.commandler.modules;
 
 import com.elypia.alexis.Alexis;
 import com.elypia.alexis.config.BotConfig;
-import com.elypia.alexis.config.embedded.Author;
 import com.elypia.alexis.utils.*;
 import com.elypia.commandler.annotations.Module;
 import com.elypia.commandler.annotations.*;
@@ -55,45 +54,32 @@ public class BotModule extends JDACHandler {
 		builder.setTitle(alexis.getName());
 		builder.setDescription(BotUtils.getScript("bot.description", source) + "\n_ _");
 		builder.setThumbnail(alexis.getAvatarUrl());
-
 		BotConfig config = Alexis.config;
-		List<Author> authors = config.getDiscordConfig().getAuthors();
-		StringJoiner joiner = new StringJoiner("\n");
 
-		for (Author author : authors) {
-			long id = author.getId();
-			User user = jda.getUserById(id);
+		source.getJDA().asBot().getApplicationInfo().queue(owner -> {
+			StringJoiner joiner = new StringJoiner("\n");
+			String title = BotUtils.getScript("bot.authors", source, Map.of());
+			builder.addField(title, joiner.toString(), true);
 
-			if (user != null)
-				joiner.add(Md.a(user.getName(), author.getUrl()) + " - " + author.getRole());
-			else
-				logger.warn("The developer for id {} couldn't be found.", id);
-		}
+			joiner = new StringJoiner("\n");
 
-		Map<String, Object> authorParams = new HashMap<>();
-		authorParams.put("authors", authors.size());
+			joiner.add(Md.a(BotUtils.getScript("bot.invite_me", source), BotUtils.getInviteUrl(alexis)));
 
-		String title = BotUtils.getScript("bot.authors", source, authorParams);
-		builder.addField(title, joiner.toString(), true);
+			builder.addField("bot.info", joiner.toString(), true);
 
-		joiner = new StringJoiner("\n");
+			builder.addField("bot.total_guilds", String.valueOf(jda.getGuilds().size()), true);
 
-		joiner.add(Md.a(BotUtils.getScript("bot.invite_me", source), BotUtils.getInviteUrl(alexis)));
+			Collection<User> users = jda.getUsers();
+			long bots = users.stream().filter(User::isBot).count();
+			String userField = String.format("%,d (%,d)", users.size() - bots, bots);
+			builder.addField("bot.total_users", userField, true);
 
-		builder.addField("bot.info", joiner.toString(), true);
-
-		builder.addField("bot.total_guilds", String.valueOf(jda.getGuilds().size()), true);
-
-		Collection<User> users = jda.getUsers();
-		long bots = users.stream().filter(User::isBot).count();
-		String userField = String.format("%,d (%,d)", users.size() - bots, bots);
-		builder.addField("bot.total_users", userField, true);
-
-		Guild guild = jda.getGuildById(config.getDiscordConfig().getSupportGuild());
-		guild.getInvites().queue(invites -> {
-			Optional<Invite> invite = invites.stream().max((one, two) -> one.getUses() > two.getUses() ? 1 : -1);
-			invite.ifPresent(o -> builder.addField("bot.support_guild", Md.a("Elypia", o.getURL()), true));
-			event.send(builder);
+			Guild guild = jda.getGuildById(config.getDiscordConfig().getSupportGuild());
+			guild.getInvites().queue(invites -> {
+				Optional<Invite> invite = invites.stream().max((one, two) -> one.getUses() > two.getUses() ? 1 : -1);
+				invite.ifPresent(o -> builder.addField("bot.support_guild", Md.a("Elypia", o.getURL()), true));
+				event.send(builder);
+			});
 		});
 	}
 

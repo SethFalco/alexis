@@ -61,23 +61,6 @@ public final class BotUtils {
 		return null;
 	}
 
-	public static boolean isDatabaseAlive() {
-		BotConfig config = Alexis.config;
-		boolean databaseEnabled = config.getDebugConfig().isDatabaseEnabled();
-
-		if (!databaseEnabled)
-			return false;
-
-		long dev = config.getDiscordConfig().getAuthors().get(0).getId();
-
-		try {
-			UserData data = UserData.query(dev);
-			return data != null;
-		} catch (NullPointerException ex) {
-			return false;
-		}
-	}
-
 	public static String getInviteUrl(User user) {
 		Objects.requireNonNull(user);
 
@@ -124,7 +107,7 @@ public final class BotUtils {
 
 	private static <T> Map<String, Object> addEventParams(Event event, Map<String, T> p) {
 		Map<String, Object> params = new HashMap<>(p);
-		boolean database = isDatabaseAlive();
+		boolean database = Alexis.getDatabaseManager() != null;
 
 		if (event instanceof MessageReceivedEvent) {
 			Message message = ((MessageReceivedEvent)event).getMessage();

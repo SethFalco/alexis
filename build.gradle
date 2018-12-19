@@ -53,6 +53,7 @@ dependencies {
     implementation files("C:\\Users\\Seth\\Google Drive\\IntelliJ\\Commandler\\core\\build\\libs\\core.jar")
     implementation files("C:\\Users\\Seth\\Google Drive\\IntelliJ\\JDACommandler\\core\\build\\libs\\core.jar")
     implementation files("C:\\Users\\Seth\\Google Drive\\IntelliJ\\Commandler\\doc\\build\\libs\\doc.jar")
+    implementation files("C:\\Users\\Seth\\Google Drive\\IntelliJ\\Commandler\\export\\build\\libs\\export.jar")
 
     ///TEMP
     // Configuration

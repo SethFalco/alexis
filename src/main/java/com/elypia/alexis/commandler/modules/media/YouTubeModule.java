@@ -1,4 +1,4 @@
-package com.elypia.alexis.modules.media;
+package com.elypia.alexis.commandler.modules.media;
 
 import com.elypia.alexis.google.youtube.*;
 import com.elypia.commandler.annotations.Module;

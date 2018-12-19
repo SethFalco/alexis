@@ -8,6 +8,7 @@ import java.util.*;
 
 public class AudioLoader implements AudioLoadResultHandler {
 
+    private AudioPlaylist playlist;
     private List<AudioTrack> tracks;
     private boolean noResults;
     private FriendlyException ex;
@@ -23,6 +24,8 @@ public class AudioLoader implements AudioLoadResultHandler {
 
     @Override
     public void playlistLoaded(AudioPlaylist playlist) {
+        this.playlist = playlist;
+
         AudioTrack track = playlist.getSelectedTrack();
         tracks.addAll(playlist.getTracks());
 
@@ -38,6 +41,10 @@ public class AudioLoader implements AudioLoadResultHandler {
     @Override
     public void loadFailed(FriendlyException exception) {
         ex = exception;
+    }
+
+    public AudioPlaylist getPlaylist() {
+        return playlist;
     }
 
     public List<AudioTrack> getTracks() {

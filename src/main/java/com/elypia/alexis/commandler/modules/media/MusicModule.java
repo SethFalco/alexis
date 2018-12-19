@@ -1,15 +1,12 @@
-package com.elypia.alexis.modules.media;
+package com.elypia.alexis.commandler.modules.media;
 
 import com.elypia.alexis.audio.*;
 import com.elypia.alexis.entities.GuildData;
 import com.elypia.alexis.entities.embedded.MusicSettings;
 import com.elypia.alexis.google.youtube.YouTubeHelper;
+import com.elypia.alexis.utils.Md;
 import com.elypia.commandler.annotations.Module;
 import com.elypia.commandler.annotations.*;
-import com.elypia.commandler.jda.*;
-import com.elypia.commandler.jda.annotations.validation.command.*;
-import com.elypia.elypiai.utils.*;
-import com.elypia.elypiai.utils.math.MathUtils;
 import com.elypia.jdac.alias.*;
 import com.elypia.jdac.validation.*;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
@@ -24,11 +21,14 @@ import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
-@Channels(ChannelType.TEXT)
 @Module(id = "Music Player", group = "Media", aliases = {"music", "m"}, help = "music.help")
 public class MusicModule extends JDACHandler {
 
 	private static final int LINE_MAX_LENGTH = 55;
+
+	private static final String[] NUMBERS = {
+		"1⃣", "2⃣","3⃣", "4⃣", "5⃣", "6⃣", "7⃣", "8⃣", "9⃣"
+	};
 
 	/**
 	 * This allows us to query YouTube for information on videos,
@@ -64,7 +64,7 @@ public class MusicModule extends JDACHandler {
 	}
 
 	@Command(id = "Play", aliases = {"play", "resume"}, help = "music.play.help")
-	public void play(JDACEvent event) {
+	public void play(@Channels(ChannelType.TEXT) JDACEvent event) {
 		ElyAudioPlayer player = getAudioPlayer(event);
 		Guild guild = event.getSource().getGuild();
 		boolean inVoice = guild.getSelfMember().getVoiceState().inVoiceChannel();
@@ -83,7 +83,7 @@ public class MusicModule extends JDACHandler {
 	}
 
 	@Command(id = "music.pause.name", aliases = {"pause", "stop"}, help = "music.pause.help")
-	public String pause(JDACEvent event) {
+	public String pause(@Channels(ChannelType.TEXT) JDACEvent event) {
 		ElyAudioPlayer player = getAudioPlayer(event);
 		Guild guild = event.getSource().getGuild();
 		boolean inVoice = guild.getSelfMember().getVoiceState().inVoiceChannel();
@@ -94,16 +94,15 @@ public class MusicModule extends JDACHandler {
 		if (!player.pause())
 			return "music.pause.not_playing";
 
-		String prefix = confiler.getPrefixes(event.getSource())[0];
 		return "music.pause.paused";
 	}
 
 	@Command(id = "music.queue.title", aliases = {"queue", "playing", "np"}, help = "music.queue.help")
-	public Object queue(JDACEvent event) throws IOException {
+	public Object queue(@Channels(ChannelType.TEXT) JDACEvent event) throws IOException {
 		return queue(event, 0);
 	}
 
-	public Object queue(JDACEvent event, int offset) throws IOException {
+	public Object queue(@Channels(ChannelType.TEXT) JDACEvent event, int offset) throws IOException {
 		ElyAudioPlayer player = getAudioPlayer(event);
 		AudioTrack playing = player.getPlayingTrack();
 		List<AudioTrack> queue = player.getQueue();
@@ -136,7 +135,7 @@ public class MusicModule extends JDACHandler {
 
 				AudioTrack track = queue.get(position);
 				AudioTrackInfo info = track.getInfo();
-				String title = String.format(":%s: %s", MathUtils.asWritten(i + 1), formTitle(info.author, info.title, info.uri));
+				String title = String.format("%s %s", NUMBERS[i], formTitle(info.author, info.title, info.uri));
 
 				if (joiner.length() + title.length() <= MessageEmbed.VALUE_MAX_LENGTH)
 					joiner.add(title);
@@ -211,7 +210,7 @@ public class MusicModule extends JDACHandler {
 	@Command(id = "music.add.name", aliases = {"add", "append"}, help = "music.add.help")
 	@Param(id = "common.query", help = "music.param.query.help")
 //	@Emoji(emotes = "\uD83D\uDD01", help = "music.emote.repeat.help")
-	public Object addTrack(JDACEvent event, String query) throws IOException {
+	public Object addTrack(@Channels(ChannelType.TEXT) JDACEvent event, String query) throws IOException {
 		if (!joinChannel(event))
 			return null;
 
@@ -231,7 +230,7 @@ public class MusicModule extends JDACHandler {
 
 	@Command(id = "music.insert.name", aliases = {"insert", "prepend"}, help = "music.insert.help")
 	@Param(id = "query", help = "music.param.query.help")
-	public Object insertTrack(JDACEvent event, String query) throws IOException {
+	public Object insertTrack(@Channels(ChannelType.TEXT) JDACEvent event, String query) throws IOException {
 		if (!joinChannel(event))
 			return null;
 
@@ -304,7 +303,7 @@ public class MusicModule extends JDACHandler {
 	@Command(id = "Sync Channel Name with Track", aliases = {"sync", "rename"}, help = "Should Alexis append the currently playing track to the current voice channel's name?")
     @Param(id = "toggle", help = "True or false, should this be enabled or not?")
 	public String channelName(
-		@Permissions(Permission.MANAGE_CHANNEL) @Elevated JDACEvent event,
+		@Channels(ChannelType.TEXT) @Permissions(Permission.MANAGE_CHANNEL) @Elevated JDACEvent event,
 		boolean enable
 	) {
         Guild guild = event.getSource().getGuild();
@@ -343,35 +342,23 @@ public class MusicModule extends JDACHandler {
 	 */
 	private Object handleSongAdded(JDACEvent event, String query, boolean insert) throws IOException {
 		ElyAudioPlayer player = getAudioPlayer(event);
-		Tuple<AudioPlaylist, List<AudioTrack>> tuple = player.add(query, insert);
+		AudioLoader loader = player.add(query, insert);
+		List<AudioTrack> tracks = loader.getTracks();
+		AudioPlaylist playlist = loader.getPlaylist();
 
-		if (tuple == null)
+		if (tracks.isEmpty())
 			return "Sorry, I couldn't find any results with your input.";
 
-		event.deleteMessage();
-
 		String method = insert ? "Inserted" : "Added";
-		AudioPlaylist playlist = tuple.itemOne();
-		List<AudioTrack> tracks = tuple.itemTwo();
-		AudioTrack single = null;
-
-		if (playlist != null && playlist.getSelectedTrack() != null)
-			single = playlist.getSelectedTrack();
-
-		else if (tracks.size() == 1)
-			single = tracks.get(0);
-
 		EmbedBuilder builder = new EmbedBuilder();
 
-		if (single != null) {
+		if (playlist != null) {
+			AudioTrack single = tracks.get(0);
 			AudioTrackInfo info = single.getInfo();
 
 			builder.setTitle("Song " + method);
-			builder.setDescription(event.getMessage().getAuthor().getAsMention() + " has " + method.toLowerCase() + " the song ");
+			builder.setDescription(event.asMessageRecieved().getMessage().getAuthor().getAsMention() + " has " + method.toLowerCase() + " the song ");
 			builder.appendDescription(formTitle(info.author, info.title, info.uri, false));
-
-			if (playlist != null)
-				builder.appendDescription(" from the playlist " + playlist.getName());
 
 			builder.appendDescription(".");
 			builder.setThumbnail(youtube.getChannelThumbnail(single.getIdentifier(), true));
@@ -383,6 +370,7 @@ public class MusicModule extends JDACHandler {
 			builder.setFooter("The queue now has " + player.getQueue().size() + " songs.", null);
 		}
 
+		event.delete();
 		return builder;
 	}
 
@@ -399,7 +387,7 @@ public class MusicModule extends JDACHandler {
 	 * @return If to continue processing this command.
 	 */
 	private boolean joinChannel(JDACEvent event) {
-		Message message = event.getMessage();
+		Message message = event.asMessageRecieved().getMessage();
 		Member member = message.getMember();
 		VoiceChannel memberChannel = member.getVoiceState().getChannel();
 
@@ -476,7 +464,7 @@ public class MusicModule extends JDACHandler {
 		}
 
 		result = result.replace("[", "{").replace("]", "}");
-		result = Markdown.a(result, url);
+		result = Md.a(result, url);
 		return result;
 	}
 
