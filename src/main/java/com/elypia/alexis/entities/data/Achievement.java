@@ -2,21 +2,19 @@ package com.elypia.alexis.entities.data;
 
 public enum Achievement {
 
-    UNKNOWN("Unknown", true);
+    UNKNOWN(null);
 
-    private final String NAME;
-    private final boolean HIDDEN;
+    /**
+     * Return the SQL query that can check if the user
+     * has met the requirements for this achievment.
+     */
+    private final String QUERY;
 
-    Achievement(String name, boolean hidden) {
-        NAME = name;
-        HIDDEN = hidden;
+    Achievement(String query) {
+        QUERY = query;
     }
 
-    public String getName() {
-        return NAME;
-    }
-
-    public boolean isHidden() {
-        return HIDDEN;
+    public String getQuery() {
+        return QUERY;
     }
 }
