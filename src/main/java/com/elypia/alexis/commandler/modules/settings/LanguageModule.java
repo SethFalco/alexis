@@ -2,7 +2,7 @@ package com.elypia.alexis.commandler.modules.settings;
 
 import com.elypia.alexis.commandler.validation.Supported;
 import com.elypia.alexis.entities.MessageChannelData;
-import com.elypia.alexis.utils.*;
+import com.elypia.alexis.utils.Language;
 import com.elypia.commandler.annotations.Module;
 import com.elypia.commandler.annotations.*;
 import com.elypia.jdac.alias.*;
@@ -26,7 +26,7 @@ public class LanguageModule extends JDACHandler {
             "private" , false
         );
 
-        return BotUtils.getScript("global.lang.changed", event.getSource(), params);
+        return scripts.get(event.getSource(), "global.lang.changed", params);
     }
 
     @Command(id = "lang.local.title", aliases = "local", help = "lang.local.help")

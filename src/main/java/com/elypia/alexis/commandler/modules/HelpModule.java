@@ -1,6 +1,5 @@
 package com.elypia.alexis.commandler.modules;
 
-import com.elypia.alexis.utils.BotUtils;
 import com.elypia.commandler.ModulesContext;
 import com.elypia.commandler.annotations.Module;
 import com.elypia.commandler.annotations.*;
@@ -99,7 +98,7 @@ public class HelpModule extends JDACHandler {
                 joiner.add("`" + alias + "`");
 
             Map<String, Object> aliasesMap = Map.of("aliases", aliases.length);
-            help = "**" + BotUtils.getScript("help.aliases", source, aliasesMap) + ": **" + joiner.toString() + "\n" + help;
+            help = "**" + scripts.get(source, "help.aliases", aliasesMap) + ": **" + joiner.toString() + "\n" + help;
 
             if (it.hasNext())
                 help += "\n_ _";

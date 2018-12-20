@@ -2,7 +2,6 @@ package com.elypia.alexis.commandler.modules.settings;
 
 import com.elypia.alexis.entities.GuildData;
 import com.elypia.alexis.entities.embedded.MessageSettings;
-import com.elypia.alexis.utils.BotUtils;
 import com.elypia.commandler.annotations.Module;
 import com.elypia.commandler.annotations.*;
 import com.elypia.jdac.alias.*;
@@ -39,8 +38,8 @@ public class LevelModule extends JDACHandler {
         String message = settings.getMessage();
 
         if (message == null || message.isEmpty())
-            return BotUtils.getScript("level.no_message", source);
+            return scripts.get(source, "level.no_message");
 
-        return BotUtils.getScript(message, source);
+        return scripts.get(source, message);
     }
 }

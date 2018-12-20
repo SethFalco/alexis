@@ -70,8 +70,10 @@ dependencies {
     // Elypiai
     implementation "com.elypia.elypiai:amazon-product-api:${elypiaiVersion}"
     implementation "com.elypia.elypiai:cleverbot:${elypiaiVersion}"
-    implementation "com.elypia.elypiai:nanowrimo:${elypiaiVersion}"
-    implementation "com.elypia.elypiai:osu:${elypiaiVersion}"
+//    implementation "com.elypia.elypiai:nanowrimo:${elypiaiVersion}"
+    implementation files("C:\\Users\\Seth\\Google Drive\\IntelliJ\\Elypiai\\nanowrimo\\build\\libs\\nanowrimo.jar")
+//    implementation "com.elypia.elypiai:osu:${elypiaiVersion}"
+    implementation files("C:\\Users\\Seth\\Google Drive\\IntelliJ\\Elypiai\\osu\\build\\libs\\osu.jar")
     implementation "com.elypia.elypiai:runescape:${elypiaiVersion}"
     implementation "com.elypia.elypiai:steam:${elypiaiVersion}"
     implementation "com.elypia.elypiai:twitch:${elypiaiVersion}"

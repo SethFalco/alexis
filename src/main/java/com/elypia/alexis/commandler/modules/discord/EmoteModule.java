@@ -27,7 +27,7 @@ public class EmoteModule extends JDACHandler {
         int count = emotes.size();
 
         if (count == 0)
-            return BotUtils.getScript("emote.no_emotes", event.getSource());
+            return scripts.get(event.getSource(), "emote.no_emotes");
 
         int length = (int)(Math.sqrt(count) + 1) * 2;
 

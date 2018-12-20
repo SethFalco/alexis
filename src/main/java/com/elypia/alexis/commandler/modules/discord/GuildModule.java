@@ -32,12 +32,12 @@ public class GuildModule extends JDACHandler {
 
         builder.setThumbnail(guild.getIconUrl());
         builder.setTitle(guild.getName());
-        builder.addField(BotUtils.getScript("guild.owner", source), guild.getOwner().getEffectiveName(), true);
+        builder.addField(scripts.get(source, "guild.owner"), guild.getOwner().getEffectiveName(), true);
 
         Collection<Member> members = guild.getMembers();
         long bots = members.stream().map(Member::getUser).filter(User::isBot).count();
         String memberField = String.format("%,d (%,d)", members.size() - bots, bots);
-        builder.addField(BotUtils.getScript("guild.users", source), memberField, true);
+        builder.addField(scripts.get(source, "guild.users"), memberField, true);
 
         return builder;
     }

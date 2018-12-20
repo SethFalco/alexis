@@ -12,15 +12,12 @@ import java.util.StringJoiner;
 @Compatible(Player.class)
 public class OsuPlayerBuilder implements IJDACBuilder<Player> {
 
-    private static final String INT_FORMAT = "%,d";
-    private static final String DEC_FORMAT = "%.2f";
-    private static final String PERCENT_FORMAT = "%02.2f%%";
-
     @Override
     public Message buildEmbed(JDACEvent event, Player output) {
         EmbedBuilder builder = BotUtils.newEmbed(event);
 
-        builder.setThumbnail(output.getAvatarUrl());
+        String avatar = output.getAvatarUrl(true);
+        builder.setThumbnail(avatar);
 
         String playerCountry = output.getCountry();
         Country country = Country.get(playerCountry);
@@ -33,7 +30,7 @@ public class OsuPlayerBuilder implements IJDACBuilder<Player> {
         builder.addField("Performance Points", decf(output.getPp()), true);
         builder.addField("Rank (Country)", intf(output.getRank()) + " (" + intf(output.getCountryRank()) + ")", true);
         builder.addField("Accuracy", perf(output.getAccuracy()), true);
-        builder.addField("Play Count", intf(output.getPlayCount()) + "\n_ _", true);
+        builder.addField("Play Count", intf(output.getPlayCount()), true);
 
         if (!output.getEvents().isEmpty()) {
             OsuEvent osuEvent = output.getEvents().get(0);
@@ -51,7 +48,7 @@ public class OsuPlayerBuilder implements IJDACBuilder<Player> {
         Country country = Country.get(playerCountry);
         String cPrint = (country != null) ? country.getUnicodeEmote() : playerCountry;
 
-        joiner.add(Md.bu(output.getUsername()) + cPrint);
+        joiner.add(Md.bu(output.getUsername()) + " " + cPrint);
         joiner.add("");
         joiner.add(Md.b("Level: ") + (int)output.getLevel());
         joiner.add(Md.b("Ranked Score: ") + intf(output.getRankedScore()));
@@ -67,14 +64,14 @@ public class OsuPlayerBuilder implements IJDACBuilder<Player> {
     }
 
     private String intf(long i) {
-        return String.format(INT_FORMAT, i);
+        return String.format("%,d", i);
     }
 
     private String decf(double d) {
-        return String.format(DEC_FORMAT, d);
+        return String.format("%,.2f", d);
     }
 
     private String perf(double d) {
-        return String.format(PERCENT_FORMAT, d);
+        return String.format("%02.2f%%", d);
     }
 }

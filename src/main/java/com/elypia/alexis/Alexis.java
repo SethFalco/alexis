@@ -5,8 +5,6 @@ import com.elypia.alexis.config.embedded.DiscordConfig;
 import com.elypia.alexis.google.youtube.YouTubeHelper;
 import com.elypia.alexis.managers.DatabaseManager;
 import com.elypia.commandler.ModulesContext;
-import com.elypia.elyscript.ScriptStore;
-import com.elypia.elyscript.sheets.SheetsLoader;
 import com.elypia.jdac.JDACDispatcher;
 import com.elypia.jdac.alias.*;
 import net.dv8tion.jda.core.*;
@@ -42,12 +40,6 @@ public class Alexis {
 	 */
 	public static JDAC commandler;
 
-	/**
-	 * The ElyScript store to validate ElyScript and store scripts in order to
-	 * query as required.
-	 */
-	public static ScriptStore scripts;
-
 	private static DatabaseManager dbManager;
 
 	public static void main(String[] args) throws IOException, GeneralSecurityException {
@@ -55,11 +47,11 @@ public class Alexis {
 		config = BotConfig.load("./alexis.toml");
 
 		// ElyScript
-		scripts = new SheetsLoader(
+		ElyScripts scripts = new ElyScripts(
 			config.getApplicationName(),
 			config.getScriptsConfig().getId(),
 			config.getScriptsConfig().getRange()
-		).load();
+		);
 
 		// JDAC
 		YouTubeHelper youtube = new YouTubeHelper("Alexis");
@@ -71,6 +63,7 @@ public class Alexis {
 		jdacBuilder.setPrefix(">");
 		jdacBuilder.setContext(context);
 		jdacBuilder.setWebsite("https://alexis.elypia.com/");
+		jdacBuilder.setEngine(scripts);
 
 		JDAC jdac = jdacBuilder.build();
 

@@ -2,7 +2,6 @@ package com.elypia.alexis.entities;
 
 import com.elypia.alexis.Alexis;
 import com.elypia.alexis.entities.data.Achievement;
-import com.elypia.alexis.entities.embedded.NanowrimoLink;
 import com.elypia.alexis.entities.impl.*;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import org.bson.types.ObjectId;
@@ -28,9 +27,6 @@ public class UserData extends Experienceable implements DatabaseEntity {
 
     @Property("achivements")
     private Set<Achievement> achievements;
-
-    @Embedded("nanowrimo")
-    private NanowrimoLink nanoLink;
 
     @Property("last_message")
     private Date lastMessage;
@@ -111,17 +107,6 @@ public class UserData extends Experienceable implements DatabaseEntity {
 
     public void setAchievements(Set<Achievement> achievments) {
         this.achievements = achievments;
-    }
-
-    public NanowrimoLink getNanoLink() {
-        if (nanoLink == null)
-            nanoLink = new NanowrimoLink();
-
-        return nanoLink;
-    }
-
-    public void setNanoLink(NanowrimoLink nanoLink) {
-        this.nanoLink = nanoLink;
     }
 
     public Date getLastMessage() {

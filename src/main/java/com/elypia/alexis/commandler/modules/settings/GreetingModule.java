@@ -3,7 +3,6 @@ package com.elypia.alexis.commandler.modules.settings;
 import com.elypia.alexis.commandler.validation.Database;
 import com.elypia.alexis.entities.GuildData;
 import com.elypia.alexis.entities.embedded.*;
-import com.elypia.alexis.utils.BotUtils;
 import com.elypia.commandler.annotations.Module;
 import com.elypia.commandler.annotations.*;
 import com.elypia.commandler.validation.Option;
@@ -58,7 +57,7 @@ public class GreetingModule extends JDACHandler {
             "greeting", greeting
         );
 
-        return BotUtils.getScript("greeting.message.response", event.getSource(), params);
+        return scripts.get(event.getSource(), "greeting.message.response", params);
     }
 
     @Command(id = "greeting.channel", aliases = "channel", help = "greeting.channel.h")
@@ -81,6 +80,6 @@ public class GreetingModule extends JDACHandler {
 
         var params = Map.of("mention", channel.getAsMention());
 
-        return BotUtils.getScript("greeting.channel.response", event.getSource(), params);
+        return scripts.get(event.getSource(), "greeting.channel.response", params);
     }
 }

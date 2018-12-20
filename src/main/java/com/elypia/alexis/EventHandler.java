@@ -110,7 +110,7 @@ public class EventHandler extends ListenerAdapter {
 			JDA jda = event.getJDA();
 			TextChannel channel = jda.getTextChannelById(settings.getChannel());
 			String message = settings.getMessage();
-			message = BotUtils.buildScript(message, event);
+//			message = BotUtils.get(event, message, event);
 
 			channel.sendMessage(message).queue();
 		}
@@ -201,7 +201,7 @@ public class EventHandler extends ListenerAdapter {
 
 						if (skillLevel != newSkillLevel && skill.isNotify()) {
 							var params = Map.of("skill", skill.getName(), "level", newSkillLevel);
-							event.getChannel().sendMessage(BotUtils.getScript("skill.level_up", event, params)).queue();
+//							event.getChannel().sendMessage(BotUtils.get("skill.level_up", event, params)).queue();
 						}
 
 						return;

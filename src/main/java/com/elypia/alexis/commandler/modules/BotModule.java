@@ -52,18 +52,18 @@ public class BotModule extends JDACHandler {
 		User alexis = jda.getSelfUser();
 
 		builder.setTitle(alexis.getName());
-		builder.setDescription(BotUtils.getScript("bot.description", source) + "\n_ _");
+		builder.setDescription(scripts.get(source, "bot.description") + "\n_ _");
 		builder.setThumbnail(alexis.getAvatarUrl());
 		BotConfig config = Alexis.config;
 
 		source.getJDA().asBot().getApplicationInfo().queue(owner -> {
 			StringJoiner joiner = new StringJoiner("\n");
-			String title = BotUtils.getScript("bot.authors", source, Map.of());
+			String title = scripts.get(source, "bot.authors");
 			builder.addField(title, joiner.toString(), true);
 
 			joiner = new StringJoiner("\n");
 
-			joiner.add(Md.a(BotUtils.getScript("bot.invite_me", source), BotUtils.getInviteUrl(alexis)));
+			joiner.add(Md.a(scripts.get(source, "bot.invite_me"), BotUtils.getInviteUrl(alexis)));
 
 			builder.addField("bot.info", joiner.toString(), true);
 
