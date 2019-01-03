@@ -31,6 +31,7 @@ public class BotModule extends JDACHandler {
 	 */
 	private static final OffsetDateTime BOT_TIME = OffsetDateTime.of(2016, 7, 19, 1, 52, 0, 0, ZoneOffset.ofHours(0));
 
+	@Example(command = ">ping", response = "pong!")
 	@Static
 	@Command(id = "bot.ping.name", aliases = "ping", help = "bot.ping.help")
 	public String ping(JDACEvent event) {

@@ -1,13 +1,12 @@
 package com.elypia.alexis.entities;
 
 import com.elypia.alexis.Alexis;
-import com.elypia.alexis.entities.data.Achievement;
 import com.elypia.alexis.entities.impl.*;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import org.bson.types.ObjectId;
 import xyz.morphia.annotations.*;
 
-import java.util.*;
+import java.util.Date;
 
 /**
  * This is the data on the <strong>global</strong> instance of a user
@@ -24,9 +23,6 @@ public class UserData extends Experienceable implements DatabaseEntity {
      */
     @Property("user_id")
     private long userId;
-
-    @Property("achivements")
-    private Set<Achievement> achievements;
 
     @Property("last_message")
     private Date lastMessage;
@@ -50,14 +46,6 @@ public class UserData extends Experienceable implements DatabaseEntity {
 
     public static <T> UserData query(String field, T value) {
         return Alexis.getDatabaseManager().query(UserData.class, field, value);
-    }
-
-    public void grantAchievement(Achievement achievement) {
-        achievements.add(achievement);
-    }
-
-    public void revokeAchievement(Achievement achievement) {
-        achievements.remove(achievement);
     }
 
     public boolean isEligibleForXp(MessageReceivedEvent event) {
@@ -99,14 +87,6 @@ public class UserData extends Experienceable implements DatabaseEntity {
 
     public void setUserId(long userId) {
         this.userId = userId;
-    }
-
-    public Set<Achievement> getAchievements() {
-        return achievements;
-    }
-
-    public void setAchievements(Set<Achievement> achievments) {
-        this.achievements = achievments;
     }
 
     public Date getLastMessage() {

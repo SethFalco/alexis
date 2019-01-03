@@ -27,22 +27,24 @@ public class ElyScripts implements IScripts<GenericMessageEvent> {
 
     @Override
     public <T> String get(GenericMessageEvent source, String script, Map<String, T> params) {
+        Objects.requireNonNull(source);
+
         Map<String, Object> scriptParams = new HashMap<>(params);
         boolean database = Alexis.getDatabaseManager() != null;
 
-        if (source instanceof MessageReceivedEvent) {
+        User user = source.getChannelType().isGuild() ? ((MessageReceivedEvent)source).getAuthor() : source.getPrivateChannel().getUser();
+        scriptParams.put("user.name", user.getName());
+        scriptParams.put("user.mention", user.getAsMention());
+        scriptParams.put("user.type", user.isBot() ? "bot" : "user");
+        scriptParams.put("user.id", user.getId());
+        scriptParams.put("user.avatar", user.getEffectiveAvatarUrl());
+        scriptParams.put("user.discriminator", user.getDiscriminator());
+
+        if (source.getChannelType().isGuild()) {
             MessageReceivedEvent mSource = (MessageReceivedEvent)source;
             Message message = mSource.getMessage();
             scriptParams.put("message.content", message.getContentRaw());
             scriptParams.put("message.id", message.getId());
-
-            User user = mSource.getAuthor();
-            scriptParams.put("user.name", user.getName());
-            scriptParams.put("user.mention", user.getAsMention());
-            scriptParams.put("user.type", user.isBot() ? "bot" : "user");
-            scriptParams.put("user.id", user.getId());
-            scriptParams.put("user.avatar", user.getEffectiveAvatarUrl());
-            scriptParams.put("user.discriminator", user.getDiscriminator());
 
             Member member = mSource.getMember();
             scriptParams.put("member.nickname", member.getEffectiveName());
@@ -79,6 +81,17 @@ public class ElyScripts implements IScripts<GenericMessageEvent> {
         if (params.containsKey("guild.prefix"))
             scriptParams.put("prefix", params.get("guild.prefix"));
 
-        return scripts.get(new String[] { script }, scriptParams);
+        return scripts.get(new String[] { script, getLanguage(source) }, scriptParams);
+    }
+
+    @Override
+    public String getLanguage(GenericMessageEvent source) {
+        MessageChannelData data = MessageChannelData.query(source.getChannel().getIdLong());
+        return data.getLanguage().toLowerCase();
+    }
+
+    @Override
+    public String[] getSupportedLanguages() {
+        return new String[0];
     }
 }

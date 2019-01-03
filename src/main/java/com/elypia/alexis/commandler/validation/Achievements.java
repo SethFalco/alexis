@@ -1,13 +1,10 @@
 package com.elypia.alexis.commandler.validation;
 
-import com.elypia.alexis.entities.UserData;
 import com.elypia.alexis.entities.data.Achievement;
 import com.elypia.jdac.alias.JDACEvent;
-import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
 import javax.validation.*;
 import java.lang.annotation.*;
-import java.util.*;
 
 @Target({ElementType.PARAMETER, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
@@ -38,12 +35,13 @@ public @interface Achievements {
 
         @Override
         public boolean isValid(JDACEvent value, ConstraintValidatorContext context) {
-            MessageReceivedEvent source = (MessageReceivedEvent)value.getSource();
-            long id = source.getAuthor().getIdLong();
-            UserData data = UserData.query(id);
-
-            Set<Achievement> owned = data.getAchievements();
-            return achieved == owned.containsAll(Arrays.asList(achievements));
+            return true;
+//            MessageReceivedEvent source = (MessageReceivedEvent)value.getSource();
+//            long id = source.getAuthor().getIdLong();
+//            UserData data = UserData.query(id);
+//
+//            Set<Achievement> owned = data.getAchievements();
+//            return achieved == owned.containsAll(Arrays.asList(achievements));
         }
     }
 }

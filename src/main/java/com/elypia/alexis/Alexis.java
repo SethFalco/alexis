@@ -1,5 +1,6 @@
 package com.elypia.alexis;
 
+import com.elypia.alexis.commandler.modules.media.*;
 import com.elypia.alexis.config.BotConfig;
 import com.elypia.alexis.config.embedded.DiscordConfig;
 import com.elypia.alexis.google.youtube.YouTubeHelper;
@@ -70,8 +71,8 @@ public class Alexis {
 		jdac.getParser().addPackage("com.elypia.alexis.commadnelr.parsers");
 		jdac.getBuilder().addPackage("com.elypia.alexis.commandler.builders", IJDACBuilder.class);
 
-//		jdac.addInstance(new MusicModule(youtube));
-//		jdac.addInstance(new YouTubeModule(youtube));
+		jdac.addInstance(new MusicModule(youtube));
+		jdac.addInstance(new YouTubeModule(youtube));
 
 		// JDA
 		DiscordConfig discord = config.getDiscordConfig();
