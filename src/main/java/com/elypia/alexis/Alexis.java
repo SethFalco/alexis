@@ -1,15 +1,16 @@
 package com.elypia.alexis;
 
-import com.elypia.alexis.commandler.modules.media.*;
 import com.elypia.alexis.config.BotConfig;
 import com.elypia.alexis.config.embedded.DiscordConfig;
+import com.elypia.alexis.entities.AlexisError;
 import com.elypia.alexis.google.youtube.YouTubeHelper;
 import com.elypia.alexis.managers.DatabaseManager;
-import com.elypia.commandler.ModulesContext;
+import com.elypia.commandler.*;
 import com.elypia.jdac.JDACDispatcher;
 import com.elypia.jdac.alias.*;
 import net.dv8tion.jda.core.*;
 import net.dv8tion.jda.core.entities.Game;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.*;
 
 import java.io.IOException;
@@ -36,11 +37,6 @@ public class Alexis {
 	 */
 	public static JDA jda;
 
-	/**
-	 * The Commandler instance used to manage most of the command handling.
-	 */
-	public static JDAC commandler;
-
 	private static DatabaseManager dbManager;
 
 	public static void main(String[] args) throws IOException, GeneralSecurityException {
@@ -59,20 +55,29 @@ public class Alexis {
 
 		ModulesContext context = new ModulesContext();
 		context.addPackage("com.elypia.alexis.commandler.modules");
+		context.addModules(HelpModule.class);
 
 		JDAC.Builder jdacBuilder = new JDAC.Builder();
 		jdacBuilder.setPrefix(">");
 		jdacBuilder.setContext(context);
 		jdacBuilder.setWebsite("https://alexis.elypia.com/");
 		jdacBuilder.setEngine(scripts);
+		jdacBuilder.setMisuseHandler(new AlexisMisuseHandler());
 
 		JDAC jdac = jdacBuilder.build();
 
 		jdac.getParser().addPackage("com.elypia.alexis.commadnelr.parsers");
 		jdac.getBuilder().addPackage("com.elypia.alexis.commandler.builders", IJDACBuilder.class);
 
-		jdac.addInstance(new MusicModule(youtube));
-		jdac.addInstance(new YouTubeModule(youtube));
+//		jdac.addInstance(new MusicModule(youtube, jdac));
+//		jdac.addInstance(new YouTubeModule(youtube, jdac));
+
+		jdac.getTestRunner().addPostAction((report) -> {
+			Exception ex = report.getException();
+
+			if (ex != null)
+				new AlexisError(ExceptionUtils.getStackTrace(ex)).commit();
+		});
 
 		// JDA
 		DiscordConfig discord = config.getDiscordConfig();

@@ -2,18 +2,34 @@ package com.elypia.alexis.commandler.modules.settings;
 
 import com.elypia.alexis.entities.GuildData;
 import com.elypia.alexis.entities.embedded.SkillEntry;
+import com.elypia.commandler.Commandler;
 import com.elypia.commandler.annotations.Module;
 import com.elypia.commandler.annotations.*;
+import com.elypia.commandler.metadata.ModuleData;
 import com.elypia.jdac.*;
 import com.elypia.jdac.alias.*;
 import com.elypia.jdac.validation.Channels;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.*;
+import net.dv8tion.jda.core.events.message.GenericMessageEvent;
 
 import java.util.*;
 
 @Module(id = "Skills", group = "Settings", aliases = {"skill", "skills"}, help = "skills.h")
 public class SkillsModule extends JDACHandler {
+
+    /**
+     * Initialise the module, this will assign the values
+     * in the module and create a {@link ModuleData} which is
+     * what {@link Commandler} uses in runtime to identify modules,
+     * commands or obtain any static data.
+     *
+     * @param commandler Our parent Commandler class.
+     * @return Returns if the {@link #test()} for this module passed.
+     */
+    public SkillsModule(Commandler<GenericMessageEvent, Message> commandler) {
+        super(commandler);
+    }
 
     @Command(id = "skills.list", aliases = {"list", "show"}, help = "skills.list.h")
     public Object list(@Channels(ChannelType.TEXT) JDACEvent event) {

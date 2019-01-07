@@ -1,10 +1,14 @@
 package com.elypia.alexis.commandler.modules.media;
 
 import com.elypia.alexis.Alexis;
+import com.elypia.commandler.Commandler;
 import com.elypia.commandler.annotations.Module;
 import com.elypia.commandler.annotations.*;
+import com.elypia.commandler.metadata.ModuleData;
 import com.elypia.elypiai.twitch.*;
 import com.elypia.jdac.alias.*;
+import net.dv8tion.jda.core.entities.Message;
+import net.dv8tion.jda.core.events.message.GenericMessageEvent;
 import org.slf4j.*;
 
 import java.util.Map;
@@ -16,7 +20,17 @@ public class TwitchModule extends JDACHandler {
 
     private Twitch twitch;
 
-    public TwitchModule() {
+    /**
+     * Initialise the module, this will assign the values
+     * in the module and create a {@link ModuleData} which is
+     * what {@link Commandler} uses in runtime to identify modules,
+     * commands or obtain any static data.
+     *
+     * @param commandler Our parent Commandler class.
+     * @return Returns if the {@link #test()} for this module passed.
+     */
+    public TwitchModule(Commandler<GenericMessageEvent, Message> commandler) {
+        super(commandler);
         twitch = new Twitch(Alexis.config.getApiCredentials().getTwitch());
     }
 

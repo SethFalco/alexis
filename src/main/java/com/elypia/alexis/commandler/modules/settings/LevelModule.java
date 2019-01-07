@@ -2,15 +2,30 @@ package com.elypia.alexis.commandler.modules.settings;
 
 import com.elypia.alexis.entities.GuildData;
 import com.elypia.alexis.entities.embedded.MessageSettings;
+import com.elypia.commandler.Commandler;
 import com.elypia.commandler.annotations.Module;
 import com.elypia.commandler.annotations.*;
+import com.elypia.commandler.metadata.ModuleData;
 import com.elypia.jdac.alias.*;
 import com.elypia.jdac.validation.Channels;
-import net.dv8tion.jda.core.entities.ChannelType;
+import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.message.GenericMessageEvent;
 
 @Module(id = "Levels", group = "Settings", aliases = {"level", "lvl"}, help = "level.help")
 public class LevelModule extends JDACHandler {
+
+    /**
+     * Initialise the module, this will assign the values
+     * in the module and create a {@link ModuleData} which is
+     * what {@link Commandler} uses in runtime to identify modules,
+     * commands or obtain any static data.
+     *
+     * @param commandler Our parent Commandler class.
+     * @return Returns if the {@link #test()} for this module passed.
+     */
+    public LevelModule(Commandler<GenericMessageEvent, Message> commandler) {
+        super(commandler);
+    }
 
     @Command(id = "level.message.name", aliases = "message", help = "level.message.help")
     @Param(id = "level.param.message.help", help = "level.message.message.help")

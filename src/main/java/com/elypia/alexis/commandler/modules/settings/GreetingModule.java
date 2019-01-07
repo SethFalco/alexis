@@ -3,18 +3,33 @@ package com.elypia.alexis.commandler.modules.settings;
 import com.elypia.alexis.commandler.validation.Database;
 import com.elypia.alexis.entities.GuildData;
 import com.elypia.alexis.entities.embedded.*;
+import com.elypia.commandler.Commandler;
 import com.elypia.commandler.annotations.Module;
 import com.elypia.commandler.annotations.*;
+import com.elypia.commandler.metadata.ModuleData;
 import com.elypia.commandler.validation.Option;
 import com.elypia.jdac.alias.*;
 import com.elypia.jdac.validation.*;
 import net.dv8tion.jda.core.entities.*;
-import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.core.events.message.*;
 
 import java.util.Map;
 
 @Module(id = "Greetings", group = "Settings", aliases = {"greeting", "greetings", "welcome"}, help = "greeting.h")
 public class GreetingModule extends JDACHandler {
+
+    /**
+     * Initialise the module, this will assign the values
+     * in the module and create a {@link ModuleData} which is
+     * what {@link Commandler} uses in runtime to identify modules,
+     * commands or obtain any static data.
+     *
+     * @param commandler Our parent Commandler class.
+     * @return Returns if the {@link #test()} for this module passed.
+     */
+    public GreetingModule(Commandler<GenericMessageEvent, Message> commandler) {
+        super(commandler);
+    }
 
     @Command(id = "greeting.message", aliases = "message", help = "greeting.message.h")
     @Param(id = "greeting.message.p.greeting", help = "greeting.message.p.greeting.h")

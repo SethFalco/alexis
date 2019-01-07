@@ -1,19 +1,35 @@
 package com.elypia.alexis.commandler.modules.discord;
 
 import com.elypia.alexis.utils.BotUtils;
+import com.elypia.commandler.Commandler;
 import com.elypia.commandler.annotations.Icon;
 import com.elypia.commandler.annotations.Module;
 import com.elypia.commandler.annotations.*;
+import com.elypia.commandler.metadata.ModuleData;
 import com.elypia.jdac.alias.*;
 import com.elypia.jdac.validation.Channels;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.*;
+import net.dv8tion.jda.core.events.message.GenericMessageEvent;
 
 import java.util.List;
 
 @Icon("fas fa-surprise")
 @Module(id = "Emotes", group = "Discord", aliases = {"emote", "emoji", "emoticon"}, help = "emote.help")
 public class EmoteModule extends JDACHandler {
+
+    /**
+     * Initialise the module, this will assign the values
+     * in the module and create a {@link ModuleData} which is
+     * what {@link Commandler} uses in runtime to identify modules,
+     * commands or obtain any static data.
+     *
+     * @param commandler Our parent Commandler class.
+     * @return Returns if the {@link #test()} for this module passed.
+     */
+    public EmoteModule(Commandler<GenericMessageEvent, Message> commandler) {
+        super(commandler);
+    }
 
     @Command(id = "Emote", aliases = "list", help = "emote.list.help")
     public void listEmotes(@Channels(ChannelType.TEXT) JDACEvent event) {

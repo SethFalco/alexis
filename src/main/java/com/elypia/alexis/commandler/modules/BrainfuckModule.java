@@ -1,10 +1,26 @@
 package com.elypia.alexis.commandler.modules;
 
+import com.elypia.commandler.Commandler;
 import com.elypia.commandler.annotations.Module;
+import com.elypia.commandler.metadata.ModuleData;
 import com.elypia.jdac.alias.JDACHandler;
+import net.dv8tion.jda.core.entities.Message;
+import net.dv8tion.jda.core.events.message.GenericMessageEvent;
 
 @Module(id = "Brainfuck", aliases = {"brainfuck", "bf"}, help = "brainfuck.help")
 public class BrainfuckModule extends JDACHandler {
+    /**
+     * Initialise the module, this will assign the values
+     * in the module and create a {@link ModuleData} which is
+     * what {@link Commandler} uses in runtime to identify modules,
+     * commands or obtain any static data.
+     *
+     * @param commandler Our parent Commandler class.
+     * @return Returns if the {@link #test()} for this module passed.
+     */
+    public BrainfuckModule(Commandler<GenericMessageEvent, Message> commandler) {
+        super(commandler);
+    }
 
 //    @Default
 //    @Command(id = "brainfuck.compile.name", aliases = {"compile", "interpret"}, help = "brainfuck.help")

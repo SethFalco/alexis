@@ -5,8 +5,10 @@ import com.elypia.alexis.entities.GuildData;
 import com.elypia.alexis.entities.embedded.MusicSettings;
 import com.elypia.alexis.google.youtube.YouTubeHelper;
 import com.elypia.alexis.utils.Md;
+import com.elypia.commandler.Commandler;
 import com.elypia.commandler.annotations.Module;
 import com.elypia.commandler.annotations.*;
+import com.elypia.commandler.metadata.ModuleData;
 import com.elypia.jdac.alias.*;
 import com.elypia.jdac.validation.*;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
@@ -49,13 +51,16 @@ public class MusicModule extends JDACHandler {
 	private Map<Long, ElyAudioPlayer> guildPlayers;
 
 	/**
-	 * Pass the YouTubeHelper instance over, this is injecting
-	 * so there is no need to create multiple instances of this whenever
-	 * else YouTube requests may be required.
+	 * Initialise the module, this will assign the values
+	 * in the module and create a {@link ModuleData} which is
+	 * what {@link Commandler} uses in runtime to identify modules,
+	 * commands or obtain any static data.
 	 *
-	 * @param youtube The YouTubeHelper for making HTTP requests to YouTube.
+	 * @param commandler Our parent Commandler class.
+	 * @return Returns if the {@link #test()} for this module passed.
 	 */
-	public MusicModule(YouTubeHelper youtube) {
+	public MusicModule(Commandler<GenericMessageEvent, Message> commandler, YouTubeHelper youtube) {
+		super(commandler);
 		this.youtube = youtube;
 		manager = new DefaultAudioPlayerManager();
 		guildPlayers = new HashMap<>();

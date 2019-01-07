@@ -1,19 +1,34 @@
 package com.elypia.alexis.commandler.modules.discord;
 
 import com.elypia.alexis.utils.*;
+import com.elypia.commandler.Commandler;
 import com.elypia.commandler.annotations.Module;
 import com.elypia.commandler.annotations.*;
+import com.elypia.commandler.metadata.ModuleData;
 import com.elypia.jdac.*;
 import com.elypia.jdac.alias.*;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.*;
-import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.core.events.message.*;
 
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Module(id = "Users", group = "Discord", aliases = "user", help = "user.h")
 public class UserModule extends JDACHandler {
+
+	/**
+	 * Initialise the module, this will assign the values
+	 * in the module and create a {@link ModuleData} which is
+	 * what {@link Commandler} uses in runtime to identify modules,
+	 * commands or obtain any static data.
+	 *
+	 * @param commandler Our parent Commandler class.
+	 * @return Returns if the {@link #test()} for this module passed.
+	 */
+	public UserModule(Commandler<GenericMessageEvent, Message> commandler) {
+		super(commandler);
+	}
 
 	@Command(id = "User Info", aliases = "info", help = "user.info.h")
 	@Param(id = "common.user", help = "user.info.p.user.h")

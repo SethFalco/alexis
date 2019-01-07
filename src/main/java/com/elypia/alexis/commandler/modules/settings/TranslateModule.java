@@ -2,17 +2,33 @@ package com.elypia.alexis.commandler.modules.settings;
 
 import com.elypia.alexis.entities.GuildData;
 import com.elypia.alexis.entities.embedded.TranslateSettings;
+import com.elypia.commandler.Commandler;
 import com.elypia.commandler.annotations.Module;
 import com.elypia.commandler.annotations.*;
+import com.elypia.commandler.metadata.ModuleData;
 import com.elypia.jdac.alias.*;
 import com.elypia.jdac.validation.*;
 import net.dv8tion.jda.core.entities.*;
+import net.dv8tion.jda.core.events.message.GenericMessageEvent;
 
 import java.util.Map;
 
 
 @Module(id = "Translate", group = "Settings", aliases = {"translate", "trans", "tran"}, help = "translate.h")
 public class TranslateModule extends JDACHandler {
+
+    /**
+     * Initialise the module, this will assign the values
+     * in the module and create a {@link ModuleData} which is
+     * what {@link Commandler} uses in runtime to identify modules,
+     * commands or obtain any static data.
+     *
+     * @param commandler Our parent Commandler class.
+     * @return Returns if the {@link #test()} for this module passed.
+     */
+    public TranslateModule(Commandler<GenericMessageEvent, Message> commandler) {
+        super(commandler);
+    }
 
     @Command(id = "translate.toggle", aliases = "toggle", help = "translate.toggle.h")
     @Param(id = "common.toggle", help = "translate.toggle.p.toggle.h")

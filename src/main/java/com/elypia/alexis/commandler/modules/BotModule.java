@@ -3,8 +3,10 @@ package com.elypia.alexis.commandler.modules;
 import com.elypia.alexis.Alexis;
 import com.elypia.alexis.config.BotConfig;
 import com.elypia.alexis.utils.*;
+import com.elypia.commandler.Commandler;
 import com.elypia.commandler.annotations.Module;
 import com.elypia.commandler.annotations.*;
+import com.elypia.commandler.metadata.ModuleData;
 import com.elypia.elyscript.ElyScript;
 import com.elypia.jdac.alias.*;
 import com.elypia.jdac.validation.*;
@@ -30,6 +32,19 @@ public class BotModule extends JDACHandler {
 	 * made after this time.
 	 */
 	private static final OffsetDateTime BOT_TIME = OffsetDateTime.of(2016, 7, 19, 1, 52, 0, 0, ZoneOffset.ofHours(0));
+
+	/**
+	 * Initialise the module, this will assign the values
+	 * in the module and create a {@link ModuleData} which is
+	 * what {@link Commandler} uses in runtime to identify modules,
+	 * commands or obtain any static data.
+	 *
+	 * @param commandler Our parent Commandler class.
+	 * @return Returns if the {@link #test()} for this module passed.
+	 */
+	public BotModule(Commandler<GenericMessageEvent, Message> commandler) {
+		super(commandler);
+	}
 
 	@Example(command = ">ping", response = "pong!")
 	@Static

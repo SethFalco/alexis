@@ -1,10 +1,13 @@
 package com.elypia.alexis.commandler.modules.media;
 
 import com.elypia.alexis.google.youtube.*;
+import com.elypia.commandler.Commandler;
 import com.elypia.commandler.annotations.Module;
 import com.elypia.commandler.annotations.*;
 import com.elypia.jdac.alias.*;
 import com.google.api.services.youtube.model.SearchResult;
+import net.dv8tion.jda.core.entities.Message;
+import net.dv8tion.jda.core.events.message.GenericMessageEvent;
 
 import java.io.IOException;
 import java.util.Optional;
@@ -14,7 +17,17 @@ public class YouTubeModule extends JDACHandler {
 
     private YouTubeHelper youtube;
 
-    public YouTubeModule(YouTubeHelper youtube) {
+    /**
+     * Initialise the module, this will assign the values
+     * in the module and create a {@link ModuleData} which is
+     * what {@link Commandler} uses in runtime to identify modules,
+     * commands or obtain any static data.
+     *
+     * @param commandler Our parent Commandler class.
+     * @return Returns if the {@link #test()} for this module passed.
+     */
+    public YouTubeModule(Commandler<GenericMessageEvent, Message> commandler, YouTubeHelper youtube) {
+        super(commandler);
         this.youtube = youtube;
     }
 

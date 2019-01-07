@@ -3,12 +3,16 @@ package com.elypia.alexis.commandler.modules;
 import com.elypia.alexis.entities.GuildData;
 import com.elypia.alexis.entities.embedded.AssignableRole;
 import com.elypia.alexis.utils.ExitCode;
+import com.elypia.commandler.Commandler;
 import com.elypia.commandler.annotations.Module;
 import com.elypia.commandler.annotations.*;
+import com.elypia.commandler.metadata.ModuleData;
 import com.elypia.jdac.alias.*;
 import com.elypia.jdac.validation.Developer;
 import net.dv8tion.jda.core.*;
 import net.dv8tion.jda.core.entities.Icon;
+import net.dv8tion.jda.core.entities.*;
+import net.dv8tion.jda.core.events.message.GenericMessageEvent;
 import org.slf4j.*;
 
 import java.io.*;
@@ -20,6 +24,19 @@ import java.util.*;
 public class DeveloperModule extends JDACHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(DeveloperModule.class);
+
+    /**
+     * Initialise the module, this will assign the values
+     * in the module and create a {@link ModuleData} which is
+     * what {@link Commandler} uses in runtime to identify modules,
+     * commands or obtain any static data.
+     *
+     * @param commandler Our parent Commandler class.
+     * @return Returns if the {@link #test()} for this module passed.
+     */
+    public DeveloperModule(Commandler<GenericMessageEvent, Message> commandler) {
+        super(commandler);
+    }
 
     @Command(id = "dev.rename", aliases = "name", help = "dev.name.h")
     @Param(id = "dev.name.p.name", help = "dev.name.p.name.h")

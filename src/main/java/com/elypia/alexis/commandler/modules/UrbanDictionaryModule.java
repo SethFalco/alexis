@@ -1,12 +1,16 @@
 package com.elypia.alexis.commandler.modules;
 
+import com.elypia.commandler.Commandler;
 import com.elypia.commandler.annotations.Module;
 import com.elypia.commandler.annotations.*;
+import com.elypia.commandler.metadata.ModuleData;
 import com.elypia.elypiai.restutils.RestLatch;
 import com.elypia.elypiai.urbandictionary.*;
 import com.elypia.elypiai.urbandictionary.data.ResultType;
 import com.elypia.jdac.alias.*;
 import net.dv8tion.jda.core.EmbedBuilder;
+import net.dv8tion.jda.core.entities.Message;
+import net.dv8tion.jda.core.events.message.GenericMessageEvent;
 import org.slf4j.*;
 
 @Module(id = "Urban Dictionary", aliases = {"urbandictionary", "urbandict", "urban", "ud"}, help = "urban.h")
@@ -16,11 +20,21 @@ public class UrbanDictionaryModule extends JDACHandler {
 
 	private UrbanDictionary ud;
 
-    public UrbanDictionaryModule() {
+    /**
+     * Initialise the module, this will assign the values
+     * in the module and create a {@link ModuleData} which is
+     * what {@link Commandler} uses in runtime to identify modules,
+     * commands or obtain any static data.
+     *
+     * @param commandler Our parent Commandler class.
+     * @return Returns if the {@link #test()} for this module passed.
+     */
+    public UrbanDictionaryModule(Commandler<GenericMessageEvent, Message> commandler) {
+        super(commandler);
         ud = new UrbanDictionary();
     }
 
-	@Static
+    @Static
 	@Command(id = "Define", aliases = "define", help = "urban.define.h")
 	@Param(id = "common.body", help = "urban.define.p.body.h")
 //	@Emoji(emotes = "🔉", help = "urban.define.e.speaker.h")
