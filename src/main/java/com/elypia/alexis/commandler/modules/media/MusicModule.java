@@ -14,10 +14,10 @@ import com.elypia.jdac.validation.*;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 import com.sedmelluq.discord.lavaplayer.track.*;
-import net.dv8tion.jda.core.*;
-import net.dv8tion.jda.core.entities.*;
-import net.dv8tion.jda.core.events.message.GenericMessageEvent;
-import net.dv8tion.jda.core.managers.AudioManager;
+import net.dv8tion.jda.api.*;
+import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.events.message.GenericMessageEvent;
+import net.dv8tion.jda.api.managers.AudioManager;
 
 import java.io.IOException;
 import java.util.*;
@@ -57,7 +57,6 @@ public class MusicModule extends JDACHandler {
 	 * commands or obtain any static data.
 	 *
 	 * @param commandler Our parent Commandler class.
-	 * @return Returns if the {@link #test()} for this module passed.
 	 */
 	public MusicModule(Commandler<GenericMessageEvent, Message> commandler, YouTubeHelper youtube) {
 		super(commandler);

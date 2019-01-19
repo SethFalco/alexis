@@ -6,10 +6,11 @@ import com.elypia.alexis.entities.AlexisError;
 import com.elypia.alexis.google.youtube.YouTubeHelper;
 import com.elypia.alexis.managers.DatabaseManager;
 import com.elypia.commandler.*;
+import com.elypia.elypiai.osu.Game;
 import com.elypia.jdac.JDACDispatcher;
 import com.elypia.jdac.alias.*;
-import net.dv8tion.jda.core.*;
-import net.dv8tion.jda.core.entities.Game;
+import net.dv8tion.jda.api.*;
+import net.dv8tion.jda.api.entities.Activity;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.*;
 
@@ -84,10 +85,9 @@ public class Alexis {
 
 		new JDABuilder(discord.getToken())
 			.setStatus(OnlineStatus.IDLE)
-			.setGame(Game.of(Game.GameType.WATCHING, "Seth turn me on!"))
+			.setActivity(Activity.watching("Seth turn me on!"))
 			.setBulkDeleteSplittingEnabled(false)
-			.addEventListener(new JDACDispatcher(jdac))
-			.addEventListener(new EventHandler())
+			.addEventListeners(new JDACDispatcher(jdac), new EventHandler())
 			.build();
 
 		if (config.getDebugConfig().isDatabaseEnabled())

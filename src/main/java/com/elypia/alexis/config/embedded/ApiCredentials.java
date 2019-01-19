@@ -18,9 +18,6 @@ public class ApiCredentials {
     @Path("cleverbot")
     private String cleverbot;
 
-    @Path("amazon")
-    private AmazonCredentials amazonCredentials;
-
     public String getOsu() {
         return osu;
     }
@@ -35,9 +32,5 @@ public class ApiCredentials {
 
     public String getCleverbot() {
         return cleverbot;
-    }
-
-    public List<AmazonCredentials> getAmazonCredentials() {
-        return List.of(amazonCredentials);
     }
 }

@@ -4,8 +4,8 @@ import com.elypia.commandler.Commandler;
 import com.elypia.commandler.annotations.Module;
 import com.elypia.commandler.metadata.ModuleData;
 import com.elypia.jdac.alias.JDACHandler;
-import net.dv8tion.jda.core.entities.Message;
-import net.dv8tion.jda.core.events.message.GenericMessageEvent;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.events.message.GenericMessageEvent;
 
 @Module(id = "Guild Logging", group = "Settings", aliases = {"log", "logging", "logger"}, help = "guild_logging.help")
 public class GuildLogModule extends JDACHandler {
@@ -17,7 +17,6 @@ public class GuildLogModule extends JDACHandler {
      * commands or obtain any static data.
      *
      * @param commandler Our parent Commandler class.
-     * @return Returns if the {@link #test()} for this module passed.
      */
     public GuildLogModule(Commandler<GenericMessageEvent, Message> commandler) {
         super(commandler);

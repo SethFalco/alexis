@@ -6,8 +6,8 @@ import com.elypia.commandler.annotations.Compatible;
 import com.elypia.jdac.alias.*;
 import com.google.api.client.util.DateTime;
 import com.google.api.services.youtube.model.*;
-import net.dv8tion.jda.core.*;
-import net.dv8tion.jda.core.entities.Message;
+import net.dv8tion.jda.api.*;
+import net.dv8tion.jda.api.entities.Message;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;

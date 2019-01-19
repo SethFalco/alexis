@@ -1,6 +1,6 @@
 package com.elypia.alexis.entities.embedded;
 
-import net.dv8tion.jda.core.entities.Guild;
+import net.dv8tion.jda.api.entities.Guild;
 import xyz.morphia.annotations.*;
 
 import java.util.*;

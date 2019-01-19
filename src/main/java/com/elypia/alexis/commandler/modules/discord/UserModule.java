@@ -7,9 +7,9 @@ import com.elypia.commandler.annotations.*;
 import com.elypia.commandler.metadata.ModuleData;
 import com.elypia.jdac.*;
 import com.elypia.jdac.alias.*;
-import net.dv8tion.jda.core.EmbedBuilder;
-import net.dv8tion.jda.core.entities.*;
-import net.dv8tion.jda.core.events.message.*;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.events.message.*;
 
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -24,7 +24,6 @@ public class UserModule extends JDACHandler {
 	 * commands or obtain any static data.
 	 *
 	 * @param commandler Our parent Commandler class.
-	 * @return Returns if the {@link #test()} for this module passed.
 	 */
 	public UserModule(Commandler<GenericMessageEvent, Message> commandler) {
 		super(commandler);
@@ -42,8 +41,7 @@ public class UserModule extends JDACHandler {
 			Member member = guild.getMember(user);
 			builder.setAuthor(member.getEffectiveName());
 			builder.addField("user.info.online_status", member.getOnlineStatus().toString(), true);
-			builder.addField("user.info.status", member.getGame().getName(), true);
-			builder.addField(scripts.get("user.info.joined_guild", Map.of("guild", guild.getName())), member.getJoinDate().format(format), true);
+			builder.addField(scripts.get("user.info.joined_guild", Map.of("guild", guild.getName())), member.getTimeJoined().format(format), true);
 
 			Collection<Role> roles = member.getRoles();
 
@@ -57,7 +55,7 @@ public class UserModule extends JDACHandler {
 		}
 
 		builder.setThumbnail(avatar);
-		builder.addField("user.info.joined_discord", user.getCreationTime().format(format), true);
+		builder.addField("user.info.joined_discord", user.getTimeCreated().format(format), true);
 
 		if (user.isBot())
 			builder.addField("user.info.bot", Md.a("common.invite_link", BotUtils.getInviteUrl(user)), false);

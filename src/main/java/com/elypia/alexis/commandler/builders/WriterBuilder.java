@@ -5,8 +5,8 @@ import com.elypia.commandler.annotations.Compatible;
 import com.elypia.commandler.interfaces.IScripts;
 import com.elypia.elypiai.nanowrimo.Writer;
 import com.elypia.jdac.alias.*;
-import net.dv8tion.jda.core.*;
-import net.dv8tion.jda.core.entities.Message;
+import net.dv8tion.jda.api.*;
+import net.dv8tion.jda.api.entities.Message;
 
 import java.util.Map;
 

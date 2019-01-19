@@ -3,11 +3,12 @@ package com.elypia.alexis.commandler.modules;
 import com.elypia.commandler.Commandler;
 import com.elypia.commandler.annotations.Module;
 import com.elypia.commandler.annotations.*;
+import com.elypia.commandler.metadata.ModuleData;
 import com.elypia.jdac.alias.*;
 import com.elypia.jdac.validation.Nsfw;
-import net.dv8tion.jda.core.EmbedBuilder;
-import net.dv8tion.jda.core.entities.Message;
-import net.dv8tion.jda.core.events.message.GenericMessageEvent;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.events.message.GenericMessageEvent;
 import okhttp3.*;
 import org.json.JSONObject;
 
@@ -29,7 +30,6 @@ public class MiscModule extends JDACHandler {
      * commands or obtain any static data.
      *
      * @param commandler Our parent Commandler class.
-     * @return Returns if the {@link #test()} for this module passed.
      */
     public MiscModule(Commandler<GenericMessageEvent, Message> commandler) {
         super(commandler);
@@ -62,13 +62,14 @@ public class MiscModule extends JDACHandler {
 //		return builder;
 //	}
 
-	@Static
-	@Command(id = "misc.count", aliases = "count", help = "misc.count.h")
-	@Param(id = "common.body", help = "misc.count.p.body.h")
-	public String count(JDACEvent event, String input) {
+    @Static
+    @Command(id = "c.count", aliases = "count", help = "ch.count")
+    public String count(JDACEvent event,
+        @Param(id = "p.body", help = "ph.body") String input
+    ) {
         var params = Map.of("length", input.length());
         return scripts.get("misc.count.response", params);
-	}
+    }
 
     @Static
     @Command(id = "misc.neko", aliases = "neko", help = "misc.neko.h")

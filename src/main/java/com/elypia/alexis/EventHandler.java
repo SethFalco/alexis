@@ -7,15 +7,15 @@ import com.elypia.alexis.utils.*;
 import com.elypia.elypiai.runescape.RuneScape;
 import com.google.cloud.translate.Language;
 import com.google.cloud.translate.*;
-import net.dv8tion.jda.core.*;
-import net.dv8tion.jda.core.entities.*;
-import net.dv8tion.jda.core.events.ReadyEvent;
-import net.dv8tion.jda.core.events.guild.*;
-import net.dv8tion.jda.core.events.guild.member.*;
-import net.dv8tion.jda.core.events.guild.voice.*;
-import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
-import net.dv8tion.jda.core.events.message.react.MessageReactionAddEvent;
-import net.dv8tion.jda.core.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.*;
+import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.events.ReadyEvent;
+import net.dv8tion.jda.api.events.guild.*;
+import net.dv8tion.jda.api.events.guild.member.*;
+import net.dv8tion.jda.api.events.guild.voice.*;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
+import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.slf4j.*;
 
 import java.time.OffsetDateTime;
@@ -49,10 +49,11 @@ public class EventHandler extends ListenerAdapter {
 	@Override
 	public void onGuildJoin(GuildJoinEvent event) {
 		Guild guild = event.getGuild();
-		TextChannel channel = BotUtils.getWriteableChannel(event);
 
-		if (guild.getSelfMember().getJoinDate().isBefore(OffsetDateTime.now().minusMinutes(10)))
+		if (guild.getSelfMember().getTimeJoined().isBefore(OffsetDateTime.now().minusMinutes(10)))
 			return;
+
+		TextChannel channel = BotUtils.getWriteableChannel(event);
 
 		if (channel == null)
 			return;

@@ -2,8 +2,8 @@ package com.elypia.alexis;
 
 import com.elypia.alexis.entities.AlexisError;
 import com.elypia.commandler.MisuseHandler;
-import net.dv8tion.jda.core.entities.Message;
-import net.dv8tion.jda.core.events.message.GenericMessageEvent;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.events.message.GenericMessageEvent;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.*;
 

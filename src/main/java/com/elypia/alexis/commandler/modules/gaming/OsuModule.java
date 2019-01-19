@@ -8,8 +8,8 @@ import com.elypia.commandler.metadata.ModuleData;
 import com.elypia.elypiai.osu.Osu;
 import com.elypia.elypiai.osu.data.OsuMode;
 import com.elypia.jdac.alias.*;
-import net.dv8tion.jda.core.entities.Message;
-import net.dv8tion.jda.core.events.message.GenericMessageEvent;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.events.message.GenericMessageEvent;
 import org.slf4j.*;
 
 import javax.validation.constraints.Size;
@@ -28,7 +28,6 @@ public class OsuModule extends JDACHandler {
      * commands or obtain any static data.
      *
      * @param commandler Our parent Commandler class.
-     * @return Returns if the {@link #test()} for this module passed.
      */
     public OsuModule(Commandler<GenericMessageEvent, Message> commandler) {
         super(commandler);

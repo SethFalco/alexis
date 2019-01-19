@@ -68,7 +68,6 @@ dependencies {
     ///
 
     // Elypiai
-    implementation "com.elypia.elypiai:amazon-product-api:${elypiaiVersion}"
     implementation "com.elypia.elypiai:cleverbot:${elypiaiVersion}"
 //    implementation "com.elypia.elypiai:nanowrimo:${elypiaiVersion}"
     implementation files("C:\\Users\\Seth\\Google Drive\\IntelliJ\\Elypiai\\nanowrimo\\build\\libs\\nanowrimo.jar")
@@ -93,7 +92,7 @@ dependencies {
     runtimeOnly "com.electronwill.night-config:toml:${nighgconfigVersion}"
 
     // Discord
-    implementation "net.dv8tion:JDA:3.8.1_448"
+    implementation "net.dv8tion:JDA:4.ALPHA.0_6"
     implementation "com.github.FredBoat:Lavalink-Client:3.0"
     implementation "com.github.DiscordBotList:DBL-Java-Library:2.0.1"
 

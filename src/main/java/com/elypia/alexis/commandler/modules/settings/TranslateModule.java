@@ -8,11 +8,10 @@ import com.elypia.commandler.annotations.*;
 import com.elypia.commandler.metadata.ModuleData;
 import com.elypia.jdac.alias.*;
 import com.elypia.jdac.validation.*;
-import net.dv8tion.jda.core.entities.*;
-import net.dv8tion.jda.core.events.message.GenericMessageEvent;
+import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.events.message.GenericMessageEvent;
 
 import java.util.Map;
-
 
 @Module(id = "Translate", group = "Settings", aliases = {"translate", "trans", "tran"}, help = "translate.h")
 public class TranslateModule extends JDACHandler {
@@ -24,7 +23,6 @@ public class TranslateModule extends JDACHandler {
      * commands or obtain any static data.
      *
      * @param commandler Our parent Commandler class.
-     * @return Returns if the {@link #test()} for this module passed.
      */
     public TranslateModule(Commandler<GenericMessageEvent, Message> commandler) {
         super(commandler);

@@ -2,11 +2,12 @@ package com.elypia.alexis;
 
 import com.elypia.alexis.entities.*;
 import com.elypia.commandler.interfaces.IScripts;
-import com.elypia.elypiai.runescape.RuneScape;
+import com.elypia.elypiai.runescape.Activity;
+import com.elypia.elypiai.runescape.*;
 import com.elypia.elyscript.ScriptStore;
 import com.elypia.elyscript.sheets.SheetsLoader;
-import net.dv8tion.jda.core.entities.*;
-import net.dv8tion.jda.core.events.message.*;
+import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.events.message.*;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
@@ -50,9 +51,9 @@ public class ElyScripts implements IScripts<GenericMessageEvent> {
             scriptParams.put("member.nickname", member.getEffectiveName());
             scriptParams.put("member.role", member.getRoles());
 
-            Game game = member.getGame();
-            if (game != null)
-                scriptParams.put("member.game", game.getName());
+            var activity = member.getActivities();
+            if (!activity.isEmpty())
+                scriptParams.put("member.game", activity.get(0).getName());
 
             Guild guild = mSource.getGuild();
             scriptParams.put("guild.name", guild.getName());

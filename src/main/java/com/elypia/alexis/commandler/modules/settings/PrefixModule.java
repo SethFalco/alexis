@@ -8,8 +8,8 @@ import com.elypia.commandler.annotations.*;
 import com.elypia.commandler.metadata.ModuleData;
 import com.elypia.jdac.alias.*;
 import com.elypia.jdac.validation.*;
-import net.dv8tion.jda.core.entities.*;
-import net.dv8tion.jda.core.events.message.GenericMessageEvent;
+import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.events.message.GenericMessageEvent;
 
 import javax.validation.constraints.Size;
 
@@ -23,7 +23,6 @@ public class PrefixModule extends JDACHandler {
      * commands or obtain any static data.
      *
      * @param commandler Our parent Commandler class.
-     * @return Returns if the {@link #test()} for this module passed.
      */
     public PrefixModule(Commandler<GenericMessageEvent, Message> commandler) {
         super(commandler);

@@ -2,7 +2,7 @@ package com.elypia.alexis.entities;
 
 import com.elypia.alexis.Alexis;
 import com.elypia.alexis.entities.impl.*;
-import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.bson.types.ObjectId;
 import xyz.morphia.annotations.*;
 

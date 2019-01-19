@@ -3,7 +3,7 @@ package com.elypia.alexis.entities;
 import com.elypia.alexis.Alexis;
 import com.elypia.alexis.entities.embedded.GuildSettings;
 import com.elypia.alexis.entities.impl.*;
-import net.dv8tion.jda.core.entities.Guild;
+import net.dv8tion.jda.api.entities.Guild;
 import org.bson.types.ObjectId;
 import xyz.morphia.annotations.*;
 

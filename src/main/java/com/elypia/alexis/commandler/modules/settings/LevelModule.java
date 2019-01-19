@@ -8,8 +8,8 @@ import com.elypia.commandler.annotations.*;
 import com.elypia.commandler.metadata.ModuleData;
 import com.elypia.jdac.alias.*;
 import com.elypia.jdac.validation.Channels;
-import net.dv8tion.jda.core.entities.*;
-import net.dv8tion.jda.core.events.message.GenericMessageEvent;
+import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.events.message.GenericMessageEvent;
 
 @Module(id = "Levels", group = "Settings", aliases = {"level", "lvl"}, help = "level.help")
 public class LevelModule extends JDACHandler {
@@ -21,7 +21,6 @@ public class LevelModule extends JDACHandler {
      * commands or obtain any static data.
      *
      * @param commandler Our parent Commandler class.
-     * @return Returns if the {@link #test()} for this module passed.
      */
     public LevelModule(Commandler<GenericMessageEvent, Message> commandler) {
         super(commandler);

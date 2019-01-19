@@ -6,8 +6,8 @@ import com.elypia.commandler.annotations.*;
 import com.elypia.commandler.metadata.ModuleData;
 import com.elypia.elypiai.runescape.RuneScape;
 import com.elypia.jdac.alias.*;
-import net.dv8tion.jda.core.entities.Message;
-import net.dv8tion.jda.core.events.message.GenericMessageEvent;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.events.message.GenericMessageEvent;
 
 @Module(id = "RuneScape", group = "Gaming", aliases = {"runescape", "rs"}, help = "rs.help")
 public class RuneScapeModule extends JDACHandler {
@@ -21,7 +21,6 @@ public class RuneScapeModule extends JDACHandler {
 	 * commands or obtain any static data.
 	 *
 	 * @param commandler Our parent Commandler class.
-	 * @return Returns if the {@link #test()} for this module passed.
 	 */
 	public RuneScapeModule(Commandler<GenericMessageEvent, Message> commandler) {
 		super(commandler);

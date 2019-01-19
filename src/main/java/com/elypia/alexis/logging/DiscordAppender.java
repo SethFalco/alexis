@@ -3,8 +3,8 @@ package com.elypia.alexis.logging;
 
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.AppenderBase;
-import net.dv8tion.jda.core.*;
-import net.dv8tion.jda.core.entities.MessageChannel;
+import net.dv8tion.jda.api.*;
+import net.dv8tion.jda.api.entities.MessageChannel;
 
 import javax.security.auth.login.LoginException;
 

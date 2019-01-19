@@ -4,8 +4,8 @@ import com.elypia.alexis.utils.*;
 import com.elypia.commandler.annotations.Compatible;
 import com.elypia.elypiai.osu.*;
 import com.elypia.jdac.alias.*;
-import net.dv8tion.jda.core.*;
-import net.dv8tion.jda.core.entities.Message;
+import net.dv8tion.jda.api.*;
+import net.dv8tion.jda.api.entities.Message;
 
 import java.util.StringJoiner;
 

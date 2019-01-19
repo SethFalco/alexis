@@ -10,9 +10,9 @@ import com.elypia.commandler.metadata.ModuleData;
 import com.elypia.elyscript.ElyScript;
 import com.elypia.jdac.alias.*;
 import com.elypia.jdac.validation.*;
-import net.dv8tion.jda.core.*;
-import net.dv8tion.jda.core.entities.*;
-import net.dv8tion.jda.core.events.message.GenericMessageEvent;
+import net.dv8tion.jda.api.*;
+import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.events.message.GenericMessageEvent;
 import org.slf4j.*;
 
 import java.time.*;
@@ -33,6 +33,8 @@ public class BotModule extends JDACHandler {
 	 */
 	private static final OffsetDateTime BOT_TIME = OffsetDateTime.of(2016, 7, 19, 1, 52, 0, 0, ZoneOffset.ofHours(0));
 
+	private long ownerId;
+
 	/**
 	 * Initialise the module, this will assign the values
 	 * in the module and create a {@link ModuleData} which is
@@ -40,7 +42,6 @@ public class BotModule extends JDACHandler {
 	 * commands or obtain any static data.
 	 *
 	 * @param commandler Our parent Commandler class.
-	 * @return Returns if the {@link #test()} for this module passed.
 	 */
 	public BotModule(Commandler<GenericMessageEvent, Message> commandler) {
 		super(commandler);
@@ -72,7 +73,10 @@ public class BotModule extends JDACHandler {
 		builder.setThumbnail(alexis.getAvatarUrl());
 		BotConfig config = Alexis.config;
 
-		source.getJDA().asBot().getApplicationInfo().queue(owner -> {
+		if (ownerId == 0)
+			ownerId = source.getJDA().getApplicationInfo().complete().getOwner().getIdLong();
+
+		source.getJDA().getApplicationInfo().queue(owner -> {
 			StringJoiner joiner = new StringJoiner("\n");
 			String title = scripts.get(source, "bot.authors");
 			builder.addField(title, joiner.toString(), true);
@@ -93,7 +97,7 @@ public class BotModule extends JDACHandler {
 			Guild guild = jda.getGuildById(config.getDiscordConfig().getSupportGuild());
 			guild.getInvites().queue(invites -> {
 				Optional<Invite> invite = invites.stream().max((one, two) -> one.getUses() > two.getUses() ? 1 : -1);
-				invite.ifPresent(o -> builder.addField("bot.support_guild", Md.a("Elypia", o.getURL()), true));
+				invite.ifPresent(o -> builder.addField("bot.support_guild", Md.a("Elypia", o.getUrl()), true));
 				event.send(builder);
 			});
 		});
@@ -122,7 +126,7 @@ public class BotModule extends JDACHandler {
 		Collection<Member> bots = guild.getMembers();
 
 		Collection<User> users = bots.stream().map(Member::getUser).filter(User::isBot).filter(o -> {
-			return o.getCreationTime().isAfter(BOT_TIME);
+			return o.getTimeCreated().isAfter(BOT_TIME);
 		}).collect(Collectors.toList());
 
 		EmbedBuilder builder = BotUtils.newEmbed(guild);

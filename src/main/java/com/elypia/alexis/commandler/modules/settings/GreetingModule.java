@@ -10,8 +10,8 @@ import com.elypia.commandler.metadata.ModuleData;
 import com.elypia.commandler.validation.Option;
 import com.elypia.jdac.alias.*;
 import com.elypia.jdac.validation.*;
-import net.dv8tion.jda.core.entities.*;
-import net.dv8tion.jda.core.events.message.*;
+import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.events.message.*;
 
 import java.util.Map;
 
@@ -25,7 +25,6 @@ public class GreetingModule extends JDACHandler {
      * commands or obtain any static data.
      *
      * @param commandler Our parent Commandler class.
-     * @return Returns if the {@link #test()} for this module passed.
      */
     public GreetingModule(Commandler<GenericMessageEvent, Message> commandler) {
         super(commandler);
