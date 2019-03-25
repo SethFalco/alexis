@@ -31,7 +31,7 @@ public class OsuModule extends JDACHandler {
      */
     public OsuModule(Commandler<GenericMessageEvent, Message> commandler) {
         super(commandler);
-        osu = new Osu(Alexis.config.getApiCredentials().getOsu());
+        osu = new Osu(Alexis.configurationService.getApiCredentials().getOsu());
     }
 
     @Command(id = "Player Stats", aliases = "get", help = "Get stats on osu! players.")

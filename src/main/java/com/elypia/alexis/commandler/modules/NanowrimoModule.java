@@ -1,13 +1,9 @@
 package com.elypia.alexis.commandler.modules;
 
-import com.elypia.commandler.Commandler;
 import com.elypia.commandler.annotations.Module;
 import com.elypia.commandler.annotations.*;
-import com.elypia.commandler.metadata.ModuleData;
 import com.elypia.elypiai.nanowrimo.Nanowrimo;
-import com.elypia.jdac.alias.*;
-import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.events.message.GenericMessageEvent;
+import com.elypia.jdac.*;
 import org.slf4j.*;
 
 import javax.validation.constraints.Size;
@@ -19,16 +15,7 @@ public class NanowrimoModule extends JDACHandler {
 
     private Nanowrimo nanowrimo;
 
-    /**
-     * Initialise the module, this will assign the values
-     * in the module and create a {@link ModuleData} which is
-     * what {@link Commandler} uses in runtime to identify modules,
-     * commands or obtain any static data.
-     *
-     * @param commandler Our parent Commandler class.
-     */
-    public NanowrimoModule(Commandler<GenericMessageEvent, Message> commandler) {
-        super(commandler);
+    public NanowrimoModule() {
         nanowrimo = new Nanowrimo();
     }
 

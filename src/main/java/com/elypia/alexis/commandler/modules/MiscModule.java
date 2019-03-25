@@ -23,16 +23,7 @@ public class MiscModule extends JDACHandler {
     private Request nekoRequest;
     private List<String> nekoCache;
 
-    /**
-     * Initialise the module, this will assign the values
-     * in the module and create a {@link ModuleData} which is
-     * what {@link Commandler} uses in runtime to identify modules,
-     * commands or obtain any static data.
-     *
-     * @param commandler Our parent Commandler class.
-     */
-    public MiscModule(Commandler<GenericMessageEvent, Message> commandler) {
-        super(commandler);
+    public MiscModule() {
         client = new OkHttpClient();
         nekoRequest = new Request.Builder().url("https://nekos.life/api/neko").build();
         nekoCache = new ArrayList<>();

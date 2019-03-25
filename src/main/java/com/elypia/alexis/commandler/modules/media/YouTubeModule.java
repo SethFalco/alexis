@@ -5,6 +5,7 @@ import com.elypia.commandler.Commandler;
 import com.elypia.commandler.annotations.Module;
 import com.elypia.commandler.annotations.*;
 import com.elypia.commandler.metadata.ModuleData;
+import com.elypia.jdac.JDACHandler;
 import com.elypia.jdac.alias.*;
 import com.google.api.services.youtube.model.SearchResult;
 import net.dv8tion.jda.api.entities.Message;
@@ -16,7 +17,7 @@ import java.util.Optional;
 @Module(id = "YouTube", group = "Media", aliases = {"youtube", "yt"}, help = "yt.h")
 public class YouTubeModule extends JDACHandler {
 
-    private YouTubeHelper youtube;
+    private YouTubeService youtube;
 
     /**
      * Initialise the module, this will assign the values
@@ -26,7 +27,7 @@ public class YouTubeModule extends JDACHandler {
      *
      * @param commandler Our parent Commandler class.
      */
-    public YouTubeModule(Commandler<GenericMessageEvent, Message> commandler, YouTubeHelper youtube) {
+    public YouTubeModule(JDACommandler, YouTubeService youtube) {
         super(commandler);
         this.youtube = youtube;
     }
@@ -42,7 +43,7 @@ public class YouTubeModule extends JDACHandler {
 
         SearchResult result = searchResult.get();
 //        event.addReaction("\uD83C\uDFB5");
-//        event.storeObject("url", YouTubeHelper.getVideoUrl(result.getId().getVideoId()));
+//        event.storeObject("url", YouTubeService.getVideoUrl(result.getId().getVideoId()));
         return searchResult.get();
     }
 

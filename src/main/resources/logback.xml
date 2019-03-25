@@ -22,7 +22,6 @@
 
     <logger name="org.hibernate" level="WARN"/>
     <logger name="org.mongodb" level="WARN"/>
-    <logger name="xyz.morphia" level="WARN"/>
     <logger name="net.dv8tion" level="WARN"/>
     <logger name="com.sedmelluq" level="WARN"/>
 </configuration>

@@ -10,7 +10,7 @@ public class ApiCredentials {
     private String osu;
 
     @Path("twitch")
-    private String twitch;
+    private TwitchConfig twitchConfig;
 
     @Path("steam")
     private String steam;
@@ -22,8 +22,8 @@ public class ApiCredentials {
         return osu;
     }
 
-    public String getTwitch() {
-        return twitch;
+    public TwitchConfig getTwitchConfig() {
+        return twitchConfig;
     }
 
     public String getSteam() {

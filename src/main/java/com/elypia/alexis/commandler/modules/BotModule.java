@@ -1,14 +1,13 @@
 package com.elypia.alexis.commandler.modules;
 
 import com.elypia.alexis.Alexis;
-import com.elypia.alexis.config.BotConfig;
+import com.elypia.alexis.config.ConfigurationService;
+import com.elypia.alexis.params.BotSayParams;
 import com.elypia.alexis.utils.*;
-import com.elypia.commandler.Commandler;
 import com.elypia.commandler.annotations.Module;
 import com.elypia.commandler.annotations.*;
-import com.elypia.commandler.metadata.ModuleData;
 import com.elypia.elyscript.ElyScript;
-import com.elypia.jdac.alias.*;
+import com.elypia.jdac.*;
 import com.elypia.jdac.validation.*;
 import net.dv8tion.jda.api.*;
 import net.dv8tion.jda.api.entities.*;
@@ -35,19 +34,6 @@ public class BotModule extends JDACHandler {
 
 	private long ownerId;
 
-	/**
-	 * Initialise the module, this will assign the values
-	 * in the module and create a {@link ModuleData} which is
-	 * what {@link Commandler} uses in runtime to identify modules,
-	 * commands or obtain any static data.
-	 *
-	 * @param commandler Our parent Commandler class.
-	 */
-	public BotModule(Commandler<GenericMessageEvent, Message> commandler) {
-		super(commandler);
-	}
-
-	@Example(command = ">ping", response = "pong!")
 	@Static
 	@Command(id = "bot.ping.name", aliases = "ping", help = "bot.ping.help")
 	public String ping(JDACEvent event) {
@@ -71,7 +57,7 @@ public class BotModule extends JDACHandler {
 		builder.setTitle(alexis.getName());
 		builder.setDescription(scripts.get(source, "bot.description") + "\n_ _");
 		builder.setThumbnail(alexis.getAvatarUrl());
-		BotConfig config = Alexis.config;
+		ConfigurationService configurationService = Alexis.configurationService;
 
 		if (ownerId == 0)
 			ownerId = source.getJDA().getApplicationInfo().complete().getOwner().getIdLong();
@@ -94,7 +80,7 @@ public class BotModule extends JDACHandler {
 			String userField = String.format("%,d (%,d)", users.size() - bots, bots);
 			builder.addField("bot.total_users", userField, true);
 
-			Guild guild = jda.getGuildById(config.getDiscordConfig().getSupportGuild());
+			Guild guild = jda.getGuildById(configurationService.getDiscordConfig().getSupportGuild());
 			guild.getInvites().queue(invites -> {
 				Optional<Invite> invite = invites.stream().max((one, two) -> one.getUses() > two.getUses() ? 1 : -1);
 				invite.ifPresent(o -> builder.addField("bot.support_guild", Md.a("Elypia", o.getUrl()), true));
@@ -105,16 +91,14 @@ public class BotModule extends JDACHandler {
 
 	@Static
 	@Command(id = "bot.script.name", aliases = "script", help = "bot.script.help")
-	@Param(id = "common.body", help = "bot.param.body.script.help")
-	public String sayEly(JDACEvent event, @Everyone String body) {
+	public String sayEly(JDACEvent event, @Param("bot.param.body.script.help") @Everyone String body) {
 		event.delete();
 		return new ElyScript(body).compile();
 	}
 
 	@Static
 	@Command(id = "bot.say.name", aliases = "say", help = "bot.say.help")
-	@Param(id = "common.body", help = "bot.param.body.say.help")
-	public String say(JDACEvent event, @Everyone String body) {
+	public String say(@Params BotSayParams params) {
 		event.delete();
 		return body;
 	}

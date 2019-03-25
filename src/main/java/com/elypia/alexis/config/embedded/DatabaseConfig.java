@@ -10,9 +10,6 @@ public class DatabaseConfig {
     @Path("port")
     private int port;
 
-    @Path("auth_database")
-    private String authDatabase;
-
     @Path("user")
     private String user;
 
@@ -32,10 +29,6 @@ public class DatabaseConfig {
 
     public int getPort() {
         return port;
-    }
-
-    public String getAuthDatabase() {
-        return authDatabase;
     }
 
     public String getUser() {

@@ -1,7 +1,6 @@
 package com.elypia.alexis.commandler.validation;
 
 import com.elypia.alexis.Alexis;
-import com.elypia.alexis.utils.BotUtils;
 import com.elypia.jdac.alias.JDACEvent;
 
 import javax.validation.*;
@@ -22,7 +21,7 @@ public @interface Database {
 
         @Override
         public boolean isValid(JDACEvent value, ConstraintValidatorContext context) {
-            return Alexis.config.getDebugConfig().isDatabaseEnabled() && Alexis.getDatabaseManager() != null;
+            return Alexis.configurationService.getDebugConfig().isDatabaseEnabled() && Alexis.getDatabaseManager() != null;
         }
     }
 }

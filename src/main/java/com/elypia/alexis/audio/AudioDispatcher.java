@@ -2,7 +2,7 @@ package com.elypia.alexis.audio;
 
 import com.elypia.alexis.Alexis;
 import com.elypia.alexis.entities.GuildData;
-import com.elypia.alexis.google.youtube.YouTubeHelper;
+import com.elypia.alexis.google.youtube.YouTubeService;
 import com.elypia.alexis.utils.Md;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter;
@@ -43,7 +43,7 @@ public class AudioDispatcher extends AudioEventAdapter {
 
 		if (track.getSourceManager() instanceof YoutubeAudioSourceManager) {
 			builder.setThumbnail("");
-			builder.setImage(YouTubeHelper.getVideoUrl(info.identifier));
+			builder.setImage(YouTubeService.getVideoUrl(info.identifier));
 		}
 
 		if (data.getSettings().getMusicSettings().getSyncChannelName()) {

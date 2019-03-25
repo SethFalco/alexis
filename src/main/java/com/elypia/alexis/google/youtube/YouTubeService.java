@@ -11,7 +11,7 @@ import java.security.GeneralSecurityException;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
-public class YouTubeHelper {
+public class YouTubeService {
 
     private static final List<String> SCOPES = List.of(YouTubeScopes.YOUTUBE_READONLY);
 
@@ -21,12 +21,12 @@ public class YouTubeHelper {
     private final YouTube youtube;
     private final Map<String, String> channelThumbnailCache;
 
-    public YouTubeHelper(String applicationName) throws IOException, GeneralSecurityException {
+    public YouTubeService() throws IOException, GeneralSecurityException {
         youtube = new YouTube.Builder(
             GoogleNetHttpTransport.newTrustedTransport(),
             JacksonFactory.getDefaultInstance(),
             GoogleCredential.getApplicationDefault().createScoped(SCOPES)
-        ).setApplicationName(applicationName).build();
+        ).setApplicationName("Alexis").build();
 
         channelThumbnailCache = new HashMap<>();
     }

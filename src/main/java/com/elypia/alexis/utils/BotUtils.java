@@ -1,6 +1,6 @@
 package com.elypia.alexis.utils;
 
-import com.elypia.jdac.alias.JDACEvent;
+import com.elypia.jdac.JDACEvent;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.guild.GenericGuildEvent;

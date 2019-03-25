@@ -2,11 +2,9 @@ package com.elypia.alexis;
 
 import com.elypia.alexis.entities.*;
 import com.elypia.alexis.entities.embedded.*;
-import com.elypia.alexis.google.translate.TranslateHelper;
+import com.elypia.alexis.google.TranslateService;
 import com.elypia.alexis.utils.*;
 import com.elypia.elypiai.runescape.RuneScape;
-import com.google.cloud.translate.Language;
-import com.google.cloud.translate.*;
 import net.dv8tion.jda.api.*;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.ReadyEvent;
@@ -25,11 +23,9 @@ public class EventHandler extends ListenerAdapter {
 
 	private static final Logger logger = LoggerFactory.getLogger(EventHandler.class);
 
-	private TranslateHelper translate = new TranslateHelper();
+	private TranslateService translate = new TranslateService();
 
 	/**
-	 * Occurs when the bot succesfully logs in.
-	 *
 	 * @param event ReadyEvent
 	 */
 	@Override
@@ -58,7 +54,7 @@ public class EventHandler extends ListenerAdapter {
 		if (channel == null)
 			return;
 
-		String prefix = Alexis.config.getDiscordConfig().getPrefix();
+		String prefix = Alexis.configurationService.getDiscordConfig().getPrefix();
 		String message = "Thank you for inviting me! My default prefix is `" + prefix + "` but you can mention me too!\nFeel free to try my help command!";
 		channel.sendMessage(message).queue();
 
@@ -229,59 +225,5 @@ public class EventHandler extends ListenerAdapter {
 
 		if (settings.isEnabled())
 			translate(event, settings);
-	}
-
-	/**
-	 * If the translate feature is enabled for the Guild we should check
-	 * reactions for if they're flags and if so, respond to the message
-	 * by translating the message to an appropriate languages the flag
-	 * may represent. <br>
-	 * <br>
-	 * <strong>Note:</strong> We pass the settings over so we don't have
-	 * to query them again.
-	 *
-	 * @param event The source event which may have request translating.
-	 * @param settings The guild settings regarding translation.
-	 */
-	private void translate(MessageReactionAddEvent event, TranslateSettings settings) {
-		if (!settings.isEnabled())
-			return;
-
-		String code = event.getReactionEmote().getName();
-		var languages = translate.getSupportedLangauges();
-
-		for (var entry : languages.entrySet()) {
-			Country[] countries = entry.getKey().getCountries();
-			Language value = entry.getValue();
-
-			for (Country country : countries) {
-				if (country.getUnicodeEmote().equals(code)) {
-					event.getChannel().getMessageById(event.getMessageIdLong()).queue(message -> {
-						String content = message.getContentStripped();
-						Translation translation = translate.translate(content, value);
-						var source = translate.getLanguage(translation.getSourceLanguage()).getKey();
-
-						EmbedBuilder builder = new EmbedBuilder();
-						builder.addField("Source (" + source.getName() + ")", content + "\n_ _", false);
-						builder.addField("Target (" + value.getName() + ")", translation.getTranslatedText(), false);
-						builder.setImage("https://elypia.com/resources/google.png");
-						builder.setFooter("http://translate.google.com/", null);
-
-						if (event.getGuild() != null)
-							builder.setColor(event.getGuild().getSelfMember().getColor());
-
-						if (!settings.isPrivate())
-							event.getChannel().sendMessage(builder.build()).queue();
-						else {
-							event.getMember().getUser().openPrivateChannel().queue(o -> {
-								o.sendMessage(builder.build()).queue();
-							});
-						}
-					});
-
-					return;
-				}
-			}
-		}
 	}
 }

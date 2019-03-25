@@ -30,7 +30,7 @@ public class SteamModule extends JDACHandler {
 	 */
 	public SteamModule(Commandler<GenericMessageEvent, Message> commandler) {
 		super(commandler);
-		steam = new Steam(Alexis.config.getApiCredentials().getSteam());
+		steam = new Steam(Alexis.configurationService.getApiCredentials().getSteam());
 	}
 
 	@Command(id = "Steam Profile", aliases = {"get", "user", "profile"}, help = "steam.get.help")

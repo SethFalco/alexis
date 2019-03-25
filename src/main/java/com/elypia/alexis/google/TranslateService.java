@@ -1,15 +1,15 @@
-package com.elypia.alexis.google.translate;
+package com.elypia.alexis.google;
 
 import com.google.cloud.translate.*;
 
 import java.util.*;
 
-public class TranslateHelper {
+public class TranslateService {
 
     private Translate translate;
     private Map<com.elypia.alexis.utils.Language, Language> languages;
 
-    public TranslateHelper() {
+    public TranslateService() {
         translate = TranslateOptions.getDefaultInstance().getService();
 
         languages = new HashMap<>();

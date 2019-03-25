@@ -1,6 +1,6 @@
 package com.elypia.alexis.commandler.builders;
 
-import com.elypia.alexis.google.youtube.YouTubeHelper;
+import com.elypia.alexis.google.youtube.YouTubeService;
 import com.elypia.alexis.utils.BotUtils;
 import com.elypia.commandler.annotations.Compatible;
 import com.elypia.jdac.alias.*;
@@ -18,9 +18,9 @@ public class YouTubeSearchResultBuilder implements IJDACBuilder<SearchResult> {
 
     private static final SimpleDateFormat FORMAT = new SimpleDateFormat("dd MMM YYYY");
 
-    private YouTubeHelper youtube;
+    private YouTubeService youtube;
 
-    public YouTubeSearchResultBuilder(YouTubeHelper youtube) {
+    public YouTubeSearchResultBuilder(YouTubeService youtube) {
         this.youtube = youtube;
     }
 
@@ -31,9 +31,9 @@ public class YouTubeSearchResultBuilder implements IJDACBuilder<SearchResult> {
 
         EmbedBuilder builder = BotUtils.newEmbed(event);
         builder.setAuthor(snippet.getChannelTitle());
-        builder.setTitle(snippet.getTitle(), YouTubeHelper.getVideoUrl(videoId));
+        builder.setTitle(snippet.getTitle(), YouTubeService.getVideoUrl(videoId));
         builder.setDescription(snippet.getDescription());
-        builder.setImage(YouTubeHelper.getThumbnailUrl(videoId));
+        builder.setImage(YouTubeService.getThumbnailUrl(videoId));
 
         DateTime datetime = snippet.getPublishedAt();
         long milli = datetime.getValue();
@@ -53,7 +53,7 @@ public class YouTubeSearchResultBuilder implements IJDACBuilder<SearchResult> {
     @Override
     public Message build(JDACEvent event, SearchResult output) {
         String videoId = output.getId().getVideoId();
-        String url = YouTubeHelper.getVideoUrl(videoId);
+        String url = YouTubeService.getVideoUrl(videoId);
         return new MessageBuilder(url).build();
     }
 }

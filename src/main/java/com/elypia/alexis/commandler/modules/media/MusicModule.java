@@ -3,7 +3,7 @@ package com.elypia.alexis.commandler.modules.media;
 import com.elypia.alexis.audio.*;
 import com.elypia.alexis.entities.GuildData;
 import com.elypia.alexis.entities.embedded.MusicSettings;
-import com.elypia.alexis.google.youtube.YouTubeHelper;
+import com.elypia.alexis.google.youtube.YouTubeService;
 import com.elypia.alexis.utils.Md;
 import com.elypia.commandler.Commandler;
 import com.elypia.commandler.annotations.Module;
@@ -36,7 +36,7 @@ public class MusicModule extends JDACHandler {
 	 * This allows us to query YouTube for information on videos,
 	 * channels or playlists.
 	 */
-	private YouTubeHelper youtube;
+	private YouTubeService youtube;
 
 	/**
 	 * The manager class which allows us to create new audio players
@@ -58,7 +58,7 @@ public class MusicModule extends JDACHandler {
 	 *
 	 * @param commandler Our parent Commandler class.
 	 */
-	public MusicModule(Commandler<GenericMessageEvent, Message> commandler, YouTubeHelper youtube) {
+	public MusicModule(Commandler<GenericMessageEvent, Message> commandler, YouTubeService youtube) {
 		super(commandler);
 		this.youtube = youtube;
 		manager = new DefaultAudioPlayerManager();
@@ -118,7 +118,7 @@ public class MusicModule extends JDACHandler {
 
 		if (playing != null) {
 			AudioTrackInfo info = playing.getInfo();
-			String position = info.isStream ? "**\\\uD83D\uDD34Live**" : YouTubeHelper.toYouTubeTimeFormat(TimeUnit.MILLISECONDS, playing.getPosition(), playing.getDuration());
+			String position = info.isStream ? "**\\\uD83D\uDD34Live**" : YouTubeService.toYouTubeTimeFormat(TimeUnit.MILLISECONDS, playing.getPosition(), playing.getDuration());
 			String title = formTitle(info.author, info.title, info.uri);
 
 			if (!queue.isEmpty())

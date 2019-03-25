@@ -30,7 +30,7 @@ public class TwitchModule extends JDACHandler {
      */
     public TwitchModule(Commandler<GenericMessageEvent, Message> commandler) {
         super(commandler);
-        twitch = new Twitch(Alexis.config.getApiCredentials().getTwitch());
+        twitch = new Twitch(Alexis.configurationService.getApiCredentials().getTwitch());
     }
 
     @Command(id = "twitch.info", aliases = {"get", "info"}, help = "twitch.info.h")

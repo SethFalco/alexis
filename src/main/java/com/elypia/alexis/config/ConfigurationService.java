@@ -4,7 +4,7 @@ import com.electronwill.nightconfig.core.conversion.*;
 import com.electronwill.nightconfig.core.file.FileConfig;
 import com.elypia.alexis.config.embedded.*;
 
-public class BotConfig {
+public class ConfigurationService {
 
     @Path("name")
     private String applicationName;
@@ -37,15 +37,20 @@ public class BotConfig {
     @Path("debug")
     private DebugConfig debugConfig;
 
-    private BotConfig() {
-
-    }
-
-    public static BotConfig load(String path) {
+    public ConfigurationService(String path) {
         FileConfig fileConfig = FileConfig.of(path);
         fileConfig.load();
 
-        return new ObjectConverter().toObject(fileConfig, BotConfig::new);
+        var config = new ObjectConverter().toObject(fileConfig, ConfigurationService::new);
+    }
+
+    public ConfigurationService(ConfigurationService configuration) {
+        this.applicationName = configuration.applicationName;
+        this.scriptsConfig = configuration.scriptsConfig;
+        this.databaseConfig = configuration.databaseConfig;
+        this.discordConfig = configuration.discordConfig;
+        this.apiCredentials = configuration.apiCredentials;
+        this.debugConfig = configuration.debugConfig;
     }
 
     public String getApplicationName() {

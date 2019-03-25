@@ -1,16 +1,12 @@
 package com.elypia.alexis.commandler.modules;
 
-import com.elypia.commandler.Commandler;
 import com.elypia.commandler.annotations.Module;
 import com.elypia.commandler.annotations.*;
-import com.elypia.commandler.metadata.ModuleData;
 import com.elypia.elypiai.restutils.RestLatch;
 import com.elypia.elypiai.urbandictionary.*;
 import com.elypia.elypiai.urbandictionary.data.ResultType;
 import com.elypia.jdac.alias.*;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.events.message.GenericMessageEvent;
 import org.slf4j.*;
 
 @Module(id = "Urban Dictionary", aliases = {"urbandictionary", "urbandict", "urban", "ud"}, help = "urban.h")
@@ -20,16 +16,7 @@ public class UrbanDictionaryModule extends JDACHandler {
 
 	private UrbanDictionary ud;
 
-    /**
-     * Initialise the module, this will assign the values
-     * in the module and create a {@link ModuleData} which is
-     * what {@link Commandler} uses in runtime to identify modules,
-     * commands or obtain any static data.
-     *
-     * @param commandler Our parent Commandler class.
-     */
-    public UrbanDictionaryModule(Commandler<GenericMessageEvent, Message> commandler) {
-        super(commandler);
+    public UrbanDictionaryModule() {
         ud = new UrbanDictionary();
     }
 

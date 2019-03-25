@@ -1,17 +1,14 @@
 package com.elypia.alexis;
 
-import com.elypia.alexis.config.BotConfig;
+import com.elypia.alexis.commandler.AlexisMisuseHandler;
+import com.elypia.alexis.config.ConfigurationService;
 import com.elypia.alexis.config.embedded.DiscordConfig;
-import com.elypia.alexis.entities.AlexisError;
-import com.elypia.alexis.google.youtube.YouTubeHelper;
-import com.elypia.alexis.managers.DatabaseManager;
+import com.elypia.alexis.database.DatabaseService;
 import com.elypia.commandler.*;
-import com.elypia.elypiai.osu.Game;
-import com.elypia.jdac.JDACDispatcher;
-import com.elypia.jdac.alias.*;
+import com.elypia.jdac.*;
+import lavalink.client.io.jda.JdaLavalink;
 import net.dv8tion.jda.api.*;
 import net.dv8tion.jda.api.entities.Activity;
-import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.*;
 
 import java.io.IOException;
@@ -31,77 +28,44 @@ public class Alexis {
 	 */
 	public static final long START_TIME = System.currentTimeMillis();
 
-	public static BotConfig config;
-
-	/**
-	 * The JDA instance used to communicate with Discord.
-	 */
-	public static JDA jda;
-
-	private static DatabaseManager dbManager;
-
 	public static void main(String[] args) throws IOException, GeneralSecurityException {
-		// Configuration
-		config = BotConfig.load("./alexis.toml");
+		logger.info("Initilising: Configuration Step");
+		ConfigurationService configuration = new ConfigurationService("alexis.toml");
 
-		// ElyScript
+		logger.info("Initilising: ElyScript Step");
 		ElyScripts scripts = new ElyScripts(
-			config.getApplicationName(),
-			config.getScriptsConfig().getId(),
-			config.getScriptsConfig().getRange()
+			configuration.getApplicationName(),
+			configuration.getScriptsConfig().getId(),
+			configuration.getScriptsConfig().getRange()
 		);
 
-		// JDAC
-		YouTubeHelper youtube = new YouTubeHelper("Alexis");
+		logger.info("Initilising: JDAC Step");
+		JDAC jdac = new JDAC.Builder()
+			.setPrefix(">")
+			.setContext(new Context(Alexis.class))
+			.setWebsite("https://alexis.elypia.com/")
+			.setEngine(scripts)
+			.setMisuseHandler(new AlexisMisuseHandler())
+			.build();
 
-		ModulesContext context = new ModulesContext();
-		context.addPackage("com.elypia.alexis.commandler.modules");
-		context.addModules(HelpModule.class);
+		logger.info("Initilising: JDA Step");
+		DiscordConfig discord = configuration.getDiscordConfig();
 
-		JDAC.Builder jdacBuilder = new JDAC.Builder();
-		jdacBuilder.setPrefix(">");
-		jdacBuilder.setContext(context);
-		jdacBuilder.setWebsite("https://alexis.elypia.com/");
-		jdacBuilder.setEngine(scripts);
-		jdacBuilder.setMisuseHandler(new AlexisMisuseHandler());
-
-		JDAC jdac = jdacBuilder.build();
-
-		jdac.getParser().addPackage("com.elypia.alexis.commadnelr.parsers");
-		jdac.getBuilder().addPackage("com.elypia.alexis.commandler.builders", IJDACBuilder.class);
-
-//		jdac.addInstance(new MusicModule(youtube, jdac));
-//		jdac.addInstance(new YouTubeModule(youtube, jdac));
-
-		jdac.getTestRunner().addPostAction((report) -> {
-			Exception ex = report.getException();
-
-			if (ex != null)
-				new AlexisError(ExceptionUtils.getStackTrace(ex)).commit();
-		});
-
-		// JDA
-		DiscordConfig discord = config.getDiscordConfig();
-
-		new JDABuilder(discord.getToken())
+		JDA jda = new JDABuilder(discord.getToken())
 			.setStatus(OnlineStatus.IDLE)
 			.setActivity(Activity.watching("Seth turn me on!"))
 			.setBulkDeleteSplittingEnabled(false)
 			.addEventListeners(new JDACDispatcher(jdac), new EventHandler())
 			.build();
 
-		if (config.getDebugConfig().isDatabaseEnabled())
-			dbManager = new DatabaseManager(config.getDatabaseConfig());
+		if (configuration.getDebugConfig().isDatabaseEnabled())
+			DatabaseService database = new DatabaseService(configuration.getDatabaseConfig());
 
-		// LavaLink
-//		JdaLavalink lavalink = new JdaLavalink(
-//			myDiscordUserId,
-//			fixedNumberOfShards,
-//			shardId -> getJdaInstanceFromId(shardId)
-//		);
-	}
-
-	public static DatabaseManager getDatabaseManager() {
-		return dbManager;
+		logger.info("Initilising: LavaLink Step");
+		JdaLavalink lavalink = new JdaLavalink(
+			0,
+			0,
+			shardId -> jda
+		);
 	}
 }

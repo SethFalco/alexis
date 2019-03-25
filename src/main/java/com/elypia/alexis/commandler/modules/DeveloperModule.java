@@ -7,6 +7,7 @@ import com.elypia.commandler.Commandler;
 import com.elypia.commandler.annotations.Module;
 import com.elypia.commandler.annotations.*;
 import com.elypia.commandler.metadata.ModuleData;
+import com.elypia.jdac.*;
 import com.elypia.jdac.alias.*;
 import com.elypia.jdac.validation.Developer;
 import net.dv8tion.jda.api.*;
@@ -24,21 +25,11 @@ public class DeveloperModule extends JDACHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(DeveloperModule.class);
 
-    /**
-     * Initialise the module, this will assign the values
-     * in the module and create a {@link ModuleData} which is
-     * what {@link Commandler} uses in runtime to identify modules,
-     * commands or obtain any static data.
-     *
-     * @param commandler Our parent Commandler class.
-     */
-    public DeveloperModule(Commandler<GenericMessageEvent, Message> commandler) {
-        super(commandler);
-    }
-
     @Command(id = "dev.rename", aliases = "name", help = "dev.name.h")
-    @Param(id = "dev.name.p.name", help = "dev.name.p.name.h")
-    public void name(@Developer JDACEvent event, String input) {
+    public void name(
+        @Developer JDACEvent event,
+        @Param(id = "dev.name.p.name", help = "dev.name.p.name.h") String input
+    ) {
         event.getSource().getJDA().getSelfUser().getManager().setName(input).queue(o -> {
             var params = Map.of("name", input);
             event.send("dev.name.success");
@@ -46,8 +37,10 @@ public class DeveloperModule extends JDACHandler {
     }
 
     @Command(id = "dev.avatar", aliases = {"avatar", "pp"}, help = "dev.avatar.h")
-    @Param(id = "common.url", help = "dev.avatar.p.url.h")
-    public void avatar(@Developer JDACEvent event, URL url) throws IOException {
+    public void avatar(
+        @Developer JDACEvent event,
+        @Param(id = "common.url", help = "dev.avatar.p.url.h") URL url
+    ) throws IOException {
         try (InputStream stream = url.openStream()) {
             Icon icon = Icon.from(stream);
 
@@ -57,8 +50,7 @@ public class DeveloperModule extends JDACHandler {
         }
     }
 
-    @Command(id = "dev.shutdown", aliases = "shutdown", help = "dev.shutdown.h")
-    public void shutdown(@Developer JDACEvent event) {
+    public void shutdownCommand(@Developer JDACEvent event) {
         JDA jda = event.getSource().getJDA();
         jda.removeEventListener(jda.getRegisteredListeners());
         jda.shutdown();
@@ -70,8 +62,10 @@ public class DeveloperModule extends JDACHandler {
     }
 
     @Command(id = "dev.embed", aliases = "embed", help = "dev.embed.h")
-    @Param(id = "common.url", help = "dev.embed.p.url.h")
-    public EmbedBuilder embedTest(@Developer String url) {
+    public EmbedBuilder embedTest(
+        @Developer JDACEvent event,
+        @Param(id = "common.url", help = "dev.embed.p.url.h") String url
+    ) {
         return new EmbedBuilder().setImage(url);
     }
 

@@ -1,10 +1,8 @@
-package com.elypia.alexis;
+package com.elypia.alexis.commandler;
 
-import com.elypia.alexis.entities.AlexisError;
 import com.elypia.commandler.MisuseHandler;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.message.GenericMessageEvent;
-import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.*;
 
 public class AlexisMisuseHandler extends MisuseHandler<GenericMessageEvent, Message> {
@@ -13,11 +11,7 @@ public class AlexisMisuseHandler extends MisuseHandler<GenericMessageEvent, Mess
 
     @Override
     public <X extends Exception> String onException(X ex) {
-        String stacktrace = ExceptionUtils.getStackTrace(ex);
-        new AlexisError(stacktrace).commit();
-
         logger.error("An unknown error occured.", ex);
-
         return "A teddy bear had been spotted stealing a line of code, it seems it broke some of our functionality";
     }
 }

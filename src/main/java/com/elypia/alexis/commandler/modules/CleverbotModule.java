@@ -3,14 +3,11 @@ package com.elypia.alexis.commandler.modules;
 import com.elypia.alexis.Alexis;
 import com.elypia.alexis.commandler.validation.Database;
 import com.elypia.alexis.entities.MessageChannelData;
-import com.elypia.commandler.Commandler;
 import com.elypia.commandler.annotations.Module;
 import com.elypia.commandler.annotations.*;
-import com.elypia.commandler.metadata.ModuleData;
 import com.elypia.elypiai.cleverbot.Cleverbot;
 import com.elypia.jdac.alias.*;
 import net.dv8tion.jda.api.entities.*;
-import net.dv8tion.jda.api.events.message.GenericMessageEvent;
 import org.slf4j.*;
 
 @Module(id = "Cleverbot", aliases = {"cleverbot", "cb"}, help = "cb.help")
@@ -20,17 +17,8 @@ public class CleverbotModule extends JDACHandler {
 
     private Cleverbot cleverbot;
 
-    /**
-     * Initialise the module, this will assign the values
-     * in the module and create a {@link ModuleData} which is
-     * what {@link Commandler} uses in runtime to identify modules,
-     * commands or obtain any static data.
-     *
-     * @param commandler Our parent Commandler class.
-     */
-    public CleverbotModule(Commandler<GenericMessageEvent, Message> commandler) {
-        super(commandler);
-        cleverbot = new Cleverbot(Alexis.config.getApiCredentials().getCleverbot());
+    public CleverbotModule() {
+        cleverbot = new Cleverbot(Alexis.configurationService.getApiCredentials().getCleverbot());
     }
 
     @Command(id = "cb.say.name", aliases = {"say", "ask"}, help = "cb.say.help")
