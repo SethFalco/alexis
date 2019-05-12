@@ -7,4 +7,3 @@ ENV GOOGLE_APPLICATION_CREDENTIALS $HOME_DIR/google_credentials.json
 WORKDIR $HOME_DIR
 
 ENTRYPOINT ["java", "-Djavax.net.ssl.trustStore=$JKS_PATH", "-jar", "alexis.jar"]
-
