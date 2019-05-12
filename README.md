@@ -1,6 +1,10 @@
-[![Alexis Banner](./assets/banner.png)](https://discord.gg/hprGMaM)
-# Alexis [![Discord](https://discordapp.com/api/guilds/184657525990359041/widget.png)](https://discord.gg/hprGMaM) [![pipeline status](https://gitlab.com/Elypia/Alexis/badges/master/pipeline.svg)](https://gitlab.com/Elypia/Alexis/commits/master) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/3a71314b2c814cd08d46077a050d9d4c)](https://www.codacy.com?utm_source=gitlab.com&amp;utm_medium=referral&amp;utm_content=Elypia/Alexis&amp;utm_campaign=Badge_Grade)
-
+![Alexis Banner](./assets/banner.png)
+# Alexis [![Discord][discord-members]][discord] [![GitLab Build][gitlab-build]][gitlab] [![GitLab Coverage][gitlab-coverage]][gitlab]
 ## About Me
 I'm a general purpose Discord bot with various functionality and integrations with many popular games and services like Twitch, Steam and RuneScape. I also performs many functions in guilds to help manage and automate management or encourage activity.
 
+[discord]: https://discord.gg/hprGMaM "Discord Invite"
+[discord-members]: https://discordapp.com/api/guilds/184657525990359041/widget.png "Discord Shield"
+[gitlab]: https://gitlab.com/Elypia/alexis/commits/master "Repository on GitLab"
+[gitlab-build]: https://gitlab.com/Elypia/alexis/badges/master/pipeline.svg "GitLab Build Shield"
+[gitlab-coverage]: https://gitlab.com/Elypia/alexis/badges/master/coverage.svg "GitLab Coverage Shield"

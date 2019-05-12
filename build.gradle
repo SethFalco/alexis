@@ -2,15 +2,14 @@ plugins {
     id 'java'
     id 'idea'
     id "jacoco"
-    id "com.github.johnrengelman.shadow" version "4.0.4"
+    id "com.github.johnrengelman.shadow" version "5.0.0"
 }
 
 shadowJar {
-    baseName = this.name
     version = "3.0.0"
 
     manifest {
-        attributes 'Implementation-Title' : baseName,
+        attributes 'Implementation-Title' : archiveBaseName,
                    'Implementation-Version' : version,
                    'Main-Class' : "com.elypia.alexis.Alexis"
     }
@@ -31,14 +30,14 @@ repositories  {
 
 dependencies {
     // JDAC
-    implementation files("/home/seth/Desktop/Elypia/Git/Commandler/export/build/libs/export.jar")
-    implementation files("/home/seth/Desktop/Elypia/Git/JDAC/core/build/libs/core.jar")
-    implementation files("/home/seth/Desktop/Elypia/Git/JDAC/logback-logging/build/libs/logback-logging.jar")
+    implementation "com.elypia.commandler:core:3.0.0"
+    implementation "com.elypia.commandler:export:3.0.0"
+    implementation "com.elypia.commandler:logback-logging:3.0.0"
 
     // Elypiai
     implementation "com.elypia.elypiai:cleverbot:2.1.2"
-    implementation files("/home/seth/Desktop/Elypia/Git/Elypiai/nanowrimo/build/libs/nanowrimo.jar")
-    implementation files("/home/seth/Desktop/Elypia/Git/Elypiai/osu/build/libs/osu.jar")
+    implementation "com.elypia.elypiai:nanowrimo:2.1.2"
+    implementation "com.elypia.elypiai:osu:2.1.2"
     implementation "com.elypia.elypiai:runescape:2.1.2"
     implementation "com.elypia.elypiai:steam:2.1.2"
     implementation "com.elypia.elypiai:twitch:2.1.2"
@@ -48,52 +47,34 @@ dependencies {
     implementation "com.elypia.elyscript:sheets:1.0.1"
 
     // Database
-    implementation "org.hibernate:hibernate-core:5.4.1.Final"
-    runtimeOnly "mysql:mysql-connector-java:8.0.15"
+    implementation "org.hibernate:hibernate-core:5.4.2.Final"
+    runtimeOnly "mysql:mysql-connector-java:8.0.16"
 
     // Config
-    implementation "com.electronwill.night-config:core:3.4.2"
-    runtimeOnly "com.electronwill.night-config:toml:3.4.2"
+    implementation "com.electronwill.night-config:core:3.6.0"
+    runtimeOnly "com.electronwill.night-config:toml:3.6.0"
 
     // Discord
-    implementation "net.dv8tion:JDA:4.ALPHA.0_45"
+    implementation "net.dv8tion:JDA:4.ALPHA.0_86"
     implementation "com.github.FredBoat:Lavalink-Client:3.0"
     implementation "com.github.DiscordBotList:DBL-Java-Library:2.0.1"
 
     // Google
     implementation "com.google.cloud:google-cloud-translate:1.62.0"
-    implementation "com.google.apis:google-api-services-youtube:v3-rev206-1.25.0"
+    implementation "com.google.apis:google-api-services-youtube:v3-rev211-1.25.0"
 
     // Logging
-    implementation "org.slf4j:slf4j-api:1.7.25"
+    implementation "org.slf4j:slf4j-api:1.7.26"
     runtimeOnly "ch.qos.logback:logback-classic:1.2.3"
 
     // Testing
-    testImplementation "org.junit.jupiter:junit-jupiter-api:5.4.0"
-    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.4.0"
-    testRuntimeOnly "org.junit.platform:junit-platform-runner:1.4.0"
+    testImplementation "org.junit.jupiter:junit-jupiter:5.4.2"
 
     // Mocking
-    testImplementation "org.mockito:mockito-core:2.24.0"
+    testImplementation "org.mockito:mockito-core:2.27.0"
 }
 
-/**
- * Testing, reporting and coverage for Codacy.
- */
-
-configurations {
-    codacy
-}
-
-repositories {
-    maven {
-        url "http://dl.bintray.com/typesafe/maven-releases"
-    }
-}
-
-dependencies {
-    codacy 'com.github.codacy:codacy-coverage-reporter:-SNAPSHOT'
-}
+/** Testing and Code Coverage */
 
 test {
     useJUnitPlatform()
@@ -105,21 +86,12 @@ test {
 }
 
 jacoco {
-    toolVersion = "0.8.3"
+    toolVersion = "0.8.4"
 }
 
 jacocoTestReport {
     reports {
-        html.enabled = false
-        xml.enabled = true
+        html.enabled = true
+        xml.enabled = false
     }
-}
-
-task codacyCoverage(type: JavaExec, dependsOn: jacocoTestReport) {
-    main = "com.codacy.CodacyCoverageReporter"
-    classpath = configurations.codacy
-
-    args = [
-        "report", "-l", "Java", "-r", "${buildDir}/reports/jacoco/jacocoTestReport/jacoco.xml"
-    ]
 }
