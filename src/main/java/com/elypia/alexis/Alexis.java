@@ -52,7 +52,7 @@ public class Alexis {
 			.addEventListeners(new AlexisHandler())
 			.build();
 
-		new DiscordController(commandler.getDispatchManager(), jda);
+		new DiscordController(commandler.getDispatcherManager(), jda);
 
 		if (configuration.getDebugConfig().isDatabaseEnabled())
 			DatabaseService database = new DatabaseService(configuration.getDatabaseConfig());
