@@ -1,22 +1,35 @@
-package com.elypia.alexis.config.embedded;
+package com.elypia.alexis.config;
 
 import com.electronwill.nightconfig.core.conversion.Path;
 
-import java.util.List;
+import javax.inject.Singleton;
 
+@Singleton
 public class ApiCredentials {
 
+    /** The path to the Service Account Key JSON file. */
+    @Path("google")
+    private String google;
+
+    /** The osu! API key. */
     @Path("osu")
     private String osu;
 
+    /** Twitch API credentials. */
     @Path("twitch")
     private TwitchConfig twitchConfig;
 
+    /** Steam API key. */
     @Path("steam")
     private String steam;
 
+    /** Cleverbot API key. */
     @Path("cleverbot")
     private String cleverbot;
+
+    public String getGoogle() {
+        return google;
+    }
 
     public String getOsu() {
         return osu;

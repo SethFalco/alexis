@@ -49,7 +49,6 @@ gradle-app.setting
 # Configuration
 *.json
 *.toml
-*.properties
 
 # IntelliJ
 /out/

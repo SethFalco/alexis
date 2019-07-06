@@ -1,14 +1,16 @@
-package com.elypia.alexis.commandler.parsers;
+package com.elypia.alexis.commandler.adapters;
 
 import com.elypia.alexis.utils.*;
-import com.elypia.commandler.annotations.Compatible;
-import com.elypia.commandler.metadata.ParamData;
-import com.elypia.jdac.alias.*;
+import com.elypia.commandler.CommandlerEvent;
+import com.elypia.commandler.annotations.Adapter;
+import com.elypia.commandler.interfaces.ParamAdapter;
+import com.elypia.commandler.metadata.data.MetaParam;
 
 import java.util.Map;
 
-@Compatible(Language.class)
-public class LanguageParser implements IJDACParser<Language> {
+// TODO: Instead of using Language, see if I can use Locale
+@Adapter(Language.class)
+public class LanguageAdapter implements ParamAdapter<Language> {
 
     private static final Map<String, Language> OTHER = Map.of(
         "baguette", Language.FRENCH,
@@ -19,7 +21,7 @@ public class LanguageParser implements IJDACParser<Language> {
     );
 
     @Override
-    public Language parse(JDACEvent event, ParamData data, Class<? extends Language> type, String input) {
+    public Language adapt(String input, Class<? extends Language> type, MetaParam param, CommandlerEvent<?> event) {
         for (Language language : Language.values()) {
             if (language.getName().equalsIgnoreCase(input))
                 return language;

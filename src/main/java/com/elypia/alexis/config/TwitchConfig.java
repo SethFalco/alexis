@@ -1,7 +1,10 @@
-package com.elypia.alexis.config.embedded;
+package com.elypia.alexis.config;
 
 import com.electronwill.nightconfig.core.conversion.Path;
 
+import javax.inject.Singleton;
+
+@Singleton
 public class TwitchConfig {
 
     @Path("key")

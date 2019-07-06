@@ -6,19 +6,19 @@ variables:
 before_script:
   - export GRADLE_USER_HOME=`pwd`/.gradle
 
+cache:
+  paths:
+    - .gradle
+    - build
+
 build:
   stage: build
-  script: gradle --build-cache shadowJar
-  cache:
-    paths:
-      - .gradle
-      - build
+  script: gradle --build-cache --full-stacktrace shadowJar
 
-.test:
+test:
   stage: test
   script:
-    - gradle --build-cache check
-  cache:
-    paths:
-      - .gradle
-      - build
+    - gradle --build-cache --full-stacktrace check
+    - cat build/reports/jacoco/jacocoReport/html/index.html # TODO: This path is wrong
+
+deploy:

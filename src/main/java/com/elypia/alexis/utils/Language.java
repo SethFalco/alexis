@@ -1,5 +1,7 @@
 package com.elypia.alexis.utils;
 
+import java.util.Locale;
+
 import static com.elypia.alexis.utils.Country.*;
 
 public enum Language {
@@ -100,6 +102,7 @@ public enum Language {
     }
 
     public String getName() {
+        new Locale()
         return LANGUAGE;
     }
 

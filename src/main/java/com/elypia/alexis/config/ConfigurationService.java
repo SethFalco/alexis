@@ -2,15 +2,11 @@ package com.elypia.alexis.config;
 
 import com.electronwill.nightconfig.core.conversion.*;
 import com.electronwill.nightconfig.core.file.FileConfig;
-import com.elypia.alexis.config.embedded.*;
 
+import javax.inject.Singleton;
+
+@Singleton
 public class ConfigurationService {
-
-    @Path("name")
-    private String applicationName;
-
-    @Path("scripts")
-    private ScriptsConfig scriptsConfig;
 
     /**
      * The database configuration, this doesn't have to
@@ -34,8 +30,9 @@ public class ConfigurationService {
     @Path("api")
     private ApiCredentials apiCredentials;
 
-    @Path("debug")
-    private DebugConfig debugConfig;
+    private ConfigurationService() {
+        // Do nothing
+    }
 
     public ConfigurationService(String path) {
         FileConfig fileConfig = FileConfig.of(path);
@@ -45,20 +42,9 @@ public class ConfigurationService {
     }
 
     public ConfigurationService(ConfigurationService configuration) {
-        this.applicationName = configuration.applicationName;
-        this.scriptsConfig = configuration.scriptsConfig;
         this.databaseConfig = configuration.databaseConfig;
         this.discordConfig = configuration.discordConfig;
         this.apiCredentials = configuration.apiCredentials;
-        this.debugConfig = configuration.debugConfig;
-    }
-
-    public String getApplicationName() {
-        return applicationName;
-    }
-
-    public ScriptsConfig getScriptsConfig() {
-        return scriptsConfig;
     }
 
     public DatabaseConfig getDatabaseConfig() {
@@ -71,9 +57,5 @@ public class ConfigurationService {
 
     public ApiCredentials getApiCredentials() {
         return apiCredentials;
-    }
-
-    public DebugConfig getDebugConfig() {
-        return debugConfig;
     }
 }

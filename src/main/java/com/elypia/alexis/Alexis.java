@@ -1,23 +1,23 @@
 package com.elypia.alexis;
 
-import com.elypia.alexis.commandler.AlexisMisuseHandler;
-import com.elypia.alexis.config.ConfigurationService;
-import com.elypia.alexis.config.embedded.DiscordConfig;
+import com.elypia.alexis.config.*;
 import com.elypia.alexis.database.DatabaseService;
 import com.elypia.commandler.*;
-import com.elypia.jdac.*;
+import com.elypia.commandler.loaders.AnnotationLoader;
+import com.elypia.commandler.metadata.ContextLoader;
+import com.elypia.disco.DiscordController;
 import lavalink.client.io.jda.JdaLavalink;
 import net.dv8tion.jda.api.*;
 import net.dv8tion.jda.api.entities.Activity;
+import org.apache.commons.cli.*;
 import org.slf4j.*;
 
-import java.io.IOException;
 import java.security.GeneralSecurityException;
 
 /**
  * This is the main class for the bot which initialised everything Alexis
  * depends on and connects to Discord. This does not contain any
- * actual command handling code however.
+ * actual command handling code.
  */
 public class Alexis {
 
@@ -28,24 +28,18 @@ public class Alexis {
 	 */
 	public static final long START_TIME = System.currentTimeMillis();
 
-	public static void main(String[] args) throws IOException, GeneralSecurityException {
+	public static void main(String[] args) throws GeneralSecurityException {
+		CommandLine commandLine = parseArguments(args);
+		String path = commandLine.getOptionValue('c', "alexis.toml");
+
 		logger.info("Initilising: Configuration Step");
-		ConfigurationService configuration = new ConfigurationService("alexis.toml");
+		ConfigurationService configuration = new ConfigurationService(path);
 
-		logger.info("Initilising: ElyScript Step");
-		ElyScripts scripts = new ElyScripts(
-			configuration.getApplicationName(),
-			configuration.getScriptsConfig().getId(),
-			configuration.getScriptsConfig().getRange()
-		);
+		logger.info("Initilising: Commandler Step");
 
-		logger.info("Initilising: JDAC Step");
-		JDAC jdac = new JDAC.Builder()
-			.setPrefix(">")
-			.setContext(new Context(Alexis.class))
-			.setWebsite("https://alexis.elypia.com/")
-			.setEngine(scripts)
-			.setMisuseHandler(new AlexisMisuseHandler())
+		AnnotationLoader loader = new AnnotationLoader(Alexis.class);
+		Context context = new ContextLoader(loader).load().build();
+		Commandler commandler = new Commandler.Builder(context)
 			.build();
 
 		logger.info("Initilising: JDA Step");
@@ -55,8 +49,10 @@ public class Alexis {
 			.setStatus(OnlineStatus.IDLE)
 			.setActivity(Activity.watching("Seth turn me on!"))
 			.setBulkDeleteSplittingEnabled(false)
-			.addEventListeners(new JDACDispatcher(jdac), new EventHandler())
+			.addEventListeners(new AlexisHandler())
 			.build();
+
+		new DiscordController(commandler.getDispatchManager(), jda);
 
 		if (configuration.getDebugConfig().isDatabaseEnabled())
 			DatabaseService database = new DatabaseService(configuration.getDatabaseConfig());
@@ -67,5 +63,19 @@ public class Alexis {
 			0,
 			shardId -> jda
 		);
+	}
+
+	private static CommandLine parseArguments(String[] args) {
+		Options options = new Options();
+		options.addOption("c", "config", true, "The configuration file to use, defaults to `alexis.toml`.");
+		CommandLineParser parser = new DefaultParser();
+
+		try {
+			return parser.parse(options, args);
+		} catch (ParseException ex) {
+			ExitStatus.FAILED_TO_PARSE_ARGUMENTS.exit(ex);
+		}
+
+		throw new IllegalStateException("This shouldn't be possible!");
 	}
 }

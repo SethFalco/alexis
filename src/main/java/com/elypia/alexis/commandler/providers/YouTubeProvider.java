@@ -1,31 +1,42 @@
-package com.elypia.alexis.commandler.builders;
+package com.elypia.alexis.commandler.providers;
 
 import com.elypia.alexis.google.youtube.YouTubeService;
 import com.elypia.alexis.utils.BotUtils;
-import com.elypia.commandler.annotations.Compatible;
-import com.elypia.jdac.alias.*;
+import com.elypia.commandler.CommandlerEvent;
+import com.elypia.commandler.annotations.Provider;
+import com.elypia.commandler.discord.interfaces.DiscordProvider;
 import com.google.api.client.util.DateTime;
 import com.google.api.services.youtube.model.*;
 import net.dv8tion.jda.api.*;
 import net.dv8tion.jda.api.entities.Message;
 
+import javax.inject.*;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-@Compatible(SearchResult.class)
-public class YouTubeSearchResultBuilder implements IJDACBuilder<SearchResult> {
+@Singleton
+@Provider(provides = Message.class, value = SearchResult.class)
+public class YouTubeProvider implements DiscordProvider<SearchResult> {
 
     private static final SimpleDateFormat FORMAT = new SimpleDateFormat("dd MMM YYYY");
 
     private YouTubeService youtube;
 
-    public YouTubeSearchResultBuilder(YouTubeService youtube) {
+    @Inject
+    public YouTubeProvider(YouTubeService youtube) {
         this.youtube = youtube;
     }
 
     @Override
-    public Message buildEmbed(JDACEvent event, SearchResult output) {
+    public Message buildMessage(CommandlerEvent<?> event, SearchResult output) {
+        String videoId = output.getId().getVideoId();
+        String url = YouTubeService.getVideoUrl(videoId);
+        return new MessageBuilder(url).build();
+    }
+
+    @Override
+    public Message buildEmbed(CommandlerEvent<?> event, SearchResult output) {
         SearchResultSnippet snippet = output.getSnippet();
         String videoId = output.getId().getVideoId();
 
@@ -48,12 +59,5 @@ public class YouTubeSearchResultBuilder implements IJDACBuilder<SearchResult> {
         }
 
         return new MessageBuilder(builder.build()).build();
-    }
-
-    @Override
-    public Message build(JDACEvent event, SearchResult output) {
-        String videoId = output.getId().getVideoId();
-        String url = YouTubeService.getVideoUrl(videoId);
-        return new MessageBuilder(url).build();
     }
 }

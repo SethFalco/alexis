@@ -1,6 +1,6 @@
 package com.elypia.alexis.utils;
 
-import com.elypia.jdac.JDACEvent;
+import com.elypia.commandler.CommandlerEvent;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.guild.GenericGuildEvent;
@@ -18,8 +18,8 @@ public final class BotUtils {
 		// Don't construct this
 	}
 
-	public static EmbedBuilder newEmbed(JDACEvent event) {
-		return newEmbed(event.getSource().getGuild());
+	public static EmbedBuilder newEmbed(CommandlerEvent<?> event) {
+		return newEmbed(((GenericGuildEvent)event.getSource()).getGuild());
 	}
 
 	public static EmbedBuilder newEmbed(Guild guild) {

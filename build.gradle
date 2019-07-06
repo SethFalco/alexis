@@ -1,53 +1,69 @@
+import com.elypia.commandler.loader.AnnotationLoader
+import com.elypia.commandler.modules.HelpModule
+
+buildscript {
+    repositories {
+        mavenLocal()
+    }
+
+    dependencies {
+        classpath "com.elypia.commandler:commandler:1.0.0"
+    }
+}
+
 plugins {
     id 'java'
     id 'idea'
     id "jacoco"
-    id "com.github.johnrengelman.shadow" version "5.0.0"
+    id "com.github.johnrengelman.shadow" version "5.1.0"
 }
 
-shadowJar {
-    version = "3.0.0"
+apply plugin: "com.elypia.commandler"
 
-    manifest {
-        attributes 'Implementation-Title' : archiveBaseName,
-                   'Implementation-Version' : version,
-                   'Main-Class' : "com.elypia.alexis.Alexis"
-    }
-}
+group = "com.elypia.alexis"
+version = "3.0.0"
+description = "Hey! I'm a chatbot for Discord!"
+sourceCompatibility = 11
+targetCompatibility = 11
 
-tasks.withType(JavaCompile) {
-    options.encoding = "UTF-8"
-}
-
-repositories  {
+repositories {
     jcenter()
     mavenCentral()
+    mavenLocal()
 
     maven {
         url 'https://jitpack.io'
     }
+
+    // TODO: Later I should get this on jcenter instead.
+    maven {
+        url  "https://dl.bintray.com/elypia/elypiai"
+    }
 }
 
 dependencies {
-    // JDAC
-    implementation "com.elypia.commandler:core:3.0.0"
-    implementation "com.elypia.commandler:export:3.0.0"
-    implementation "com.elypia.commandler:logback-logging:3.0.0"
+    // Discord Commandler
+    implementation "com.elypia.disco:core:2.0.0"
 
     // Elypiai
-    implementation "com.elypia.elypiai:cleverbot:2.1.2"
-    implementation "com.elypia.elypiai:nanowrimo:2.1.2"
-    implementation "com.elypia.elypiai:osu:2.1.2"
-    implementation "com.elypia.elypiai:runescape:2.1.2"
-    implementation "com.elypia.elypiai:steam:2.1.2"
-    implementation "com.elypia.elypiai:twitch:2.1.2"
-    implementation "com.elypia.elypiai:urbandictionary:2.1.2"
+    implementation "com.elypia.elypiai:cleverbot:2.2.0"
+    implementation "com.elypia.elypiai:nanowrimo:2.2.0"
+    implementation "com.elypia.elypiai:osu:2.2.0"
+    implementation "com.elypia.elypiai:path-of-exile:2.2.0"
+    implementation "com.elypia.elypiai:urbandictionary:2.2.0"
+    implementation "com.elypia.elypiai:yugioh-prices:2.2.0"
+    implementation "com.elypia.elypiai:runescape:2.2.0"
+    implementation "com.elypia.elypiai:twitch:2.2.0"
+    implementation "com.elypia.elypiai:steam:2.2.0"
 
-    // ElyScript
-    implementation "com.elypia.elyscript:sheets:1.0.1"
+    implementation "com.elypia.elypiai:extensions-redis:2.2.0"
+
+    implementation "commons-cli:commons-cli:1.4"
+
+    // TODO: Make and depend on ElyScript.
 
     // Database
-    implementation "org.hibernate:hibernate-core:5.4.2.Final"
+    implementation "org.hibernate:hibernate-core:5.4.3.Final"
     runtimeOnly "mysql:mysql-connector-java:8.0.16"
 
     // Config
@@ -55,13 +71,13 @@ dependencies {
     runtimeOnly "com.electronwill.night-config:toml:3.6.0"
 
     // Discord
-    implementation "net.dv8tion:JDA:4.ALPHA.0_86"
+    implementation "net.dv8tion:JDA:4.BETA.0_19"
     implementation "com.github.FredBoat:Lavalink-Client:3.0"
     implementation "com.github.DiscordBotList:DBL-Java-Library:2.0.1"
 
     // Google
-    implementation "com.google.cloud:google-cloud-translate:1.62.0"
-    implementation "com.google.apis:google-api-services-youtube:v3-rev211-1.25.0"
+    implementation "com.google.cloud:google-cloud-translate:1.79.0"
+    implementation "com.google.apis:google-api-services-youtube:v3-rev212-1.25.0"
 
     // Logging
     implementation "org.slf4j:slf4j-api:1.7.26"
@@ -69,12 +85,20 @@ dependencies {
 
     // Testing
     testImplementation "org.junit.jupiter:junit-jupiter:5.4.2"
-
-    // Mocking
-    testImplementation "org.mockito:mockito-core:2.27.0"
+    testImplementation "org.mockito:mockito-core:2.28.2"
 }
 
-/** Testing and Code Coverage */
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+
+shadowJar {
+    manifest {
+        attributes 'Implementation-Title' : this.name,
+                   'Implementation-Version' : version,
+                   'Main-Class' : "com.elypia.alexis.Alexis"
+    }
+}
+
+/** Testing */
 
 test {
     useJUnitPlatform()
@@ -85,6 +109,8 @@ test {
     }
 }
 
+/** Coverage **/
+
 jacoco {
     toolVersion = "0.8.4"
 }
@@ -94,4 +120,16 @@ jacocoTestReport {
         html.enabled = true
         xml.enabled = false
     }
+}
+
+/** Commandlerdoc */
+
+commandler {
+    def types = [
+        HelpModule.class
+    ]
+
+    loaders = [
+        new AnnotationLoader(types)
+    ]
 }

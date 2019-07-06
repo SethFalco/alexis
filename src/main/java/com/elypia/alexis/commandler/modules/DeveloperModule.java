@@ -1,19 +1,15 @@
 package com.elypia.alexis.commandler.modules;
 
+import com.elypia.alexis.ExitStatus;
 import com.elypia.alexis.entities.GuildData;
 import com.elypia.alexis.entities.embedded.AssignableRole;
-import com.elypia.alexis.utils.ExitCode;
-import com.elypia.commandler.Commandler;
 import com.elypia.commandler.annotations.Module;
 import com.elypia.commandler.annotations.*;
-import com.elypia.commandler.metadata.ModuleData;
 import com.elypia.jdac.*;
 import com.elypia.jdac.alias.*;
 import com.elypia.jdac.validation.Developer;
 import net.dv8tion.jda.api.*;
 import net.dv8tion.jda.api.entities.Icon;
-import net.dv8tion.jda.api.entities.*;
-import net.dv8tion.jda.api.events.message.GenericMessageEvent;
 import org.slf4j.*;
 
 import java.io.*;
@@ -55,7 +51,7 @@ public class DeveloperModule extends JDACHandler {
         jda.removeEventListener(jda.getRegisteredListeners());
         jda.shutdown();
 
-        ExitCode code = ExitCode.PEACEFUL;
+        ExitStatus code = ExitStatus.PEACEFUL;
 
         logger.trace(code.getMessage());
         System.exit(code.getStatusCode());

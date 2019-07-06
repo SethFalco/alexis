@@ -1,8 +1,16 @@
-package com.elypia.alexis.config.embedded;
+package com.elypia.alexis.config;
 
-import com.electronwill.nightconfig.core.conversion.Path;
+import com.electronwill.nightconfig.core.conversion.*;
 
+import javax.inject.Singleton;
+
+@Singleton
 public class DatabaseConfig {
+
+    /** Should database functionaly be enabled. This must be specified. */
+    @Path("enabled")
+    @SpecNotNull
+    private boolean enabled;
 
     @Path("ip")
     private String ip;
@@ -21,6 +29,10 @@ public class DatabaseConfig {
 
     public DatabaseConfig() {
 
+    }
+
+    public boolean isEnabled() {
+        return enabled;
     }
 
     public String getIp() {

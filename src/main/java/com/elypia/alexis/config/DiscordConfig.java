@@ -1,19 +1,23 @@
-package com.elypia.alexis.config.embedded;
+package com.elypia.alexis.config;
 
 import com.electronwill.nightconfig.core.conversion.*;
 
-import java.util.List;
+import javax.inject.Singleton;
 
+@Singleton
 public class DiscordConfig {
 
+    /** The bot token to authenticate to the Discord bot API. */
     @Path("token")
     @SpecNotNull
     private String token;
 
+    /** The command prefix to execute commands. */
     @Path("prefix")
     @SpecNotNull
     private String prefix;
 
+    /** The ID to the bot developers/owners guild. */
     @Path("support_guild")
     private long supportGuild;
 

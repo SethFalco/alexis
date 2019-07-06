@@ -1,11 +1,8 @@
 package com.elypia.alexis.commandler;
 
-import com.elypia.commandler.MisuseHandler;
-import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.events.message.GenericMessageEvent;
 import org.slf4j.*;
 
-public class AlexisMisuseHandler extends MisuseHandler<GenericMessageEvent, Message> {
+public class AlexisMisuseHandler extends Misu {
 
     private static Logger logger = LoggerFactory.getLogger(AlexisMisuseHandler.class);
 

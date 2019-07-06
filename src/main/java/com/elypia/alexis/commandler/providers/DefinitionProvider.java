@@ -1,17 +1,23 @@
-package com.elypia.alexis.commandler.builders;
+package com.elypia.alexis.commandler.providers;
 
 import com.elypia.alexis.utils.BotUtils;
-import com.elypia.commandler.annotations.Compatible;
+import com.elypia.commandler.CommandlerEvent;
+import com.elypia.commandler.annotations.Provider;
+import com.elypia.commandler.discord.interfaces.DiscordProvider;
 import com.elypia.elypiai.urbandictionary.Definition;
-import com.elypia.jdac.alias.*;
 import net.dv8tion.jda.api.*;
 import net.dv8tion.jda.api.entities.*;
 
-@Compatible(Definition.class)
-public class UrbanDefinitionBuilder implements IJDACBuilder<Definition> {
+@Provider(provides = Message.class, value = Definition.class)
+public class DefinitionProvider implements DiscordProvider<Definition> {
 
     @Override
-    public Message buildEmbed(JDACEvent event, Definition toSend) {
+    public Message buildMessage(CommandlerEvent<?> event, Definition output) {
+        return null;
+    }
+
+    @Override
+    public Message buildEmbed(CommandlerEvent<?> event, Definition toSend) {
         EmbedBuilder builder = BotUtils.newEmbed(event);
 
         builder.setAuthor(toSend.getAuthor());
@@ -33,10 +39,5 @@ public class UrbanDefinitionBuilder implements IJDACBuilder<Definition> {
         builder.addField("Example", descText, true);
 
         return new MessageBuilder(builder.build()).build();
-    }
-
-    @Override
-    public Message build(JDACEvent event, Definition output) {
-        return null;
     }
 }

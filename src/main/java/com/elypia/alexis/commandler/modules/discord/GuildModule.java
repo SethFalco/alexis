@@ -1,57 +1,50 @@
 package com.elypia.alexis.commandler.modules.discord;
 
+import com.elypia.alexis.commandler.dyndefault.CurrentGuild;
 import com.elypia.alexis.utils.BotUtils;
-import com.elypia.commandler.Commandler;
+import com.elypia.commandler.CommandlerEvent;
 import com.elypia.commandler.annotations.Module;
 import com.elypia.commandler.annotations.*;
-import com.elypia.commandler.metadata.ModuleData;
+import com.elypia.commandler.discord.annotations.Scoped;
+import com.elypia.commandler.discord.constraints.Channels;
+import com.elypia.commandler.interfaces.*;
 import com.elypia.jdac.*;
 import com.elypia.jdac.alias.*;
 import com.elypia.jdac.validation.*;
 import net.dv8tion.jda.api.*;
 import net.dv8tion.jda.api.entities.*;
-import net.dv8tion.jda.api.events.message.*;
+import net.dv8tion.jda.api.events.Event;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
+import javax.inject.Inject;
 import javax.validation.constraints.*;
 import java.util.Collection;
 
-@Module(id = "Guilds", group = "Discord", aliases = "guild", help = "guild.help")
-public class GuildModule extends JDACHandler {
+@Module(name = "Guilds", group = "Discord", aliases = "guild", help = "Manage and automate your guild.")
+public class GuildModule implements Handler {
 
-    /**
-     * Initialise the module, this will assign the values
-     * in the module and create a {@link ModuleData} which is
-     * what {@link Commandler} uses in runtime to identify modules,
-     * commands or obtain any static data.
-     *
-     * @param commandler Our parent Commandler class.
-     */
-    public GuildModule(Commandler<GenericMessageEvent, Message> commandler) {
-        super(commandler);
+    private final LanguageInterface lang;
+
+    @Inject
+    public GuildModule(LanguageInterface lang) {
+        this.lang = lang;
     }
 
-    @Command(id = "Guild Info", aliases = "info", help = "guild.info.help")
-    public void info(@Channels(ChannelType.TEXT) JDACEvent event) {
-        info(event, event.getSource().getGuild());
-    }
-
-    @Overload("Guild Info")
-    @Param(id = "common.guild", help = "guild.param.guild.help")
+    @Command(name = "Guild Info", aliases = "info", help = "Get the guild's information.")
     public EmbedBuilder info(
-        @Channels(ChannelType.PRIVATE) JDACEvent event,
-        @Search(Scope.MUTUAL) Guild guild
+        CommandlerEvent<Event> event,
+        @Param(name = "guild", help = "A mutual guild by name or ID.", dynDefaultValue = CurrentGuild.class) @Scoped Guild guild
     ) {
-        GenericMessageEvent source = event.getSource();
-        EmbedBuilder builder = BotUtils.newEmbed(event.getSource().getGuild());
+        EmbedBuilder builder = BotUtils.newEmbed(event);
 
         builder.setThumbnail(guild.getIconUrl());
         builder.setTitle(guild.getName());
-        builder.addField(scripts.get(source, "guild.owner"), guild.getOwner().getEffectiveName(), true);
+        builder.addField(lang.get(event, "guild.owner"), guild.getOwner().getEffectiveName(), true);
 
         Collection<Member> members = guild.getMembers();
         long bots = members.stream().map(Member::getUser).filter(User::isBot).count();
         String memberField = String.format("%,d (%,d)", members.size() - bots, bots);
-        builder.addField(scripts.get(source, "guild.users"), memberField, true);
+        builder.addField(lang.get(event, "guild.users"), memberField, true);
 
         return builder;
     }

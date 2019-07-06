@@ -1,9 +1,7 @@
 package com.elypia.alexis;
 
 import com.elypia.alexis.entities.*;
-import com.elypia.commandler.interfaces.IScripts;
-import com.elypia.elypiai.runescape.Activity;
-import com.elypia.elypiai.runescape.*;
+import com.elypia.elypiai.runescape.RuneScape;
 import com.elypia.elyscript.ScriptStore;
 import com.elypia.elyscript.sheets.SheetsLoader;
 import net.dv8tion.jda.api.entities.*;
@@ -13,7 +11,7 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.*;
 
-public class ElyScripts implements IScripts<GenericMessageEvent> {
+public class ElyScripts implements ScriptMan<GenericMessageEvent> {
 
     private ScriptStore scripts;
 

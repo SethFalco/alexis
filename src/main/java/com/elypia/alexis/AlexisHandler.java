@@ -1,9 +1,7 @@
 package com.elypia.alexis;
 
-import com.elypia.alexis.entities.*;
-import com.elypia.alexis.entities.embedded.*;
 import com.elypia.alexis.google.TranslateService;
-import com.elypia.alexis.utils.*;
+import com.elypia.alexis.utils.BotUtils;
 import com.elypia.elypiai.runescape.RuneScape;
 import net.dv8tion.jda.api.*;
 import net.dv8tion.jda.api.entities.*;
@@ -19,9 +17,9 @@ import org.slf4j.*;
 import java.time.OffsetDateTime;
 import java.util.*;
 
-public class EventHandler extends ListenerAdapter {
+public class AlexisHandler extends ListenerAdapter {
 
-	private static final Logger logger = LoggerFactory.getLogger(EventHandler.class);
+	private static final Logger logger = LoggerFactory.getLogger(AlexisHandler.class);
 
 	private TranslateService translate = new TranslateService();
 
