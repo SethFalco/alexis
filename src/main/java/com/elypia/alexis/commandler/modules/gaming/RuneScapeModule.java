@@ -1,62 +1,62 @@
 package com.elypia.alexis.commandler.modules.gaming;
 
-import com.elypia.commandler.Commandler;
 import com.elypia.commandler.annotations.Module;
 import com.elypia.commandler.annotations.*;
-import com.elypia.commandler.metadata.ModuleData;
-import com.elypia.elypiai.runescape.RuneScape;
-import com.elypia.jdac.alias.*;
-import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.events.message.GenericMessageEvent;
+import com.elypia.commandler.interfaces.Handler;
+import com.elypia.elypiai.runescape.*;
+import com.google.inject.*;
+import net.dv8tion.jda.api.EmbedBuilder;
+import org.slf4j.*;
 
-@Module(id = "RuneScape", group = "Gaming", aliases = {"runescape", "rs"}, help = "rs.help")
-public class RuneScapeModule extends JDACHandler {
+import java.util.Collection;
+
+@Singleton
+@Module(name = "RuneScape", group = "Gaming", aliases = {"runescape", "rs"}, help = "rs.help")
+public class RuneScapeModule implements Handler {
+
+	private static final Logger logger = LoggerFactory.getLogger(RuneScapeModule.class);
 
 	private RuneScape runescape;
 
-	/**
-	 * Initialise the module, this will assign the values
-	 * in the module and create a {@link ModuleData} which is
-	 * what {@link Commandler} uses in runtime to identify modules,
-	 * commands or obtain any static data.
-	 *
-	 * @param commandler Our parent Commandler class.
-	 */
-	public RuneScapeModule(Commandler<GenericMessageEvent, Message> commandler) {
-		super(commandler);
-		runescape = new RuneScape();
+	@Inject
+	public RuneScapeModule(RuneScape runescape) {
+		this.runescape = runescape;
 	}
 
-	@Command(id = "Status", aliases = "status", help = "rs.status.help")
-	public void displayStatus(JDACEvent event) {
-
+	// TODO: Not implemented yet.
+	@Command(name = "Status", aliases = "status", help = "rs.status.help")
+	public void displayStatus() {
+		//
 	}
 
-	@Command(id = "Player Stats", aliases = "stats", help = "rs.stats.help")
-	@Param(id = "common.username", help = "rs.stats.username.help")
-	public void getPlayerStats(JDACEvent event, String username) {
+	// TODO: Not implemented yet.
+	@Command(name = "Player Stats", aliases = "stats", help = "rs.stats.help")
+	public void getPlayerStats(
+		@Param(name = "common.username", help = "rs.stats.username.help") String username
+	) {
 
 	}
 
-//	@Command(name = "rs.quests.title", aliases = {"quests", "quest", "q"}, help = "rs.quests.help")
-//	@Param(name = "common.username", help = "rs.stats.p.username.help")
-//	public void getQuests(AbstractEvent event, String username) {
-//		runescape.getQuestStatuses(username, result -> {
-//			EmbedBuilder builder = new EmbedBuilder();
-//
-//			Collection<QuestStats> completedQuests = result.getQuests(QuestStatus.COMPLETED);
-//			Collection<QuestStats> startedQuests = result.getQuests(QuestStatus.STARTED);
-//			Collection<QuestStats> notStartedQuests = result.getQuests(QuestStatus.NOT_STARTED);
-//
-//            String[] completed = ElyUtils.toStringArray(completedQuests);
-//            String[] started = ElyUtils.toStringArray(startedQuests);
-//			String[] notStarted = ElyUtils.toStringArray(notStartedQuests);
-//
-//			builder.setTitle("Quest Stats for " + result.getUsername() + "!");
-//
-//			builder.addField("Completed", String.join("\n", completed), false);
-//			builder.addField("Started", String.join("\n", started), false);
-//			builder.addField("Not Started", String.join("\n", notStarted), false);
-//		}, failure -> BotUtils.sendHttpError(event, failure));
-//	}
+	@Command(name = "rs.quests.title", aliases = {"quests", "quest", "q"}, help = "rs.quests.help")
+	public void getQuests(
+		@Param(name = "common.username", help = "rs.stats.p.username.help")	String username
+	) {
+		runescape.getQuestStatuses(username).queue(result -> {
+			EmbedBuilder builder = new EmbedBuilder();
+
+			Collection<QuestStats> completedQuests = result.getQuests(QuestStatus.COMPLETED);
+			Collection<QuestStats> startedQuests = result.getQuests(QuestStatus.STARTED);
+			Collection<QuestStats> notStartedQuests = result.getQuests(QuestStatus.NOT_STARTED);
+
+            String[] completed = ElyUtils.toStringArray(completedQuests);
+            String[] started = ElyUtils.toStringArray(startedQuests);
+			String[] notStarted = ElyUtils.toStringArray(notStartedQuests);
+
+			builder.setTitle("Quest Stats for " + result.getUsername() + "!");
+
+			builder.addField("Completed", String.join("\n", completed), false);
+			builder.addField("Started", String.join("\n", started), false);
+			builder.addField("Not Started", String.join("\n", notStarted), false);
+		}, ex -> logger.error("Failed to perform HTTP request!", ex));
+	}
 }

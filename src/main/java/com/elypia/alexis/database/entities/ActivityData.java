@@ -4,7 +4,7 @@ import javax.persistence.*;
 
 @Entity(name = "status")
 @Table
-public class DbStatus {
+public class ActivityData {
 
     @Column(name = "status_type")
     private int type;

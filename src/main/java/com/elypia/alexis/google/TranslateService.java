@@ -12,7 +12,7 @@ import java.util.*;
 public class TranslateService {
 
     private Translate translate;
-    private Map<com.elypia.alexis.utils.Language, Language> languages;
+    private Collection<Language> supported;
 
     @Inject
     public TranslateService(final ApiCredentials apiCredentials) throws IOException {
@@ -20,37 +20,34 @@ public class TranslateService {
         GoogleCredentials credentials = GoogleCredentials.fromStream(new FileInputStream(path));
 
         translate = TranslateOptions.newBuilder()
-                .setCredentials(credentials)
-                .build()
-                .getService();
+            .setCredentials(credentials)
+            .build()
+            .getService();
 
-        languages = new HashMap<>();
+        supported = translate.listSupportedLanguages();
+    }
 
-        List<Language> supportedLanguages = translate.listSupportedLanguages();
-        supportedLanguages.forEach(lang -> {
-            for (com.elypia.alexis.utils.Language eLang : com.elypia.alexis.utils.Language.values()) {
-                if (eLang.getCode().equalsIgnoreCase(lang.getCode())) {
-                    languages.put(eLang, lang);
-                    return;
-                }
-            }
-        });
+    public Translation translate(String text, Locale locale) {
+        for (Language language : supported) {
+            if (language.getCode().equalsIgnoreCase(locale.getLanguage()))
+                return translate(text, language);
+        }
+
+        throw new IllegalArgumentException("This isn't a supported language.");
     }
 
     public Translation translate(String text, Language language) {
-        return translate.translate(text, Translate.TranslateOption.targetLanguage(language.getCode()));
+        return translate(text, language.getCode());
     }
 
-    public Map.Entry<com.elypia.alexis.utils.Language, Language> getLanguage(String code) {
-        for (Map.Entry<com.elypia.alexis.utils.Language, Language> entry : languages.entrySet()) {
-            if (entry.getKey().getCode().equalsIgnoreCase(code))
-                return entry;
-        }
-
-        return null;
+    public Translation translate(String text, String languageCode) {
+        return translate.translate(text, Translate.TranslateOption.targetLanguage(languageCode));
     }
 
-    public Map<com.elypia.alexis.utils.Language, Language> getSupportedLangauges() {
-        return languages;
+    /**
+     * @return A list of languages support by the Google Translate API.
+     */
+    public Collection<Language> getSupportedLangauges() {
+        return supported;
     }
 }

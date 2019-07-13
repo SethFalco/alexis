@@ -1,6 +1,5 @@
 package com.elypia.alexis.commandler.modules.discord;
 
-import com.elypia.alexis.commandler.dyndefault.CurrentGuild;
 import com.elypia.alexis.utils.BotUtils;
 import com.elypia.commandler.CommandlerEvent;
 import com.elypia.commandler.annotations.Module;
@@ -14,7 +13,7 @@ import javax.inject.*;
 import java.util.List;
 
 @Singleton
-@Module(name = "Emotes", group = "Discord", aliases = {"emote", "emoji", "emoticon"}, help = "Interact with Discord emotes!")
+@Module(name = "emotes", group = "Discord", aliases = {"emote", "emoji", "emoticon"})
 public class EmoteModule implements Handler {
 
     private final LanguageInterface lang;
@@ -24,10 +23,8 @@ public class EmoteModule implements Handler {
         this.lang = lang;
     }
 
-    @Command(name = "List Emotes", aliases = "list", help = "List all emotes in a guild.")
-    public String list(
-        CommandlerEvent<Event> event,
-        @Param(name = "guild", help = "The guild to list emotes from.", dynDefaultValue = CurrentGuild.class) Guild guild) {
+    @Command(name = "list", aliases = "list")
+    public String list(CommandlerEvent<Event> event, @Param(name = "guild", defaultValue = "${src.guild.id}") Guild guild) {
         List<Emote> emotes = guild.getEmotes();
         int count = emotes.size();
 
@@ -47,11 +44,8 @@ public class EmoteModule implements Handler {
         return builder.toString();
     }
 
-    @Command(name = "Send Emote", aliases = {"get", "post"}, help = "Send an emote in chat.")
-    public EmbedBuilder post(
-        CommandlerEvent<Event> event,
-        @Param(name = "emote", help = "The emote to send.") Emote emote
-    ) {
+    @Command(name = "send", aliases = {"get", "post"})
+    public EmbedBuilder post(CommandlerEvent<Event> event, @Param(name = "emote") Emote emote) {
         EmbedBuilder builder = BotUtils.newEmbed(event);
         builder.setImage(emote.getImageUrl());
         return builder;

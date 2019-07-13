@@ -1,7 +1,6 @@
 package com.elypia.alexis.config;
 
 import com.electronwill.nightconfig.core.conversion.*;
-import com.electronwill.nightconfig.core.file.FileConfig;
 
 import javax.inject.Singleton;
 
@@ -30,15 +29,8 @@ public class ConfigurationService {
     @Path("api")
     private ApiCredentials apiCredentials;
 
-    private ConfigurationService() {
+    public ConfigurationService() {
         // Do nothing
-    }
-
-    public ConfigurationService(String path) {
-        FileConfig fileConfig = FileConfig.of(path);
-        fileConfig.load();
-
-        var config = new ObjectConverter().toObject(fileConfig, ConfigurationService::new);
     }
 
     public ConfigurationService(ConfigurationService configuration) {

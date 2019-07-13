@@ -1,31 +1,27 @@
 package com.elypia.alexis.database.entities;
 
 import javax.persistence.*;
-import java.util.Date;
 
-@Entity(name = "guild_feature")
+@Entity(name = "skill")
 @Table
-public class DbGuildFeature {
+public class SkillData {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "feature_id")
+    @Column(name = "skill_id")
     private int id;
 
     @Column(name = "guild_id")
-    private int guildId;
+    private long guildId;
 
-    @Column(name = "feature_name")
+    @Column(name = "skill_name")
     private String name;
 
-    @Column(name = "enabled")
+    @Column(name = "skill_enabled")
     private boolean enabled;
 
-    @Column(name = "modified_by")
-    private long modifiedBy;
-
-    @Column(name = "modified_at")
-    private Date modifiedAt;
+    @Column(name = "skill_notify")
+    private boolean notify;
 
     public int getId() {
         return id;
@@ -35,11 +31,11 @@ public class DbGuildFeature {
         this.id = id;
     }
 
-    public int getGuildId() {
+    public long getGuildId() {
         return guildId;
     }
 
-    public void setGuildId(int guildId) {
+    public void setGuildId(long guildId) {
         this.guildId = guildId;
     }
 
@@ -59,19 +55,11 @@ public class DbGuildFeature {
         this.enabled = enabled;
     }
 
-    public long getModifiedBy() {
-        return modifiedBy;
+    public boolean isNotify() {
+        return notify;
     }
 
-    public void setModifiedBy(long modifiedBy) {
-        this.modifiedBy = modifiedBy;
-    }
-
-    public Date getModifiedAt() {
-        return modifiedAt;
-    }
-
-    public void setModifiedAt(Date modifiedAt) {
-        this.modifiedAt = modifiedAt;
+    public void setNotify(boolean notify) {
+        this.notify = notify;
     }
 }

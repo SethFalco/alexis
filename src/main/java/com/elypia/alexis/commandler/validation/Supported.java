@@ -1,9 +1,8 @@
 package com.elypia.alexis.commandler.validation;
 
-import com.elypia.alexis.utils.Language;
-
 import javax.validation.*;
 import java.lang.annotation.*;
+import java.util.*;
 
 @Target({ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
@@ -11,17 +10,14 @@ import java.lang.annotation.*;
 public @interface Supported {
 
     String message() default "{com.elypia.jdac.validation.Supported.message}";
-
     Class<?>[] groups() default {};
-
     Class<? extends Payload>[] payload() default {};
 
-    class Validator implements ConstraintValidator<Supported, Language> {
+    class Validator implements ConstraintValidator<Supported, Locale> {
 
         @Override
-        public boolean isValid(Language value, ConstraintValidatorContext context) {
-            return true;
-//            return Alexis.supportedLanguages.contains(language);
+        public boolean isValid(Locale value, ConstraintValidatorContext context) {
+            return ResourceBundle.getBundle("CommandlerMessages").
         }
     }
 }

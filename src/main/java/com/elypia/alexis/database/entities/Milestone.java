@@ -2,19 +2,22 @@ package com.elypia.alexis.database.entities;
 
 import javax.persistence.*;
 
-@Entity(name = "member_skill")
+@Entity(name = "skill_milestone")
 @Table
-public class DbMemberSkill {
+public class Milestone {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "member_id")
+    @Column(name = "skill_ms_id")
     private int id;
 
     @Column(name = "skill_id")
     private int skillId;
 
-    @Column(name = "skill_xp")
+    @Column(name = "skill_name")
+    private int name;
+
+    @Column(name = "skill_ms_xp")
     private int xp;
 
     public int getId() {
@@ -31,6 +34,14 @@ public class DbMemberSkill {
 
     public void setSkillId(int skillId) {
         this.skillId = skillId;
+    }
+
+    public int getName() {
+        return name;
+    }
+
+    public void setName(int name) {
+        this.name = name;
     }
 
     public int getXp() {

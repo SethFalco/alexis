@@ -1,6 +1,5 @@
 package com.elypia.alexis.commandler.modules;
 
-import com.elypia.alexis.ExitStatus;
 import com.elypia.alexis.entities.GuildData;
 import com.elypia.alexis.entities.embedded.AssignableRole;
 import com.elypia.commandler.annotations.Module;

@@ -1,41 +1,33 @@
 package com.elypia.alexis.commandler.modules.gaming;
 
-import com.elypia.alexis.Alexis;
-import com.elypia.commandler.Commandler;
+import com.elypia.commandler.CommandlerEvent;
 import com.elypia.commandler.annotations.Module;
 import com.elypia.commandler.annotations.*;
-import com.elypia.commandler.metadata.ModuleData;
+import com.elypia.commandler.interfaces.Handler;
 import com.elypia.elypiai.steam.*;
 import com.elypia.jdac.alias.*;
-import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.events.message.GenericMessageEvent;
+import com.google.inject.Inject;
 import org.slf4j.*;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-@Module(id = "Steam", group = "Gaming", aliases = "steam", help = "steam.help")
-public class SteamModule extends JDACHandler {
+@Module(name = "steam", group = "Gaming", aliases = "steam", help = "steam.h")
+public class SteamModule implements Handler {
 
 	private static final Logger logger = LoggerFactory.getLogger(SteamModule.class);
 
 	private Steam steam;
 
-	/**
-	 * Initialise the module, this will assign the values
-	 * in the module and create a {@link ModuleData} which is
-	 * what {@link Commandler} uses in runtime to identify modules,
-	 * commands or obtain any static data.
-	 *
-	 * @param commandler Our parent Commandler class.
-	 */
-	public SteamModule(Commandler<GenericMessageEvent, Message> commandler) {
-		super(commandler);
-		steam = new Steam(Alexis.configurationService.getApiCredentials().getSteam());
+	@Inject
+	public SteamModule(Steam steam) {
+		this.steam = steam;
 	}
 
-	@Command(id = "Steam Profile", aliases = {"get", "user", "profile"}, help = "steam.get.help")
-	@Param(id = "common.username", help = "steam.get.p.username.help")
-	public void displayProfile(JDACEvent event, String username) {
+	@Command(name = "Steam Profile", aliases = {"get", "user", "profile"}, help = "steam.get.h")
+	public void displayProfile(
+		CommandlerEvent<?> event,
+		@Param(name = "c.username", help = "steam.get.p.username.h") String username
+	) {
 		steam.getIdFromVanityUrl(username).queue((search) -> {
 			if (!search.isSuccess()) {
 				event.send("steam.get.no_user");
@@ -49,9 +41,11 @@ public class SteamModule extends JDACHandler {
 		});
 	}
 
-	@Command(id = "steam.library.title", aliases = {"lib", "library"}, help = "steam.library.help")
-	@Param(id = "common.username", help = "The username or ID of the user!")
-	public void listLibrary(JDACEvent event, String username) {
+	@Command(name = "steam.library.title", aliases = {"lib", "library"}, help = "steam.library.help")
+	public void listLibrary(
+		CommandlerEvent<?> event,
+		@Param(name = "common.username", help = "The username or ID of the user!") String username
+	) {
 		steam.getIdFromVanityUrl(username).queue((search) -> {
 			if (!search.isSuccess()) {
 				event.send("Sorry, I couldn't find that user.");
@@ -79,10 +73,12 @@ public class SteamModule extends JDACHandler {
 		});
 	}
 
-	@Command(id = "Game Roulette", aliases = {"random", "rand", "game", "r"}, help = "Select a random game from the players library!")
-	@Param(id = "username", help = "The username or ID of the user!")
 //	@Emoji(emotes = "🎲", help = "Reroll for a different game.")
-	public void randomGame(JDACEvent event, String username) {
+	@Command(name = "steam.random", aliases = {"random", "rand", "game", "r"}, help = "steam.random.h")
+	public void randomGame(
+		CommandlerEvent<?> event,
+		@Param(name = "username", help = "The username or ID of the user!") String username
+	) {
 		steam.getIdFromVanityUrl(username).queue((search) -> {
 			if (!search.isSuccess()) {
 				event.send("Sorry, I couldn't find that user.");

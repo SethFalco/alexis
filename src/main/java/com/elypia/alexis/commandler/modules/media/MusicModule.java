@@ -5,10 +5,9 @@ import com.elypia.alexis.entities.GuildData;
 import com.elypia.alexis.entities.embedded.MusicSettings;
 import com.elypia.alexis.google.youtube.YouTubeService;
 import com.elypia.alexis.utils.Md;
-import com.elypia.commandler.Commandler;
 import com.elypia.commandler.annotations.Module;
 import com.elypia.commandler.annotations.*;
-import com.elypia.commandler.metadata.ModuleData;
+import com.elypia.commandler.interfaces.Handler;
 import com.elypia.jdac.alias.*;
 import com.elypia.jdac.validation.*;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
@@ -23,8 +22,8 @@ import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
-@Module(id = "Music Player", group = "Media", aliases = {"music", "m"}, help = "music.help")
-public class MusicModule extends JDACHandler {
+@Module(name = "Music Player", group = "Media", aliases = {"music", "m"}, help = "music.help")
+public class MusicModule implements Handler {
 
 	private static final int LINE_MAX_LENGTH = 55;
 
@@ -50,16 +49,7 @@ public class MusicModule extends JDACHandler {
 	 */
 	private Map<Long, ElyAudioPlayer> guildPlayers;
 
-	/**
-	 * Initialise the module, this will assign the values
-	 * in the module and create a {@link ModuleData} which is
-	 * what {@link Commandler} uses in runtime to identify modules,
-	 * commands or obtain any static data.
-	 *
-	 * @param commandler Our parent Commandler class.
-	 */
-	public MusicModule(Commandler<GenericMessageEvent, Message> commandler, YouTubeService youtube) {
-		super(commandler);
+	public MusicModule(YouTubeService youtube) {
 		this.youtube = youtube;
 		manager = new DefaultAudioPlayerManager();
 		guildPlayers = new HashMap<>();

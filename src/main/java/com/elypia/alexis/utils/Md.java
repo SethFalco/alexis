@@ -115,15 +115,15 @@ public final class Md {
      * @return Text wrapped with markdown codeblock syntax syntax. (```)
      */
     public static String pre(String body) {
-        return pre(body, "");
+        return pre("", body);
     }
 
     /**
-     * @param body Text to wrap.
      * @param flavour The color flavour to display the text, eg <code>java</code>.
+     * @param body Text to wrap.
      * @return Text wrapped with markdown codeblock syntax. (```)
      */
-    public static String pre(String body, String flavour) {
+    public static String pre(String flavour, String body) {
         return "```" + flavour + "\n" + body + "\n```";
     }
 
@@ -137,20 +137,20 @@ public final class Md {
 
     /**
      * This defaults the checkbox to unchecked. To specify
-     * checked or unchecked, see {@link #checkbox(String, boolean)}.
+     * checked or unchecked, see {@link #checkbox(boolean, String)}.
      *
      * @param body The text to wrap.
      * @return Text wrapped with markdown checkbox syntax.
      */
     public static String checkbox(String body) {
-        return checkbox(body, false);
+        return checkbox(false, body);
     }
 
     /**
      * @param body The text to wrap.
      * @return Text wrapped with markdown checkbox syntax.
      */
-    public static String checkbox(String body, boolean checked) {
+    public static String checkbox(boolean checked, String body) {
         return "* [" + (checked ? "x" : " ") + "] " + body;
     }
 

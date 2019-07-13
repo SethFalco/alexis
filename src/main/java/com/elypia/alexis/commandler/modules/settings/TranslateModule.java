@@ -2,7 +2,6 @@ package com.elypia.alexis.commandler.modules.settings;
 
 import com.elypia.alexis.entities.GuildData;
 import com.elypia.alexis.entities.embedded.TranslateSettings;
-import com.elypia.alexis.utils.Country;
 import com.elypia.commandler.Commandler;
 import com.elypia.commandler.annotations.Module;
 import com.elypia.commandler.annotations.*;

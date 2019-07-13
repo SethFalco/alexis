@@ -5,7 +5,7 @@ import javax.persistence.*;
 /** The data representing a Discord Guild. */
 @Entity(name = "guild")
 @Table
-public class DbGuild {
+public class GuildData {
 
     /** The ID of the Guild. */
     @Id

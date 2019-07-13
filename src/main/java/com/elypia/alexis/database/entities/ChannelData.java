@@ -4,7 +4,7 @@ import javax.persistence.*;
 
 @Entity(name = "message_channel")
 @Table
-public class DbMessageChannel {
+public class ChannelData {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

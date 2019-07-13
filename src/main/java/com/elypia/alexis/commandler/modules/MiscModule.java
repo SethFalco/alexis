@@ -1,14 +1,11 @@
 package com.elypia.alexis.commandler.modules;
 
-import com.elypia.commandler.Commandler;
 import com.elypia.commandler.annotations.Module;
 import com.elypia.commandler.annotations.*;
-import com.elypia.commandler.metadata.ModuleData;
+import com.elypia.commandler.interfaces.Handler;
 import com.elypia.jdac.alias.*;
 import com.elypia.jdac.validation.Nsfw;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.events.message.GenericMessageEvent;
 import okhttp3.*;
 import org.json.JSONObject;
 
@@ -16,8 +13,8 @@ import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
-@Module(id = "Miscellaneous", aliases = {"util", "utils"}, help = "misc.h")
-public class MiscModule extends JDACHandler {
+@Module(name = "Miscellaneous", aliases = {"util", "utils"}, help = "misc.h")
+public class MiscModule implements Handler {
 
     private OkHttpClient client;
     private Request nekoRequest;
@@ -29,34 +26,10 @@ public class MiscModule extends JDACHandler {
         nekoCache = new ArrayList<>();
     }
 
-//    @Static
-//	@Command(id = "misc.convert", aliases = {"convert"}, help = "misc.convert.h")
-//	@Param(id = "common.value", help = "misc.convert.p.value.h")
-//	public EmbedBuilder asWritten(JDACEvent event, long values[]) {
-//		EmbedBuilder builder = new EmbedBuilder();
-//		builder.setTitle("**" + scripts.get("misc.convert.results") + "**");
-//
-//		for (long l : values) {
-//			StringBuilder sb = new StringBuilder();
-//			sb.append("**  " + scripts.get("misc.convert.input") + "**\n```");
-//			sb.append(l);
-//			sb.append("```\n** " + scripts.get("misc.convert.output") + "**\n```");
-//
-//			String result = MathUtils.asWritten(l);
-//			sb.append(result == null ? scripts.get("misc.convert.error") : result);
-//
-//			sb.append("```");
-//
-//			builder.addField("", sb.toString(), false);
-//		}
-//
-//		return builder;
-//	}
-
     @Static
-    @Command(id = "c.count", aliases = "count", help = "ch.count")
-    public String count(JDACEvent event,
-        @Param(id = "p.body", help = "ph.body") String input
+    @Command(name = "c.count", aliases = "count", help = "ch.count")
+    public String count(
+        @Param(name = "p.body", help = "ph.body") String input
     ) {
         var params = Map.of("length", input.length());
         return scripts.get("misc.count.response", params);

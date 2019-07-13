@@ -4,22 +4,27 @@ import com.elypia.alexis.Alexis;
 import com.elypia.alexis.config.ConfigurationService;
 import com.elypia.alexis.params.BotSayParams;
 import com.elypia.alexis.utils.*;
+import com.elypia.cmdlrdiscord.constraints.Channels;
+import com.elypia.commandler.CommandlerEvent;
 import com.elypia.commandler.annotations.Module;
 import com.elypia.commandler.annotations.*;
-import com.elypia.elyscript.ElyScript;
+import com.elypia.commandler.interfaces.*;
 import com.elypia.jdac.*;
 import com.elypia.jdac.validation.*;
+import com.google.inject.Inject;
 import net.dv8tion.jda.api.*;
 import net.dv8tion.jda.api.entities.*;
-import net.dv8tion.jda.api.events.message.GenericMessageEvent;
+import net.dv8tion.jda.api.events.message.*;
 import org.slf4j.*;
 
+import javax.inject.Singleton;
 import java.time.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
-@Module(id = "Bot", aliases = {"bot", "robot"}, help = "bot.help")
-public class BotModule extends JDACHandler {
+@Singleton
+@Module(name = "Bot", aliases = {"bot", "robot"})
+public class BotModule implements Handler {
 
 	private static final Logger logger = LoggerFactory.getLogger(BotModule.class);
 
@@ -32,22 +37,29 @@ public class BotModule extends JDACHandler {
 	 */
 	private static final OffsetDateTime BOT_TIME = OffsetDateTime.of(2016, 7, 19, 1, 52, 0, 0, ZoneOffset.ofHours(0));
 
+	private final LanguageInterface lang;
+
 	private long ownerId;
 
-	@Static
-	@Command(id = "bot.ping.name", aliases = "ping", help = "bot.ping.help")
-	public String ping(JDACEvent event) {
-		return scripts.get("bot.pong.name");
+	@Inject
+	public BotModule(LanguageInterface lang) {
+		this.lang = lang;
 	}
 
 	@Static
-	@Command(id = "bot.pong.name", aliases = "pong")
-	public String pong(JDACEvent event) {
-		return scripts.get("bot.ping.name");
+	@Command(name = "ping", aliases = "ping")
+	public String ping() {
+		return lang.get("bot.pong");
+	}
+
+	@Static
+	@Command(name = "pong", aliases = "pong")
+	public String pong() {
+		return lang.get("bot.ping");
 	}
 
 	@Default
-	@Command(id = "bot.info.name", aliases = {"stats", "info"}, help = "bot.info.help")
+	@Command(name = "info", aliases = {"stats", "info"})
 	public void displayStats(JDACEvent event) {
 		GenericMessageEvent source = event.getSource();
 		EmbedBuilder builder = BotUtils.newEmbed(source.getGuild());
@@ -90,22 +102,15 @@ public class BotModule extends JDACHandler {
 	}
 
 	@Static
-	@Command(id = "bot.script.name", aliases = "script", help = "bot.script.help")
-	public String sayEly(JDACEvent event, @Param("bot.param.body.script.help") @Everyone String body) {
-		event.delete();
-		return new ElyScript(body).compile();
+	@Command(name = "bot.say.name", aliases = "say", help = "bot.say.help")
+	public String say(BotSayParams params) {
+		params.getEvent().getSource().getMessage().delete().queue();
+		return params.getBody();
 	}
 
 	@Static
-	@Command(id = "bot.say.name", aliases = "say", help = "bot.say.help")
-	public String say(@Params BotSayParams params) {
-		event.delete();
-		return body;
-	}
-
-	@Static
-	@Command(id = "bot.invites.name", aliases = {"invite", "invites"}, help = "bot.invites.help")
-	public EmbedBuilder invites(@Channels(ChannelType.TEXT) JDACEvent event) {
+	@Command(name = "bot.invites.name", aliases = {"invite", "invites"}, help = "bot.invites.help")
+	public EmbedBuilder invites(@Channels(ChannelType.TEXT) CommandlerEvent<MessageReceivedEvent> event) {
 		Guild guild = event.getSource().getGuild();
 		Collection<Member> bots = guild.getMembers();
 

@@ -1,39 +1,29 @@
 package com.elypia.alexis.commandler.modules.media;
 
 import com.elypia.alexis.google.youtube.*;
-import com.elypia.commandler.Commandler;
 import com.elypia.commandler.annotations.Module;
 import com.elypia.commandler.annotations.*;
-import com.elypia.commandler.metadata.ModuleData;
-import com.elypia.jdac.JDACHandler;
+import com.elypia.commandler.interfaces.Handler;
 import com.elypia.jdac.alias.*;
 import com.google.api.services.youtube.model.SearchResult;
-import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.events.message.GenericMessageEvent;
+import com.google.inject.*;
 
 import java.io.IOException;
 import java.util.Optional;
 
-@Module(id = "YouTube", group = "Media", aliases = {"youtube", "yt"}, help = "yt.h")
-public class YouTubeModule extends JDACHandler {
+@Singleton
+@Module(name = "YouTube", group = "Media", aliases = {"youtube", "yt"}, help = "yt.h")
+public class YouTubeModule implements Handler {
 
     private YouTubeService youtube;
 
-    /**
-     * Initialise the module, this will assign the values
-     * in the module and create a {@link ModuleData} which is
-     * what {@link Commandler} uses in runtime to identify modules,
-     * commands or obtain any static data.
-     *
-     * @param commandler Our parent Commandler class.
-     */
-    public YouTubeModule(JDACommandler, YouTubeService youtube) {
-        super(commandler);
+    @Inject
+    public YouTubeModule(YouTubeService youtube) {
         this.youtube = youtube;
     }
 
-    @Command(id = "Search", aliases = "get", help = "yt.search.h")
-    @Param(id = "common.query", help = "yt.search.p.query.h")
+    @Command(name = "Search", aliases = "get", help = "yt.search.h")
+    @Param(name = "common.query", help = "yt.search.p.query.h")
 //    @Emoji(emotes = "\uD83C\uDFA7", help = "yt.search.e.headphones")
     public Object getVideo(JDACEvent event, String query) throws IOException {
         Optional<SearchResult> searchResult = youtube.getSearchResult(query, ResourceType.VIDEO);
@@ -47,10 +37,10 @@ public class YouTubeModule extends JDACHandler {
         return searchResult.get();
     }
 
-//    @Reaction(id = 10, emotes = "\uD83C\uDFB5")
-//    public void addToQueue(ReactionEvent event) {
-//        event.trigger("music add " + event.getReactionRecord().getObject("url"));
-//        event.deleteParentMessage();
-//        event.deleteMessage();
-//    }
+    @Reaction(command = "search", emotes = "\uD83C\uDFB5")
+    public void addToQueue(ReactionEvent event) {
+        event.trigger("music add " + event.getReactionRecord().getObject("url"));
+        event.deleteParentMessage();
+        event.deleteMessage();
+    }
 }

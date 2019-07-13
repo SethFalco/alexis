@@ -1,16 +1,12 @@
 package com.elypia.alexis.commandler.modules.discord;
 
-import com.elypia.alexis.commandler.dyndefault.CurrentGuild;
 import com.elypia.alexis.utils.BotUtils;
+import com.elypia.cmdlrdiscord.annotations.Scoped;
+import com.elypia.cmdlrdiscord.constraints.*;
 import com.elypia.commandler.CommandlerEvent;
 import com.elypia.commandler.annotations.Module;
 import com.elypia.commandler.annotations.*;
-import com.elypia.commandler.discord.annotations.Scoped;
-import com.elypia.commandler.discord.constraints.Channels;
 import com.elypia.commandler.interfaces.*;
-import com.elypia.jdac.*;
-import com.elypia.jdac.alias.*;
-import com.elypia.jdac.validation.*;
 import net.dv8tion.jda.api.*;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.Event;
@@ -20,7 +16,7 @@ import javax.inject.Inject;
 import javax.validation.constraints.*;
 import java.util.Collection;
 
-@Module(name = "Guilds", group = "Discord", aliases = "guild", help = "Manage and automate your guild.")
+@Module(name = "guild", group = "Discord", aliases = "guild")
 public class GuildModule implements Handler {
 
     private final LanguageInterface lang;
@@ -30,10 +26,10 @@ public class GuildModule implements Handler {
         this.lang = lang;
     }
 
-    @Command(name = "Guild Info", aliases = "info", help = "Get the guild's information.")
+    @Command(name = "info", aliases = "info")
     public EmbedBuilder info(
         CommandlerEvent<Event> event,
-        @Param(name = "guild", help = "A mutual guild by name or ID.", dynDefaultValue = CurrentGuild.class) @Scoped Guild guild
+        @Param(name = "guild", defaultValue = "${src.guild.id}") @Scoped Guild guild
     ) {
         EmbedBuilder builder = BotUtils.newEmbed(event);
 
@@ -49,21 +45,11 @@ public class GuildModule implements Handler {
         return builder;
     }
 
-    @Command(id = "Prune Messages", aliases = "prune", help = "guild.prune.help")
-    @Param(id = "count", help = "guild.param.count.help")
+    @Command(name = "prune", aliases = "prune")
     public void prune(
-        @Channels(ChannelType.TEXT) @Permissions(Permission.MESSAGE_MANAGE) JDACEvent event,
-        @Min(2) @Max(100) int count
-    ) {
-        prune(event, count, event.getSource().getTextChannel());
-    }
-
-    @Overload("Prune Messages")
-    @Param(id = "common.channel", help = "guild.param.channel.help")
-    public void prune(
-        @Channels(ChannelType.TEXT) @Permissions(Permission.MESSAGE_MANAGE) JDACEvent event,
-        @Min(2) @Max(100) int count,
-        TextChannel channel
+        @Channels(ChannelType.TEXT) @Permissions(Permission.MESSAGE_MANAGE) CommandlerEvent<?> event,
+        @Param(name = "count") @Min(2) @Max(100) int count,
+        @Param(name = "channel", defaultValue = "${src.channel.id}") TextChannel channel
     ) {
         MessageReceivedEvent source = (MessageReceivedEvent)event.getSource();
 

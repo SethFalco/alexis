@@ -1,9 +1,9 @@
 package com.elypia.alexis.commandler.providers;
 
 import com.elypia.alexis.utils.BotUtils;
+import com.elypia.cmdlrdiscord.interfaces.DiscordProvider;
 import com.elypia.commandler.CommandlerEvent;
 import com.elypia.commandler.annotations.Provider;
-import com.elypia.commandler.discord.interfaces.DiscordProvider;
 import com.elypia.commandler.interfaces.LanguageInterface;
 import com.elypia.elypiai.nanowrimo.Writer;
 import com.google.inject.*;
