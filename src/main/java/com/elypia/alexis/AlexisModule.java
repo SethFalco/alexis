@@ -1,6 +1,6 @@
 package com.elypia.alexis;
 
-import com.elypia.alexis.config.*;
+import com.elypia.alexis.configuration.*;
 import com.google.inject.AbstractModule;
 import org.apache.commons.cli.CommandLine;
 

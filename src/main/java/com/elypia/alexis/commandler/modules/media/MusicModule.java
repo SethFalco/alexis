@@ -3,7 +3,7 @@ package com.elypia.alexis.commandler.modules.media;
 import com.elypia.alexis.audio.*;
 import com.elypia.alexis.entities.GuildData;
 import com.elypia.alexis.entities.embedded.MusicSettings;
-import com.elypia.alexis.google.youtube.YouTubeService;
+import com.elypia.alexis.services.youtube.YouTubeService;
 import com.elypia.alexis.utils.Md;
 import com.elypia.commandler.annotations.Module;
 import com.elypia.commandler.annotations.*;

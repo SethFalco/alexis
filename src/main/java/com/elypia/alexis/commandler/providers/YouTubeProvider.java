@@ -1,6 +1,6 @@
 package com.elypia.alexis.commandler.providers;
 
-import com.elypia.alexis.google.youtube.YouTubeService;
+import com.elypia.alexis.services.youtube.YouTubeService;
 import com.elypia.alexis.utils.BotUtils;
 import com.elypia.commandler.CommandlerEvent;
 import com.elypia.commandler.annotations.Provider;

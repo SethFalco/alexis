@@ -1,4 +1,4 @@
-package com.elypia.alexis.database.entities;
+package com.elypia.alexis.entities;
 
 import javax.persistence.*;
 import java.util.Date;

@@ -1,4 +1,4 @@
-package com.elypia.alexis.google.youtube;
+package com.elypia.alexis.services.youtube;
 
 public enum ResourceType {
 

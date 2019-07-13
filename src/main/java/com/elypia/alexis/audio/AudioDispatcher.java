@@ -2,7 +2,7 @@ package com.elypia.alexis.audio;
 
 import com.elypia.alexis.Alexis;
 import com.elypia.alexis.entities.GuildData;
-import com.elypia.alexis.google.youtube.YouTubeService;
+import com.elypia.alexis.services.youtube.YouTubeService;
 import com.elypia.alexis.utils.Md;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter;

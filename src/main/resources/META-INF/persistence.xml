@@ -1,0 +1,9 @@
+<persistence-unit name="com.elypia.alexis">
+  <description>Alexis</description>
+  <properties>
+    <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL57Dialect"/>
+    <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
+    <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/alexis"/>
+    <property name="javax.persistence.jdbc.user" value="alexis"/>
+  </properties>
+</persistence-unit>

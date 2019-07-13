@@ -1,4 +1,4 @@
-package com.elypia.alexis.config;
+package com.elypia.alexis.configuration;
 
 import com.electronwill.nightconfig.core.conversion.*;
 

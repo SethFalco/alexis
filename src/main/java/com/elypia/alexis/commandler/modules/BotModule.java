@@ -1,7 +1,7 @@
 package com.elypia.alexis.commandler.modules;
 
 import com.elypia.alexis.Alexis;
-import com.elypia.alexis.config.ConfigurationService;
+import com.elypia.alexis.configuration.ConfigurationService;
 import com.elypia.alexis.params.BotSayParams;
 import com.elypia.alexis.utils.*;
 import com.elypia.cmdlrdiscord.constraints.Channels;

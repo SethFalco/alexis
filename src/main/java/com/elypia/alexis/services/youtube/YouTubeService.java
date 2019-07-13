@@ -1,6 +1,6 @@
-package com.elypia.alexis.google.youtube;
+package com.elypia.alexis.services.youtube;
 
-import com.elypia.alexis.config.ApiCredentials;
+import com.elypia.alexis.configuration.ApiCredentials;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.youtube.*;

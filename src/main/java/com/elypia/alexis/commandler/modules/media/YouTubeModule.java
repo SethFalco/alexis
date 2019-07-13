@@ -1,6 +1,6 @@
 package com.elypia.alexis.commandler.modules.media;
 
-import com.elypia.alexis.google.youtube.*;
+import com.elypia.alexis.services.youtube.*;
 import com.elypia.commandler.annotations.Module;
 import com.elypia.commandler.annotations.*;
 import com.elypia.commandler.interfaces.Handler;

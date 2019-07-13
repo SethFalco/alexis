@@ -1,6 +1,6 @@
-package com.elypia.alexis.google;
+package com.elypia.alexis.services;
 
-import com.elypia.alexis.config.ApiCredentials;
+import com.elypia.alexis.configuration.ApiCredentials;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.translate.*;
 

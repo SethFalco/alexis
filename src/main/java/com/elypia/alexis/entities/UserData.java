@@ -1,7 +1,7 @@
-package com.elypia.alexis.database.entities;
+package com.elypia.alexis.entities;
 
 import javax.persistence.*;
-import java.sql.Date;
+import java.util.Date;
 
 @Entity(name = "user")
 @Table

@@ -2,7 +2,7 @@ package com.elypia.alexis;
 
 import com.electronwill.nightconfig.core.conversion.ObjectConverter;
 import com.electronwill.nightconfig.core.file.FileConfig;
-import com.elypia.alexis.config.*;
+import com.elypia.alexis.configuration.*;
 import com.elypia.alexis.listeners.*;
 import com.elypia.cmdlrdiscord.DiscordController;
 import com.elypia.commandler.*;

@@ -1,7 +1,7 @@
 package com.elypia.alexis.listeners;
 
 import com.elypia.alexis.Alexis;
-import com.elypia.alexis.database.entities.GuildData;
+import com.elypia.alexis.entities.GuildData;
 import com.elypia.alexis.utils.BotUtils;
 import net.dv8tion.jda.api.*;
 import net.dv8tion.jda.api.entities.*;
