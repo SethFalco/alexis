@@ -20,7 +20,7 @@ public class DatabaseService implements AutoCloseable {
 
     private final boolean isEnabled;
 
-    /** Creates the session factory so we can create transcation and commit changes. */
+    /** Creates the session factory so we can create transactions and commit changes. */
     private SessionFactory sessionFactory;
 
     @Inject
@@ -45,6 +45,10 @@ public class DatabaseService implements AutoCloseable {
 
     public boolean isEnabled() {
         return isEnabled;
+    }
+
+    public boolean isDisabled() {
+        return !isEnabled();
     }
 
     @Override

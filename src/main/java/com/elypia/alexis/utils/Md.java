@@ -2,6 +2,10 @@ package com.elypia.alexis.utils;
 
 public final class Md {
 
+    private Md() {
+        // Do nothing
+    }
+
     public static String bu(String body) {
         return b(u(body));
     }

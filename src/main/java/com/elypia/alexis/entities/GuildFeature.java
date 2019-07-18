@@ -31,10 +31,6 @@ public class GuildFeature {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
     public int getGuildId() {
         return guildId;
     }

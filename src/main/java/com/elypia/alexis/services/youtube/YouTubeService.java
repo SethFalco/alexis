@@ -1,6 +1,6 @@
 package com.elypia.alexis.services.youtube;
 
-import com.elypia.alexis.configuration.ApiCredentials;
+import com.elypia.alexis.configuration.ApiConfig;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.youtube.*;
@@ -26,15 +26,15 @@ public class YouTubeService {
     private final Map<String, String> channelThumbnailCache;
 
     @Inject
-    public YouTubeService(ApiCredentials apiCredentials) throws IOException, GeneralSecurityException {
-        String path = apiCredentials.getGoogle();
+    public YouTubeService(ApiConfig apiConfig) throws IOException, GeneralSecurityException {
+        String path = apiConfig.getGoogle();
         GoogleCredentials credentials = GoogleCredentials.fromStream(new FileInputStream(path)).createScoped(SCOPES);
 
         youtube = new YouTube.Builder(
             GoogleNetHttpTransport.newTrustedTransport(),
             JacksonFactory.getDefaultInstance(),
             new HttpCredentialsAdapter(credentials)
-        ).setApplicationName("Alexis").build();
+        ).setApplicationName("ChatBot").build();
 
         channelThumbnailCache = new HashMap<>();
     }

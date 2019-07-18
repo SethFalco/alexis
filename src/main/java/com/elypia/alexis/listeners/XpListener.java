@@ -1,10 +1,11 @@
 package com.elypia.alexis.listeners;
 
 import com.elypia.alexis.entities.*;
-import com.elypia.alexis.services.DatabaseService;
-import com.elypia.elypiai.runescape.RuneScape;
-import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import com.elypia.alexis.services.*;
+import com.elypia.alexis.utils.LevelUtils;
+import com.google.inject.*;
+import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.events.message.*;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.hibernate.Session;
 import org.slf4j.*;
@@ -12,9 +13,8 @@ import org.slf4j.*;
 import java.time.Duration;
 import java.util.*;
 
-/**
- * Handles calcuating and giving XP to users.
- */
+/** Handles calcuating and giving XP to users. */
+@Singleton
 public class XpListener extends ListenerAdapter {
 
     private static Logger logger = LoggerFactory.getLogger(XpListener.class);
@@ -25,18 +25,21 @@ public class XpListener extends ListenerAdapter {
     /** The average length of an English word. */
     private static final int AVERAGE_WORD_LENGTH = 5;
 
-    /** The max allowed characters per second before Alexis considers the message too fast. */
+    /** The max allowed characters per second before ChatBot considers the message too fast. */
     private static final int ALLOWED_CPS = FASTEST_WPM * AVERAGE_WORD_LENGTH / 60;
 
     /** MAX XP per Message, + 1 for whitespace. */
     private static final int MAX_XP_PM = Message.MAX_CONTENT_LENGTH / AVERAGE_WORD_LENGTH;
 
     private final DatabaseService dbService;
+    private final AuditService auditService;
 
-    public XpListener(final DatabaseService dbService) {
-        this.dbService = dbService;
+    @Inject
+    public XpListener(final DatabaseService dbService, final AuditService auditService) {
+        this.dbService = Objects.requireNonNull(dbService);
+        this.auditService = Objects.requireNonNull(auditService);
 
-        if (!dbService.isEnabled())
+        if (dbService.isDisabled())
             logger.info("Database is disabled so XP will not be rewarded.");
     }
 
@@ -59,51 +62,102 @@ public class XpListener extends ListenerAdapter {
             int xp = content.split("\\s+", MAX_XP_PM).length;
 
             long guildId = event.getGuild().getIdLong();
-
             GuildData guildData = session.get(GuildData.class, guildId);
+
             MemberData memberData = session.get(MemberData.class, null);
 
-            userData.setXp(userData.getXp() + xp);
             memberData.setXp(memberData.getXp() + xp);
             guildData.setXp(guildData.getXp() + xp);
 
-            GuildSettings settings = guildData.getSettings();
+            GuildFeature feature = null;
 
-            int currentLevel = RuneScape.parseXpAsLevel(memberData.getXp());
-            int newLevel = RuneScape.parseXpAsLevel(memberData.getXp());
-
-            if (currentLevel != newLevel) {
-                boolean enabled = settings.getLevelSettings().getNotifySettings().isEnabled();
-
-                if (enabled)
-                    event.getChannel().sendMessage("Well done you went from level " + currentLevel + " to level " + newLevel + "!").queue();
-            }
-
-            List<SkillEntry> skills = settings.getSkills();
-            List<MemberSkill> memberSkills = memberData.getSkills();
-
-            skills.forEach((skill) -> {
-                if (skill.getChannels().contains(event.getChannel().getIdLong())) {
-                    if (memberSkills.stream().noneMatch(o -> o.getName().equalsIgnoreCase(skill.getName())))
-                        memberSkills.add(new MemberSkill(skill.getName()));
-
-                    for (MemberSkill mSkill : memberSkills) {
-                        if (mSkill.getName().equalsIgnoreCase(skill.getName())) {
-                            int skillLevel = RuneScape.parseXpAsLevel(mSkill.getXp());
-                            int newSkillLevel = RuneScape.parseXpAsLevel(mSkill.incrementXp(reward));
-
-                            if (skillLevel != newSkillLevel && skill.isNotify()) {
-                                var params = Map.of("skill", skill.getName(), "level", newSkillLevel);
-//							event.getChannel().sendMessage(BotUtils.get("skill.level_up", event, params)).queue();
-                            }
-
-                            return;
-                        }
-                    }
-                }
-            });
 
             session.getTransaction().commit();
+        }
+    }
+
+    /**
+     * @param event
+     * @param userData
+     * @param guildData
+     * @param earned
+     */
+    private void giveUserXp(MessageReceivedEvent event, UserData userData, GuildData guildData, int earned) {
+        int currentLevel = LevelUtils.getLevelFromXp(userData.getXp());
+        userData.setXp(userData.getXp() + earned);
+        int newLevel = LevelUtils.getLevelFromXp(userData.getXp());
+
+        if (currentLevel != newLevel) {
+            GuildFeature feature = guildData.getFeature("GLOBAL_LEVEL_NOTIFICATION");
+
+            if (feature.isEnabled()) {
+
+                event.getChannel().sendMessage("Well done you went from level " + currentLevel + " to level " + newLevel + "!").queue();
+            }
+        }
+    }
+
+    private void getMemberXp(MessageReceivedEvent event, MemberData memberData, GuildData guildData, int earned) {
+        int currentLevel = LevelUtils.getLevelFromXp(memberData.getXp());
+        memberData.setXp(memberData.getXp() + earned);
+        int newLevel = LevelUtils.getLevelFromXp(memberData.getXp());
+
+        if (currentLevel != newLevel) {
+            GuildFeature feature = guildData.getFeature("GUILD_LEVEL_NOTIFICATION");
+
+            if (feature.isEnabled())
+                event.getChannel().sendMessage("Well done you went from level " + currentLevel + " to level " + newLevel + "!").queue();
+        }
+    }
+
+    /**
+     * @param event The event that allowed the guild to gain XP.
+     * @param guildData The guild data in the database.
+     * @param earned The amount of XP the guild earned in this event.
+     */
+    private void giveGuildXp(GenericMessageEvent event, GuildData guildData, int earned) {
+        long oldXp = guildData.getXp();
+        float multipler = guildData.getMutlipler();
+
+        int oldLevel = LevelUtils.getLevelFromXp(oldXp, multipler);
+        guildData.setXp(oldXp += earned);
+        int newLevel = LevelUtils.getLevelFromXp(oldXp, multipler);
+
+        if (oldLevel == newLevel)
+            return; // Didn't level up.
+
+        GuildFeature feature = guildData.getFeature("GLOBAL_LEVEL_NOTIFICATION");
+
+        if (!feature.isEnabled())
+            return; // Notifications not enabled.
+
+        Guild guild = event.getGuild();
+        MessageSetting settings = guildData.getMessage(3);
+        Long channelId = settings.getChannelId();
+        MessageChannel channel = (channelId != null) ? guild.getTextChannelById(channelId) : event.getChannel();
+
+        String message = settings.getMessage();
+
+        if (message == null) {
+            logger.info("Guild leveled up with notifications enabled but no message configured.");
+            auditService.log(guild, guildData, "The global level notification feature is enabled but no message is set, disabling global level notifications.");
+            feature.setEnabled(false);
+            return;
+        }
+
+        channel.sendMessage(message).queue();
+    }
+
+    private void giveSkillsXp(MessageReceivedEvent event, UserData userData, GuildData guildData, int earned) {
+        int currentLevel = LevelUtils.getLevelFromXp(userData.getXp());
+        userData.setXp(userData.getXp() + earned);
+        int newLevel = LevelUtils.getLevelFromXp(userData.getXp());
+
+        if (currentLevel != newLevel) {
+            GuildFeature feature = guildData.getFeature("GLOBAL_LEVEL_NOTIFICATIONS");
+
+            if (feature.isEnabled())
+                event.getChannel().sendMessage("Well done you went from level " + currentLevel + " to level " + newLevel + "!").queue();
         }
     }
 
@@ -112,7 +166,7 @@ public class XpListener extends ListenerAdapter {
      * @return If this event is allowed eligable to grant XP to entities.
      */
     private boolean isValid(MessageReceivedEvent event) {
-        if (!dbService.isEnabled())
+        if (dbService.isDisabled())
             return false;
 
         if (!event.getChannelType().isGuild() || event.getAuthor().isBot())
@@ -142,9 +196,5 @@ public class XpListener extends ListenerAdapter {
         long cps = chars / seconds;
 
         return cps <= ALLOWED_CPS;
-    }
-
-    public int calculateLevelFromXp() {
-        return 0;
     }
 }

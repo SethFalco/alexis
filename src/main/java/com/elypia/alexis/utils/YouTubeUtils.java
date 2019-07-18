@@ -8,6 +8,10 @@ public final class YouTubeUtils {
     private static final String VIDEO_URL = "https://www.youtube.com/watch?v=";
     private static final String THUMBNAIL_FORMAT = "http://img.youtube.com/vi/%s/maxresdefault.jpg";
 
+    private YouTubeUtils() {
+        // Do nothing
+    }
+
     public static String toYouTubeTimeFormat(TimeUnit unit, long current, long duration) {
         return String.format("%s / %s", toYouTubeTimeFormat(unit, current), toYouTubeTimeFormat(unit, duration));
     }

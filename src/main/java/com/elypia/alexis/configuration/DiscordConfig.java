@@ -3,6 +3,7 @@ package com.elypia.alexis.configuration;
 import com.electronwill.nightconfig.core.conversion.*;
 
 import javax.inject.Singleton;
+import java.util.List;
 
 @Singleton
 public class DiscordConfig {
@@ -15,7 +16,7 @@ public class DiscordConfig {
     /** The command prefix to execute commands. */
     @Path("prefix")
     @SpecNotNull
-    private String prefix;
+    private List<String> prefix;
 
     /** The ID to the bot developers/owners guild. */
     @Path("support_guild")
@@ -25,7 +26,7 @@ public class DiscordConfig {
         return token;
     }
 
-    public String getPrefix() {
+    public List<String> getPrefix() {
         return prefix;
     }
 

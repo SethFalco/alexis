@@ -17,18 +17,17 @@ public class MessageSetting {
     @Column(name = "message_enabled")
     private boolean enabled;
 
-    @Column(name = "message_channel_id")
-    private long channelId;
+    /**
+     * Optional, null means current channel.
+     */
+    @Column(name = "channel_id")
+    private Long channelId;
 
     @Column(name = "message")
     private String message;
 
     public int getId() {
         return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public int getType() {
@@ -47,7 +46,7 @@ public class MessageSetting {
         this.enabled = enabled;
     }
 
-    public long getChannelId() {
+    public Long getChannelId() {
         return channelId;
     }
 

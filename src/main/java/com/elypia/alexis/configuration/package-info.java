@@ -1,2 +1,2 @@
-/** All configuration for Alexis mapped to objects. */
+/** All configuration for ChatBot mapped to objects. */
 package com.elypia.alexis.configuration;

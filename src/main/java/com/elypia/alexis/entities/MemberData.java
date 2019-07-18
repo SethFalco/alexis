@@ -18,14 +18,10 @@ public class MemberData {
     private long userId;
 
     @Column(name = "member_xp")
-    private int xp;
+    private long xp;
 
     public int getId() {
         return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public long getGuildId() {
@@ -44,11 +40,11 @@ public class MemberData {
         this.userId = userId;
     }
 
-    public int getXp() {
+    public long getXp() {
         return xp;
     }
 
-    public void setXp(int xp) {
+    public void setXp(long xp) {
         this.xp = xp;
     }
 }
