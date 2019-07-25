@@ -18,32 +18,25 @@ alter table alexis.guild
 
 create table alexis.emote
 (
-    emote_id bigint(18) not null,
-    guild_id bigint(18) not null comment 'Useful for pruning data, if we''re in the guild, but the emote doesn''t exist, it''s been removed.',
-    constraint emotes_emote_id_uindex
-        unique (emote_id),
+    emote_id bigint not null
+        primary key,
+    guild_id bigint not null comment 'Useful for pruning data, if we''re in the guild, but the emote doesn''t exist, it''s been removed.',
     constraint emote_guild_guild_id_fk
         foreign key (guild_id) references alexis.guild (guild_id)
-);
-
-alter table alexis.emote
-    add primary key (emote_id);
+)
+    comment 'Data about emotes globally and the guild it''s in. (We store the guild it''s in as well so we can know where to check to know if it''s been deleted.)';
 
 create table alexis.emote_usage
 (
-    emote_usage_id int auto_increment,
+    emote_usage_id int auto_increment
+        primary key,
     emote_id bigint not null,
     guild_id bigint not null comment 'The guild this emote was used in. (Doesn''t have to be the guild that owns the emote.)',
-    emote_count int(4) not null,
-    usage_time timestamp default CURRENT_TIMESTAMP not null,
-    constraint emote_usage_emote_usage_id_uindex
-        unique (emote_usage_id),
+    occurences int(4) not null,
+    usage_timestamp timestamp default CURRENT_TIMESTAMP not null,
     constraint emote_usage_emote_emote_id_fk
         foreign key (emote_id) references alexis.emote (emote_id)
 );
-
-alter table alexis.emote_usage
-    add primary key (emote_usage_id);
 
 create table alexis.guild_feature
 (
