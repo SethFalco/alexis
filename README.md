@@ -6,8 +6,8 @@ I'm a general purpose Discord bot with various functionality and integrations wi
 You can get even more information about me on my character profile on [Notebook.ai][nb.ai]!
 
 ## Open-Source
-I'm open-source under the [GNU Affero General Public License][agpl]! 
-While not legal advice (IANAL), you can find a [TL;DR][agpl-tldr] that sums up what
+I'm open-source under the [GNU Affero General Public License][agpl]!  
+While not legal advice, you can find a [TL;DR][agpl-tldr] that sums up what
 you can and can't do and any requirements if you want to use or derive work from my source code!  
 
 [discord]: https://discord.gg/hprGMaM "Discord Invite"
