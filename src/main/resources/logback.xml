@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright (C) 2019-2019  Elypia
+  ~ Copyright (C) 2019-2019  Elypia CIC
   ~
   ~ This program is free software: you can redistribute it and/or modify
   ~ it under the terms of the GNU Affero General Public License as
@@ -16,17 +16,34 @@
   -->
 
 <configuration>
+    <logger name="org.hibernate" level="WARN"/>
+    <logger name="net.dv8tion" level="WARN"/>
+    <logger name="com.sedmelluq" level="WARN"/>
+
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
             <pattern>%highlight([%-5p]) [%blue(%d{MM/dd, UTC}) %green(%d{HH:mm:ss, UTC})] %blue([%logger]) %msg%n</pattern>
         </encoder>
     </appender>
 
-    <root level="INFO">
-        <appender-ref ref="STDOUT"/>
-    </root>
+    <!-- If STACKDRIVER is defined, assume we're running on Google Cloud Platform with correct permissions. -->
+    <if condition='isDefined("STACKDRIVER")'>
+        <then>
+            <appender name="STACKDRIVER" class="com.google.cloud.logging.logback.LoggingAppender">
+                <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+                    <level>INFO</level>
+                </filter>
+                <log>alexis.log</log>
+                <flushLevel>WARN</flushLevel>
+            </appender>
+        </then>
+    </if>
 
-    <logger name="org.hibernate" level="WARN"/>
-    <logger name="net.dv8tion" level="WARN"/>
-    <logger name="com.sedmelluq" level="WARN"/>
+    <root level="ALL">
+        <appender-ref ref="STDOUT"/>
+
+        <if condition='isDefined("STACKDRIVER")'>
+            <then><appender-ref ref="STACKDRIVER"/></then>
+        </if>
+    </root>
 </configuration>

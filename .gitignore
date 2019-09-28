@@ -47,6 +47,11 @@ gradle-app.setting
 ##########
 
 # Configuration
+/config/**
+*.p12
+*.jks
+*.key
+*.env
 *.json
 *.toml
 
@@ -54,3 +59,9 @@ gradle-app.setting
 /out/
 /.idea/
 *.iml
+
+# Eclipse / vscode
+.settings
+bin
+.classpath
+.project
