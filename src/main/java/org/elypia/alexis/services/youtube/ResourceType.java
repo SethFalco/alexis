@@ -18,6 +18,9 @@
 
 package org.elypia.alexis.services.youtube;
 
+/**
+ * @author seth@elypia.org (Seth Falco)
+ */
 public enum ResourceType {
 
     VIDEO("video"),

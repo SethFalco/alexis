@@ -22,10 +22,12 @@ package org.elypia.alexis.utils;
  * Utilities regarding the leveling system used by Elypia.
  * This should be standardised across applications but
  * is currently coded direcly in ChatBot only.
+ *
+ * @author seth@elypia.org (Seth Falco)
  */
 public final class LevelUtils {
 
-    private static final float ONE_OVER_THREE = 1 / 3;
+    private static final float ONE_OVER_THREE = 1f / 3f;
 
     private LevelUtils() {
         // Do nothing

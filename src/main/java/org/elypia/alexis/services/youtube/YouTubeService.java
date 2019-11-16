@@ -24,13 +24,16 @@ import com.google.api.services.youtube.*;
 import com.google.api.services.youtube.model.*;
 import com.google.auth.http.HttpCredentialsAdapter;
 import com.google.auth.oauth2.GoogleCredentials;
-import org.elypia.alexis.configuration.ApiConfig;
+import org.elypia.commandler.config.AppConfig;
 
 import javax.inject.*;
-import java.io.*;
+import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.*;
 
+/**
+ * @author seth@elypia.org (Seth Falco)
+ */
 @Singleton
 public class YouTubeService {
 
@@ -44,15 +47,14 @@ public class YouTubeService {
     private final Map<String, String> channelThumbnailCache;
 
     @Inject
-    public YouTubeService(ApiConfig apiConfig) throws IOException, GeneralSecurityException {
-        String path = apiConfig.getGoogle();
-        GoogleCredentials credentials = GoogleCredentials.fromStream(new FileInputStream(path)).createScoped(SCOPES);
+    public YouTubeService(AppConfig appConfig) throws IOException, GeneralSecurityException {
+        GoogleCredentials credentials = GoogleCredentials.getApplicationDefault().createScoped(SCOPES);
 
         youtube = new YouTube.Builder(
             GoogleNetHttpTransport.newTrustedTransport(),
             JacksonFactory.getDefaultInstance(),
             new HttpCredentialsAdapter(credentials)
-        ).setApplicationName("ChatBot").build();
+        ).setApplicationName(appConfig.getApplicationName()).build();
 
         channelThumbnailCache = new HashMap<>();
     }

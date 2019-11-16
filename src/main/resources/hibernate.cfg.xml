@@ -1,0 +1,31 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<!--
+  ~ Alexis - A general purpose chatbot for Discord.
+  ~ Copyright (C) 2019-2019  Elypia CIC
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as
+  ~ published by the Free Software Foundation, either version 3 of the
+  ~ License, or (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with this program.  If not, see <https://www.gnu.org/licenses/>.
+  -->
+
+<!DOCTYPE hibernate-configuration PUBLIC
+  "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+  "http://hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+  <session-factory>
+    <property name="hibernate.dialect">org.hibernate.dialect.MySQL57Dialect</property>
+    <property name="hibernate.connection.driver_class">com.mysql.cj.jdbc.Driver</property>
+    <property name="hibernate.connection.username">alexis</property>
+    <property name="hibernate.c3p0.max_size">16</property>
+    <property name="hibernate.show_sql">false</property>
+  </session-factory>
+</hibernate-configuration>

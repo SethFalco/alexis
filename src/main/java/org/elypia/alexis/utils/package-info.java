@@ -16,5 +16,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-/** Static utilities, none of these classes should be instantiated. */
+/**
+ *  Static utilities, none of these classes should be instantiated.
+ *
+ *  @author seth@elypia.org (Seth Falco)
+ */
 package org.elypia.alexis.utils;

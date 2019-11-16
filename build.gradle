@@ -30,59 +30,69 @@ description = "Hey! I'm a chatbot for Discord!"
 sourceCompatibility = 11
 targetCompatibility = 11
 
+ext {
+    comcordVersion = "2.0.0"
+    elypiaiVersion = "2.3.0"
+    hibernateVersion = "5.4.8.Final"
+}
+
 repositories {
     jcenter()
     mavenLocal()
-
-    maven {
-        url 'https://jitpack.io'
-    }
+    maven { url "https://oss.jfrog.org/artifactory/libs-release" }
+    maven { url 'https://jitpack.io' }
 }
 
 dependencies {
+    // TODO: TEMP
+    runtimeOnly "commons-beanutils:commons-beanutils:1.9.4"
+
     // ComCord (Commandler for Discord)
-//    implementation "org.elypia.comcord:core:2.0.0"
+    implementation "org.elypia.comcord:core:${comcordVersion}"
+    implementation "org.elypia.comcord:validation:${comcordVersion}"
 
     // Elypiai
-//    implementation "org.elypia.elypiai:cleverbot:2.2.1"
-//    implementation "org.elypia.elypiai:nanowrimo:2.2.1"
-//    implementation "org.elypia.elypiai:osu:2.2.1"
-//    implementation "org.elypia.elypiai:path-of-exile:2.2.1"
-//    implementation "org.elypia.elypiai:runescape:2.2.1"
-//    implementation "org.elypia.elypiai:steam:2.2.1"
-//    implementation "org.elypia.elypiai:twitch:2.2.1"
-//    implementation "org.elypia.elypiai:urbandictionary:2.2.1"
-//    implementation "org.elypia.elypiai:yugioh-prices:2.2.1"
+    implementation "org.elypia.elypiai:cleverbot:${elypiaiVersion}"
+    implementation "org.elypia.elypiai:nanowrimo:${elypiaiVersion}"
+    implementation "org.elypia.elypiai:osu:${elypiaiVersion}"
+    implementation "org.elypia.elypiai:path-of-exile:${elypiaiVersion}"
+    implementation "org.elypia.elypiai:runescape:${elypiaiVersion}"
+    implementation "org.elypia.elypiai:steam:${elypiaiVersion}"
+    implementation "org.elypia.elypiai:urbandictionary:${elypiaiVersion}"
+    implementation "org.elypia.elypiai:yugioh-prices:${elypiaiVersion}"
 
-    // Elypiai Extensions
-//    implementation "org.elypia.elypiai:extensions-redis:2.2.1"
-
-    // Apache Commons
-    implementation "commons-cli:commons-cli:1.4"
-    implementation "org.apache.commons:commons-collections4:4.4"
-
-    // Database
-    implementation "org.hibernate:hibernate-core:5.4.5.Final"
-    runtimeOnly "mysql:mysql-connector-java:8.0.17"
+    // Elypiai Extensions TODO: This should be extensions-redis
+    implementation "org.elypia.elypiai:redis:${elypiaiVersion}"
 
     // Discord
-    implementation "net.dv8tion:JDA:4.0.0_48"
-    implementation "com.sedmelluq:lavaplayer:1.3.22"
+    implementation "net.dv8tion:JDA:4.0.0_61"
+    implementation "com.sedmelluq:lavaplayer:1.3.25"
     implementation "com.github.DiscordBotList:DBL-Java-Library:2.0.1"
 
+    // Twitch
+    implementation "com.github.twitch4j:twitch4j:1.0.0-alpha.17";
+
     // Google Translate and YouTube
-    implementation "com.google.cloud:google-cloud-translate:1.90.0"
+    implementation "com.google.cloud:google-cloud-translate:1.94.0"
     implementation "com.google.apis:google-api-services-youtube:v3-rev212-1.25.0"
 
+    // YAML Configuration for Commandler (Apache Commons Configuration)
+    runtimeOnly "org.yaml:snakeyaml:1.25"
+
+    // Database
+    implementation "org.hibernate:hibernate-core:${hibernateVersion}"
+    implementation "org.hibernate:hibernate-c3p0:${hibernateVersion}"
+    runtimeOnly "mysql:mysql-connector-java:8.0.18"
+
     // Logging
-    implementation "org.slf4j:slf4j-api:1.7.28"
+    implementation "org.slf4j:slf4j-api:1.7.29"
     runtimeOnly "org.codehaus.janino:janino:3.1.0"
     runtimeOnly "ch.qos.logback:logback-classic:1.2.3"
-    runtimeOnly "com.google.cloud:google-cloud-logging-logback:0.111.0-alpha"
+    runtimeOnly "com.google.cloud:google-cloud-logging-logback:0.116.0-alpha"
 
     // Testing
     testImplementation "org.junit.jupiter:junit-jupiter:5.5.2"
-    testImplementation "org.mockito:mockito-core:3.0.0"
+    testImplementation "org.mockito:mockito-core:3.1.0"
 }
 
 [compileJava, compileTestJava, javadoc]*.options*.encoding = 'UTF-8'
@@ -109,7 +119,7 @@ test {
 /** Coverage **/
 
 jacoco {
-    toolVersion = "0.8.4"
+    toolVersion = "0.8.5"
 }
 
 jacocoTestReport {

@@ -20,6 +20,9 @@ package org.elypia.alexis.entities;
 
 import javax.persistence.*;
 
+/**
+ * @author seth@elypia.org (Seth Falco)
+ */
 @Entity(name = "emote")
 @Table
 public class EmoteData {
@@ -31,6 +34,15 @@ public class EmoteData {
 
     @Column(name = "guild_id")
     private long guildId;
+
+    public EmoteData() {
+        // Do nothing
+    }
+
+    public EmoteData(final long id, final long guildId) {
+        this.id = id;
+        this.guildId = guildId;
+    }
 
     public long getId() {
         return id;

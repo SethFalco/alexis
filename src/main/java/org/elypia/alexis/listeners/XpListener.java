@@ -18,20 +18,24 @@
 
 package org.elypia.alexis.listeners;
 
-import com.google.inject.*;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.*;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.elypia.alexis.entities.*;
 import org.elypia.alexis.services.*;
-import org.elypia.alexis.utils.LevelUtils;
+import org.elypia.alexis.utils.*;
 import org.hibernate.Session;
 import org.slf4j.*;
 
+import javax.inject.*;
 import java.time.Duration;
 import java.util.*;
 
-/** Handles calcuating and giving XP to users. */
+/**
+ * Handles calcuating and giving XP to users.
+ *
+ * @author seth@elypia.org (Seth Falco)
+ */
 @Singleton
 public class XpListener extends ListenerAdapter {
 
@@ -150,11 +154,9 @@ public class XpListener extends ListenerAdapter {
             return; // Notifications not enabled.
 
         Guild guild = event.getGuild();
-        MessageSetting settings = guildData.getMessage(3);
-        Long channelId = settings.getChannelId();
-        MessageChannel channel = (channelId != null) ? guild.getTextChannelById(channelId) : event.getChannel();
+        MessageChannel channel = DiscordUtils.getWriteableChannel(guild);
 
-        String message = settings.getMessage();
+        String message = "Random thing";
 
         if (message == null) {
             logger.info("Guild leveled up with notifications enabled but no message configured.");

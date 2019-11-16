@@ -18,16 +18,16 @@
 
 package org.elypia.alexis.listeners;
 
-import com.google.inject.*;
-import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.guild.member.*;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.elypia.alexis.entities.*;
 import org.elypia.alexis.services.DatabaseService;
+import org.elypia.alexis.utils.DiscordUtils;
 import org.hibernate.Session;
 import org.slf4j.*;
 
+import javax.inject.*;
 import java.util.Objects;
 
 @Singleton
@@ -55,13 +55,12 @@ public class GreetingListener extends ListenerAdapter {
         onGuildMemberEvent(event, false);
     }
 
-    public void onGuildMemberEvent(GenericGuildMemberEvent event, boolean join) {
+    public void onGuildMemberEvent(GenericGuildMemberEvent event, final boolean join) {
         if (dbService.isDisabled())
             return;
 
-        boolean bot = event.getUser().isBot();
-
-        Guild guild = event.getGuild();
+        final Guild guild = event.getGuild();
+        final boolean bot = event.getUser().isBot();
 
         try (Session session = dbService.open()) {
             GuildData data = session.get(GuildData.class, guild.getIdLong());
@@ -77,12 +76,8 @@ public class GreetingListener extends ListenerAdapter {
                 feature = data.getFeature("USER_LEAVE_NOTIFICATION");
 
             if (feature.isEnabled()) {
-                JDA jda = event.getJDA();
-//                TextChannel channel = jda.getTextChannelById(settings.getChannel());
-//                String message = settings.getMessage();
-//                message = DiscordUtils.get(event, message, event);
-
-//                channel.sendMessage(message).queue();
+                TextChannel channel = DiscordUtils.getWriteableChannel(event.getGuild());
+                channel.sendMessage(feature.getName()).queue();
             }
         }
     }

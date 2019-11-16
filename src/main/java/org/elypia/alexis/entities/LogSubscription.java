@@ -22,6 +22,8 @@ import javax.persistence.*;
 
 /**
  * Allows guilds to choose what messages they are subscribed too.
+ *
+ * @author seth@elypia.org (Seth Falco)
  */
 @Entity(name = "log_subscription")
 @Table

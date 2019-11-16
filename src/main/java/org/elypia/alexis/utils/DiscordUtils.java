@@ -21,14 +21,17 @@ package org.elypia.alexis.utils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.Event;
-import net.dv8tion.jda.api.events.guild.GenericGuildEvent;
-import net.dv8tion.jda.api.events.message.GenericMessageEvent;
-import org.elypia.comcord.DiscordController;
-import org.elypia.commandler.CommandlerEvent;
+import org.elypia.comcord.*;
+import org.elypia.commandler.event.ActionEvent;
 import org.slf4j.*;
 
 import java.util.Objects;
 
+/**
+ * Utility methods to put reusable methods to interact with JDA.
+ *
+ * @author seth@elypia.org (Seth Falco)
+ */
 public final class DiscordUtils {
 
 	private static final Logger logger = LoggerFactory.getLogger(DiscordUtils.class);
@@ -48,23 +51,18 @@ public final class DiscordUtils {
 	 * has a reference to a guild and returns calls
 	 * {@link #newEmbed(Guild)}.
 	 *
-	 * @param event The {@link CommandlerEvent} that wants this new embed.
+	 * @param event The {@link ActionEvent} that wants this new embed.
 	 * @return A new embed builder, if guild is non-null, it may have a color set.
 	 */
-	public static EmbedBuilder newEmbed(CommandlerEvent<Event, Message> event) {
-		if (event.getController() instanceof DiscordController)
+	public static EmbedBuilder newEmbed(ActionEvent<?, ?> event) {
+		if (!(event.getIntegration() instanceof DiscordIntegration))
 			throw new RuntimeException("Embeds are specific to Discord only.");
 
 		Object source = event.getSource();
 
-		if (source instanceof GenericGuildEvent)
-			return newEmbed(((GenericGuildEvent)source).getGuild());
-
-		if (source instanceof GenericMessageEvent) {
-			GenericMessageEvent gme = (GenericMessageEvent)source;
-
-			if (gme.isFromGuild())
-				return newEmbed(gme.getGuild());
+		if (source instanceof Event) {
+			Guild guild = EventUtils.getGuild((Event)source);
+			return newEmbed(guild);
 		}
 
 		return newEmbed((Guild)null);

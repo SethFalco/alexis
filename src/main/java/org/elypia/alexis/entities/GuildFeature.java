@@ -21,6 +21,9 @@ package org.elypia.alexis.entities;
 import javax.persistence.*;
 import java.util.Date;
 
+/**
+ * @author seth@elypia.org (Seth Falco)
+ */
 @Entity(name = "guild_feature")
 @Table
 public class GuildFeature {
@@ -31,7 +34,7 @@ public class GuildFeature {
     private int id;
 
     @Column(name = "guild_id")
-    private int guildId;
+    private Long guildId;
 
     @Column(name = "feature_name")
     private String name;
@@ -49,11 +52,11 @@ public class GuildFeature {
         return id;
     }
 
-    public int getGuildId() {
+    public Long getGuildId() {
         return guildId;
     }
 
-    public void setGuildId(int guildId) {
+    public void setGuildId(Long guildId) {
         this.guildId = guildId;
     }
 

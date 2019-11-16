@@ -18,7 +18,7 @@
 
 package org.elypia.alexis.listeners;
 
-import net.dv8tion.jda.api.entities.Emote;
+import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.apache.commons.collections4.Bag;
@@ -28,10 +28,12 @@ import org.hibernate.Session;
 import org.slf4j.*;
 
 import javax.inject.*;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * Count up all emotes used in guilds.
+ *
+ * @author seth@elypia.org (Seth Falco)
  */
 @Singleton
 public class EmoteListener extends ListenerAdapter {
@@ -45,7 +47,7 @@ public class EmoteListener extends ListenerAdapter {
         this.dbService = Objects.requireNonNull(dbService);
 
         if (dbService.isDisabled())
-            logger.warn("DatabaseService is disabled, won't track or add emotes.");
+            logger.warn("DatabaseService is disabled, won't track emotes.");
     }
 
     @Override
@@ -54,12 +56,16 @@ public class EmoteListener extends ListenerAdapter {
             return;
 
         long guildId = event.getGuild().getIdLong();
-        Bag<Emote> emotes = event.getMessage().getEmotesBag();
+        Message message = event.getMessage();
+        List<Emote> emotes = message.getEmotes();
+        Bag<Emote> emotesBag = message.getEmotesBag();
 
         try (Session session = dbService.open()) {
+            session.beginTransaction();
+
             for (Emote emote : emotes) {
                 long emoteId = emote.getIdLong();
-                int count = emotes.getCount(emote);
+                int count = emotesBag.getCount(emote);
                 session.save(new EmoteUsage(emoteId, guildId, count));
             }
 

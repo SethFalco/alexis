@@ -20,6 +20,9 @@ package org.elypia.alexis.entities;
 
 import javax.persistence.*;
 
+/**
+ * @author seth@elypia.org (Seth Falco)
+ */
 @Entity(name = "skill_milestone")
 @Table
 public class Milestone {

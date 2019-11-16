@@ -25,6 +25,8 @@ import java.util.Date;
 
 /**
  * Records when the emote was used and how many times.
+ *
+ * @author seth@elypia.org
  */
 @Entity(name = "emote_usage")
 @Table
@@ -40,11 +42,11 @@ public class EmoteUsage {
      * It's possible this emote may not exist any longer.
      */
     @Column(name = "emote_id")
-    private long emoteId;
+    private Long emoteId;
 
     /** The {@link Guild} these emotes were used in. */
     @Column(name = "guild_id")
-    private long guildId;
+    private Long guildId;
 
     /** The number of times this emote occured in the message. */
     @Column(name = "occurences")

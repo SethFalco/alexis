@@ -16,5 +16,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-/** Mapping of all database entities for JPA and Hibernate. */
+/**
+ * Mapping of all database entities for JPA and Hibernate.
+ *
+ * @author seth@elypia.org (Seth Falco)
+ */
 package org.elypia.alexis.entities;

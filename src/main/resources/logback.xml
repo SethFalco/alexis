@@ -17,9 +17,12 @@
   -->
 
 <configuration>
+    <logger name="com" level="WARN"/>
+    <logger name="com.netflix.config.sources.URLConfigurationSource" level="ERROR"/>
+    <logger name="net" level="WARN"/>
     <logger name="org.hibernate" level="WARN"/>
-    <logger name="net.dv8tion" level="WARN"/>
-    <logger name="com.sedmelluq" level="WARN"/>
+    <logger name="org.jboss" level="WARN"/>
+    <logger name="reactor" level="WARN"/>
 
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>

@@ -18,13 +18,13 @@
 
 package org.elypia.alexis.services;
 
-import com.google.inject.*;
 import net.dv8tion.jda.api.entities.Guild;
 import org.elypia.alexis.ChatBot;
 import org.elypia.alexis.entities.*;
 import org.hibernate.Session;
 import org.slf4j.*;
 
+import javax.inject.*;
 import java.util.List;
 
 /**

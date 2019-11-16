@@ -18,7 +18,8 @@
 
 package org.elypia.alexis.services;
 
-import org.elypia.alexis.configuration.DatabaseConfig;
+import org.elypia.alexis.config.DatabaseConfig;
+import org.elypia.alexis.entities.*;
 import org.hibernate.*;
 import org.hibernate.cfg.Configuration;
 import org.slf4j.*;
@@ -30,6 +31,8 @@ import java.util.Objects;
  * The database service is created on runtime regardless, however
  * if it is actively connected to a live database can be configured with the
  * {@link DatabaseConfig#isEnabled()} method.
+ *
+ * @author seth@elypia.org (Seth Falco)
  */
 @Singleton
 public class DatabaseService implements AutoCloseable {
@@ -49,11 +52,35 @@ public class DatabaseService implements AutoCloseable {
         if (!isEnabled)
             return;
 
-        sessionFactory = new Configuration()
-            .setProperty("javax.persistence.jdbc.password", config.getPassword())
-            .configure()
-            .buildSessionFactory();
+        String connection = "jdbc:mysql://" + config.getHost() + ":3306/alexis?autoReconnect=true&serverTimezone=UTC&sslMode=VERIFY_CA"
+            + "&trustCertificateKeyStoreUrl=" + config.getTrustCertificateKeyStoreUrl() +
+            "&trustCertificateKeyStorePassword=" + config.getTrustCertificateKeyStorePassword() +
+            "&clientCertificateKeyStoreUrl=" + config.getClientCertificateKeyStoreUrl() +
+            "&clientCertificateKeyStorePassword=" + config.getClientCertificateKeyStorePassword();
 
+        Configuration configuration = new Configuration().configure()
+            .setProperty("hibernate.connection.url", connection)
+            .setProperty("hibernate.connection.password", config.getPassword());
+
+        if (config.getUsername() != null)
+            configuration.setProperty("hibernate.connection.username", config.getUsername());
+
+        configuration.addAnnotatedClass(ActivityData.class);
+        configuration.addAnnotatedClass(AssignableRole.class);
+        configuration.addAnnotatedClass(EmoteData.class);
+        configuration.addAnnotatedClass(EmoteUsage.class);
+//        configuration.addAnnotatedClass(GuildData.class);
+//        configuration.addAnnotatedClass(GuildFeature.class);
+        configuration.addAnnotatedClass(LogSubscription.class);
+        configuration.addAnnotatedClass(MemberData.class);
+        configuration.addAnnotatedClass(MemberSkill.class);
+        configuration.addAnnotatedClass(MessageChannelData.class);
+        configuration.addAnnotatedClass(GuildMessage.class);
+        configuration.addAnnotatedClass(Milestone.class);
+        configuration.addAnnotatedClass(SkillData.class);
+        configuration.addAnnotatedClass(UserData.class);
+
+        sessionFactory = configuration.buildSessionFactory();
         logger.info("Succesfully connected to database.");
     }
 

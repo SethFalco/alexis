@@ -21,6 +21,9 @@ package org.elypia.alexis.utils;
 import java.util.StringJoiner;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * @author seth@elypia.org (Seth Falco)
+ */
 public final class YouTubeUtils {
 
     private static final String VIDEO_URL = "https://www.youtube.com/watch?v=";

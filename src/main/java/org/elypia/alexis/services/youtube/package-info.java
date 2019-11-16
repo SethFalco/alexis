@@ -16,5 +16,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-/** YouTube specific classes for YouTube integration. */
+/**
+ * YouTube specific classes for YouTube integration.
+ *
+ * @author seth@elypia.org (Seth Falco)
+ */
 package org.elypia.alexis.services.youtube;

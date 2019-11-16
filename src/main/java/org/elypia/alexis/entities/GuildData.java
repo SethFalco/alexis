@@ -21,7 +21,11 @@ package org.elypia.alexis.entities;
 import javax.persistence.*;
 import java.util.List;
 
-/** The data representing a Discord Guild. */
+/**
+ * The data representing a Discord Guild.
+ *
+ * @author seth@elypia.org (Seth Falco)
+ */
 @Entity(name = "guild")
 @Table
 public class GuildData {
@@ -30,7 +34,7 @@ public class GuildData {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "guild_id")
-    private int id;
+    private long id;
 
     /** The total XP earned in this Guild. */
     @Column(name = "guild_xp")
@@ -52,13 +56,22 @@ public class GuildData {
     private float mutlipler;
 
     /** Message settings such as the custom message and where to send it. */
-    private List<MessageSetting> messages;
+    private List<GuildMessage> messages;
 
     /** The features that are enabled in this guild. */
+    @OneToMany(targetEntity = GuildFeature.class, mappedBy = "guildId", fetch = FetchType.EAGER)
     private List<GuildFeature> features;
 
     /** Log subscriptions for the bot managed audit channel. */
     private List<LogSubscription> subscriptions;
+
+    public GuildData() {
+        // Do nothing
+    }
+
+    public GuildData(final long id) {
+        this.id = id;
+    }
 
     // TODO: This is TEMP, we probably want a better way to do this.
     public GuildFeature getFeature(String id) {
@@ -71,8 +84,8 @@ public class GuildData {
     }
 
     // TODO: This is TEMP, we probably want a better way to do this.
-    public MessageSetting getMessage(int id) {
-        for (MessageSetting message : messages) {
+    public GuildMessage getMessage(int id) {
+        for (GuildMessage message : messages) {
             if (message.getType() == id)
                 return message;
         }
@@ -80,7 +93,7 @@ public class GuildData {
         return null;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 

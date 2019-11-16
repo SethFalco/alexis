@@ -20,18 +20,30 @@ package org.elypia.alexis.entities;
 
 import javax.persistence.*;
 
-@Entity(name = "status")
+/**
+ * @author seth@elypia.org (Seth Falco)
+ */
+@Entity(name = "activity")
 @Table
 public class ActivityData {
 
-    @Column(name = "status_type")
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "activity_id")
+    private int id;
+
+    @Column(name = "activity_type")
     private int type;
 
-    @Column(name = "status_text")
+    @Column(name = "activity_text")
     private String text;
 
-    @Column(name = "status_url")
+    @Column(name = "activity_url")
     private String url;
+
+    public int getId() {
+        return id;
+    }
 
     public int getType() {
         return type;

@@ -18,5 +18,7 @@
 
 /**
  * Services to use around this bot.
+ *
+ * @author seth@elypia.org (Seth Falco)
  */
 package org.elypia.alexis.services;

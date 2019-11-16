@@ -18,13 +18,16 @@
 
 package org.elypia.alexis.constraints;
 
-import com.google.inject.Inject;
 import org.elypia.alexis.services.DatabaseService;
-import org.elypia.commandler.CommandlerEvent;
+import org.elypia.commandler.event.ActionEvent;
 
+import javax.inject.Inject;
 import javax.validation.*;
 import java.lang.annotation.*;
 
+/**
+ * @author seth@elypia.org (Seth Falco)
+ */
 @Target({ElementType.ANNOTATION_TYPE, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = {Database.Validator.class})
@@ -34,7 +37,7 @@ public @interface Database {
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 
-    class Validator implements ConstraintValidator<Database, CommandlerEvent<?>> {
+    class Validator implements ConstraintValidator<Database, ActionEvent<?, ?>> {
 
         private final DatabaseService dbService;
 
@@ -44,7 +47,7 @@ public @interface Database {
         }
 
         @Override
-        public boolean isValid(CommandlerEvent<?> value, ConstraintValidatorContext context) {
+        public boolean isValid(ActionEvent<?, ?> value, ConstraintValidatorContext context) {
             return dbService.isEnabled();
         }
     }

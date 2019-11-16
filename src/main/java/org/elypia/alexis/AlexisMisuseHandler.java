@@ -18,16 +18,20 @@
 
 package org.elypia.alexis;
 
-import org.elypia.commandler.misuse.CommandMisuseListener;
+import org.elypia.commandler.api.MisuseHandler;
+import org.elypia.commandler.exceptions.misuse.MisuseException;
 import org.slf4j.*;
 
-public class AlexisMisuseHandler extends CommandMisuseListener {
+/**
+ * @author seth@elypia.org (Seth Falco)
+ */
+public class AlexisMisuseHandler implements MisuseHandler {
 
     private static Logger logger = LoggerFactory.getLogger(AlexisMisuseHandler.class);
 
     @Override
-    public <X extends Exception> String onException(X ex) {
-        logger.error("An unknown error occured.", ex);
-        return "A teddy bear had been spotted stealing a line of code, it seems it broke some of our functionality";
+    public <X extends MisuseException> Object handle(X ex) {
+        logger.error("A runtime exception occured.", ex);
+        return "A teddy bear had been spotted stealing a line of code, it seems it broke some of our functionality.";
     }
 }

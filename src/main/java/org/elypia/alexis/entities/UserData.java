@@ -21,6 +21,9 @@ package org.elypia.alexis.entities;
 import javax.persistence.*;
 import java.util.Date;
 
+/**
+ * @author seth@elypia.org (Seth Falco)
+ */
 @Entity(name = "user")
 @Table
 public class UserData {
@@ -28,7 +31,7 @@ public class UserData {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
-    private int id;
+    private long id;
 
     @Column(name = "user_xp")
     private int xp;
@@ -36,7 +39,7 @@ public class UserData {
     @Column(name = "last_message")
     private Date lastMessage;
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 

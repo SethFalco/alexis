@@ -18,5 +18,7 @@
 
 /**
  * Listeners to add to JDA to listen to non-command events.
+ *
+ * @author seth@elypia.org (Seth Falco)
  */
 package org.elypia.alexis.listeners;

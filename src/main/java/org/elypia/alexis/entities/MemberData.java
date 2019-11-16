@@ -20,6 +20,9 @@ package org.elypia.alexis.entities;
 
 import javax.persistence.*;
 
+/**
+ * @author seth@elypia.org (Seth Falco)
+ */
 @Entity(name = "member")
 @Table
 public class MemberData {
@@ -30,10 +33,10 @@ public class MemberData {
     private int id;
 
     @Column(name = "guild_id")
-    private long guildId;
+    private Long guildId;
 
     @Column(name = "user_id")
-    private long userId;
+    private Long userId;
 
     @Column(name = "member_xp")
     private long xp;

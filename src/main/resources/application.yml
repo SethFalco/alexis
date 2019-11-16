@@ -1,0 +1,12 @@
+application:
+  name: Alexis
+commandler:
+  dispatcher:
+    - "org.elypia.commandler.dispatchers.StandardDispatcher"
+comcord:
+  bot-owner-id: 127578559790186497
+  support-guild-id: 184657525990359041
+database:
+  enabled: true
+api:
+  google-enabled: true
