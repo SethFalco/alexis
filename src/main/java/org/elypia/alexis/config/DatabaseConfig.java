@@ -55,18 +55,18 @@ public class DatabaseConfig {
 
     @Inject
     public DatabaseConfig(final ConfigService configService) {
-        this.enabled = configService.getBoolean("database.enabled");
+        this.enabled = configService.getBoolean("alexis.database.enabled");
 
         if (!enabled)
             return;
 
-        this.host = Objects.requireNonNull(configService.getString("database.host"));
-        this.trustCertificateKeyStoreUrl = Objects.requireNonNull(configService.getString("database.trust-certificate-key-store-url"));
-        this.trustCertificateKeyStorePassword = Objects.requireNonNull(configService.getString("database.trust-certificate-key-store-password"));
-        this.clientCertificateKeyStoreUrl = Objects.requireNonNull(configService.getString("database.client-certificate-key-store-url"));
-        this.clientCertificateKeyStorePassword = Objects.requireNonNull(configService.getString("database.client-certificate-key-store-password"));
-        this.username = Objects.requireNonNull(configService.getString("database.username"));
-        this.password = Objects.requireNonNull(configService.getString("database.password"));
+        this.host = Objects.requireNonNull(configService.getString("alexis.database.host"));
+        this.trustCertificateKeyStoreUrl = Objects.requireNonNull(configService.getString("alexis.database.trust-certificate-key-store-url"));
+        this.trustCertificateKeyStorePassword = Objects.requireNonNull(configService.getString("alexis.database.trust-certificate-key-store-password"));
+        this.clientCertificateKeyStoreUrl = Objects.requireNonNull(configService.getString("alexis.database.client-certificate-key-store-url"));
+        this.clientCertificateKeyStorePassword = Objects.requireNonNull(configService.getString("alexis.database.client-certificate-key-store-password"));
+        this.username = Objects.requireNonNull(configService.getString("alexis.database.username"));
+        this.password = Objects.requireNonNull(configService.getString("alexis.database.password"));
     }
 
     public boolean isEnabled() {

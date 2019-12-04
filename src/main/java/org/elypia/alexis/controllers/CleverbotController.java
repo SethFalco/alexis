@@ -53,7 +53,7 @@ public class CleverbotController implements Controller {
     }
 
     public Object say(@Database ActionEvent<Event, Message> event, String body) throws IOException {
-        MessageChannel channel = EventUtils.getMessageChannel(event.getSource());
+        MessageChannel channel = EventUtils.getMessageChannel(event.getRequest().getSource());
 
         try (Session session = dbService.open()) {
             MessageChannelData data = session.get(MessageChannelData.class, channel.getIdLong());

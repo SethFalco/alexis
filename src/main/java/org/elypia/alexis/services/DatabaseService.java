@@ -19,7 +19,6 @@
 package org.elypia.alexis.services;
 
 import org.elypia.alexis.config.DatabaseConfig;
-import org.elypia.alexis.entities.*;
 import org.hibernate.*;
 import org.hibernate.cfg.Configuration;
 import org.slf4j.*;
@@ -64,21 +63,6 @@ public class DatabaseService implements AutoCloseable {
 
         if (config.getUsername() != null)
             configuration.setProperty("hibernate.connection.username", config.getUsername());
-
-        configuration.addAnnotatedClass(ActivityData.class);
-        configuration.addAnnotatedClass(AssignableRole.class);
-        configuration.addAnnotatedClass(EmoteData.class);
-        configuration.addAnnotatedClass(EmoteUsage.class);
-//        configuration.addAnnotatedClass(GuildData.class);
-//        configuration.addAnnotatedClass(GuildFeature.class);
-        configuration.addAnnotatedClass(LogSubscription.class);
-        configuration.addAnnotatedClass(MemberData.class);
-        configuration.addAnnotatedClass(MemberSkill.class);
-        configuration.addAnnotatedClass(MessageChannelData.class);
-        configuration.addAnnotatedClass(GuildMessage.class);
-        configuration.addAnnotatedClass(Milestone.class);
-        configuration.addAnnotatedClass(SkillData.class);
-        configuration.addAnnotatedClass(UserData.class);
 
         sessionFactory = configuration.buildSessionFactory();
         logger.info("Succesfully connected to database.");

@@ -55,10 +55,10 @@ public final class DiscordUtils {
 	 * @return A new embed builder, if guild is non-null, it may have a color set.
 	 */
 	public static EmbedBuilder newEmbed(ActionEvent<?, ?> event) {
-		if (!(event.getIntegration() instanceof DiscordIntegration))
+		if (!(event.getRequest().getIntegration() instanceof DiscordIntegration))
 			throw new RuntimeException("Embeds are specific to Discord only.");
 
-		Object source = event.getSource();
+		Object source = event.getRequest().getSource();
 
 		if (source instanceof Event) {
 			Guild guild = EventUtils.getGuild((Event)source);

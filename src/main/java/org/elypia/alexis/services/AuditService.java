@@ -60,7 +60,7 @@ public class AuditService {
     }
 
     public void log(Guild guild, GuildData guildData, String log) {
-        log(guild, guildData.getSubscriptions(), log);
+//        log(guild, guildData.getSubscriptions(), log);
     }
 
     public void log(Guild guild, List<LogSubscription> logs, String log) {

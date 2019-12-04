@@ -36,15 +36,17 @@ public class GuildFeature {
     @Column(name = "guild_id")
     private Long guildId;
 
-    @Column(name = "feature_name")
-    private String name;
+    @Column(name = "feature_enum")
+    private int featureEnum;
 
     @Column(name = "enabled")
     private boolean enabled;
 
+    /** The ID of the user this was last modified by. */
     @Column(name = "modified_by")
-    private long modifiedBy;
+    private Long modifiedBy;
 
+    /** The time this was last modified at. */
     @Column(name = "modified_at")
     private Date modifiedAt;
 
@@ -60,12 +62,12 @@ public class GuildFeature {
         this.guildId = guildId;
     }
 
-    public String getName() {
-        return name;
+    public int getFeature() {
+        return featureEnum;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFeature(int featureEnum) {
+        this.featureEnum = featureEnum;
     }
 
     public boolean isEnabled() {
@@ -76,11 +78,11 @@ public class GuildFeature {
         this.enabled = enabled;
     }
 
-    public long getModifiedBy() {
+    public Long getModifiedBy() {
         return modifiedBy;
     }
 
-    public void setModifiedBy(long modifiedBy) {
+    public void setModifiedBy(Long modifiedBy) {
         this.modifiedBy = modifiedBy;
     }
 

@@ -46,7 +46,7 @@ public class DeveloperController implements Controller {
 
     public String guilds(@BotOwner ActionEvent<Event, Message> event) {
         StringJoiner joiner = new StringJoiner("\n");
-        Collection<Guild> guilds = event.getSource().getJDA().getGuilds();
+        Collection<Guild> guilds = event.getRequest().getSource().getJDA().getGuilds();
 
         for (Guild guild : guilds)
            joiner.add(String.format(format, guild.getId(), guild.getName(), guild.getMembers().size()));
@@ -60,20 +60,20 @@ public class DeveloperController implements Controller {
     }
 
     public String rename(@BotOwner ActionEvent<Event, Message> event, String input) {
-        event.getSource().getJDA().getSelfUser().getManager().setName(input).complete();
+        event.getRequest().getSource().getJDA().getSelfUser().getManager().setName(input).complete();
         return "Name was succesfully changed to " + input + ".";
     }
 
     public String avatar(@BotOwner ActionEvent<Event, Message> event, URL url) throws IOException {
         try (InputStream stream = url.openStream()) {
             Icon icon = Icon.from(stream);
-            event.getSource().getJDA().getSelfUser().getManager().setAvatar(icon).complete();
+            event.getRequest().getSource().getJDA().getSelfUser().getManager().setAvatar(icon).complete();
             return "Avatar was succefuly changed!";
         }
     }
 
     public void shutdown(@BotOwner ActionEvent<Event, Message> event) {
-        JDA jda = event.getSource().getJDA();
+        JDA jda = event.getRequest().getSource().getJDA();
         jda.shutdown();
         logger.info("Logging out of Discord.");
         System.exit(0);
@@ -84,7 +84,7 @@ public class DeveloperController implements Controller {
      * @return
      */
     public String clean(@BotOwner ActionEvent<Event, Message> event) {
-        event.getSource().getJDA().getGuilds().forEach((guild) -> {
+        event.getRequest().getSource().getJDA().getGuilds().forEach((guild) -> {
             //
         });
 

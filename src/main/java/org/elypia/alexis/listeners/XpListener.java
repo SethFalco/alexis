@@ -22,9 +22,9 @@ import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.*;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.elypia.alexis.entities.*;
-import org.elypia.alexis.services.*;
+import org.elypia.alexis.repositories.*;
+import org.elypia.alexis.services.AuditService;
 import org.elypia.alexis.utils.*;
-import org.hibernate.Session;
 import org.slf4j.*;
 
 import javax.inject.*;
@@ -32,7 +32,7 @@ import java.time.Duration;
 import java.util.*;
 
 /**
- * Handles calcuating and giving XP to users.
+ * Handles calculating and granting XP (experience) to users.
  *
  * @author seth@elypia.org (Seth Falco)
  */
@@ -41,8 +41,12 @@ public class XpListener extends ListenerAdapter {
 
     private static Logger logger = LoggerFactory.getLogger(XpListener.class);
 
-    /** Current highest WPM. */
-    private static final int FASTEST_WPM = 212;
+    /**
+     *  Max rewardable words per minute.
+     *
+     *  If you type faster than this, you're a fire hazard.
+     */
+    private static final int FASTEST_WPM = 300;
 
     /** The average length of an English word. */
     private static final int AVERAGE_WORD_LENGTH = 5;
@@ -53,16 +57,15 @@ public class XpListener extends ListenerAdapter {
     /** MAX XP per Message, + 1 for whitespace. */
     private static final int MAX_XP_PM = Message.MAX_CONTENT_LENGTH / AVERAGE_WORD_LENGTH;
 
-    private final DatabaseService dbService;
+    private final GuildRepository guildRepo;
+    private final UserRepository userRepo;
     private final AuditService auditService;
 
     @Inject
-    public XpListener(final DatabaseService dbService, final AuditService auditService) {
-        this.dbService = Objects.requireNonNull(dbService);
+    public XpListener(final GuildRepository guildRepo, final UserRepository userRepo, final AuditService auditService) {
+        this.guildRepo = Objects.requireNonNull(guildRepo);
+        this.userRepo = Objects.requireNonNull(userRepo);
         this.auditService = Objects.requireNonNull(auditService);
-
-        if (dbService.isDisabled())
-            logger.info("Database is disabled so XP will not be rewarded.");
     }
 
     @Override
@@ -73,29 +76,29 @@ public class XpListener extends ListenerAdapter {
         long userId = event.getAuthor().getIdLong();
         String content = event.getMessage().getContentDisplay().trim();
 
-        try (Session session = dbService.open()) {
-            UserData userData = session.get(UserData.class, userId);
-            Date lastMessage = userData.getLastMessage();
-            userData.setLastMessage(new Date());
-
-            if (!isTypingTooFast(content.length(), lastMessage))
-                return;
-
-            int xp = content.split("\\s+", MAX_XP_PM).length;
-
-            long guildId = event.getGuild().getIdLong();
-            GuildData guildData = session.get(GuildData.class, guildId);
-
-            MemberData memberData = session.get(MemberData.class, null);
-
-            memberData.setXp(memberData.getXp() + xp);
-            guildData.setXp(guildData.getXp() + xp);
-
-            GuildFeature feature = null;
-
-
-            session.getTransaction().commit();
-        }
+//        try (Session session = dbService.open()) {
+//            UserData userData = session.get(UserData.class, userId);
+//            Date lastMessage = userData.getLastMessage();
+//            userData.setLastMessage(new Date());
+//
+//            if (!isTypingTooFast(content.length(), lastMessage))
+//                return;
+//
+//            int xp = content.split("\\s+", MAX_XP_PM).length;
+//
+//            long guildId = event.getGuild().getIdLong();
+//            GuildData guildData = session.get(GuildData.class, guildId);
+//
+//            MemberData memberData = session.get(MemberData.class, null);
+//
+//            memberData.setXp(memberData.getXp() + xp);
+//            guildData.setXp(guildData.getXp() + xp);
+//
+//            GuildFeature feature = null;
+//
+//
+//            session.getTransaction().commit();
+//        }
     }
 
     /**
@@ -110,12 +113,10 @@ public class XpListener extends ListenerAdapter {
         int newLevel = LevelUtils.getLevelFromXp(userData.getXp());
 
         if (currentLevel != newLevel) {
-            GuildFeature feature = guildData.getFeature("GLOBAL_LEVEL_NOTIFICATION");
+            GuildFeature feature = null;
 
-            if (feature.isEnabled()) {
-
+            if (feature.isEnabled())
                 event.getChannel().sendMessage("Well done you went from level " + currentLevel + " to level " + newLevel + "!").queue();
-            }
         }
     }
 
@@ -125,7 +126,7 @@ public class XpListener extends ListenerAdapter {
         int newLevel = LevelUtils.getLevelFromXp(memberData.getXp());
 
         if (currentLevel != newLevel) {
-            GuildFeature feature = guildData.getFeature("GUILD_LEVEL_NOTIFICATION");
+            GuildFeature feature = null;
 
             if (feature.isEnabled())
                 event.getChannel().sendMessage("Well done you went from level " + currentLevel + " to level " + newLevel + "!").queue();
@@ -148,7 +149,7 @@ public class XpListener extends ListenerAdapter {
         if (oldLevel == newLevel)
             return; // Didn't level up.
 
-        GuildFeature feature = guildData.getFeature("GLOBAL_LEVEL_NOTIFICATION");
+        GuildFeature feature = null;
 
         if (!feature.isEnabled())
             return; // Notifications not enabled.
@@ -174,7 +175,7 @@ public class XpListener extends ListenerAdapter {
         int newLevel = LevelUtils.getLevelFromXp(userData.getXp());
 
         if (currentLevel != newLevel) {
-            GuildFeature feature = guildData.getFeature("GLOBAL_LEVEL_NOTIFICATIONS");
+            GuildFeature feature = null;
 
             if (feature.isEnabled())
                 event.getChannel().sendMessage("Well done you went from level " + currentLevel + " to level " + newLevel + "!").queue();
@@ -186,9 +187,6 @@ public class XpListener extends ListenerAdapter {
      * @return If this event is allowed eligable to grant XP to entities.
      */
     private boolean isValid(MessageReceivedEvent event) {
-        if (dbService.isDisabled())
-            return false;
-
         if (!event.getChannelType().isGuild() || event.getAuthor().isBot())
             return false;
 

@@ -67,17 +67,17 @@ public class GreetingListener extends ListenerAdapter {
             GuildFeature feature;
 
             if (join && bot)
-                feature = data.getFeature("BOT_JOIN_NOTIFICATION");
+                feature = null;
             else if (join)
-                feature = data.getFeature("USER_JOIN_NOTIFICATION");
+                feature = null;
             else if (bot)
-                feature = data.getFeature("BOT_LEAVE_NOTIFICATION");
+                feature = null;
             else
-                feature = data.getFeature("USER_LEAVE_NOTIFICATION");
+                feature = null;
 
             if (feature.isEnabled()) {
                 TextChannel channel = DiscordUtils.getWriteableChannel(event.getGuild());
-                channel.sendMessage(feature.getName()).queue();
+                channel.sendMessage("updated").queue();
             }
         }
     }

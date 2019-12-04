@@ -144,6 +144,39 @@
       </command>
     </controller>
 
+    <controller type="org.elypia.alexis.controllers.GreetingController">
+      <name>Greeting</name>
+      <group>Settings</group>
+      <description>Change what happens when a bot or user joins or leaves.</description>
+      <property name="org.elypia.commandler.dispatchers.StandardDispatcher.aliases" value="greeting"/>
+      <command method="setGreeting">
+        <name>Set Greeting</name>
+        <description>Set what happens when a certain type of user joins the guild.</description>
+        <property name="org.elypia.commandler.dispatchers.StandardDispatcher.aliases" value="set"/>
+        <param index="1">
+          <name>greeting</name>
+          <description>If when the user "joins", or "leaves".</description>
+        </param>
+        <param index="2">
+          <name>account</name>
+          <description>If this is for "users", or "bots".</description>
+        </param>
+        <param index="3">
+          <name>message</name>
+          <description>What to actually send when this action occurs.</description>
+        </param>
+      </command>
+      <command method="setChannel">
+        <name>Set Channel</name>
+        <description>Set or change the channel that messages are sent to.</description>
+        <property name="org.elypia.commandler.dispatchers.StandardDispatcher.aliases" value="channel"/>
+        <param index="1">
+          <name>channel</name>
+          <description>A talkable channel where the message can go.</description>
+        </param>
+      </command>
+    </controller>
+
     <controller type="org.elypia.alexis.controllers.GuildController">
       <name>Guild</name>
       <group>Discord</group>
@@ -199,6 +232,31 @@
       </command>
     </controller>
 
+    <controller type="org.elypia.alexis.controllers.LocaleController">
+      <name>Language and Locale</name>
+      <group>Settings</group>
+      <description>Change how text is formatted or the language I speak.</description>
+      <property name="org.elypia.commandler.dispatchers.StandardDispatcher.aliases" value="locale"/>
+      <command method="setGlobalLocale">
+        <name>Guild Locale</name>
+        <description>Set the default locale for the guild.</description>
+        <property name="org.elypia.commandler.dispatchers.StandardDispatcher.aliases" value="guild"/>
+        <param index="1">
+          <name>locale</name>
+          <description>The locale by name, country, or both.</description>
+        </param>
+      </command>
+      <command method="setLocalLocale">
+        <name>Channel Locale</name>
+        <description>Set the locale for this channel, this could be in a guild or private.</description>
+        <property name="org.elypia.commandler.dispatchers.StandardDispatcher.aliases" value="channel"/>
+        <param index="1">
+          <name>locale</name>
+          <description>The locale by name, country, or both.</description>
+        </param>
+      </command>
+    </controller>
+
     <controller type="org.elypia.alexis.controllers.OsuController">
       <name>osu!</name>
       <group>Gaming</group>
@@ -219,6 +277,59 @@
         </param>
       </command>
     </controller>
+
+    <controller type="org.elypia.alexis.controllers.PrefixController">
+      <name>Prefix</name>
+      <group>Settings</group>
+      <description>Change or disable the prefix to use my commands!</description>
+      <property name="org.elypia.commandler.dispatchers.StandardDispatcher.aliases" value="prefix"/>
+      <command method="setPrefix">
+        <name>Set Prefix</name>
+        <description>Change the prefix if you're not into the current one.</description>
+        <default>true</default>
+        <property name="org.elypia.commandler.dispatchers.StandardDispatcher.aliases" value="set"/>
+        <param index="1">
+          <name>prefix</name>
+          <description>The new prefix to use.</description>
+        </param>
+      </command>
+      <command method="enableMentionOnly">
+        <name>Mention Only</name>
+        <description>Disable using the guild prefix to interact with the bot.</description>
+        <property name="org.elypia.commandler.dispatchers.StandardDispatcher.aliases" value="mention"/>
+      </command>
+    </controller>
+
+    <!--<controller type="org.elypia.alexis.controllers.RolesController">-->
+      <!--<name>Roles</name>-->
+      <!--<group>Settings</group>-->
+      <!--<description>Configure join roles or other self-assignable roles!</description>-->
+      <!--<property name="org.elypia.commandler.dispatchers.StandardDispatcher.aliases" value="role"/>-->
+      <!--<command method="getSelfAssignableRoles">-->
+        <!--<name>List Self-Assignable Roles</name>-->
+        <!--<description>List all roles that a user could assign to themselves.</description>-->
+        <!--<property name="org.elypia.commandler.dispatchers.StandardDispatcher.aliases" value="list"/>-->
+      <!--</command>-->
+      <!--<command method="allow">-->
+        <!--<name>Allow Self-Assignable Roles</name>-->
+        <!--<description>White list roles as self-assignable so users without permission can add them to themselves.</description>-->
+        <!--<property name="org.elypia.commandler.dispatchers.StandardDispatcher.aliases" value="allow"/>-->
+        <!--<param index="1">-->
+          <!--<name>roles</name>-->
+          <!--<description>A list of roles you want to make self-assignable.</description>-->
+        <!--</param>-->
+      <!--</command>-->
+      <!--<command method="assign">-->
+        <!--<name>Mention Only</name>-->
+        <!--<description>Disable using the guild prefix to interact with the bot.</description>-->
+        <!--<static>true</static>-->
+        <!--<property name="org.elypia.commandler.dispatchers.StandardDispatcher.aliases" value="iam"/>-->
+        <!--<param index="1">-->
+          <!--<name>roles</name>-->
+          <!--<description>A list of roles you want to self-assign.</description>-->
+        <!--</param>-->
+      <!--</command>-->
+    <!--</controller>-->
 
     <controller type="org.elypia.alexis.controllers.RuneScapeController">
       <name>RuneScape</name>
@@ -276,6 +387,35 @@
         <param index="0">
           <name>username</name>
           <description>The player to get quests on.</description>
+        </param>
+      </command>
+    </controller>
+
+    <controller type="org.elypia.alexis.controllers.TranslateController">
+      <name>Translate</name>
+      <description>Utilise Google Translate to translate messages or enable react translations.</description>
+      <property name="org.elypia.commandler.dispatchers.StandardDispatcher.aliases" value="trans"/>
+      <command method="translate">
+        <name>Translate</name>
+        <description>I'll translate whatever you tell me to into the specified language.</description>
+        <default>true</default>
+        <property name="org.elypia.commandler.dispatchers.StandardDispatcher.aliases" value="translate"/>
+        <param index="0">
+          <name>body</name>
+          <description>The text to translate.</description>
+        </param>
+        <param index="1">
+          <name>language</name>
+          <description>The language to translate to.</description>
+        </param>
+      </command>
+      <command method="toggle">
+        <name>Toggle React Translation</name>
+        <description>I'll translate a message for you on reaction; I'll have to assume the language though.</description>
+        <property name="org.elypia.commandler.dispatchers.StandardDispatcher.aliases" value="toggle"/>
+        <param index="0">
+          <name>toggle</name>
+          <description>If reaction translation should be enabled or disbaled.</description>
         </param>
       </command>
     </controller>
@@ -385,9 +525,13 @@
       </command>
     </controller>
 
+    <adapter type="org.elypia.alexis.adapters.LanguageAdapter">
+      <compatible>com.google.cloud.translate.Language</compatible>
+    </adapter>
     <adapter type="org.elypia.alexis.adapters.OsuModeAdapter">
       <compatible>org.elypia.elypiai.osu.data.OsuMode</compatible>
     </adapter>
+
     <messenger type="org.elypia.alexis.messengers.DefinitionMessenger" provides="net.dv8tion.jda.api.entities.Message">
       <compatible>org.elypia.elypiai.urbandictionary.Definition</compatible>
     </messenger>
@@ -400,15 +544,15 @@
     <messenger type="org.elypia.alexis.messengers.SteamUserMessenger" provides="net.dv8tion.jda.api.entities.Message">
       <compatible>org.elypia.elypiai.steam.SteamUser</compatible>
     </messenger>
+        <messenger type="org.elypia.alexis.messengers.TranslationMessenger" provides="net.dv8tion.jda.api.entities.Message">
+      <compatible>org.elypia.alexis.models.TranslationModel</compatible>
+    </messenger>
     <messenger type="org.elypia.alexis.messengers.TwitchUserMessenger" provides="net.dv8tion.jda.api.entities.Message">
       <compatible>com.github.twitch4j.helix.domain.User</compatible>
     </messenger>
     <messenger type="org.elypia.alexis.messengers.UserMessenger" provides="net.dv8tion.jda.api.entities.Message">
       <compatible>net.dv8tion.jda.api.entities.User</compatible>
       <compatible>net.dv8tion.jda.internal.entities.UserImpl</compatible>
-    </messenger>
-    <messenger type="org.elypia.alexis.messengers.WriterMessenger" provides="net.dv8tion.jda.api.entities.Message">
-      <compatible>org.elypia.elypiai.nanowrimo.Writer</compatible>
     </messenger>
     <messenger type="org.elypia.alexis.messengers.YouTubeMessenger" provides="net.dv8tion.jda.api.entities.Message">
       <compatible>com.google.api.services.youtube.model.SearchResult</compatible>

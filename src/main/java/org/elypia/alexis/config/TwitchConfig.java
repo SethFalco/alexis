@@ -36,8 +36,8 @@ public class TwitchConfig {
 
     @Inject
     public TwitchConfig(final ConfigService config) {
-        this.clientId = config.getString("twitch.client-id");
-        this.clientSecret = config.getString("twitch.client-secret");
+        this.clientId = config.getString("alexis.api.twitch.client-id");
+        this.clientSecret = config.getString("alexis.api.twitch.client-secret");
     }
 
     public String getClientId() {

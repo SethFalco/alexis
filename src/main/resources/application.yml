@@ -1,12 +1,24 @@
 application:
-  name: Alexis
+  name: "Alexis"
 commandler:
+  headers:
+    binder:
+      - "org.elypia.alexis.binders.MentionBinder"
+      - "org.elypia.alexis.binders.GuildBinder"
   dispatcher:
-    - "org.elypia.commandler.dispatchers.StandardDispatcher"
+    - class: "org.elypia.commandler.dispatchers.StandardDispatcher"
+      prefix:
+        - "${GUILD_PREFIX}"
+        - "${SELF_MENTION}"
+        - "${SELF_NICK_MENTION}"
+    - class: "org.elypia.commandler.dispatchers.MatchDispatcher"
 comcord:
   bot-owner-id: 127578559790186497
   support-guild-id: 184657525990359041
-database:
-  enabled: true
-api:
-  google-enabled: true
+alexis:
+  database:
+    enabled: true
+  api:
+    google-enabled: true
+  translation:
+    attribution-url: "https://cdn.elypia.org/google_translate_attribution.png"

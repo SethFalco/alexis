@@ -19,6 +19,7 @@
 package org.elypia.alexis.entities;
 
 import javax.persistence.*;
+import java.util.Locale;
 
 /**
  * @author seth@elypia.org (Seth Falco)
@@ -36,7 +37,7 @@ public class MessageChannelData {
     private long guildId;
 
     @Column(name = "channel_locale")
-    private String language;
+    private Locale locale;
 
     @Column(name = "cleverbot_state")
     private String cleverState;
@@ -53,12 +54,12 @@ public class MessageChannelData {
         this.guildId = guildId;
     }
 
-    public String getLanguage() {
-        return language;
+    public Locale getLocale() {
+        return locale;
     }
 
-    public void setLanguage(String language) {
-        this.language = language;
+    public void setLocale(Locale locale) {
+        this.locale = locale;
     }
 
     public String getCleverState() {

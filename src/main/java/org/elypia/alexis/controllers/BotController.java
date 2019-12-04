@@ -67,7 +67,7 @@ public class BotController implements Controller {
 	}
 
 	public void info(ActionEvent<Event, Message> event) {
-		Event source = event.getSource();
+		Event source = event.getRequest().getSource();
 		EmbedBuilder builder = DiscordUtils.newEmbed(event);
 		JDA jda = source.getJDA();
 		User self = jda.getSelfUser();
@@ -103,7 +103,7 @@ public class BotController implements Controller {
 	}
 
 	public String say(@Everyone ActionEvent<Event, Message> event, @NotBlank String body) {
-		Event source = event.getSource();
+		Event source = event.getRequest().getSource();
 		Guild guild = EventUtils.getGuild(source);
 
 		if (source != null) {
@@ -118,7 +118,7 @@ public class BotController implements Controller {
 	}
 
 	public EmbedBuilder invites(@Channels(ChannelType.TEXT) ActionEvent<Event, Message> event) {
-		Guild guild = EventUtils.getGuild(event.getSource());
+		Guild guild = EventUtils.getGuild(event.getRequest().getSource());
 		Collection<Member> bots = guild.getMembers();
 
 		Collection<User> users = bots.stream().map(Member::getUser).filter(User::isBot).filter(o -> {

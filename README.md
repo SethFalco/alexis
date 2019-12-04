@@ -31,7 +31,7 @@ use or derive work from this source code!
 animations such as gifs, are not under the aforementioned license; all rights
 are reserved by Elypia CIC.** 
 
-[discord]: https://discord.gg/hprGMaM "Discord Invite"
+[discord]: https://discordapp.com/invite/hprGMaM "Discord Invite"
 [i18n]: https://i18n.elypia.org/engage/alexis/?utm "Weblate Translations"
 [gitlab]: https://gitlab.com/Elypia/alexis/commits/master "Repository on GitLab"
 [elypia-donate]: https://elypia.org/donate "Donate to Elypia"

@@ -28,9 +28,6 @@ import javax.inject.*;
 @Singleton
 public class ApiConfig {
 
-    /** The path to the Service Account Key JSON file. */
-    private final String googleSaKey;
-
     /** The osu! API key. */
     private final String osu;
 
@@ -42,14 +39,9 @@ public class ApiConfig {
 
     @Inject
     public ApiConfig(final ConfigService config) {
-        googleSaKey = config.getString("api.google-enabled");
-        osu = config.getString("api.osu");
-        steam = config.getString("api.steam");
-        cleverbot = config.getString("api.cleverbot");
-    }
-
-    public String getGoogleSaKey() {
-        return googleSaKey;
+        osu = config.getString("alexis.api.osu");
+        steam = config.getString("alexis.api.steam");
+        cleverbot = config.getString("alexis.api.cleverbot");
     }
 
     public String getOsu() {

@@ -71,5 +71,5 @@ public class ChatBot {
 
 		injector.add(jda, JDA.class);
 		commandler.run();
-	}
+    }
 }

@@ -54,7 +54,7 @@ public class UrbanDictionaryController implements Controller {
     }
 
 	public void define(ActionEvent<Event, Message> event, String[] terms, boolean random) {
-        Event source = event.getSource();
+        Event source = event.getRequest().getSource();
         RestLatch<DefineResult> latch = new RestLatch<>();
 
         for (String term : terms)
@@ -66,7 +66,7 @@ public class UrbanDictionaryController implements Controller {
             if (results.isEmpty())
                 channel.sendMessage("No definitions were found.").queue();
             else if (results.size() == 1) {
-                Message message = messenger.getProvider(event.getIntegration(), Definition.class)
+                Message message = messenger.getProvider(event.getRequest().getIntegration(), Definition.class)
                     .provide(event, results.get(0).get().getDefinition(random));
                 channel.sendMessage(message).queue();
             }

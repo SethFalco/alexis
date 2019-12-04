@@ -58,7 +58,7 @@ public class UserMessenger implements DiscordMessenger<User> {
     @Override
     public Message buildEmbed(ActionEvent<?, Message> event, User output) {
         EmbedBuilder builder = DiscordUtils.newEmbed(event);
-        Guild guild = EventUtils.getGuild((Event)event.getSource());
+        Guild guild = EventUtils.getGuild((Event)event.getRequest().getSource());
         String avatar = output.getEffectiveAvatarUrl();
         builder.setThumbnail(avatar);
 

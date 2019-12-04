@@ -19,7 +19,7 @@
 package org.elypia.alexis.entities;
 
 import javax.persistence.*;
-import java.util.List;
+import java.util.Locale;
 
 /**
  * The data representing a Discord Guild.
@@ -40,30 +40,36 @@ public class GuildData {
     @Column(name = "guild_xp")
     private long xp;
 
+    @Column(name = "guild_locale")
+    private Locale locale;
+
     /** The prefix that must be before a command, or null if this guild only allows mentions. */
     @Column(name = "guild_prefix")
     private String prefix;
 
+    @Column(name = "react_translate")
+    private boolean reactTranslation;
+
     /** What role to apply to users on join. */
     @Column(name = "join_role_user_id")
-    private long joinRoleUserId;
+    private Long joinRoleUserId;
 
     /** The role that should be applied to bots on join. */
     @Column(name = "join_role_bot_id")
-    private long joinRoleBotId;
+    private Long joinRoleBotId;
 
-    @Column(name = "multipler")
+    @Column(name = "xp_multp")
     private float mutlipler;
 
     /** Message settings such as the custom message and where to send it. */
-    private List<GuildMessage> messages;
+//    private List<GuildMessage> messages;
 
     /** The features that are enabled in this guild. */
-    @OneToMany(targetEntity = GuildFeature.class, mappedBy = "guildId", fetch = FetchType.EAGER)
-    private List<GuildFeature> features;
+//    @OneToMany(targetEntity = GuildFeature.class, mappedBy = "guildId", fetch = FetchType.EAGER)
+//    private List<GuildFeature> features;
 
     /** Log subscriptions for the bot managed audit channel. */
-    private List<LogSubscription> subscriptions;
+//    private List<LogSubscription> subscriptions;
 
     public GuildData() {
         // Do nothing
@@ -73,25 +79,23 @@ public class GuildData {
         this.id = id;
     }
 
-    // TODO: This is TEMP, we probably want a better way to do this.
-    public GuildFeature getFeature(String id) {
-        for (GuildFeature feature : features) {
-            if (feature.getName().equalsIgnoreCase(id))
-                return feature;
-        }
-
-        return null;
-    }
-
-    // TODO: This is TEMP, we probably want a better way to do this.
-    public GuildMessage getMessage(int id) {
-        for (GuildMessage message : messages) {
-            if (message.getType() == id)
-                return message;
-        }
-
-        return null;
-    }
+//    public GuildFeature getFeature(int id) {
+//        for (GuildFeature feature : features) {
+//            if (feature.getFeature() == id)
+//                return feature;
+//        }
+//
+//        return null;
+//    }
+//
+//    public GuildMessage getMessage(int id) {
+//        for (GuildMessage message : messages) {
+//            if (message.getType() == id)
+//                return message;
+//        }
+//
+//        return null;
+//    }
 
     public long getId() {
         return id;
@@ -105,6 +109,14 @@ public class GuildData {
         this.xp = xp;
     }
 
+    public Locale getLocale() {
+        return locale;
+    }
+
+    public void setLocale(Locale locale) {
+        this.locale = locale;
+    }
+
     public String getPrefix() {
         return prefix;
     }
@@ -113,19 +125,27 @@ public class GuildData {
         this.prefix = prefix;
     }
 
-    public long getJoinRoleUserId() {
+    public boolean isReactTranslation() {
+        return reactTranslation;
+    }
+
+    public void setReactTranslation(boolean reactTranslation) {
+        this.reactTranslation = reactTranslation;
+    }
+
+    public Long getJoinRoleUserId() {
         return joinRoleUserId;
     }
 
-    public void setJoinRoleUserId(long joinRoleUserId) {
+    public void setJoinRoleUserId(Long joinRoleUserId) {
         this.joinRoleUserId = joinRoleUserId;
     }
 
-    public long getJoinRoleBotId() {
+    public Long getJoinRoleBotId() {
         return joinRoleBotId;
     }
 
-    public void setJoinRoleBotId(long joinRoleBotId) {
+    public void setJoinRoleBotId(Long joinRoleBotId) {
         this.joinRoleBotId = joinRoleBotId;
     }
 
@@ -137,11 +157,11 @@ public class GuildData {
         this.mutlipler = mutlipler;
     }
 
-    public List<LogSubscription> getSubscriptions() {
-        return subscriptions;
-    }
-
-    public void setSubscriptions(List<LogSubscription> subscriptions) {
-        this.subscriptions = subscriptions;
-    }
+    //    public List<LogSubscription> getSubscriptions() {
+//        return subscriptions;
+//    }
+//
+//    public void setSubscriptions(List<LogSubscription> subscriptions) {
+//        this.subscriptions = subscriptions;
+//    }
 }

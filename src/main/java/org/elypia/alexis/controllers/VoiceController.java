@@ -44,7 +44,7 @@ public class VoiceController implements Controller {
             .filter(Predicate.not(User::isBot))
             .collect(Collectors.toSet());
 
-        Message message = EventUtils.getMessage(event.getSource());
+        Message message = EventUtils.getMessage(event.getRequest().getSource());
 
         if (users.remove(message.getAuthor()) && users.size() == 0)
             return "There's no one else in that channel with you though?";

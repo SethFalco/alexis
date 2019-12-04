@@ -59,7 +59,7 @@ public class GuildController implements Controller {
         @Min(2) @Max(100) int count,
         TextChannel channel
     ) {
-        GenericMessageEvent source = (GenericMessageEvent)event.getSource();
+        GenericMessageEvent source = (GenericMessageEvent)event.getRequest().getSource();
 
         channel.getHistoryBefore(source.getMessageIdLong(), count).queue(history -> {
             channel.deleteMessages(history.getRetrievedHistory()).queue(command ->

@@ -20,10 +20,9 @@ package org.elypia.alexis.services;
 
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.translate.*;
-import org.elypia.alexis.config.ApiConfig;
 
 import javax.inject.*;
-import java.io.*;
+import java.io.IOException;
 import java.util.*;
 
 /**
@@ -36,9 +35,8 @@ public class TranslateService {
     private Collection<Language> supported;
 
     @Inject
-    public TranslateService(final ApiConfig apiConfig) throws IOException {
-        String path = apiConfig.getGoogleSaKey();
-        GoogleCredentials credentials = GoogleCredentials.fromStream(new FileInputStream(path));
+    public TranslateService() throws IOException {
+        GoogleCredentials credentials = GoogleCredentials.getApplicationDefault();
 
         translate = TranslateOptions.newBuilder()
             .setCredentials(credentials)

@@ -39,7 +39,7 @@ public class OsuPlayerMessenger implements DiscordMessenger<Player> {
 
         String playerCountry = output.getCountry();
 
-        joiner.add("**__" + output.getUsername() + "__** " + ChatUtils.replaceWithIndictors(playerCountry));
+        joiner.add("**__" + output.getUsername() + "__** " + ChatUtils.replaceWithIndicators(playerCountry));
         joiner.add("");
         joiner.add("**Level: **" + (int)output.getLevel());
         joiner.add("**Ranked Score: **" + intf(output.getRankedScore()));

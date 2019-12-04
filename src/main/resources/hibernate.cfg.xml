@@ -27,5 +27,20 @@
     <property name="hibernate.connection.username">alexis</property>
     <property name="hibernate.c3p0.max_size">16</property>
     <property name="hibernate.show_sql">false</property>
+
+    <mapping class="org.elypia.alexis.entities.ActivityData"/>
+    <mapping class="org.elypia.alexis.entities.AssignableRole"/>
+    <mapping class="org.elypia.alexis.entities.EmoteData"/>
+    <mapping class="org.elypia.alexis.entities.EmoteUsage"/>
+    <mapping class="org.elypia.alexis.entities.GuildData"/>
+    <mapping class="org.elypia.alexis.entities.GuildFeature"/>
+    <mapping class="org.elypia.alexis.entities.GuildMessage"/>
+    <mapping class="org.elypia.alexis.entities.LogSubscription"/>
+    <mapping class="org.elypia.alexis.entities.MemberData"/>
+    <mapping class="org.elypia.alexis.entities.MemberSkill"/>
+    <mapping class="org.elypia.alexis.entities.MessageChannelData"/>
+    <mapping class="org.elypia.alexis.entities.Milestone"/>
+    <mapping class="org.elypia.alexis.entities.SkillData"/>
+    <mapping class="org.elypia.alexis.entities.UserData"/>
   </session-factory>
 </hibernate-configuration>

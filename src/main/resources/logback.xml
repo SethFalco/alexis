@@ -30,7 +30,7 @@
         </encoder>
     </appender>
 
-    <!-- If STACKDRIVER is defined, assume we're running on Google Cloud Platform with correct permissions. -->
+    <!-- If STACKDRIVER is defined, assume we're running on Google Cloud Platform. -->
     <if condition='isDefined("STACKDRIVER")'>
         <then>
             <appender name="STACKDRIVER" class="com.google.cloud.logging.logback.LoggingAppender">
