@@ -1,19 +1,17 @@
 /*
- * Alexis - A general purpose chatbot for Discord.
- * Copyright (C) 2019-2019  Elypia CIC
+ * Copyright 2019-2020 Elypia CIC
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
+ *       http://www.apache.org/licenses/LICENSE-2.0
  *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package org.elypia.alexis.messengers;
@@ -26,6 +24,7 @@ import org.elypia.alexis.services.youtube.YouTubeService;
 import org.elypia.alexis.utils.*;
 import org.elypia.comcord.api.DiscordMessenger;
 import org.elypia.commandler.event.ActionEvent;
+import org.slf4j.*;
 
 import javax.inject.*;
 import java.io.IOException;
@@ -38,7 +37,9 @@ import java.util.Date;
 @Singleton
 public class YouTubeMessenger implements DiscordMessenger<SearchResult> {
 
-    private static final SimpleDateFormat FORMAT = new SimpleDateFormat("dd MMM YYYY");
+    private static final Logger logger = LoggerFactory.getLogger(YouTubeMessenger.class);
+
+    private static final SimpleDateFormat FORMAT = new SimpleDateFormat("dd MMM yyyy");
 
     private YouTubeService youtube;
 
@@ -74,7 +75,7 @@ public class YouTubeMessenger implements DiscordMessenger<SearchResult> {
         try {
             builder.setThumbnail(youtube.getChannelThumbnail(snippet.getChannelId()));
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("Obtaining the thumbnail failed, and it isn't cached either.", e);
         }
 
         return new MessageBuilder(builder.build()).build();

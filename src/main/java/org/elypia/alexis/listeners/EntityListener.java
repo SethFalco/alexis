@@ -1,19 +1,17 @@
 /*
- * Alexis - A general purpose chatbot for Discord.
- * Copyright (C) 2019-2019  Elypia CIC
+ * Copyright 2019-2020 Elypia CIC
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
+ *       http://www.apache.org/licenses/LICENSE-2.0
  *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package org.elypia.alexis.listeners;
@@ -21,11 +19,14 @@ package org.elypia.alexis.listeners;
 import net.dv8tion.jda.api.entities.Emote;
 import net.dv8tion.jda.api.events.Event;
 import net.dv8tion.jda.api.events.emote.GenericEmoteEvent;
+import net.dv8tion.jda.api.events.guild.GenericGuildEvent;
 import net.dv8tion.jda.api.events.message.*;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import org.elypia.alexis.services.DatabaseService;
+import org.elypia.alexis.entities.GuildData;
+import org.elypia.alexis.repositories.*;
 import org.slf4j.*;
 
+import javax.annotation.Nonnull;
 import javax.inject.*;
 import java.util.*;
 
@@ -40,37 +41,34 @@ public class EntityListener extends ListenerAdapter {
 
     private static final Logger logger = LoggerFactory.getLogger(EntityListener.class);
 
-    private final DatabaseService dbService;
+    private GuildRepository guildRepo;
+    private EmoteRepository emoteRepo;
 
     @Inject
-    public EntityListener(final DatabaseService dbService) {
-        this.dbService = Objects.requireNonNull(dbService);
+    public EntityListener(GuildRepository guildRepo, EmoteRepository emoteRepo) {
+        this.guildRepo = guildRepo;
+        this.emoteRepo = emoteRepo;
+    }
 
-        if (dbService.isDisabled())
-            logger.warn("DatabaseService is disabled, won't add entities.");
+    @Override
+    public void onGenericGuild(@Nonnull GenericGuildEvent event) {
+        long guildId = event.getGuild().getIdLong();
+        GuildData guildData = new GuildData(guildId);
+        guildRepo.save(guildData);
     }
 
     @Override
     public void onGenericEmote(GenericEmoteEvent event) {
-        if (dbService.isDisabled())
-            return;
-
         addEmotes(event, event.getEmote());
     }
 
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {
-        if (dbService.isDisabled())
-            return;
-
         addEmotes(event, event.getMessage().getEmotes());
     }
 
     @Override
     public void onMessageUpdate(MessageUpdateEvent event) {
-        if (dbService.isDisabled())
-            return;
-
         addEmotes(event, event.getMessage().getEmotes());
     }
 

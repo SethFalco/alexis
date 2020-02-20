@@ -1,103 +1,61 @@
 /*
- * Alexis - A general purpose chatbot for Discord.
- * Copyright (C) 2019-2019  Elypia CIC
+ * Copyright 2019-2020 Elypia CIC
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
+ *       http://www.apache.org/licenses/LICENSE-2.0
  *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package org.elypia.alexis.config;
 
-import org.elypia.commandler.config.ConfigService;
+import org.apache.deltaspike.core.api.config.*;
 
-import javax.inject.*;
-import java.util.Objects;
+import javax.inject.Singleton;
 
 /**
  * @author seth@elypia.org (Seth Falco)
  */
 @Singleton
-public class DatabaseConfig {
+@Configuration(prefix = "alexis.database.")
+public interface DatabaseConfig {
 
     /** Should database functionaly be enabled. This must be specified. */
-    private final boolean enabled;
+    @ConfigProperty(name = "enabled")
+    boolean isEnabled();
 
     /** The host server this database server is running on. */
-    private String host;
+    @ConfigProperty(name = "host")
+    String getHost();
 
     /** You must connect to the database with SSL, specify the certificate URL. */
-    private String trustCertificateKeyStoreUrl;
+    @ConfigProperty(name = "trust-certificate-key-store-url")
+    String getTrustCertificateKeyStoreUrl();
 
-    /** The password to the certificate for {@link #trustCertificateKeyStoreUrl}. */
-    private String trustCertificateKeyStorePassword;
+    /** The password to the certificate for {@link #getTrustCertificateKeyStoreUrl}. */
+    @ConfigProperty(name = "trust-certificate-key-store-password")
+    String getTrustCertificateKeyStorePassword();
 
     /** You must connect to the database with SSL, specify the client certificate URL. */
-    private String clientCertificateKeyStoreUrl;
+    @ConfigProperty(name = "client-certificate-key-store-url")
+    String getClientCertificateKeyStoreUrl();
 
-    /** The password to the certificate for {@link #clientCertificateKeyStoreUrl}. */
-    private String clientCertificateKeyStorePassword;
+    /** The password to the certificate for {@link #getClientCertificateKeyStoreUrl}. */
+    @ConfigProperty(name = "client-certificate-key-store-password")
+    String getClientCertificateKeyStorePassword();
 
     /** The username for this database user. */
-    private String username;
+    @ConfigProperty(name = "username")
+    String getUsername();
 
     /** Password to the Alexis user on the database. */
-    private String password;
-
-    @Inject
-    public DatabaseConfig(final ConfigService configService) {
-        this.enabled = configService.getBoolean("alexis.database.enabled");
-
-        if (!enabled)
-            return;
-
-        this.host = Objects.requireNonNull(configService.getString("alexis.database.host"));
-        this.trustCertificateKeyStoreUrl = Objects.requireNonNull(configService.getString("alexis.database.trust-certificate-key-store-url"));
-        this.trustCertificateKeyStorePassword = Objects.requireNonNull(configService.getString("alexis.database.trust-certificate-key-store-password"));
-        this.clientCertificateKeyStoreUrl = Objects.requireNonNull(configService.getString("alexis.database.client-certificate-key-store-url"));
-        this.clientCertificateKeyStorePassword = Objects.requireNonNull(configService.getString("alexis.database.client-certificate-key-store-password"));
-        this.username = Objects.requireNonNull(configService.getString("alexis.database.username"));
-        this.password = Objects.requireNonNull(configService.getString("alexis.database.password"));
-    }
-
-    public boolean isEnabled() {
-        return enabled;
-    }
-
-    public String getHost() {
-        return host;
-    }
-
-    public String getTrustCertificateKeyStoreUrl() {
-        return trustCertificateKeyStoreUrl;
-    }
-
-    public String getTrustCertificateKeyStorePassword() {
-        return trustCertificateKeyStorePassword;
-    }
-
-    public String getClientCertificateKeyStoreUrl() {
-        return clientCertificateKeyStoreUrl;
-    }
-
-    public String getClientCertificateKeyStorePassword() {
-        return clientCertificateKeyStorePassword;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
+    @ConfigProperty(name = "password")
+    String getPassword();
 }

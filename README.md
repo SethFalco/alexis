@@ -1,5 +1,5 @@
 ![Alexis Banner]
-# Alexis [![discord-members]][discord] [![i18n-badge]][i18n] [![gitlab-build]][gitlab] [![gitlab-coverage]][gitlab] [![donate-shield]][elypia-donate]
+# Alexis [![matrix-members]][matrix] [![discord-members]][discord] [![i18n-badge]][i18n] [![gitlab-build]][gitlab] [![gitlab-coverage]][gitlab] [![donate-shield]][elypia-donate]
 ## About Me
 I'm a general purpose Discord bot with various functionality and integrations with many 
 popular games and services like Twitch, Steam and RuneScape. I also perform many 
@@ -22,7 +22,7 @@ your instance, and that it does _not_ use any of Elypia's graphics including Ale
 * [MySQL 5.7]
 
 ## Open-Source
-This project is open-source under the [GNU Affero General Public License]!  
+This project is open-source under the [Apache 2.0]!  
 While not legal advice, you can find a [TL;DR] that sums up what
 you're allowed and not allowed to do along with any requirements if you want to 
 use or derive work from this source code!  
@@ -31,15 +31,17 @@ use or derive work from this source code!
 animations such as gifs, are not under the aforementioned license; all rights
 are reserved by Elypia CIC.** 
 
+[matrix]: https://matrix.to/#/+elypia:matrix.org "Matrix Invite"
 [discord]: https://discordapp.com/invite/hprGMaM "Discord Invite"
 [i18n]: https://i18n.elypia.org/engage/alexis/?utm "Weblate Translations"
 [gitlab]: https://gitlab.com/Elypia/alexis/commits/master "Repository on GitLab"
 [elypia-donate]: https://elypia.org/donate "Donate to Elypia"
 [Notebook.ai]: https://www.notebook.ai/plan/characters/830595 "Alexis Character Design"
 [MySQL 5.7]: https://www.mysql.com "MySQL Database Server"
-[GNU Affero General Public License]: https://www.gnu.org/licenses/agpl-3.0.en.html "AGPL"
-[TL;DR]: https://tldrlegal.com/license/gnu-affero-general-public-license-v3-(agpl-3.0) "TLDR of AGPL"
+[Apache 2.0]: https://www.apache.org/licenses/LICENSE-2.0 "Apache 2.0 License"
+[TL;DR]: https://tldrlegal.com/license/apache-license-2.0-(apache-2.0) "TL;DR of Apache 2.0"
 
+[matrix-members]: https://img.shields.io/matrix/elypia-general:matrix.org?logo=matrix "Matrix Shield"
 [Alexis Banner]: ./assets/banner.png "Banner for Alexis"
 [discord-members]: https://discordapp.com/api/guilds/184657525990359041/widget.png "Discord Shield"
 [i18n-badge]: https://i18n.elypia.org/widgets/alexis/-/svg-badge.svg "Weblate Translation Badge"

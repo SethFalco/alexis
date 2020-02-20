@@ -1,26 +1,54 @@
-<?xml version="1.1" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ Alexis - A general purpose chatbot for Discord.
-  ~ Copyright (C) 2019-2019  Elypia CIC
+  ~ Copyright 2019-2020 Elypia CIC
   ~
-  ~ This program is free software: you can redistribute it and/or modify
-  ~ it under the terms of the GNU Affero General Public License as
-  ~ published by the Free Software Foundation, either version 3 of the
-  ~ License, or (at your option) any later version.
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
   ~
-  ~ This program is distributed in the hope that it will be useful,
-  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
-  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  ~ GNU Affero General Public License for more details.
+  ~       http://www.apache.org/licenses/LICENSE-2.0
   ~
-  ~ You should have received a copy of the GNU Affero General Public License
-  ~ along with this program.  If not, see <https://www.gnu.org/licenses/>.
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
   -->
 
 <configuration xmlns="https://commandler.elypia.org"
                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                xsi:schemaLocation="https://commandler.elypia.org application.xsd">
   <commandler>
+    <controller type="org.elypia.commandler.DefaultHelpController">
+      <name>Help</name>
+      <group>Guidance</group>
+      <description>Offer generic help through all the modules in this bot.</description>
+      <property name="org.elypia.commandler.dispatchers.StandardDispatcher.aliases" value="help"/>
+      <command method="getGroups">
+        <name>Show Groups</name>
+        <description>Display a list of all metaCommand categories.</description>
+        <default>true</default>
+        <property name="org.elypia.commandler.dispatchers.StandardDispatcher.aliases" value="groups"/>
+      </command>
+      <command method="getControllers">
+        <name>Show Modules</name>
+        <description>Display a list of all modules in a category.</description>
+        <property name="org.elypia.commandler.dispatchers.StandardDispatcher.aliases" value="modules"/>
+        <param>
+          <name>group</name>
+          <description>The group to list modules for.</description>
+        </param>
+      </command>
+      <command method="getCommands">
+        <name>Show Commands</name>
+        <description>Display a list of all metaCommands in a module.</description>
+        <property name="org.elypia.commandler.dispatchers.StandardDispatcher.aliases" value="commands"/>
+        <param>
+          <name>modules</name>
+          <description>The module to list commands for.</description>
+        </param>
+      </command>
+    </controller>
 
     <controller type="org.elypia.alexis.controllers.BotController">
       <name>Bot</name>
@@ -80,6 +108,7 @@
 
     <controller type="org.elypia.alexis.controllers.DeveloperController">
       <name>Developer</name>
+      <hidden>true</hidden>
       <property name="org.elypia.commandler.dispatchers.StandardDispatcher.aliases" value="dev"/>
       <command method="guilds">
         <name>List Guilds</name>

@@ -20,5 +20,5 @@ alexis:
     enabled: true
   api:
     google-enabled: true
-  translation:
+  translate:
     attribution-url: "https://cdn.elypia.org/google_translate_attribution.png"

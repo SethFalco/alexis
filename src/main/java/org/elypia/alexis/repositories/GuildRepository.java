@@ -1,83 +1,46 @@
 /*
- * Alexis - A general purpose chatbot for Discord.
- * Copyright (C) 2019-2019  Elypia CIC
+ * Copyright 2019-2020 Elypia CIC
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
+ *       http://www.apache.org/licenses/LICENSE-2.0
  *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package org.elypia.alexis.repositories;
 
-import net.dv8tion.jda.api.entities.Guild;
+import org.apache.deltaspike.data.api.*;
 import org.elypia.alexis.entities.GuildData;
-import org.elypia.alexis.services.DatabaseService;
-import org.hibernate.Session;
-import org.hibernate.query.Query;
 
-import javax.inject.*;
 import java.util.Locale;
 
 /**
- * @author seth@elypia.org (Syed Shah)
+ * @author seth@elypia.org (Seth Falco)
  */
-@Singleton
-public class GuildRepository extends AbstractRepository<GuildData> {
+@Repository(forEntity = GuildData.class)
+public interface GuildRepository extends EntityRepository<GuildData, Long> {
 
-    @Inject
-    public GuildRepository(final DatabaseService dbService) {
-        super(dbService);
-    }
-
-    /**
-     * @param id The ID of the {@link Guild} to select.
-     * @return The data this application is storing on the guild.
-     */
-    public GuildData selectGuild(long id) {
-        try (Session session = dbService.open()) {
-            return session.get(GuildData.class, id);
-        }
-    }
-
-    public int updateLocale(final long id, final Locale locale) {
-        return updateColumn(id, "locale", locale);
-    }
+    @Modifying
+    @Query("UPDATE GuildData AS g SET g.locale = ?1 WHERE g.id = ?2")
+    int updateLocale(final Locale locale, final long id);
 
     /**
      * @param id The ID of the guild.
      * @param prefix What to set he guild's prefix to.
      * @return The number of rows that changed, this should always be 1.
      */
-    public int updatePrefix(final long id, final String prefix) {
-        return updateColumn(id, "prefix", prefix);
-    }
+    @Modifying
+    @Query("UPDATE GuildData AS g SET g.prefix = ?1 WHERE g.id = ?2")
+    int updatePrefix(final String prefix, final long id);
 
-    public int updateReactTranslation(final long id, final boolean toggle) {
-        return updateColumn(id, "reactTranslation", toggle);
-    }
-
-    public <T> int updateColumn(final long id, String column, final T value) {
-        final String queryString = "UPDATE org.elypia.alexis.entities.GuildData SET " + column + " = :column WHERE id = :id";
-
-        try (Session session = dbService.open()) {
-            session.beginTransaction();
-
-            Query query = session.createQuery(queryString)
-                .setParameter("id", id)
-                .setParameter("column", value);
-
-            int result = query.executeUpdate();
-            session.getTransaction().commit();
-            return result;
-        }
-    }
+    @Modifying
+    @Query("UPDATE GuildData AS g SET g.reactTranslation = ?1 WHERE g.id = ?2")
+    int updateReactTranslation(final boolean toggle, final long id);
 }
