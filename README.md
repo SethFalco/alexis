@@ -1,5 +1,5 @@
 ![Alexis Banner]
-# Alexis [![matrix-members]][matrix] [![discord-members]][discord] [![i18n-badge]][i18n] [![gitlab-build]][gitlab] [![gitlab-coverage]][gitlab] [![donate-shield]][elypia-donate]
+# Alexis [![Matrix]][matrix-community] [![Discord]][discord-guild] [![i18n-badge]][i18n] [![Build]][gitlab] [![Coverage]][gitlab] [![Donate]][elypia-donate]
 ## About Me
 I'm a general purpose Discord bot with various functionality and integrations with many 
 popular games and services like Twitch, Steam and RuneScape. I also perform many 
@@ -31,8 +31,8 @@ use or derive work from this source code!
 animations such as gifs, are not under the aforementioned license; all rights
 are reserved by Elypia CIC.** 
 
-[matrix]: https://matrix.to/#/+elypia:matrix.org "Matrix Invite"
-[discord]: https://discordapp.com/invite/hprGMaM "Discord Invite"
+[matrix-community]: https://matrix.to/#/+elypia:matrix.org "Matrix Invite"
+[discord-guild]: https://discordapp.com/invite/hprGMaM "Discord Invite"
 [i18n]: https://i18n.elypia.org/engage/alexis/?utm "Weblate Translations"
 [gitlab]: https://gitlab.com/Elypia/alexis/commits/master "Repository on GitLab"
 [elypia-donate]: https://elypia.org/donate "Donate to Elypia"
@@ -41,10 +41,10 @@ are reserved by Elypia CIC.**
 [Apache 2.0]: https://www.apache.org/licenses/LICENSE-2.0 "Apache 2.0 License"
 [TL;DR]: https://tldrlegal.com/license/apache-license-2.0-(apache-2.0) "TL;DR of Apache 2.0"
 
-[matrix-members]: https://img.shields.io/matrix/elypia-general:matrix.org?logo=matrix "Matrix Shield"
+[Matrix]: https://img.shields.io/matrix/elypia-general:matrix.org?logo=matrix "Matrix Shield"
 [Alexis Banner]: ./assets/banner.png "Banner for Alexis"
-[discord-members]: https://discordapp.com/api/guilds/184657525990359041/widget.png "Discord Shield"
+[Discord]: https://discordapp.com/api/guilds/184657525990359041/widget.png "Discord Shield"
 [i18n-badge]: https://i18n.elypia.org/widgets/alexis/-/svg-badge.svg "Weblate Translation Badge"
-[gitlab-build]: https://gitlab.com/Elypia/alexis/badges/master/pipeline.svg "GitLab Build Shield"
-[gitlab-coverage]: https://gitlab.com/Elypia/alexis/badges/master/coverage.svg "GitLab Coverage Shield"
-[donate-shield]: https://img.shields.io/badge/Elypia-Donate-blueviolet "Donate Shield"
+[Build]: https://gitlab.com/Elypia/alexis/badges/master/pipeline.svg "GitLab Build Shield"
+[Coverage]: https://gitlab.com/Elypia/alexis/badges/master/coverage.svg "GitLab Coverage Shield"
+[Donate]: https://img.shields.io/badge/Elypia-Donate-blueviolet "Donate Shield"
