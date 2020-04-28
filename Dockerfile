@@ -1,5 +1,5 @@
 # Smallest appropriate image.
-FROM openjdk:11.0.4-jre-slim
+FROM openjdk:11.0.7-jre-slim
 
 LABEL maintainer="seth@elypia.org"
 

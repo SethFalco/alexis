@@ -29,9 +29,9 @@ test:
 # Build the Dockerfile, the image is only used when by deploy-docker if deploying.
 build-docker:
   stage: build-docker
-  image: docker:19.03.1
+  image: docker:19.03.8
   services:
-    - docker:19.03.1-dind
+    - docker:19.03.8-dind
   script:
     - docker build -t ${IMAGE_NAME}:latest .
     - mkdir -p images
@@ -42,9 +42,9 @@ deploy-docker:
   only:
     - tags
   stage: deploy-docker
-  image: docker:19.03.1
+  image: docker:19.03.8
   services:
-    - docker:19.03.1-dind
+    - docker:19.03.8-dind
   script:
     - docker load -i images/${SERIALIZED_IMAGE}
     - docker tag ${IMAGE_NAME}:latest ${IMAGE_NAME}:${CI_COMMIT_TAG}
@@ -60,7 +60,7 @@ deploy-k8s:
   only:
     - tags
   stage: deploy-k8s
-  image: google/cloud-sdk:257.0.0
+  image: google/cloud-sdk:290.0.1
   script:
     - gcloud auth activate-service-account --key-file ${GCP_SA_KEY}
     - gcloud container clusters get-credentials ${K8S_CLUSTER} --zone ${GCP_ZONE} --project alexis
