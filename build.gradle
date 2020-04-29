@@ -15,8 +15,9 @@
  */
 
 plugins {
-    id 'java'
-    id 'idea'
+    id "application"
+    id "java"
+    id "idea"
     id "jacoco"
     id "com.github.johnrengelman.shadow" version "5.2.0"
     id "io.spring.dependency-management" version "1.0.9.RELEASE"
@@ -34,6 +35,10 @@ ext {
     elypiaiVersion = "2.3.0"
     deltaSpikeVersion = "1.9.3"
     hibernateVersion = "5.4.14.Final"
+}
+
+application {
+    mainClassName = "org.elypia.alexis.Alexis"
 }
 
 repositories {
