@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-rootProject.name = 'alexis'
+/**
+ * Mapping of all database entities for JPA and Hibernate.
+ *
+ * @author seth@elypia.org (Seth Falco)
+ */
+package org.elypia.alexis.entities;
 
-/** The primiary chat bot code which isn't bound to any specific platform. */
-include "core"
-
-/** The Discord specific bot code. */
-include "discord"

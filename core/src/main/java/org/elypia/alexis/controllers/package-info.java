@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 
-rootProject.name = 'alexis'
-
-/** The primiary chat bot code which isn't bound to any specific platform. */
-include "core"
-
-/** The Discord specific bot code. */
-include "discord"
+/**
+ * All of the platform agnostic controllers we're registering to the bot.
+ *
+ * @author seth@elypia.org (Seth Falco)
+ */
+package org.elypia.alexis.controllers;

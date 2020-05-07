@@ -14,10 +14,25 @@
  * limitations under the License.
  */
 
-rootProject.name = 'alexis'
+package org.elypia.alexis.config;
 
-/** The primiary chat bot code which isn't bound to any specific platform. */
-include "core"
+import org.apache.deltaspike.core.api.config.*;
 
-/** The Discord specific bot code. */
-include "discord"
+/**
+ * @author seth@elypia.org (Seth Falco)
+ */
+@Configuration(prefix = "alexis.api.")
+public interface ApiConfig {
+
+    /** The osu! API key. */
+    @ConfigProperty(name = "osu")
+    String getOsu();
+
+    /** Steam API key. */
+    @ConfigProperty(name = "steam")
+    String getSteam();
+
+    /** Cleverbot API key. */
+    @ConfigProperty(name = "cleverbot")
+    String getCleverbot();
+}

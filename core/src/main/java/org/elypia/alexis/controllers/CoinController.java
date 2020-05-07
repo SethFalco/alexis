@@ -14,10 +14,20 @@
  * limitations under the License.
  */
 
-rootProject.name = 'alexis'
+package org.elypia.alexis.controllers;
 
-/** The primiary chat bot code which isn't bound to any specific platform. */
-include "core"
+import org.elypia.commandler.api.Controller;
 
-/** The Discord specific bot code. */
-include "discord"
+import javax.enterprise.context.ApplicationScoped;
+import java.util.concurrent.ThreadLocalRandom;
+
+/**
+ * @author Elypia CIC
+ */
+@ApplicationScoped
+public class CoinController implements Controller {
+
+    public String flipCoin() {
+        return ThreadLocalRandom.current().nextBoolean() ? "Heads" : "Tails";
+    }
+}

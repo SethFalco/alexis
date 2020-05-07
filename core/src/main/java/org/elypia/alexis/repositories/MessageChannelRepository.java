@@ -14,10 +14,18 @@
  * limitations under the License.
  */
 
-rootProject.name = 'alexis'
+package org.elypia.alexis.repositories;
 
-/** The primiary chat bot code which isn't bound to any specific platform. */
-include "core"
+import org.apache.deltaspike.data.api.*;
+import org.elypia.alexis.entities.MessageChannelData;
 
-/** The Discord specific bot code. */
-include "discord"
+/**
+ * @author seth@elypia.org (Seth Falco)
+ */
+@Repository(forEntity = MessageChannelData.class)
+public interface MessageChannelRepository extends EntityRepository<MessageChannelData, Long> {
+
+    @Modifying
+    @Query("UPDATE MessageChannelData AS c SET c.cleverbot_state = ?1 WHERE g.id = ?2")
+    int updateCleverState(final String locale, final long id);
+}

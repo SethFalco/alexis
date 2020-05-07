@@ -15,138 +15,144 @@
  */
 
 plugins {
-    id "application"
-    id "java"
-    id "idea"
-    id "jacoco"
-    id "com.github.johnrengelman.shadow" version "5.2.0"
-    id "io.spring.dependency-management" version "1.0.9.RELEASE"
-//    id "org.elypia.commandler" version "1.2.1"
+    id "com.github.johnrengelman.shadow" version "5.2.0" apply false
+    id "io.spring.dependency-management" version "1.0.9.RELEASE" apply false
 }
 
-group = "org.elypia"
-version = "3.0.0"
-description = "Hey! I'm a chatbot for Discord!"
-sourceCompatibility = 11
-targetCompatibility = 11
+allprojects() {
+    apply plugin: "idea"
 
-ext {
-    comcordVersion = "2.0.0"
-    elypiaiVersion = "2.3.0"
-    deltaSpikeVersion = "1.9.3"
-    hibernateVersion = "5.4.14.Final"
-}
-
-application {
-    mainClassName = "org.elypia.alexis.Alexis"
-}
-
-repositories {
-    jcenter()
-    mavenLocal()
-    maven { url "https://oss.jfrog.org/artifactory/libs-release" }
-    maven { url 'https://jitpack.io' }
-}
-
-dependencies {
-    // Comcord (Bundles Java Discord API)
-    implementation "org.elypia.comcord:core:${comcordVersion}"
-    implementation "org.elypia.comcord:validation:${comcordVersion}"
-
-    // Elypiai
-    implementation "org.elypia.elypiai:cleverbot:${elypiaiVersion}"
-    implementation "org.elypia.elypiai:osu:${elypiaiVersion}"
-    implementation "org.elypia.elypiai:path-of-exile:${elypiaiVersion}"
-    implementation "org.elypia.elypiai:runescape:${elypiaiVersion}"
-    implementation "org.elypia.elypiai:steam:${elypiaiVersion}"
-    implementation "org.elypia.elypiai:urbandictionary:${elypiaiVersion}"
-    implementation "org.elypia.elypiai:yugioh-prices:${elypiaiVersion}"
-
-    // Elypiai Extensions TODO: This should be extensions-redis
-    implementation "org.elypia.elypiai:redis:${elypiaiVersion}"
-
-    // DeltaSpike Extensions
-    implementation "org.apache.deltaspike.modules:deltaspike-data-module-api:${deltaSpikeVersion}"
-    runtimeOnly "org.apache.deltaspike.modules:deltaspike-data-module-impl:${deltaSpikeVersion}"
-    implementation "org.apache.deltaspike.modules:deltaspike-scheduler-module-api:${deltaSpikeVersion}"
-    runtimeOnly "org.apache.deltaspike.modules:deltaspike-scheduler-module-impl:${deltaSpikeVersion}"
-
-    // Discord
-    implementation "com.sedmelluq:lavaplayer:1.3.47"
-    implementation "com.github.DiscordBotList:DBL-Java-Library:2.0.1"
-
-    // Twitch
-    implementation "com.github.twitch4j:twitch4j:1.0.0-alpha.19"
-
-    // Google Translate and YouTube
-    implementation "com.google.cloud:google-cloud-translate:1.94.5"
-    implementation "com.google.apis:google-api-services-youtube:v3-rev20200402-1.30.9"
-
-    // YAML Configuration for Commandler (Apache Commons Configuration)
-    runtimeOnly "org.yaml:snakeyaml:1.26"
-
-    // Database
-    implementation "org.hibernate:hibernate-core:${hibernateVersion}"
-    implementation "org.hibernate:hibernate-c3p0:${hibernateVersion}"
-    runtimeOnly "mysql:mysql-connector-java:8.0.19"
-
-    // Logging
-    implementation "org.slf4j:slf4j-api:1.7.30"
-    runtimeOnly "org.codehaus.janino:janino:3.1.2"
-    runtimeOnly "ch.qos.logback:logback-classic:1.2.3"
-    runtimeOnly "com.google.cloud:google-cloud-logging-logback:0.116.0-alpha"
-
-    // Testing
-    testImplementation "org.junit.jupiter:junit-jupiter:5.6.2"
-    testImplementation "org.mockito:mockito-core:3.3.3"
-}
-
-[compileJava, compileTestJava, javadoc]*.options*.encoding = 'UTF-8'
-
-dependencyManagement {
-    imports {
-        mavenBom "org.apache.deltaspike.distribution:distributions-bom:${deltaSpikeVersion}"
+    ext {
+        commandlerVersion = "4.0.0"
+        elypiaiVersion = "2.3.0"
+        deltaSpikeVersion = "1.9.3"
+        hibernateVersion = "5.4.14.Final"
     }
 }
 
-sourceSets {
-    main {
-        output.resourcesDir = output.classesDirs.singleFile
+subprojects() {
+    apply plugin: "application"
+    apply plugin: "java"
+    apply plugin: "jacoco"
+    apply plugin: "com.github.johnrengelman.shadow"
+    apply plugin: "io.spring.dependency-management"
+
+    group = "org.elypia"
+    version = "3.0.0"
+    description = "Hey! I'm a chatbot for Discord!"
+
+    sourceCompatibility = 11
+    targetCompatibility = 11
+
+    application {
+        mainClassName = "org.elypia.alexis.Alexis"
     }
+
+    repositories {
+        jcenter()
+        mavenLocal()
+        maven { url "https://oss.jfrog.org/artifactory/libs-release" }
+        maven { url 'https://jitpack.io' }
+    }
+
+    dependencies {
+        implementation "org.elypia.commandler:core:${commandlerVersion}"
+        implementation "org.elypia.commandler:validation:${commandlerVersion}"
+        
+        // Elypiai
+        implementation "org.elypia.elypiai:cleverbot:${elypiaiVersion}"
+        implementation "org.elypia.elypiai:osu:${elypiaiVersion}"
+        implementation "org.elypia.elypiai:path-of-exile:${elypiaiVersion}"
+        implementation "org.elypia.elypiai:runescape:${elypiaiVersion}"
+        implementation "org.elypia.elypiai:steam:${elypiaiVersion}"
+        implementation "org.elypia.elypiai:urbandictionary:${elypiaiVersion}"
+        implementation "org.elypia.elypiai:yugioh-prices:${elypiaiVersion}"
+
+        // Elypiai Extensions TODO: This should be extensions-redis
+        implementation "org.elypia.elypiai:redis:${elypiaiVersion}"
+
+        // DeltaSpike Extensions
+        implementation "org.apache.deltaspike.modules:deltaspike-data-module-api:${deltaSpikeVersion}"
+        runtimeOnly "org.apache.deltaspike.modules:deltaspike-data-module-impl:${deltaSpikeVersion}"
+        implementation "org.apache.deltaspike.modules:deltaspike-scheduler-module-api:${deltaSpikeVersion}"
+        runtimeOnly "org.apache.deltaspike.modules:deltaspike-scheduler-module-impl:${deltaSpikeVersion}"
+
+        // Quartz
+        implementation "org.quartz-scheduler:quartz:2.3.2"
+
+        // Twitch
+        implementation "com.github.twitch4j:twitch4j:1.0.0-alpha.19"
+
+        // Google Translate and YouTube
+        implementation "com.google.cloud:google-cloud-translate:1.94.5"
+        implementation "com.google.apis:google-api-services-youtube:v3-rev20200402-1.30.9"
+
+        // YAML Configuration for Commandler (Apache Commons Configuration)
+        runtimeOnly "org.yaml:snakeyaml:1.26"
+
+        // Database
+        implementation "org.hibernate:hibernate-core:${hibernateVersion}"
+        implementation "org.hibernate:hibernate-c3p0:${hibernateVersion}"
+        runtimeOnly "mysql:mysql-connector-java:8.0.19"
+
+        // Logging
+        implementation "org.slf4j:slf4j-api:1.7.30"
+        runtimeOnly "org.codehaus.janino:janino:3.1.2"
+        runtimeOnly "ch.qos.logback:logback-classic:1.2.3"
+        runtimeOnly "com.google.cloud:google-cloud-logging-logback:0.116.0-alpha"
+
+        // Testing
+        testImplementation "org.junit.jupiter:junit-jupiter:5.6.2"
+        testImplementation "org.mockito:mockito-core:3.3.3"
+    }
+
+    [compileJava, compileTestJava, javadoc]*.options*.encoding = 'UTF-8'
+
+    dependencyManagement {
+        imports {
+            mavenBom "org.apache.deltaspike.distribution:distributions-bom:${deltaSpikeVersion}"
+        }
+    }
+
+    sourceSets {
+        main {
+            output.resourcesDir = output.classesDirs.singleFile
+        }
+
+        test {
+            output.resourcesDir = output.classesDirs.singleFile
+        }
+    }
+
+    shadowJar {
+        manifest {
+            attributes 'Implementation-Title' : this.name,
+                    'Implementation-Version' : version,
+                    'Main-Class' : "org.elypia.alexis.Alexis"
+        }
+    }
+
+    /** Testing */
 
     test {
-        output.resourcesDir = output.classesDirs.singleFile
+        useJUnitPlatform()
+        finalizedBy jacocoTestReport
+
+        reports {
+            html.enabled = false
+        }
     }
-}
 
-shadowJar {
-    manifest {
-        attributes 'Implementation-Title' : this.name,
-                   'Implementation-Version' : version,
-                   'Main-Class' : "org.elypia.alexis.Alexis"
+    /** Coverage **/
+
+    jacoco {
+        toolVersion = "0.8.5"
     }
-}
 
-/** Testing */
-
-test {
-    useJUnitPlatform()
-    finalizedBy jacocoTestReport
-
-    reports {
-        html.enabled = false
-    }
-}
-
-/** Coverage **/
-
-jacoco {
-    toolVersion = "0.8.5"
-}
-
-jacocoTestReport {
-    reports {
-        html.enabled = true
-        xml.enabled = false
+    jacocoTestReport {
+        reports {
+            html.enabled = true
+            xml.enabled = false
+        }
     }
 }

@@ -32,7 +32,7 @@ animations such as gifs, are not under the aforementioned license; all rights
 are reserved by Elypia CIC.** 
 
 [matrix-community]: https://matrix.to/#/+elypia:matrix.org "Matrix Invite"
-[discord-guild]: https://discordapp.com/invite/hprGMaM "Discord Invite"
+[discord-guild]: https://discord.com/invite/hprGMaM "Discord Invite"
 [i18n]: https://i18n.elypia.org/engage/alexis/?utm "Weblate Translations"
 [gitlab]: https://gitlab.com/Elypia/alexis/commits/master "Repository on GitLab"
 [elypia-donate]: https://elypia.org/donate "Donate to Elypia"
@@ -43,7 +43,7 @@ are reserved by Elypia CIC.**
 
 [Matrix]: https://img.shields.io/matrix/elypia-general:matrix.org?logo=matrix "Matrix Shield"
 [Alexis Banner]: ./assets/banner.png "Banner for Alexis"
-[Discord]: https://discordapp.com/api/guilds/184657525990359041/widget.png "Discord Shield"
+[Discord]: https://discord.com/api/guilds/184657525990359041/widget.png "Discord Shield"
 [i18n-badge]: https://i18n.elypia.org/widgets/alexis/-/svg-badge.svg "Weblate Translation Badge"
 [Build]: https://gitlab.com/Elypia/alexis/badges/master/pipeline.svg "GitLab Build Shield"
 [Coverage]: https://gitlab.com/Elypia/alexis/badges/master/coverage.svg "GitLab Coverage Shield"

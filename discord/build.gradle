@@ -14,10 +14,18 @@
  * limitations under the License.
  */
 
-rootProject.name = 'alexis'
+ext {
+    comcordVersion = "2.0.0"
+}
 
-/** The primiary chat bot code which isn't bound to any specific platform. */
-include "core"
+dependencies {
+    implementation project(":core")
 
-/** The Discord specific bot code. */
-include "discord"
+    // Comcord
+    implementation "org.elypia.comcord:core:${comcordVersion}"
+    implementation "org.elypia.comcord:validation:${comcordVersion}"
+
+    // Discord
+    implementation "com.sedmelluq:lavaplayer:1.3.47"
+    implementation "com.github.DiscordBotList:DBL-Java-Library:2.0.1"
+}

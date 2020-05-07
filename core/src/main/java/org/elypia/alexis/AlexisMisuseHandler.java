@@ -14,10 +14,21 @@
  * limitations under the License.
  */
 
-rootProject.name = 'alexis'
+package org.elypia.alexis;
 
-/** The primiary chat bot code which isn't bound to any specific platform. */
-include "core"
+import org.apache.deltaspike.core.api.exception.control.ExceptionHandler;
+import org.slf4j.*;
 
-/** The Discord specific bot code. */
-include "discord"
+/**
+ * @author seth@elypia.org (Seth Falco)
+ */
+@ExceptionHandler
+public class AlexisMisuseHandler {
+
+    private static Logger logger = LoggerFactory.getLogger(AlexisMisuseHandler.class);
+
+//    public Object handle(@Handles MisuseException ex) {
+//        logger.error("A runtime exception occured.", ex);
+//        return "A teddy bear had been spotted stealing a line of code, it seems it broke some of our functionality.";
+//    }
+}

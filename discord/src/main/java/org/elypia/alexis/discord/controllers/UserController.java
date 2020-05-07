@@ -14,10 +14,22 @@
  * limitations under the License.
  */
 
-rootProject.name = 'alexis'
+package org.elypia.alexis.discord.controllers;
 
-/** The primiary chat bot code which isn't bound to any specific platform. */
-include "core"
+import net.dv8tion.jda.api.entities.User;
+import org.elypia.comcord.Scope;
+import org.elypia.comcord.annotations.Scoped;
+import org.elypia.commandler.api.Controller;
 
-/** The Discord specific bot code. */
-include "discord"
+import javax.inject.Singleton;
+
+/**
+ * @author seth@elypia.org (Seth Falco)
+ */
+@Singleton
+public class UserController implements Controller {
+
+	public User info(@Scoped(inGuild = Scope.LOCAL, inPrivate = Scope.MUTUAL) User user) {
+        return user;
+	}
+}

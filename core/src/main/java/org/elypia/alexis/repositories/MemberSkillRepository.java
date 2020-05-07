@@ -14,10 +14,12 @@
  * limitations under the License.
  */
 
-rootProject.name = 'alexis'
+package org.elypia.alexis.repositories;
 
-/** The primiary chat bot code which isn't bound to any specific platform. */
-include "core"
+import org.apache.deltaspike.data.api.*;
+import org.elypia.alexis.entities.MemberSkill;
 
-/** The Discord specific bot code. */
-include "discord"
+@Repository(forEntity = MemberSkill.class)
+public interface MemberSkillRepository extends EntityRepository<MemberSkill, Integer> {
+
+}

@@ -14,10 +14,21 @@
  * limitations under the License.
  */
 
-rootProject.name = 'alexis'
+package org.elypia.alexis.config;
 
-/** The primiary chat bot code which isn't bound to any specific platform. */
-include "core"
+import org.apache.deltaspike.core.api.config.*;
 
-/** The Discord specific bot code. */
-include "discord"
+/**
+ * @author seth@elypia.org (Seth Falco)
+ */
+@Configuration(prefix = "alexis.api.twitch.")
+public interface TwitchConfig {
+
+    /** Twitch Client ID */
+    @ConfigProperty(name = "client-id")
+    String getClientId();
+
+    /** Twitch API Secret, only visible once. */
+    @ConfigProperty(name = "client-secret")
+    String getClientSecret();
+}

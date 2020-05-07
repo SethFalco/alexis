@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 
-rootProject.name = 'alexis'
-
-/** The primiary chat bot code which isn't bound to any specific platform. */
-include "core"
-
-/** The Discord specific bot code. */
-include "discord"
+/**
+ * Listeners to add to JDA to listen to non-command events.
+ *
+ * @author seth@elypia.org (Seth Falco)
+ */
+package org.elypia.alexis.discord.listeners;
