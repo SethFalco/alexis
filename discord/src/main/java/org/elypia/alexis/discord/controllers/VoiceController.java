@@ -23,7 +23,7 @@ import org.elypia.comcord.constraints.Channels;
 import org.elypia.commandler.api.Controller;
 import org.elypia.commandler.event.ActionEvent;
 
-import javax.inject.Singleton;
+import javax.enterprise.context.ApplicationScoped;
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
 /**
  * @author seth@elypia.org (Seth Falco)
  */
-@Singleton
+@ApplicationScoped
 public class VoiceController implements Controller {
 
     public String mention(@Channels(ChannelType.TEXT) ActionEvent<Event, Message> event, VoiceChannel[] channels) {

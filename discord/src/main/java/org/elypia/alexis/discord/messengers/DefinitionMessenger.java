@@ -19,14 +19,30 @@ package org.elypia.alexis.discord.messengers;
 import net.dv8tion.jda.api.*;
 import net.dv8tion.jda.api.entities.*;
 import org.elypia.alexis.discord.utils.DiscordUtils;
+import org.elypia.alexis.i18n.AlexisMessages;
 import org.elypia.comcord.api.DiscordMessenger;
 import org.elypia.commandler.event.ActionEvent;
+import org.elypia.commandler.utils.ChatUtils;
 import org.elypia.elypiai.urbandictionary.Definition;
+
+import javax.inject.Inject;
 
 /**
  * @author seth@elypia.org (Seth Falco)
  */
 public class DefinitionMessenger implements DiscordMessenger<Definition> {
+
+    private static final String THUMBS_UP = "\uD83D\uDC4D";
+    private static final String THUMBS_DOWN = "\uD83D\uDC4E";
+
+    private static final String SCORES_FORMAT = THUMBS_UP + " %,d  " + THUMBS_DOWN + "  %,d";
+
+    private final AlexisMessages messages;
+
+    @Inject
+    public DefinitionMessenger(final AlexisMessages messages) {
+        this.messages = messages;
+    }
 
     @Override
     public Message buildMessage(ActionEvent<?, Message> event, Definition output) {
@@ -38,23 +54,19 @@ public class DefinitionMessenger implements DiscordMessenger<Definition> {
         EmbedBuilder builder = DiscordUtils.newEmbed(event);
 
         builder.setAuthor(toSend.getAuthor());
-        String titleText = toSend.getWord();
-        builder.setTitle(titleText, toSend.getPermaLink());
+        builder.setTitle(toSend.getWord(), toSend.getPermaLink());
 
         String description = toSend.getDefinition();
-        if (description.length() > MessageEmbed.TEXT_MAX_LENGTH)
-            description = description.substring(MessageEmbed.TEXT_MAX_LENGTH - 3) + "...";
-
+        description = ChatUtils.truncateAndAppend(description, MessageEmbed.TEXT_MAX_LENGTH, "...");
         builder.setDescription(description);
 
-        // TODO: Unexpected behavior when there is no example
-        String descText = String.format (
-            "%s%n%n: %,d 👎: %,d",
-            toSend.getExample(),
-            toSend.getThumbsUp(),
-            toSend.getThumbsDown()
-        );
-        builder.addField("Example", descText, true);
+        String example = toSend.getExample();
+
+        if (example != null && !example.isBlank())
+            builder.addField(messages.udExampleUsageOfWord(), example, false);
+
+        String descText = String.format(SCORES_FORMAT, toSend.getThumbsUp(), toSend.getThumbsDown());
+        builder.addField(messages.udThumbsUpThumbsDown(), descText, false);
 
         return new MessageBuilder(builder.build()).build();
     }

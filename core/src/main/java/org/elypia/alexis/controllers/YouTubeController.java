@@ -18,36 +18,40 @@ package org.elypia.alexis.controllers;
 
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.google.api.services.youtube.model.SearchResult;
+import org.elypia.alexis.i18n.AlexisMessages;
 import org.elypia.alexis.services.youtube.*;
 import org.elypia.commandler.api.Controller;
 import org.slf4j.*;
 
-import javax.inject.*;
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import java.io.IOException;
 import java.util.Optional;
 
 /**
  * @author seth@elypia.org (Seth Falco)
  */
-@Singleton
+@ApplicationScoped
 public class YouTubeController implements Controller {
 
     private static final Logger logger = LoggerFactory.getLogger(YouTubeController.class);
 
     private YouTubeService youtube;
+    private AlexisMessages messages;
 
     @Inject
-    public YouTubeController(YouTubeService youtube) {
+    public YouTubeController(YouTubeService youtube, AlexisMessages messages) {
         this.youtube = youtube;
+        this.messages = messages;
     }
 
     public Object search(String query) throws IOException {
         try {
             Optional<SearchResult> searchResult = youtube.getSearchResult(query, ResourceType.VIDEO);
-            return (searchResult.isPresent()) ? searchResult.get() : "There were no results for that.";
+            return (searchResult.isPresent()) ? searchResult.get() : messages.noSearchResultsFound();
         } catch (GoogleJsonResponseException ex) {
             logger.error("The YouTube API hasn't been configured propertly: {}", ex.getDetails().getMessage());
-            return "I'm struggling to connect to YouTube at the moment, could you try again later!";
+            return messages.youtubeApiError();
         }
     }
 }

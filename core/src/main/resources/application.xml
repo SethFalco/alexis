@@ -32,7 +32,7 @@
       </command>
     </controller>
 
-    <controller type="org.elypia.alexis.discord.controllers.SkillsController">
+    <controller type="org.elypia.alexis.discord.controllers.SkillController">
       <name>Skills</name>
       <group>Settings</group>
       <description>Change settings for skills of the guild, and notification settings.</description>
@@ -169,7 +169,7 @@
         <static>true</static>
         <description>I'll repeat what you ask me to say, I'll also delete your message if I have permission.</description>
         <property name="org.elypia.commandler.dispatchers.StandardDispatcher.aliases" value="say"/>
-        <param index="1">
+        <param>
           <name>body</name>
           <description>The text to repeat.</description>
         </param>
@@ -190,7 +190,7 @@
         <name>Talk to Cleverbot</name>
         <description>Say something to Cleverbot and get a response.</description>
         <property name="org.elypia.commandler.dispatchers.StandardDispatcher.aliases" value="say"/>
-        <param index="0">
+        <param>
           <name>body</name>
           <description>What you want to say.</description>
         </param>
@@ -208,21 +208,21 @@
       <command method="leave">
         <name>Leave Guild</name>
         <property name="org.elypia.commandler.dispatchers.StandardDispatcher.aliases" value="leave"/>
-        <param index="1">
+        <param>
           <name>guild</name>
         </param>
       </command>
       <command method="rename">
         <name>Change my Display</name>
         <property name="org.elypia.commandler.dispatchers.StandardDispatcher.aliases" value="rename"/>
-        <param index="1">
+        <param>
           <name>name</name>
         </param>
       </command>
       <command method="avatar">
         <name>Change my Avatar</name>
         <property name="org.elypia.commandler.dispatchers.StandardDispatcher.aliases" value="avatar"/>
-        <param index="1">
+        <param>
           <name>url</name>
         </param>
       </command>
@@ -245,10 +245,10 @@
         <name>Emote List</name>
         <description>Get a full list of all emotes in the guild.</description>
         <property name="org.elypia.commandler.dispatchers.StandardDispatcher.aliases" value="list"/>
-        <param index="0">
+        <param>
           <name>guild</name>
           <description>The guild to list emotes for.</description>
-          <defaultValue>${s.guild}</defaultValue>
+          <defaultValue>${source.guild}</defaultValue>
           <property name="org.elypia.comcord.annotations.Scoped.inGuild" value="LOCAL"/>
           <property name="org.elypia.comcord.annotations.Scoped.inPrivate" value="MUTUAL"/>
         </param>
@@ -257,7 +257,7 @@
         <name>Post Emote</name>
         <description>Find and post the specified emote.</description>
         <property name="org.elypia.commandler.dispatchers.StandardDispatcher.aliases" value="post"/>
-        <param index="1">
+        <param>
           <name>emote</name>
           <description>The emote I should send.</description>
         </param>
@@ -273,15 +273,15 @@
         <name>Set Greeting</name>
         <description>Set what happens when a certain type of user joins the guild.</description>
         <property name="org.elypia.commandler.dispatchers.StandardDispatcher.aliases" value="set"/>
-        <param index="1">
+        <param>
           <name>greeting</name>
           <description>If when the user "joins", or "leaves".</description>
         </param>
-        <param index="2">
+        <param>
           <name>account</name>
           <description>If this is for "users", or "bots".</description>
         </param>
-        <param index="3">
+        <param>
           <name>message</name>
           <description>What to actually send when this action occurs.</description>
         </param>
@@ -290,7 +290,7 @@
         <name>Set Channel</name>
         <description>Set or change the channel that messages are sent to.</description>
         <property name="org.elypia.commandler.dispatchers.StandardDispatcher.aliases" value="channel"/>
-        <param index="1">
+        <param>
           <name>channel</name>
           <description>A talkable channel where the message can go.</description>
         </param>
@@ -306,10 +306,10 @@
         <name>Guild Info</name>
         <description>Get information on a guild.</description>
         <property name="org.elypia.commandler.dispatchers.StandardDispatcher.aliases" value="info"/>
-        <param index="0">
+        <param>
           <name>guild</name>
           <description>The guild to get information on.</description>
-          <defaultValue>${s.guild}</defaultValue>
+          <defaultValue>${source.guild}</defaultValue>
           <property name="org.elypia.comcord.annotations.Scoped.inGuild" value="LOCAL"/>
           <property name="org.elypia.comcord.annotations.Scoped.inPrivate" value="MUTUAL"/>
         </param>
@@ -318,14 +318,14 @@
         <name>Prune Messages</name>
         <description>Delete a bunch of messages in the channel.</description>
         <property name="org.elypia.commandler.dispatchers.StandardDispatcher.aliases" value="prune"/>
-        <param index="1">
+        <param>
           <name>amount</name>
           <description>The number of messages to delete.</description>
         </param>
-        <param index="2">
+        <param>
           <name>channel</name>
           <description>Which channel to delete messages from.</description>
-          <defaultValue>${s.textChannel}</defaultValue>
+          <defaultValue>${source.textChannel}</defaultValue>
           <property name="org.elypia.comcord.annotations.Scoped.inGuild" value="LOCAL"/>
         </param>
       </command>
@@ -340,7 +340,7 @@
         <name>Set Level Up Message</name>
         <description>Set the message that is sent when a user levels up.</description>
         <property name="org.elypia.commandler.dispatchers.StandardDispatcher.aliases" value="message"/>
-        <param index="1">
+        <param>
           <name>message</name>
           <description>The message to send when a member levels up.</description>
         </param>
@@ -361,7 +361,7 @@
         <name>Guild Locale</name>
         <description>Set the default locale for the guild.</description>
         <property name="org.elypia.commandler.dispatchers.StandardDispatcher.aliases" value="guild"/>
-        <param index="1">
+        <param>
           <name>locale</name>
           <description>The locale by name, country, or both.</description>
         </param>
@@ -370,7 +370,7 @@
         <name>Channel Locale</name>
         <description>Set the locale for this channel, this could be in a guild or private.</description>
         <property name="org.elypia.commandler.dispatchers.StandardDispatcher.aliases" value="channel"/>
-        <param index="1">
+        <param>
           <name>locale</name>
           <description>The locale by name, country, or both.</description>
         </param>
@@ -386,11 +386,11 @@
         <name>Get Player</name>
         <description>Display information on an osu! player.</description>
         <property name="org.elypia.commandler.dispatchers.StandardDispatcher.aliases" value="get"/>
-        <param index="1">
+        <param>
           <name>players</name>
           <description>The players to get information on.</description>
         </param>
-        <param index="2">
+        <param>
           <name>mode</name>
           <description>The hame mode to get players on.</description>
           <defaultValue>0</defaultValue>
@@ -403,12 +403,12 @@
       <group>Settings</group>
       <description>Change or disable the prefix to use my commands!</description>
       <property name="org.elypia.commandler.dispatchers.StandardDispatcher.aliases" value="prefix"/>
-      <command method="setPrefix">
+      <command method="changePrefix">
         <name>Set Prefix</name>
         <description>Change the prefix if you're not into the current one.</description>
         <default>true</default>
         <property name="org.elypia.commandler.dispatchers.StandardDispatcher.aliases" value="set"/>
-        <param index="1">
+        <param>
           <name>prefix</name>
           <description>The new prefix to use.</description>
         </param>
@@ -434,7 +434,7 @@
         <!--<name>Allow Self-Assignable Roles</name>-->
         <!--<description>White list roles as self-assignable so users without permission can add them to themselves.</description>-->
         <!--<property name="org.elypia.commandler.dispatchers.StandardDispatcher.aliases" value="allow"/>-->
-        <!--<param index="1">-->
+        <!--<param>-->
           <!--<name>roles</name>-->
           <!--<description>A list of roles you want to make self-assignable.</description>-->
         <!--</param>-->
@@ -444,7 +444,7 @@
         <!--<description>Disable using the guild prefix to interact with the bot.</description>-->
         <!--<static>true</static>-->
         <!--<property name="org.elypia.commandler.dispatchers.StandardDispatcher.aliases" value="iam"/>-->
-        <!--<param index="1">-->
+        <!--<param>-->
           <!--<name>roles</name>-->
           <!--<description>A list of roles you want to self-assign.</description>-->
         <!--</param>-->
@@ -460,7 +460,7 @@
         <name>Quests</name>
         <description>Get information on quests a player has completed.</description>
         <property name="org.elypia.commandler.dispatchers.StandardDispatcher.aliases" value="quests"/>
-        <param index="0">
+        <param>
           <name>username</name>
           <description>The player to get quests on.</description>
         </param>
@@ -477,7 +477,7 @@
         <description>Return the players Steam64 ID.</description>
         <property name="org.elypia.commandler.dispatchers.StandardDispatcher.aliases" value="id"/>
         <property name="org.elypia.comcord.messengers.NumberToMessageMessenger.formatted" value="false"/>
-        <param index="0">
+        <param>
           <name>username</name>
           <description>The player to retrieve the ID of.</description>
         </param>
@@ -486,7 +486,7 @@
         <name>Get Player by ID</name>
         <description>Get general profile information on a player by ID.</description>
         <property name="org.elypia.commandler.dispatchers.StandardDispatcher.aliases" value="getbyid"/>
-        <param index="0">
+        <param>
           <name>id</name>
           <description>The Steam64 ID of the player.</description>
         </param>
@@ -495,7 +495,7 @@
         <name>Get Player</name>
         <description>Get general profile information on a player by vanity URL.</description>
         <property name="org.elypia.commandler.dispatchers.StandardDispatcher.aliases" value="get"/>
-        <param index="0">
+        <param>
           <name>username</name>
           <description>The player to get the profile of.</description>
         </param>
@@ -504,7 +504,7 @@
         <name>Game Roulette</name>
         <description>Looking to see random games or want me to choose what you play?</description>
         <property name="org.elypia.commandler.dispatchers.StandardDispatcher.aliases" value="rand"/>
-        <param index="0">
+        <param>
           <name>username</name>
           <description>The player to get quests on.</description>
         </param>
@@ -520,11 +520,11 @@
         <description>I'll translate whatever you tell me to into the specified language.</description>
         <default>true</default>
         <property name="org.elypia.commandler.dispatchers.StandardDispatcher.aliases" value="translate"/>
-        <param index="0">
+        <param>
           <name>body</name>
           <description>The text to translate.</description>
         </param>
-        <param index="1">
+        <param>
           <name>language</name>
           <description>The language to translate to.</description>
         </param>
@@ -533,7 +533,7 @@
         <name>Toggle React Translation</name>
         <description>I'll translate a message for you on reaction; I'll have to assume the language though.</description>
         <property name="org.elypia.commandler.dispatchers.StandardDispatcher.aliases" value="toggle"/>
-        <param index="0">
+        <param>
           <name>toggle</name>
           <description>If reaction translation should be enabled or disbaled.</description>
         </param>
@@ -549,7 +549,7 @@
         <name>Streamer Info</name>
         <description>Get information on quests a player has completed.</description>
         <property name="org.elypia.commandler.dispatchers.StandardDispatcher.aliases" value="info"/>
-        <param index="0">
+        <param>
           <name>username</name>
           <description>The player to get quests on.</description>
         </param>
@@ -566,11 +566,11 @@
         <default>true</default>
         <static>true</static>
         <property name="org.elypia.commandler.dispatchers.StandardDispatcher.aliases" value="define"/>
-        <param index="1">
+        <param>
           <name>words</name>
           <description>The words to define.</description>
         </param>
-        <param index="2">
+        <param>
           <name>random</name>
           <description>If to get a random definition, or the top one.</description>
           <defaultValue>false</defaultValue>
@@ -588,10 +588,10 @@
         <description>Display information on a user.</description>
         <default>true</default>
         <property name="org.elypia.commandler.dispatchers.StandardDispatcher.aliases" value="info"/>
-        <param index="0">
+        <param>
           <name>username</name>
           <description>The name of the user.</description>
-          <defaultValue>${s.author}</defaultValue>
+          <defaultValue>${source.author}</defaultValue>
         </param>
       </command>
     </controller>
@@ -605,7 +605,7 @@
         <description>See how many characters Discord see's your message as.</description>
         <static>true</static>
         <property name="org.elypia.commandler.dispatchers.StandardDispatcher.aliases" value="count"/>
-        <param index="0">
+        <param>
           <name>body</name>
           <description>What you want me to count up.</description>
         </param>
@@ -621,7 +621,7 @@
         <name>Mention in Voice Channel</name>
         <description>Mention all users in the specified voice channels.</description>
         <property name="org.elypia.commandler.dispatchers.StandardDispatcher.aliases" value="mention"/>
-        <param index="1">
+        <param>
           <name>channels</name>
           <description>The channels to mention users from.</description>
           <property name="org.elypia.comcord.annotations.Scoped.inGuild" value="LOCAL"/>
@@ -638,7 +638,7 @@
         <name>Search</name>
         <description>Search YouTube for a video.</description>
         <property name="org.elypia.commandler.dispatchers.StandardDispatcher.aliases" value="search"/>
-        <param index="0">
+        <param>
           <name>query</name>
           <description>The query to search on YouTube.</description>
         </param>

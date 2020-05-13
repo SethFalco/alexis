@@ -24,10 +24,11 @@ import org.elypia.comcord.constraints.Channels;
 import org.elypia.commandler.api.Controller;
 import org.elypia.commandler.event.ActionEvent;
 
-import javax.inject.*;
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import java.util.Locale;
 
-@Singleton
+@ApplicationScoped
 public class LocaleController implements Controller {
 
     private final GuildRepository guildRepo;

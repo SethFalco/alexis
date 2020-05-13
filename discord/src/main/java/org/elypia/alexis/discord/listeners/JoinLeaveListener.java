@@ -21,9 +21,10 @@ import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.guild.*;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.elypia.alexis.discord.utils.DiscordUtils;
+import org.elypia.alexis.i18n.AlexisMessages;
 import org.slf4j.*;
 
-import javax.inject.Singleton;
+import javax.inject.*;
 import java.time.OffsetDateTime;
 import java.util.List;
 
@@ -31,12 +32,19 @@ import java.util.List;
  * @author seth@elypia.org (Seth Falco)
  */
 @Singleton
-public class JoinKickListener extends ListenerAdapter {
+public class JoinLeaveListener extends ListenerAdapter {
 
-    private static final Logger logger = LoggerFactory.getLogger(JoinKickListener.class);
+    private static final Logger logger = LoggerFactory.getLogger(JoinLeaveListener.class);
 
     /** The format to log the new total of guilds, users, and bots. */
     private final static String GUILD_USERS_FORMAT = "%,d guilds | %,d users | %,d bots!";
+
+    private final AlexisMessages messages;
+
+    @Inject
+    public JoinLeaveListener(AlexisMessages messages) {
+        this.messages = messages;
+    }
 
     /**
      * Occurs when the chatbot itself, joins a new guild.
@@ -59,13 +67,11 @@ public class JoinKickListener extends ListenerAdapter {
         logger.info("The guild {} just invited me! ({})", name, statsMessage(event.getJDA()));
 
         if (channel == null) {
-            logger.info("We were unable write into any of the channels of {}, so no thank you message was delivered.", name);
+            logger.info("We were unable to talk in any channel in {};  no thank you message was delivered.", name);
             return;
         }
 
-        String message =
-            "Thank you for inviting me! My default prefix is `$` but you can mention me too!\n" +
-                "Feel free to try my help command!";
+        String message = messages.thankYouForInvite();
         channel.sendMessage(message).queue();
     }
 

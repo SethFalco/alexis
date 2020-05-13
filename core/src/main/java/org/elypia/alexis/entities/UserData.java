@@ -42,6 +42,7 @@ public class UserData implements Serializable {
     private int xp;
 
     @UpdateTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "last_activity")
     private Date lastMessage;
 

@@ -19,6 +19,7 @@ package org.elypia.alexis.discord.controllers;
 import com.google.cloud.translate.*;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.Event;
+import org.elypia.alexis.i18n.AlexisMessages;
 import org.elypia.alexis.models.TranslationModel;
 import org.elypia.alexis.repositories.GuildRepository;
 import org.elypia.alexis.services.TranslateService;
@@ -26,18 +27,21 @@ import org.elypia.comcord.constraints.*;
 import org.elypia.commandler.api.Controller;
 import org.elypia.commandler.event.ActionEvent;
 
-import javax.inject.*;
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 
-@Singleton
+@ApplicationScoped
 public class TranslateController implements Controller {
 
     private final GuildRepository guildRepo;
     private final TranslateService translateService;
+    private final AlexisMessages messages;
 
     @Inject
-    public TranslateController(GuildRepository guildRepo, TranslateService translateService) {
+    public TranslateController(GuildRepository guildRepo, TranslateService translateService, AlexisMessages messages) {
         this.guildRepo = guildRepo;
         this.translateService = translateService;
+        this.messages = messages;
     }
 
     public TranslationModel translate(String body, Language language) {
@@ -48,11 +52,7 @@ public class TranslateController implements Controller {
     public String toggle(@Channels(ChannelType.TEXT) @Elevated ActionEvent<Event, Message> event, boolean toggle) {
         Guild guild = event.getRequest().getMessage().getGuild();
         guildRepo.updateReactTranslation(toggle, guild.getIdLong());
-
-        if (toggle)
-            return "Feel free to give it a try whenever you're ready, it's been enabled for the guild.";
-        else
-            return "Understood; I'll stop translating messages on reaction now.";
+        return (toggle) ? messages.featureEnabledTryItNow() : messages.reactionFeatureDisabled();
     }
 
 //    public String inPrivate(@Channels(ChannelType.TEXT) @Elevated ActionEvent<Event, Message> event, boolean isPrivate) {

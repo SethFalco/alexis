@@ -27,14 +27,14 @@ import org.slf4j.*;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Produces;
-import javax.inject.*;
+import javax.inject.Inject;
 import javax.security.auth.login.LoginException;
 import java.util.*;
 
 /**
  * @author seth@elypia.org (Seth Falco)
  */
-@Singleton
+@ApplicationScoped
 public class DiscordBot {
 
     /** Logging with SLF4J. */
@@ -69,11 +69,17 @@ public class DiscordBot {
         EmoteListener emoteListener,
         EntityListener entityListener,
         GreetingListener greetingListener,
-        JoinKickListener joinKickListener,
+        JoinLeaveListener joinKickListener,
         XpListener xpListener
     ) throws LoginException {
-        logger.info("Initialize JDA and authenticate to Discord.");
         String token = discordConfig.getBotToken();
+
+        if (token == null) {
+            logger.warn("No Discord bot token was provided to the application.");
+            throw new IllegalStateException("Unable to connect to Discord API.");
+        }
+
+        logger.info("Initializing JDA and authenticate to Discord.");
 
         jda = JDABuilder.create(token, INTENTS)
             .disableCache(CACHE_FLAGS_DISABLED)

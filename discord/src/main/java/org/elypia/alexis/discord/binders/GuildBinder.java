@@ -18,19 +18,20 @@ package org.elypia.alexis.discord.binders;
 
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.events.Event;
-import net.dv8tion.jda.api.events.guild.GenericGuildEvent;
 import org.elypia.alexis.entities.GuildData;
 import org.elypia.alexis.repositories.GuildRepository;
+import org.elypia.comcord.EventUtils;
 import org.elypia.commandler.Request;
 import org.elypia.commandler.api.HeaderBinder;
 
-import javax.inject.*;
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import java.util.*;
 
 /**
  * @author seth@elypia.org (Seth Falco)
  */
-@Singleton
+@ApplicationScoped
 public class GuildBinder implements HeaderBinder {
 
     /** To select data from the database. */
@@ -44,11 +45,11 @@ public class GuildBinder implements HeaderBinder {
     @Override
     public <S, M> Map<String, String> bind(Request<S, M> request) {
         Event source = (Event)request.getSource();
+        Guild guild = EventUtils.getGuild(source);
 
-        if (!(source instanceof GenericGuildEvent))
+        if (guild == null)
             return null;
 
-        Guild guild = ((GenericGuildEvent)source).getGuild();
         GuildData data = guildRepo.findBy(guild.getIdLong());
 
         HashMap<String, String> headers = new HashMap<>();

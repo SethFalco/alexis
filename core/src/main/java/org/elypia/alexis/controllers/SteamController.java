@@ -17,12 +17,14 @@
 package org.elypia.alexis.controllers;
 
 import org.elypia.alexis.config.ApiConfig;
+import org.elypia.alexis.i18n.AlexisMessages;
 import org.elypia.commandler.api.Controller;
 import org.elypia.elypiai.steam.*;
 import org.hibernate.validator.constraints.Length;
 import org.slf4j.*;
 
-import javax.inject.*;
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
@@ -30,7 +32,7 @@ import java.util.concurrent.ThreadLocalRandom;
 /**
  * @author seth@elypia.org (Seth Falco)
  */
-@Singleton
+@ApplicationScoped
 public class SteamController implements Controller {
 
 	private static final Logger logger = LoggerFactory.getLogger(SteamController.class);
@@ -41,14 +43,18 @@ public class SteamController implements Controller {
 	/** Access the Steam API */
 	private final Steam steam;
 
+	/** Strings that Alexis will say. */
+	private final AlexisMessages messages;
+
 	@Inject
-	public SteamController(final ApiConfig config) {
+	public SteamController(final ApiConfig config, final AlexisMessages messages) {
 		this.steam = new Steam(config.getSteam());
+		this.messages = messages;
 	}
 
 	public Object getId(@Length(max = MAX_USERNAME_LENGTH) String username) throws IOException {
 		Optional<SteamSearch> optSearch = steam.getIdFromVanityUrl(username).complete();
-		String errorText = "Sorry, I couldn't find that user on Steam. If it helps, you should give the ID, or what would be at the end of their custom URL.";
+		String errorText = messages.steamUserNotFound();
 
 		if (optSearch.isEmpty())
 			return errorText;
@@ -65,7 +71,7 @@ public class SteamController implements Controller {
 		Optional<List<SteamUser>> optUsers = steam.getUsers(steamId).complete();
 
 		if (optUsers.isEmpty())
-			return "I found the user, but I was unable to access their profile.";
+			return messages.steamProfilePrivate();
 
 		List<SteamUser> users = optUsers.get();
 		return users.get(0);
@@ -89,7 +95,7 @@ public class SteamController implements Controller {
 		Optional<List<SteamGame>> optGames = steam.getLibrary((long)steamId).complete();
 
 		if (optGames.isEmpty())
-			return "I found the user, but I was unable to access their library.";
+			return messages.steamLibraryPrivate();
 
 		List<SteamGame> games = optGames.get();
 		return games.get(ThreadLocalRandom.current().nextInt(games.size()));

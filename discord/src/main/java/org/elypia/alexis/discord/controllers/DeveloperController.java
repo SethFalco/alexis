@@ -26,7 +26,7 @@ import org.elypia.commandler.api.Controller;
 import org.elypia.commandler.event.ActionEvent;
 import org.slf4j.*;
 
-import javax.inject.Singleton;
+import javax.enterprise.context.ApplicationScoped;
 import java.io.*;
 import java.net.URL;
 import java.util.*;
@@ -34,7 +34,7 @@ import java.util.*;
 /**
  * @author seth@elypia.org (Seth Falco)
  */
-@Singleton
+@ApplicationScoped
 public class DeveloperController implements Controller {
 
     private static final Logger logger = LoggerFactory.getLogger(DeveloperController.class);

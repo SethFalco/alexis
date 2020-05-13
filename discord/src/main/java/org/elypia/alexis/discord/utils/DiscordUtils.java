@@ -54,7 +54,7 @@ public final class DiscordUtils {
 	 */
 	public static EmbedBuilder newEmbed(ActionEvent<?, ?> event) {
 		if (!(event.getRequest().getIntegration() instanceof DiscordIntegration))
-			throw new RuntimeException("Embeds are specific to Discord only.");
+			throw new IllegalStateException("Embeds are specific to Discord only.");
 
 		Object source = event.getRequest().getSource();
 
@@ -117,13 +117,13 @@ public final class DiscordUtils {
 	 * @param user The bot this get the invite link for.
 	 * @return The invite link for this bot.
 	 * @throws NullPointerException If the user is null.
-	 * @throws RuntimeException If the {@link User} specified is not a bot.
+	 * @throws IllegalStateException If the {@link User} specified is not a bot.
 	 */
 	public static String getInviteUrl(User user) {
 		Objects.requireNonNull(user);
 
 		if (!user.isBot())
-			throw new RuntimeException("User is not a bot.");
+			throw new IllegalStateException("User is not a bot.");
 
 		return BOT_URL + user.getId();
 	}

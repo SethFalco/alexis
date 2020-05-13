@@ -18,12 +18,12 @@ package org.elypia.alexis.controllers;
 
 import org.elypia.commandler.api.Controller;
 
-import javax.inject.Singleton;
+import javax.enterprise.context.ApplicationScoped;
 
 /**
  * @author seth@elypia.org (Seth Falco)
  */
-@Singleton
+@ApplicationScoped
 public class UtilitiesController implements Controller {
 
     public int count(String input) {

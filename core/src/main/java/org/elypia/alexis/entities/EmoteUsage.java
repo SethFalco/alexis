@@ -55,6 +55,7 @@ public class EmoteUsage implements Serializable {
 
     /** The time the emote(s) were used. */
     @CreationTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "usage_timestamp")
     private Date timestamp;
 

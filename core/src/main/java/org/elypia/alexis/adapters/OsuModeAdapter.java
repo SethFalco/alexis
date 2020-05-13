@@ -23,12 +23,13 @@ import org.elypia.commandler.event.ActionEvent;
 import org.elypia.commandler.metadata.MetaParam;
 import org.elypia.elypiai.osu.data.OsuMode;
 
-import javax.inject.*;
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 
 /**
  * @author seth@elypia.org (Seth Falco)
  */
-@Singleton
+@ApplicationScoped
 @ParamAdapter(OsuMode.class)
 public class OsuModeAdapter implements Adapter<OsuMode> {
 

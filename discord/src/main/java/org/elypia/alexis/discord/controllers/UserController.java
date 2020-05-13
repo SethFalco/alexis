@@ -21,12 +21,12 @@ import org.elypia.comcord.Scope;
 import org.elypia.comcord.annotations.Scoped;
 import org.elypia.commandler.api.Controller;
 
-import javax.inject.Singleton;
+import javax.enterprise.context.ApplicationScoped;
 
 /**
  * @author seth@elypia.org (Seth Falco)
  */
-@Singleton
+@ApplicationScoped
 public class UserController implements Controller {
 
 	public User info(@Scoped(inGuild = Scope.LOCAL, inPrivate = Scope.MUTUAL) User user) {

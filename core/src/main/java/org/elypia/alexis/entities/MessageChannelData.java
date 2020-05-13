@@ -34,7 +34,7 @@ public class MessageChannelData implements Serializable {
     private long id;
 
     @Column(name = "guild_id")
-    private long guildId;
+    private Long guildId;
 
     @Column(name = "channel_locale")
     private Locale locale;
@@ -42,15 +42,28 @@ public class MessageChannelData implements Serializable {
     @Column(name = "cleverbot_state", length = 8196)
     private String cleverState;
 
+    public MessageChannelData() {
+        // Do nothing
+    }
+
+    public MessageChannelData(long channelId) {
+        this.id = channelId;
+    }
+
+    public MessageChannelData(long channelId, Long guildId) {
+        this(channelId);
+        this.guildId = guildId;
+    }
+
     public long getId() {
         return id;
     }
 
-    public long getGuildId() {
+    public Long getGuildId() {
         return guildId;
     }
 
-    public void setGuildId(long guildId) {
+    public void setGuildId(Long guildId) {
         this.guildId = guildId;
     }
 

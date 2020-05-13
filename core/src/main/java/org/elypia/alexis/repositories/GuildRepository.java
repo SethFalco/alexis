@@ -40,6 +40,7 @@ public interface GuildRepository extends EntityRepository<GuildData, Long> {
      * @param prefix What to set he guild's prefix to.
      * @return The number of rows that changed, this should always be 1.
      */
+
     @Modifying
     @Query("UPDATE GuildData AS g SET g.prefix = ?1 WHERE g.id = ?2")
     int updatePrefix(final String prefix, final long id);

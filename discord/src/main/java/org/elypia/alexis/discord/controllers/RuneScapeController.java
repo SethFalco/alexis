@@ -23,14 +23,15 @@ import org.elypia.elypiai.runescape.*;
 import org.hibernate.validator.constraints.Length;
 import org.slf4j.*;
 
-import javax.inject.*;
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import java.io.IOException;
 import java.util.*;
 
 /**
  * @author seth@elypia.org (Seth Falco)
  */
-@Singleton
+@ApplicationScoped
 public class RuneScapeController implements Controller {
 
 	private static final Logger logger = LoggerFactory.getLogger(RuneScapeController.class);

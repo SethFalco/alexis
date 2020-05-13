@@ -20,7 +20,7 @@ import net.dv8tion.jda.api.events.Event;
 import org.elypia.commandler.Request;
 import org.elypia.commandler.api.HeaderBinder;
 
-import javax.inject.Singleton;
+import javax.enterprise.context.ApplicationScoped;
 import java.util.*;
 
 /**
@@ -29,16 +29,18 @@ import java.util.*;
  *
  * @author seth@elypia.org (Seth Falco)
  */
-@Singleton
+@ApplicationScoped
 public class MentionBinder implements HeaderBinder {
 
     @Override
     public <S, M> Map<String, String> bind(Request<S, M> request) {
         Event source = (Event)request.getSource();
         String id = source.getJDA().getSelfUser().getId();
+
         HashMap<String, String> headers = new HashMap<>();
         headers.put("SELF_MENTION", "<@" + id + ">");
         headers.put("SELF_NICK_MENTION", "<@!" + id + ">");
+
         return headers;
     }
 }

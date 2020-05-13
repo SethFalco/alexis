@@ -21,13 +21,23 @@ import net.dv8tion.jda.api.*;
 import net.dv8tion.jda.api.entities.Message;
 import org.apache.commons.lang.StringUtils;
 import org.elypia.alexis.discord.utils.DiscordUtils;
+import org.elypia.alexis.i18n.AlexisMessages;
 import org.elypia.comcord.api.DiscordMessenger;
 import org.elypia.commandler.event.ActionEvent;
+
+import javax.inject.Inject;
 
 /**
  * @author seth@elypia.org (Seth Falco)
  */
 public class TwitchUserMessenger implements DiscordMessenger<User> {
+
+    private final AlexisMessages messages;
+
+    @Inject
+    public TwitchUserMessenger(final AlexisMessages messages) {
+        this.messages = messages;
+    }
 
     @Override
     public Message buildMessage(ActionEvent<?, Message> event, User output) {
@@ -44,12 +54,12 @@ public class TwitchUserMessenger implements DiscordMessenger<User> {
         builder.setAuthor(output.getDisplayName(), "https://twitch.tv/" + output.getLogin());
         builder.setThumbnail(avatarUrl);
         builder.setDescription(output.getDescription());
-        builder.addField("Total Views", String.format("%,d", output.getViewCount()), true);
+        builder.addField(messages.twitchTotalViews(), String.format("%,d", output.getViewCount()), true);
 
         if (!broadcasterType.isEmpty())
-            builder.addField("Type", StringUtils.capitalize(broadcasterType), true);
+            builder.addField(messages.twitchType(), StringUtils.capitalize(broadcasterType), true);
 
-        builder.setFooter("ID: " + output.getId(), avatarUrl);
+        builder.setFooter(messages.uniqueIdentifier() + output.getId(), avatarUrl);
         return new MessageBuilder(builder.build()).build();
     }
 }

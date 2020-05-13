@@ -16,9 +16,12 @@
 
 package org.elypia.alexis.controllers;
 
+import org.elypia.alexis.i18n.AlexisMessages;
 import org.elypia.commandler.api.Controller;
+import org.slf4j.*;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -27,7 +30,17 @@ import java.util.concurrent.ThreadLocalRandom;
 @ApplicationScoped
 public class CoinController implements Controller {
 
+    private static final Logger logger = LoggerFactory.getLogger(CoinController.class);
+
+    private final AlexisMessages messages;
+
+    @Inject
+    public CoinController(AlexisMessages messages) {
+        this.messages = messages;
+    }
+
     public String flipCoin() {
-        return ThreadLocalRandom.current().nextBoolean() ? "Heads" : "Tails";
+        boolean isHeads = ThreadLocalRandom.current().nextBoolean();
+        return (isHeads) ? messages.coinFlipHeads() : messages.coinClipTails();
     }
 }

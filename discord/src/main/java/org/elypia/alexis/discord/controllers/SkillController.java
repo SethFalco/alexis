@@ -20,6 +20,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.Event;
 import org.elypia.alexis.entities.*;
+import org.elypia.alexis.i18n.AlexisMessages;
 import org.elypia.alexis.repositories.*;
 import org.elypia.comcord.EventUtils;
 import org.elypia.comcord.annotations.Scoped;
@@ -32,13 +33,17 @@ import javax.inject.Inject;
 import java.util.*;
 
 @ApplicationScoped
-public class SkillsController implements Controller {
+public class SkillController implements Controller {
 
+    private final AlexisMessages messages;
+    private final MessageChannelRepository messageChannelRepo;
     private final SkillRepository skillRepo;
     private final SkillRelationRepository skillRelationRepo;
 
     @Inject
-    public SkillsController(SkillRepository skillRepo, SkillRelationRepository skillRelationRepo) {
+    public SkillController(AlexisMessages messages, MessageChannelRepository messageChannelRepo, SkillRepository skillRepo, SkillRelationRepository skillRelationRepo) {
+        this.messages = messages;
+        this.messageChannelRepo = messageChannelRepo;
         this.skillRepo = skillRepo;
         this.skillRelationRepo = skillRelationRepo;
     }
@@ -86,7 +91,7 @@ public class SkillsController implements Controller {
         if (count > 0)
             return "A skill with that name already exists.";
 
-        Skill skill = new Skill(guild.getIdLong(), name);
+        Skill skill = new Skill(guild.getIdLong(), name, true, true);
         skillRepo.save(skill);
 
         return "I've added the new skill now!";
@@ -132,12 +137,15 @@ public class SkillsController implements Controller {
         Skill skill = skillRepo.findByGuildIdAndNameEqualIgnoreCase(guild.getIdLong(), name);
 
         if (skill == null)
-            return "There is no skill with that name.";
+            return messages.noSkillsWithThatName(name);
 
-        SkillRelation relation = new SkillRelation(skill.getId(), channel.getIdLong());
+        long channelId = channel.getIdLong();
+        messageChannelRepo.save(new MessageChannelData(channelId, channel.getGuild().getIdLong()));
+
+        SkillRelation relation = new SkillRelation(skill.getId(), channelId);
         skillRelationRepo.save(relation);
 
-        return "I've assigned " + skill.getName() + " to the text channel " + channel.getName() + ".";
+        return messages.assignedSkillToTextChannel(skill.getName(), channel.getAsMention());
     }
 
     public String setNotify(@Channels(ChannelType.TEXT) ActionEvent<Event, Message> event, String name, boolean enable) {

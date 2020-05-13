@@ -41,17 +41,16 @@ public class GreetingListener extends ListenerAdapter {
 
     @Override
     public void onGuildMemberJoin(GuildMemberJoinEvent event) {
-        onGuildMemberEvent(event, true);
+        onGuildMemberEvent(event.getGuild(), event.getUser(), true);
     }
 
     @Override
-    public void onGuildMemberLeave(GuildMemberLeaveEvent event) {
-        onGuildMemberEvent(event, false);
+    public void onGuildMemberRemove(GuildMemberRemoveEvent event) {
+        onGuildMemberEvent(event.getGuild(), event.getUser(), true);
     }
 
-    public void onGuildMemberEvent(GenericGuildMemberEvent event, final boolean join) {
-        final Guild guild = event.getGuild();
-        final boolean bot = event.getUser().isBot();
+    public void onGuildMemberEvent(Guild guild, User user, final boolean join) {
+        final boolean bot = user.isBot();
 
         GuildData data = guildRepo.findBy(guild.getIdLong());
         GuildFeature feature;
@@ -66,7 +65,7 @@ public class GreetingListener extends ListenerAdapter {
             feature = null;
 
         if (feature.isEnabled()) {
-            TextChannel channel = DiscordUtils.getWriteableChannel(event.getGuild());
+            TextChannel channel = DiscordUtils.getWriteableChannel(guild);
             channel.sendMessage("updated").queue();
         }
     }

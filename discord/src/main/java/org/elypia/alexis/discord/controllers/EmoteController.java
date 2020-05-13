@@ -23,13 +23,13 @@ import org.elypia.alexis.discord.utils.DiscordUtils;
 import org.elypia.commandler.api.Controller;
 import org.elypia.commandler.event.ActionEvent;
 
-import javax.inject.Singleton;
+import javax.enterprise.context.ApplicationScoped;
 import java.util.List;
 
 /**
  * @author seth@elypia.org (Seth Falco)
  */
-@Singleton
+@ApplicationScoped
 public class EmoteController implements Controller {
 
     public String list(Guild guild) {

@@ -29,8 +29,7 @@
     <exclude name="org.slf4j.**"/>
     <exclude name="org.yaml.**"/>
   </scan>
-  <!-- Ideally I want commandler.validation to handle setting this for us. -->
   <alternatives>
-    <class>org.elypia.commandler.validation.ValidatedActionHandler</class>
+    <class>org.elypia.alexis.i18n.AlexisLocaleResolver</class>
   </alternatives>
 </beans>

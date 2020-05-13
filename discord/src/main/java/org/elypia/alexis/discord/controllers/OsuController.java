@@ -25,7 +25,8 @@ import org.elypia.elypiai.osu.*;
 import org.elypia.elypiai.osu.data.OsuMode;
 import org.slf4j.*;
 
-import javax.inject.*;
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import javax.validation.constraints.Size;
 import java.io.IOException;
 import java.util.Optional;
@@ -33,7 +34,7 @@ import java.util.Optional;
 /**
  * @author seth@elypia.org (Seth Falco)
  */
-@Singleton
+@ApplicationScoped
 public class OsuController implements Controller {
 
     private static final Logger logger = LoggerFactory.getLogger(OsuController.class);

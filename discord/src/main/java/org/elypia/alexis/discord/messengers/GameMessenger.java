@@ -19,10 +19,12 @@ package org.elypia.alexis.discord.messengers;
 import net.dv8tion.jda.api.*;
 import net.dv8tion.jda.api.entities.Message;
 import org.elypia.alexis.discord.utils.DiscordUtils;
+import org.elypia.alexis.i18n.AlexisMessages;
 import org.elypia.comcord.api.DiscordMessenger;
 import org.elypia.commandler.event.ActionEvent;
 import org.elypia.elypiai.steam.SteamGame;
 
+import javax.inject.Inject;
 import java.util.StringJoiner;
 
 /**
@@ -30,14 +32,21 @@ import java.util.StringJoiner;
  */
 public class GameMessenger implements DiscordMessenger<SteamGame> {
 
+    private final AlexisMessages messages;
+
+    @Inject
+    public GameMessenger(final AlexisMessages messages) {
+        this.messages = messages;
+    }
+
     @Override
     public Message buildMessage(ActionEvent<?, Message> event, SteamGame output) {
         StringJoiner joiner = new StringJoiner("\n");
 
         joiner.add("**__" + output.getName() + "__**");
         joiner.add("");
-        joiner.add("**Total Playtime:** " + toPretty(output.getTotalPlaytime()));
-        joiner.add("**Recent Playtime:** " + toPretty(output.getRecentPlaytime()));
+        joiner.add("**" + messages.steamTotalPlaytime() + ":** " + toPretty(output.getTotalPlaytime()));
+        joiner.add("**" + messages.steamRecentPlaytime() + ":** " + toPretty(output.getRecentPlaytime()));
         joiner.add("");
         joiner.add(output.getUrl());
 
@@ -53,15 +62,15 @@ public class GameMessenger implements DiscordMessenger<SteamGame> {
         builder.setImage(output.getLogoUrl());
 
         String totalPlaytime = toPretty(output.getTotalPlaytime());
-        builder.addField("Total Playtime", totalPlaytime, true);
+        builder.addField(messages.steamTotalPlaytime(), totalPlaytime, true);
 
         String recentPlaytime = toPretty(output.getRecentPlaytime());
-        builder.addField("Recent Playtime", recentPlaytime, true);
+        builder.addField(messages.steamRecentPlaytime(), recentPlaytime, true);
 
         return new MessageBuilder(builder.build()).build();
     }
 
     private String toPretty(long playtime) {
-        return String.format("%,d Hours", playtime);
+        return String.format("%,d %s", playtime, messages.steamPlaytimeHours());
     }
 }

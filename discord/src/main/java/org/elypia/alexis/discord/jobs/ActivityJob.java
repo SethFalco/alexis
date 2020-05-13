@@ -24,7 +24,8 @@ import org.elypia.alexis.repositories.ActivityRepository;
 import org.quartz.*;
 import org.slf4j.*;
 
-import javax.inject.*;
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import java.util.*;
 
 // TODO: Make Alexis run without database
@@ -33,7 +34,7 @@ import java.util.*;
  *
  * @author seth@elypia.org (Seth Falco)
  */
-@Singleton
+@ApplicationScoped
 @Scheduled(cronExpression = "0 0/1 * 1/1 * ? *", description = "Iterate the activities to display on Discord.")
 public class ActivityJob implements Job {
 

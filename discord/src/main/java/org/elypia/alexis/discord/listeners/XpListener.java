@@ -23,6 +23,7 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.elypia.alexis.discord.services.AuditService;
 import org.elypia.alexis.discord.utils.DiscordUtils;
 import org.elypia.alexis.entities.*;
+import org.elypia.alexis.i18n.AlexisMessages;
 import org.elypia.alexis.repositories.*;
 import org.elypia.alexis.utils.LevelUtils;
 import org.slf4j.*;
@@ -60,12 +61,14 @@ public class XpListener extends ListenerAdapter {
     private final GuildRepository guildRepo;
     private final UserRepository userRepo;
     private final AuditService auditService;
+    private final AlexisMessages messages;
 
     @Inject
-    public XpListener(final GuildRepository guildRepo, final UserRepository userRepo, final AuditService auditService) {
+    public XpListener(GuildRepository guildRepo, UserRepository userRepo, AuditService auditService, AlexisMessages messages) {
         this.guildRepo = Objects.requireNonNull(guildRepo);
         this.userRepo = Objects.requireNonNull(userRepo);
         this.auditService = Objects.requireNonNull(auditService);
+        this.messages = Objects.requireNonNull(messages);
     }
 
 
@@ -117,7 +120,7 @@ public class XpListener extends ListenerAdapter {
             GuildFeature feature = null;
 
             if (feature.isEnabled())
-                event.getChannel().sendMessage("Well done you went from level " + currentLevel + " to level " + newLevel + "!").queue();
+                event.getChannel().sendMessage(messages.userLeveledUp(currentLevel, newLevel)).queue();
         }
     }
 
@@ -130,7 +133,7 @@ public class XpListener extends ListenerAdapter {
             GuildFeature feature = null;
 
             if (feature.isEnabled())
-                event.getChannel().sendMessage("Well done you went from level " + currentLevel + " to level " + newLevel + "!").queue();
+                event.getChannel().sendMessage(messages.userLeveledUp(currentLevel, newLevel)).queue();
         }
     }
 
@@ -164,7 +167,7 @@ public class XpListener extends ListenerAdapter {
 
         if (message == null) {
             logger.info("Guild leveled up with notifications enabled but no message configured.");
-            auditService.log(guild, guildData, "The global level notification feature is enabled but no message is set, disabling global level notifications.");
+            auditService.log(guild, guildData, messages.auditLevelEnabledNoMessage());
             feature.setEnabled(false);
             return;
         }
@@ -181,7 +184,7 @@ public class XpListener extends ListenerAdapter {
             GuildFeature feature = null;
 
             if (feature.isEnabled())
-                event.getChannel().sendMessage("Well done you went from level " + currentLevel + " to level " + newLevel + "!").queue();
+                event.getChannel().sendMessage(messages.userLeveledUp(currentLevel, newLevel)).queue();
         }
     }
 

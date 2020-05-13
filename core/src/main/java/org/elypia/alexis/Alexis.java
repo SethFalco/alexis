@@ -37,12 +37,14 @@ public class Alexis {
 	 * @param args Command line arguments passed when running this application.
 	 */
 	public static void main(String[] args) {
-		logger.info("Initialize the Commandler application.");
-
-		// Initialize Commandler
+		logger.info("Initializing the Commandler application.");
 		Commandler commandler = Commandler.create();
 
-		// Run Commandler and start dispatching commands.
-		commandler.run();
+		try {
+			commandler.run();
+		} catch (Exception ex) {
+			logger.error("Exception occured during Commandler initialization, backing out and exiting application.", ex);
+			System.exit(AlexisExitCode.INITIALIZATION_ERROR.getExitCode());
+		}
     }
 }

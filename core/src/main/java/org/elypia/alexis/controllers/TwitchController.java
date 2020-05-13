@@ -23,13 +23,14 @@ import org.elypia.commandler.api.Controller;
 import org.hibernate.validator.constraints.Length;
 import org.slf4j.*;
 
-import javax.inject.*;
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import java.util.List;
 
 /**
  * @author seth@elypia.org (Seth Falco)
  */
-@Singleton
+@ApplicationScoped
 public class TwitchController implements Controller {
 
     private static final Logger logger = LoggerFactory.getLogger(TwitchController.class);

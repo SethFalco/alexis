@@ -54,6 +54,7 @@ public class GuildFeature implements Serializable {
 
     /** The time this was last modified at. */
     @UpdateTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "modified_at")
     private Date modifiedAt;
 

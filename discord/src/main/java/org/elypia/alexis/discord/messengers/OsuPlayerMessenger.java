@@ -18,18 +18,28 @@ package org.elypia.alexis.discord.messengers;
 
 import net.dv8tion.jda.api.*;
 import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.utils.MarkdownUtil;
 import org.elypia.alexis.discord.utils.DiscordUtils;
+import org.elypia.alexis.i18n.AlexisMessages;
 import org.elypia.comcord.api.DiscordMessenger;
 import org.elypia.commandler.event.ActionEvent;
 import org.elypia.commandler.utils.ChatUtils;
 import org.elypia.elypiai.osu.*;
 
+import javax.inject.Inject;
 import java.util.StringJoiner;
 
 /**
  * @author seth@elypia.org (Seth Falco)
  */
 public class OsuPlayerMessenger implements DiscordMessenger<Player> {
+
+    private final AlexisMessages messages;
+
+    @Inject
+    public OsuPlayerMessenger(final AlexisMessages messages) {
+        this.messages = messages;
+    }
 
     @Override
     public Message buildMessage(ActionEvent<?, Message> event, Player output) {
@@ -39,13 +49,13 @@ public class OsuPlayerMessenger implements DiscordMessenger<Player> {
 
         joiner.add("**__" + output.getUsername() + "__** " + ChatUtils.replaceWithIndicators(playerCountry));
         joiner.add("");
-        joiner.add("**Level: **" + (int)output.getLevel());
-        joiner.add("**Ranked Score: **" + intf(output.getRankedScore()));
-        joiner.add("**Total Score: **" + intf(output.getTotalScore()));
-        joiner.add("**Performance Points: **" + decf(output.getPp()));
-        joiner.add("**Rank (Country): **" + intf(output.getRank()) + " (" + intf(output.getCountryRank()) + ")");
-        joiner.add("**Accuracy: **" + perf(output.getAccuracy()));
-        joiner.add("**Play Count: **" + intf(output.getPlayCount()));
+        joiner.add("**" + messages.osuLevel() + ": **" + (int)output.getLevel());
+        joiner.add("**" + messages.osuRankedScore() + ": **" + intf(output.getRankedScore()));
+        joiner.add("**" + messages.osuTotalScore() + ": **" + intf(output.getTotalScore()));
+        joiner.add("**" + messages.osuPp() + ": **" + decf(output.getPp()));
+        joiner.add("**" + messages.osuRank() + ": **" + intf(output.getRank()) + " (" + intf(output.getCountryRank()) + ")");
+        joiner.add("**" + messages.osuAccuracy() + ": **" + perf(output.getAccuracy()));
+        joiner.add("**" + messages.osuPlayCount() + ": **" + intf(output.getPlayCount()));
         joiner.add("");
         joiner.add(output.getProfileUrl());
 
@@ -59,18 +69,18 @@ public class OsuPlayerMessenger implements DiscordMessenger<Player> {
 
         builder.setThumbnail("https://countryflags.io/" + playerCountry + "/shiny/64.png");
 
-        builder.addField("Username", "[" + output.getUsername() + "](" + output.getProfileUrl() + ") ", true);
-        builder.addField("Level", String.valueOf((int)output.getLevel()), true);
-        builder.addField("Ranked Score", intf(output.getRankedScore()), true);
-        builder.addField("Total Score", intf(output.getTotalScore()), true);
-        builder.addField("Performance Points", decf(output.getPp()), true);
-        builder.addField("Rank (Country)", intf(output.getRank()) + " (" + intf(output.getCountryRank()) + ")", true);
-        builder.addField("Accuracy", perf(output.getAccuracy()), true);
-        builder.addField("Play Count", intf(output.getPlayCount()), true);
+        builder.addField(messages.osuUsername(), MarkdownUtil.maskedLink(output.getUsername(), output.getProfileUrl()), true);
+        builder.addField(messages.osuLevel(), String.valueOf((int)output.getLevel()), true);
+        builder.addField(messages.osuRankedScore(), intf(output.getRankedScore()), true);
+        builder.addField(messages.osuTotalScore(), intf(output.getTotalScore()), true);
+        builder.addField(messages.osuPp(), decf(output.getPp()), true);
+        builder.addField(messages.osuRank(), intf(output.getRank()) + " (" + intf(output.getCountryRank()) + ")", true);
+        builder.addField(messages.osuAccuracy(), perf(output.getAccuracy()), true);
+        builder.addField(messages.osuPlayCount(), intf(output.getPlayCount()), true);
 
         if (!output.getEvents().isEmpty()) {
             OsuEvent osuEvent = output.getEvents().get(0);
-            builder.addField("Latest Activity - " + osuEvent.getDate(), osuEvent.getMessage(), false);
+            builder.addField(messages.osuLatestActivity() + " - " + osuEvent.getDate(), osuEvent.getMessage(), false);
         }
 
         return new MessageBuilder(builder.build()).build();

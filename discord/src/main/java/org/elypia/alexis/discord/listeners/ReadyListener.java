@@ -41,6 +41,12 @@ public class ReadyListener extends ListenerAdapter {
     /** The default activity to display after the bot is ready. */
     private static final Activity DEFAULT_ACTIVITY = Activity.watching("myself get ready!");
 
+    /**
+     * Perform some initialization work, then remove this listenering since
+     * it no longer needs to receive events.
+     *
+     * @param event The ready event, issued when JDA is ready to receive events.
+     */
     @Override
     public void onReady(ReadyEvent event) {
         JDA jda = event.getJDA();

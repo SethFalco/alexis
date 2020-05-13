@@ -22,7 +22,8 @@ import org.elypia.alexis.entities.*;
 import org.elypia.alexis.repositories.GuildRepository;
 import org.slf4j.*;
 
-import javax.inject.*;
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import java.util.*;
 
 /**
@@ -33,7 +34,7 @@ import java.util.*;
  * like bot actions or reporting issues or changes to the
  * guild.
  */
-@Singleton
+@ApplicationScoped
 public class AuditService {
 
     private static final Logger logger = LoggerFactory.getLogger(AuditService.class);

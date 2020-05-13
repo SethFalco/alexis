@@ -21,32 +21,32 @@ import com.google.api.services.youtube.model.*;
 import net.dv8tion.jda.api.*;
 import net.dv8tion.jda.api.entities.Message;
 import org.elypia.alexis.discord.utils.DiscordUtils;
+import org.elypia.alexis.i18n.AlexisMessages;
 import org.elypia.alexis.services.youtube.YouTubeService;
 import org.elypia.alexis.utils.YouTubeUtils;
 import org.elypia.comcord.api.DiscordMessenger;
 import org.elypia.commandler.event.ActionEvent;
 import org.slf4j.*;
 
-import javax.inject.*;
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 /**
  * @author seth@elypia.org (Seth Falco)
  */
-@Singleton
+@ApplicationScoped
 public class YouTubeMessenger implements DiscordMessenger<SearchResult> {
 
     private static final Logger logger = LoggerFactory.getLogger(YouTubeMessenger.class);
 
-    private static final SimpleDateFormat FORMAT = new SimpleDateFormat("dd MMM yyyy");
-
-    private YouTubeService youtube;
+    private final YouTubeService youtube;
+    private final AlexisMessages messages;
 
     @Inject
-    public YouTubeMessenger(YouTubeService youtube) {
+    public YouTubeMessenger(YouTubeService youtube, AlexisMessages messages) {
         this.youtube = youtube;
+        this.messages = messages;
     }
 
     @Override
@@ -68,10 +68,7 @@ public class YouTubeMessenger implements DiscordMessenger<SearchResult> {
         builder.setImage(YouTubeUtils.getThumbnailUrl(videoId));
 
         DateTime datetime = snippet.getPublishedAt();
-        long milli = datetime.getValue();
-        Date date = new Date(milli);
-
-        builder.setFooter("Published on " + FORMAT.format(date), null);
+        builder.setFooter(messages.youtubePublishedOn(datetime), null);
 
         try {
             builder.setThumbnail(youtube.getChannelThumbnail(snippet.getChannelId()));

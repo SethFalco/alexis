@@ -19,14 +19,17 @@ package org.elypia.alexis.discord.messengers;
 import net.dv8tion.jda.api.*;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.Event;
+import net.dv8tion.jda.api.utils.MarkdownUtil;
 import org.elypia.alexis.discord.utils.DiscordUtils;
+import org.elypia.alexis.i18n.AlexisMessages;
 import org.elypia.alexis.repositories.UserRepository;
 import org.elypia.comcord.EventUtils;
 import org.elypia.comcord.api.DiscordMessenger;
 import org.elypia.commandler.event.ActionEvent;
 
-import javax.inject.*;
-import java.time.format.DateTimeFormatter;
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
+import java.time.*;
 
 /**
  * Build a Discord user into an attractive
@@ -34,17 +37,16 @@ import java.time.format.DateTimeFormatter;
  *
  * @author seth@elypia.org (Seth Falco)
  */
-@Singleton
+@ApplicationScoped
 public class UserMessenger implements DiscordMessenger<User> {
 
-    /** Date/Time Format to display when significant events. */
-    private static final DateTimeFormatter format = DateTimeFormatter.ISO_LOCAL_DATE;
-
     private final UserRepository userRepo;
+    private final AlexisMessages messages;
 
     @Inject
-    public UserMessenger(UserRepository userRepo) {
+    public UserMessenger(UserRepository userRepo, AlexisMessages messages) {
         this.userRepo = userRepo;
+        this.messages = messages;
     }
 
     @Override
@@ -53,27 +55,46 @@ public class UserMessenger implements DiscordMessenger<User> {
     }
 
     @Override
-    public Message buildEmbed(ActionEvent<?, Message> event, User output) {
+    public Message buildEmbed(ActionEvent<?, Message> event, User toSend) {
         EmbedBuilder builder = DiscordUtils.newEmbed(event);
         Guild guild = EventUtils.getGuild((Event)event.getRequest().getSource());
-        String avatar = output.getEffectiveAvatarUrl();
-        builder.setThumbnail(avatar);
 
-        if (guild != null) {
-            Member member = guild.getMember(output);
-            builder.setAuthor(member.getEffectiveName(), avatar);
-            builder.addField("Joined " + guild.getName(), member.getTimeJoined().format(format), true);
+        String avatar = toSend.getEffectiveAvatarUrl();
+        builder.setThumbnail(avatar);
+        builder.setFooter(messages.uniqueIdentifier() + toSend.getId(), avatar);
+
+        OffsetDateTime now = OffsetDateTime.now();
+
+        MessageEmbed.Field joinedDiscord = createDateField(messages.userJoinedDiscord(), toSend.getTimeCreated(), now);
+        builder.addField(joinedDiscord);
+
+        if (guild == null) {
+            builder.setAuthor(toSend.getName(), avatar);
         } else {
-            builder.setAuthor(output.getName(), avatar);
+            Member member = guild.getMember(toSend);
+
+            if (member == null)
+                throw new UnsupportedOperationException("User info queried for a user in a guild they aren't in. Aborting!");
+
+            builder.setAuthor(member.getEffectiveName(), avatar);
+
+            MessageEmbed.Field joinedGuild = createDateField(messages.userJoinedGuild(guild.getName()), member.getTimeJoined(), now);
+            builder.addField(joinedGuild);
         }
 
-        builder.addField("Joined Discord", output.getTimeCreated().format(format), true);
-
-        if (output.isBot())
-            builder.addField("Bot", "[Invite Link](" + DiscordUtils.getInviteUrl(output) + ")", false);
-
-        builder.setFooter("ID: " + output.getId(), null);
+        if (toSend.isBot())
+            builder.addField(messages.userBot(), MarkdownUtil.maskedLink(messages.botInviteLink(), DiscordUtils.getInviteUrl(toSend)), false);
 
         return new MessageBuilder(builder).build();
+    }
+
+    private MessageEmbed.Field createDateField(String name, OffsetDateTime datetime) {
+        return createDateField(name, datetime, OffsetDateTime.now());
+    }
+
+    private MessageEmbed.Field createDateField(String name, OffsetDateTime datetime, OffsetDateTime relativeTo) {
+        Duration duration = Duration.between(datetime, relativeTo);
+        String value = messages.userJoinAge(datetime, duration.toDays());
+        return new MessageEmbed.Field(name, value, true);
     }
 }

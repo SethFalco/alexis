@@ -40,11 +40,11 @@ public class GuildData implements Serializable {
 
     /** The total XP earned in this Guild. */
     @ColumnDefault("0")
-    @Column(name = "guild_xp")
+    @Column(name = "guild_xp", nullable = false)
     private long xp;
 
     @ColumnDefault("'en_US'")
-    @Column(name = "guild_locale")
+    @Column(name = "guild_locale", nullable = false)
     private Locale locale;
 
     /** The prefix that must be before a command, or null if this guild only allows mentions. */
@@ -65,7 +65,7 @@ public class GuildData implements Serializable {
     private Long joinRoleBotId;
 
     @ColumnDefault("1.0")
-    @Column(name = "xp_multp")
+    @Column(name = "xp_multp", nullable = false)
     private double mutlipler;
 
     /** Message settings such as the custom message and where to send it. */

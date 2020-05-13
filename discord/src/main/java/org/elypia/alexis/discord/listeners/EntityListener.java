@@ -16,13 +16,13 @@
 
 package org.elypia.alexis.discord.listeners;
 
-import net.dv8tion.jda.api.entities.Emote;
+import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.Event;
 import net.dv8tion.jda.api.events.emote.GenericEmoteEvent;
 import net.dv8tion.jda.api.events.guild.GenericGuildEvent;
 import net.dv8tion.jda.api.events.message.*;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import org.elypia.alexis.entities.GuildData;
+import org.elypia.alexis.entities.*;
 import org.elypia.alexis.repositories.*;
 import org.slf4j.*;
 
@@ -53,8 +53,10 @@ public class EntityListener extends ListenerAdapter {
     @Override
     public void onGenericGuild(@Nonnull GenericGuildEvent event) {
         long guildId = event.getGuild().getIdLong();
-        GuildData guildData = new GuildData(guildId);
-        guildRepo.save(guildData);
+        GuildData data = guildRepo.findBy(guildId);
+
+        if (data == null)
+            guildRepo.save(new GuildData(guildId));
     }
 
     @Override
@@ -77,16 +79,14 @@ public class EntityListener extends ListenerAdapter {
     }
 
     private void addEmotes(Event event, Collection<Emote> emotes) {
-//        try (Session session = dbService.open()) {
-//            for (Emote emote : emotes) {
-//                if (emote.isFake())
-//                    emote = event.getJDA().getEmoteById(emote.getIdLong());
-//
-//                if (emote == null)
-//                    continue;
-//
-//                session.saveOrUpdate(new EmoteData(emote.getIdLong(), emote.getGuild().getIdLong()));
-//            }
-//        }
+        for (Emote emote : emotes) {
+            Guild guild = emote.getGuild();
+
+            if (guild == null)
+                continue;
+
+            EmoteData emoteData = new EmoteData(emote.getIdLong(), guild.getIdLong());
+            emoteRepo.save(emoteData);
+        }
     }
 }

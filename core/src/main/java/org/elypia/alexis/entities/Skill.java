@@ -61,6 +61,16 @@ public class Skill implements Serializable {
         this.name = name;
     }
 
+    public Skill(long guildId, String name, boolean enabled) {
+        this(guildId, name);
+        this.enabled = enabled;
+    }
+
+    public Skill(long guildId, String name, boolean enabled, boolean notify) {
+        this(guildId, name, enabled);
+        this.notify = notify;
+    }
+
     public int getId() {
         return id;
     }

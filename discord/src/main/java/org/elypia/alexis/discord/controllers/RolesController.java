@@ -20,11 +20,11 @@ import net.dv8tion.jda.api.entities.*;
 import org.elypia.alexis.entities.AssignableRole;
 import org.elypia.commandler.api.Controller;
 
-import javax.inject.Singleton;
+import javax.enterprise.context.ApplicationScoped;
 import java.util.*;
 import java.util.stream.Collectors;
 
-@Singleton
+@ApplicationScoped
 public class RolesController implements Controller {
 
 //    public String getSelfAssignableRoles(@Channels(ChannelType.TEXT) ActionEvent<Event, Message> event) {

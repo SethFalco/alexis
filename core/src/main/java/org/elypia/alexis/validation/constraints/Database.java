@@ -14,12 +14,10 @@
  * limitations under the License.
  */
 
-package org.elypia.alexis.constraints;
+package org.elypia.alexis.validation.constraints;
 
-import org.elypia.commandler.event.ActionEvent;
+import org.elypia.alexis.validation.validators.DatabaseValidator;
 
-import javax.inject.*;
-import javax.persistence.EntityManager;
 import javax.validation.*;
 import java.lang.annotation.*;
 
@@ -28,26 +26,10 @@ import java.lang.annotation.*;
  */
 @Target({ElementType.ANNOTATION_TYPE, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = {Database.Validator.class})
+@Constraint(validatedBy = {DatabaseValidator.class})
 public @interface Database {
 
-    String message() default "{org.elypia.alexis.constraints.Database.message}";
+    String message() default "{org.elypia.alexis.validation.constraints.Database.message}";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
-
-    @Singleton
-    class Validator implements ConstraintValidator<Database, ActionEvent<?, ?>> {
-
-        private final EntityManager manager;
-
-        @Inject
-        public Validator(final EntityManager manager) {
-            this.manager = manager;
-        }
-
-        @Override
-        public boolean isValid(ActionEvent<?, ?> value, ConstraintValidatorContext context) {
-            return manager.isOpen();
-        }
-    }
 }

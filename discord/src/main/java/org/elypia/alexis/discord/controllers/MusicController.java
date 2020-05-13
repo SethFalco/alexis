@@ -24,10 +24,10 @@ import org.elypia.alexis.services.youtube.YouTubeService;
 import org.elypia.commandler.api.Controller;
 import org.slf4j.*;
 
-import javax.inject.Singleton;
+import javax.enterprise.context.ApplicationScoped;
 import java.util.*;
 
-@Singleton
+@ApplicationScoped
 public class MusicController implements Controller {
 
 	private static final Logger logger = LoggerFactory.getLogger(MusicController.class);

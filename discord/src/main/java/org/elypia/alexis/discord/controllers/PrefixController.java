@@ -18,34 +18,62 @@ package org.elypia.alexis.discord.controllers;
 
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.Event;
-import org.elypia.alexis.constraints.Database;
+import org.elypia.alexis.entities.GuildData;
+import org.elypia.alexis.i18n.AlexisMessages;
 import org.elypia.alexis.repositories.GuildRepository;
-import org.elypia.comcord.constraints.*;
+import org.elypia.alexis.validation.constraints.Database;
+import org.elypia.comcord.constraints.Channels;
 import org.elypia.commandler.api.Controller;
 import org.elypia.commandler.event.ActionEvent;
+import org.slf4j.*;
 
-import javax.inject.*;
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import javax.validation.constraints.Size;
 
-@Singleton
+/**
+ * TODO: These should be @Elevated
+ */
+@ApplicationScoped
 public class PrefixController implements Controller {
 
+    private static final Logger logger = LoggerFactory.getLogger(PrefixController.class);
+
     private final GuildRepository guildRepo;
+    private final AlexisMessages messages;
 
     @Inject
-    public PrefixController(final GuildRepository guildRepo) {
+    public PrefixController(GuildRepository guildRepo, AlexisMessages messages) {
         this.guildRepo = guildRepo;
+        this.messages = messages;
     }
 
-    public String setPrefix(@Channels(ChannelType.TEXT) @Elevated @Database ActionEvent<Event, Message> event, @Size(min = 1, max = 32) String prefix) {
+    public String changePrefix(@Channels(ChannelType.TEXT) @Database ActionEvent<Event, Message> event, @Size(min = 1, max = 32) String prefix) {
         long guildId = event.getRequest().getMessage().getGuild().getIdLong();
-        guildRepo.updatePrefix(prefix, guildId);
-        return "The prefix has been changed to " + prefix + ".";
+        setPrefix(guildId, prefix);
+        return messages.prefixHasBeenChanged(prefix);
     }
 
-    public String enableMentionOnly(@Channels(ChannelType.TEXT) @Elevated @Database ActionEvent<Event, Message> event) {
+    public String enableMentionOnly(@Channels(ChannelType.TEXT) @Database ActionEvent<Event, Message> event) {
         long guildId = event.getRequest().getMessage().getGuild().getIdLong();
-        guildRepo.updatePrefix(null, guildId);
-        return "I'll now only respond to mentions.";
+        setPrefix(guildId, null);
+        return messages.disablePrefixMentionsOnly();
+    }
+
+    /**
+     * Actually set the prefix in the database.
+     *
+     * @param guildId The ID of the guild to update.
+     * @param prefix The new prefix this guild wants to use,
+     *               or null if no prefix is to be used.
+     */
+    private void setPrefix(long guildId, String prefix) {
+        GuildData data = guildRepo.findBy(guildId);
+
+        if (data == null)
+            data = new GuildData(guildId);
+
+        data.setPrefix(prefix);
+        guildRepo.save(data);
     }
 }

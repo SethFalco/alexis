@@ -19,14 +19,15 @@ package org.elypia.alexis.services;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.translate.*;
 
-import javax.inject.*;
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import java.io.IOException;
 import java.util.*;
 
 /**
  * @author seth@elypia.org (Seth Falco)
  */
-@Singleton
+@ApplicationScoped
 public class TranslateService {
 
     private Translate translate;

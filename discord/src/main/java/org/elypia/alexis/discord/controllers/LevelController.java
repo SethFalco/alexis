@@ -18,17 +18,18 @@ package org.elypia.alexis.discord.controllers;
 
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.Event;
-import org.elypia.alexis.constraints.Database;
+import org.elypia.alexis.validation.constraints.Database;
 import org.elypia.comcord.constraints.*;
 import org.elypia.commandler.api.Controller;
 import org.elypia.commandler.event.ActionEvent;
 
-import javax.inject.*;
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 
 /**
  * @author seth@elypia.org (Seth Falco)
  */
-@Singleton
+@ApplicationScoped
 public class LevelController implements Controller {
 
     @Inject

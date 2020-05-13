@@ -22,7 +22,7 @@ import org.slf4j.*;
 import javax.annotation.PreDestroy;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.*;
-import javax.inject.*;
+import javax.inject.Inject;
 import javax.persistence.*;
 import java.io.Closeable;
 
@@ -30,7 +30,7 @@ import java.io.Closeable;
  * @author seth@elypia.org (Seth Falco)
  * @since 3.0.0
  */
-@Singleton
+@ApplicationScoped
 public class EntityManagerProducer implements Closeable {
 
     private static final Logger logger = LoggerFactory.getLogger(EntityManagerProducer.class);

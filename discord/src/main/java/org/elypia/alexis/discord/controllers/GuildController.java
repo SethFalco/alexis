@@ -25,14 +25,14 @@ import org.elypia.comcord.constraints.*;
 import org.elypia.commandler.api.Controller;
 import org.elypia.commandler.event.ActionEvent;
 
-import javax.inject.Singleton;
+import javax.enterprise.context.ApplicationScoped;
 import javax.validation.constraints.*;
 import java.util.Collection;
 
 /**
  * @author seth@elypia.org (Seth Falco)
  */
-@Singleton
+@ApplicationScoped
 public class GuildController implements Controller {
 
     public MessageEmbed info(Guild guild) {

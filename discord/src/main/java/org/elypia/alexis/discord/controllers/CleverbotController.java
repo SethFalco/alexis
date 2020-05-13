@@ -19,23 +19,25 @@ package org.elypia.alexis.discord.controllers;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.Event;
 import org.elypia.alexis.config.ApiConfig;
-import org.elypia.alexis.constraints.Database;
 import org.elypia.alexis.entities.MessageChannelData;
 import org.elypia.alexis.repositories.MessageChannelRepository;
+import org.elypia.alexis.validation.constraints.Database;
 import org.elypia.comcord.EventUtils;
 import org.elypia.commandler.api.Controller;
 import org.elypia.commandler.event.ActionEvent;
 import org.elypia.elypiai.cleverbot.*;
 import org.slf4j.*;
 
-import javax.inject.*;
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
+import javax.validation.constraints.NotBlank;
 import java.io.IOException;
 import java.util.*;
 
 /**
  * @author seth@elypia.org (Seth Falco)
  */
-@Singleton
+@ApplicationScoped
 public class CleverbotController implements Controller {
 
     private static final Logger logger = LoggerFactory.getLogger(CleverbotController.class);
@@ -49,10 +51,13 @@ public class CleverbotController implements Controller {
         cleverbot = new Cleverbot(config.getCleverbot());
     }
 
-    public Object say(@Database ActionEvent<Event, Message> event, String body) throws IOException {
+    public Object say(@Database ActionEvent<Event, Message> event, @NotBlank String body) throws IOException {
         MessageChannel channel = EventUtils.getMessageChannel(event.getRequest().getSource());
-
         MessageChannelData data = channelRepo.findBy(channel.getIdLong());
+
+        if (data == null)
+            data = new MessageChannelData(channel.getIdLong());
+
         String cs = data.getCleverState();
 
         Optional<CleverResponse> optResponse = cleverbot.say(body, cs).complete();
@@ -61,7 +66,9 @@ public class CleverbotController implements Controller {
             return "The request failed for some reason.";
 
         CleverResponse response = optResponse.get();
-        channelRepo.updateCleverState(response.getCs(), channel.getIdLong());
+        data.setCleverState(response.getCs());
+        channelRepo.save(data);
+
         return response.getOutput();
     }
 }

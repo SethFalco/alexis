@@ -23,7 +23,8 @@ import org.elypia.alexis.repositories.GuildRepository;
 import org.quartz.*;
 import org.slf4j.*;
 
-import javax.inject.*;
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import java.util.*;
 
 /**
@@ -33,7 +34,7 @@ import java.util.*;
  *
  * @author seth@elypia.org (Seth Falco)
  */
-@Singleton
+@ApplicationScoped
 @Scheduled(cronExpression = "0 0/1 * 1/1 * ? *", description = "Iterate the activities to display on Discord.")
 public class VoiceXpJob implements Job {
 
@@ -86,7 +87,8 @@ public class VoiceXpJob implements Job {
             }
         }
 
-        logger.debug("Awarded a total of {} XP this interval.", totalXpAwarded);
+        if (totalXpAwarded > 0)
+            logger.debug("Awarded a total of {} XP this interval.", totalXpAwarded);
     }
 
     private int calculateXpAward(GuildVoiceState states) {

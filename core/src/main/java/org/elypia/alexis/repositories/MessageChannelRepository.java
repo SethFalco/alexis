@@ -26,6 +26,6 @@ import org.elypia.alexis.entities.MessageChannelData;
 public interface MessageChannelRepository extends EntityRepository<MessageChannelData, Long> {
 
     @Modifying
-    @Query("UPDATE MessageChannelData AS c SET c.cleverbot_state = ?1 WHERE g.id = ?2")
+    @Query("UPDATE MessageChannelData AS c SET c.cleverState = ?1 WHERE g.id = ?2")
     int updateCleverState(final String locale, final long id);
 }

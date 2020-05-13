@@ -19,38 +19,57 @@ package org.elypia.alexis.discord.messengers;
 import com.google.cloud.translate.Translation;
 import net.dv8tion.jda.api.*;
 import net.dv8tion.jda.api.entities.Message;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.elypia.alexis.config.TranslationConfig;
 import org.elypia.alexis.discord.utils.DiscordUtils;
+import org.elypia.alexis.i18n.AlexisMessages;
 import org.elypia.alexis.models.TranslationModel;
 import org.elypia.comcord.api.DiscordMessenger;
 import org.elypia.commandler.event.ActionEvent;
+import org.slf4j.*;
 
-import javax.inject.*;
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 
 /**
  * @author seth@elypia.org (Seth Falco)
  */
-@Singleton
+@ApplicationScoped
 public class TranslationMessenger implements DiscordMessenger<TranslationModel> {
 
+    /** Logging with slf4j. */
+    private static final Logger logger = LoggerFactory.getLogger(TranslationMessenger.class);
+
+    /** Link to Google Translate */
     private static final String GOOGLE_TRANSLATE = "https://translate.google.com/";
 
+    /** Format for the field titles for source and target string. */
+    private static final String FIELD_TITLE_FORMAT = "%s (%s)";
+
+    /** Configuration for the translation settings. */
     private final TranslationConfig translationConfig;
 
+    private final AlexisMessages messages;
+
     @Inject
-    public TranslationMessenger(final TranslationConfig translationConfig) {
+    public TranslationMessenger(final TranslationConfig translationConfig, AlexisMessages messages) {
         this.translationConfig = translationConfig;
+        this.messages = messages;
+
+        if (translationConfig.getAttributionUrl() == null)
+            logger.warn("No attribution image set in the configuration. This may be a breach of the attribution guidelines, please see: https://cloud.google.com/translate/attribution");
     }
 
     @Override
     public Message buildMessage(ActionEvent<?, Message> event, TranslationModel output) {
         Translation translation = output.getTranslation();
         String builder =
-            "Source (" + translation.getSourceLanguage() + ")\n" +
+            String.format(FIELD_TITLE_FORMAT, messages.translateSource(), translation.getSourceLanguage()) + "\n" +
             output.getSourceText() + "\n\n" +
-            "Target (" + output.getTargetLanguage().getCode() + ")\n" +
+            String.format(FIELD_TITLE_FORMAT, messages.translateTarget(), output.getTargetLanguage().getCode()) + "\n" +
             translation.getTranslatedText() + "\n\n" +
             GOOGLE_TRANSLATE;
+
         return new MessageBuilder(builder).build();
     }
 
@@ -58,8 +77,12 @@ public class TranslationMessenger implements DiscordMessenger<TranslationModel> 
     public Message buildEmbed(ActionEvent<?, Message> event, TranslationModel output) {
         EmbedBuilder builder = DiscordUtils.newEmbed(event);
         Translation translation = output.getTranslation();
-        builder.addField("Source (" + translation.getSourceLanguage() + ")", output.getSourceText(), false);
-        builder.addField("Target (" + output.getTargetLanguage().getCode() + ")", translation.getTranslatedText(), false);
+
+        String sourceFieldTitle = String.format(FIELD_TITLE_FORMAT, messages.translateSource(), translation.getSourceLanguage());
+        builder.addField(sourceFieldTitle, output.getSourceText(), false);
+
+        String targetFieldTitle = String.format(FIELD_TITLE_FORMAT, messages.translateTarget(), output.getTargetLanguage().getCode());
+        builder.addField(targetFieldTitle, StringEscapeUtils.unescapeHtml(translation.getTranslatedText()), false);
 
         String attribution = translationConfig.getAttributionUrl();
 
