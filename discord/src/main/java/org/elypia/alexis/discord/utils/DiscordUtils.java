@@ -66,6 +66,13 @@ public final class DiscordUtils {
 		return newEmbed((Guild)null);
 	}
 
+	public static EmbedBuilder newEmbed(Message message) {
+		if (message.isFromGuild())
+			return newEmbed(message.getGuild());
+
+		return new EmbedBuilder();
+	}
+
 	/**
 	 * Returns a new embed, colors the embed in the same color as the bots
 	 * role if guild is non-null and the bot has a colored role.

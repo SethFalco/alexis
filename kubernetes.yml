@@ -5,17 +5,15 @@
 # metadata:
 #   name: alexis-config
 # stringData:
-#   GOOGLE_ENABLED: true
+#   DATABASE_URL:
+#   DATABASE_USERNAME:
+#   DATABASE_PASSWORD:
 #   OSU_API_KEY:
 #   STEAM_API_KEY:
 #   CLEVERBOT_API_KEY:
-#   DATABASE_ENABLED:
-#   DATABASE_PASSWORD:
-#   DISCORD_TOKEN:
-#   DISCORD_GUILD:
-#   DISCORD_PREFIXES:
 #   TWITCH_API_KEY:
 #   TWITCH_API_SECRET:
+#   DISCORD_TOKEN:
 
 apiVersion: apps/v1
 kind: Deployment

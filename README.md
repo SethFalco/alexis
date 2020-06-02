@@ -1,4 +1,3 @@
-![Alexis Banner]
 # Alexis [![Matrix]][matrix-community] [![Discord]][discord-guild] [![i18n-badge]][i18n] [![Build]][gitlab] [![Coverage]][gitlab] [![Donate]][elypia-donate]
 ## About Me
 I'm a general purpose Discord bot with various functionality and integrations with many 
@@ -9,8 +8,8 @@ You can get even more information about me on my character profile on [Notebook.
 
 ## For Developers
 ### Self-Hosting
-I recommend you use me through any of the invite links in this repository so you get,
-the me managed and served by Elypia, however if you're a developer or have the technical 
+I recommend you use me through my invite link in this repository so you get,
+the me, managed and served by Elypia, however if you're a developer or have the technical 
 knowledge, you're always welcome to build and self-host me however you want, or clone me 
 so you can modify my behaviour.
 
@@ -42,9 +41,8 @@ are reserved by Elypia CIC.**
 [TL;DR]: https://tldrlegal.com/license/apache-license-2.0-(apache-2.0) "TL;DR of Apache 2.0"
 
 [Matrix]: https://img.shields.io/matrix/elypia-general:matrix.org?logo=matrix "Matrix Shield"
-[Alexis Banner]: ./assets/banner.png "Banner for Alexis"
 [Discord]: https://discord.com/api/guilds/184657525990359041/widget.png "Discord Shield"
 [i18n-badge]: https://i18n.elypia.org/widgets/alexis/-/svg-badge.svg "Weblate Translation Badge"
 [Build]: https://gitlab.com/Elypia/alexis/badges/master/pipeline.svg "GitLab Build Shield"
 [Coverage]: https://gitlab.com/Elypia/alexis/badges/master/coverage.svg "GitLab Coverage Shield"
-[Donate]: https://img.shields.io/badge/Elypia-Donate-blueviolet "Donate Shield"
+[Donate]: https://img.shields.io/badge/donate-elypia-blueviolet "Donate Shield"

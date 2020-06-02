@@ -21,6 +21,7 @@ import net.dv8tion.jda.api.entities.Message;
 import org.elypia.alexis.discord.utils.DiscordUtils;
 import org.elypia.alexis.i18n.AlexisMessages;
 import org.elypia.comcord.api.DiscordMessenger;
+import org.elypia.commandler.annotation.stereotypes.MessageProvider;
 import org.elypia.commandler.event.ActionEvent;
 import org.elypia.elypiai.steam.SteamGame;
 
@@ -30,6 +31,7 @@ import java.util.StringJoiner;
 /**
  * @author seth@elypia.org (Seth Falco)
  */
+@MessageProvider(provides = Message.class, value = SteamGame.class)
 public class GameMessenger implements DiscordMessenger<SteamGame> {
 
     private final AlexisMessages messages;

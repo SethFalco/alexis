@@ -16,52 +16,64 @@
 
 package org.elypia.alexis.discord.controllers;
 
-import net.dv8tion.jda.api.*;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
-import net.dv8tion.jda.api.events.Event;
-import net.dv8tion.jda.api.events.message.GenericMessageEvent;
-import org.elypia.alexis.discord.utils.DiscordUtils;
+import org.elypia.alexis.persistence.entities.GuildData;
+import org.elypia.alexis.persistence.repositories.GuildRepository;
+import org.elypia.alexis.i18n.AlexisMessages;
 import org.elypia.comcord.constraints.*;
+import org.elypia.commandler.annotation.Param;
+import org.elypia.commandler.annotation.command.StandardCommand;
+import org.elypia.commandler.annotation.stereotypes.CommandController;
 import org.elypia.commandler.api.Controller;
-import org.elypia.commandler.event.ActionEvent;
 
-import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import javax.validation.constraints.*;
-import java.util.Collection;
 
 /**
  * @author seth@elypia.org (Seth Falco)
  */
-@ApplicationScoped
+@CommandController
+@StandardCommand
 public class GuildController implements Controller {
 
-    public MessageEmbed info(Guild guild) {
-        EmbedBuilder builder = DiscordUtils.newEmbed(guild);
-        builder.setThumbnail(guild.getIconUrl());
-        builder.setTitle(guild.getName());
+    private final GuildRepository guildRepo;
+    private final AlexisMessages messages;
 
-        Member owner = guild.getOwner();
-        String ownerValue = (owner != null) ? owner.getUser().getAsTag() : "Deleted/Banned";
-        builder.addField("Guild Owner", ownerValue, true);
-
-        Collection<Member> members = guild.getMembers();
-        long bots = members.stream().map(Member::getUser).filter(User::isBot).count();
-        String memberField = String.format("%,d (%,d)", members.size() - bots, bots);
-        builder.addField("Total Users (Bots)", memberField, true);
-
-        return builder.build();
+    @Inject
+    public GuildController(GuildRepository guildRepo, AlexisMessages messages) {
+        this.guildRepo = guildRepo;
+        this.messages = messages;
     }
 
-    public void prune(
-        @Channels(ChannelType.TEXT) @Permissions(Permission.MESSAGE_MANAGE) ActionEvent<Event, Message> event,
-        @Min(2) @Max(100) int count,
-        TextChannel channel
-    ) {
-        GenericMessageEvent source = (GenericMessageEvent)event.getRequest().getSource();
+    @StandardCommand
+    public Guild info(@Param(value = "${source.guild}", displayAs = "current") Guild guild) {
+        return guild;
+    }
 
-        channel.getHistoryBefore(source.getMessageIdLong(), count).queue(history -> {
-            channel.deleteMessages(history.getRetrievedHistory()).queue(command ->
-                source.getChannel().deleteMessageById(source.getMessageId()).queue()
+    // TODO: Make a way to unset things?
+    @StandardCommand
+    public String setDescription(@Channels(ChannelType.TEXT) Guild guild, @Param @NotBlank String description) {
+        GuildData data = guildRepo.findBy(guild.getIdLong());
+        String oldDescription = data.getDescription();
+
+        if (description.equals(oldDescription))
+            return messages.guildSameDescriptionAsBefore();
+
+        if (oldDescription == null) {
+            data.setDescription(description);
+            return messages.guildSetNewDescription(description);
+        }
+
+        data.setDescription(description);
+        return messages.guildChangeDescription(description);
+    }
+
+    @StandardCommand
+    public void prune(@Channels(ChannelType.TEXT) @Permissions(Permission.MESSAGE_MANAGE) Message message, @Param @Min(2) @Max(100) int count, @Param(value = "${source.textChannel}", displayAs = "current") TextChannel channel) {
+        channel.getHistoryBefore(message.getIdLong(), count).queue((history) -> {
+            channel.deleteMessages(history.getRetrievedHistory()).queue((command) ->
+                message.getChannel().deleteMessageById(message.getIdLong()).queue()
             );
         });
     }

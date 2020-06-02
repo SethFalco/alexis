@@ -14,4 +14,4 @@ COPY ./build/libs/alexis-*.jar /home/elypia/alexis.jar
 # On startup, execute the jar.
 ENTRYPOINT ["java", "-jar", "alexis.jar"]
 
-# Check the README.md to find our what else you'll want to do with the resulting image.
+# Check the README.md to find our how to configure the image.

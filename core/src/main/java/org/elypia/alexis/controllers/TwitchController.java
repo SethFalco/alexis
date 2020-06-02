@@ -16,40 +16,52 @@
 
 package org.elypia.alexis.controllers;
 
-import com.github.twitch4j.*;
 import com.github.twitch4j.helix.domain.*;
-import org.elypia.alexis.config.TwitchConfig;
+import org.elypia.alexis.i18n.AlexisMessages;
+import org.elypia.alexis.services.TwitchService;
+import org.elypia.commandler.annotation.Param;
+import org.elypia.commandler.annotation.command.StandardCommand;
+import org.elypia.commandler.annotation.stereotypes.CommandController;
 import org.elypia.commandler.api.Controller;
-import org.hibernate.validator.constraints.Length;
 import org.slf4j.*;
 
-import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import java.util.List;
+import javax.validation.constraints.Size;
+import java.util.Optional;
 
 /**
  * @author seth@elypia.org (Seth Falco)
  */
-@ApplicationScoped
+@CommandController
+@StandardCommand
 public class TwitchController implements Controller {
 
+    /** Logging with slf4j. */
     private static final Logger logger = LoggerFactory.getLogger(TwitchController.class);
 
-    private final TwitchClient twitch;
+    /** The minimum length a Twitch username can be. (We check this to avoid redundant requests.) */
+    private static final int MIN_NAME_LENGTH = 4;
+
+    /** The maximum length a Twitch username can be. (We check this to avoid redundant requests.) */
+    private static final int MAX_NAME_LENGTH = 25;
+
+    private final TwitchService twitchService;
+    private final AlexisMessages messages;
 
     @Inject
-    public TwitchController(final TwitchConfig config) {
-        this.twitch = TwitchClientBuilder.builder()
-            .withEnableHelix(true)
-            .withClientId(config.getClientId())
-            .withClientSecret(config.getClientSecret())
-            .build();
-
-        logger.info("Succesfully authenticated to the Twitch API.");
+    public TwitchController(final TwitchService twitchService, final AlexisMessages messages) {
+        this.twitchService = twitchService;
+        this.messages = messages;
+        logger.info("Created instance of {}.", TwitchController.class);
     }
 
-    public User info(@Length(min = 4, max = 25) String username) {
-        UserList users = twitch.getHelix().getUsers(null, null, List.of(username)).execute();
-        return users.getUsers().get(0);
+    @StandardCommand
+    public Object getTwitchUser(@Param @Size(min = MIN_NAME_LENGTH, max = MAX_NAME_LENGTH) String username) {
+        Optional<User> optUser = twitchService.getUser(username);
+
+        if (optUser.isPresent())
+            return optUser.get();
+
+        return messages.twitchUserNotFound();
     }
 }

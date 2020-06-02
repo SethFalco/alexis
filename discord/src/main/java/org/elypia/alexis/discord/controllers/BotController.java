@@ -18,17 +18,21 @@ package org.elypia.alexis.discord.controllers;
 
 import net.dv8tion.jda.api.*;
 import net.dv8tion.jda.api.entities.*;
-import net.dv8tion.jda.api.events.Event;
 import net.dv8tion.jda.api.utils.MarkdownUtil;
-import org.elypia.alexis.discord.utils.DiscordUtils;
+import org.elypia.alexis.configuration.AuthorConfig;
+import org.elypia.alexis.discord.models.BotInfoModel;
+import org.elypia.alexis.discord.utils.*;
 import org.elypia.alexis.i18n.AlexisMessages;
-import org.elypia.comcord.*;
 import org.elypia.comcord.constraints.*;
+import org.elypia.commandler.annotation.*;
+import org.elypia.commandler.annotation.command.StandardCommand;
+import org.elypia.commandler.annotation.stereotypes.CommandController;
 import org.elypia.commandler.api.Controller;
-import org.elypia.commandler.event.ActionEvent;
+import org.elypia.commandler.newb.*;
+import org.elypia.commandler.producers.MessageSender;
+import org.jboss.weld.context.bound.BoundRequestContext;
 import org.slf4j.*;
 
-import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.validation.constraints.NotBlank;
 import java.time.*;
@@ -38,7 +42,8 @@ import java.util.stream.Collectors;
 /**
  * @author seth@elypia.org (Seth Falco)
  */
-@ApplicationScoped
+@CommandController
+@StandardCommand
 public class BotController implements Controller {
 
 	private static final Logger logger = LoggerFactory.getLogger(BotController.class);
@@ -52,120 +57,166 @@ public class BotController implements Controller {
 	 */
 	private static final OffsetDateTime BOT_TIME = OffsetDateTime.of(2016, 7, 19, 1, 52, 0, 0, ZoneOffset.ofHours(0));
 
-	private static final String AUTHOR_VALUE = MarkdownUtil.maskedLink("Elypia", "https://elypia.org/");
-
-	private final DiscordConfig config;
 	private final AlexisMessages messages;
+	private final AuthorConfig authorConfig;
+	private final MessageSender sender;
 
 	@Inject
-	public BotController(final DiscordConfig config, final AlexisMessages messages) {
-		this.config = config;
+	public BotController(AlexisMessages messages, AuthorConfig authorConfig, MessageSender sender) {
 		this.messages = messages;
+		this.authorConfig = authorConfig;
+		this.sender = sender;
 	}
 
+	@Static
+	@StandardCommand
 	public String ping() {
 		return messages.pong();
 	}
 
+	@Static
+	@Command(hidden = true)
+	@StandardCommand
 	public String pong() {
 		return messages.ping();
 	}
 
-	public MessageEmbed info(ActionEvent<Event, Message> event) {
-		Event source = event.getRequest().getSource();
-		EmbedBuilder builder = DiscordUtils.newEmbed(event);
-		JDA jda = source.getJDA();
+	/**
+	 * @param message The message from the request context.
+	 */
+	@Default
+	@StandardCommand
+	public void getBotInfo(Message message) {
+		JDA jda = message.getJDA();
 		User self = jda.getSelfUser();
+		String inviteUrl = jda.getInviteUrl();
+		String avatarUrl = self.getAvatarUrl();
 
-		builder.setTitle(self.getName());
-		builder.setThumbnail(self.getAvatarUrl());
+		BotInfoModel model = new BotInfoModel()
+			.setAuthorName(authorConfig.getName())
+			.setAuthorUrl(authorConfig.getUrl())
+			.setAuthorLogo(authorConfig.getIconUrl())
+			.setBotName(self.getName())
+			.setBotInviteUrl(inviteUrl)
+			.setBotAvatarUrl(avatarUrl)
+			.setBotId(self.getIdLong());
 
-		ApplicationInfo info = source.getJDA().retrieveApplicationInfo().complete();
-		builder.setDescription(info.getDescription());
+		var contextCopy = AsyncUtils.copyContext();
 
-		builder.addField(messages.botAuthor(), AUTHOR_VALUE, true);
-		builder.addField(messages.botTotalGuilds(), String.format("%,d", jda.getGuilds().size()), true);
+		jda.retrieveApplicationInfo().queue((info) -> {
+			var context = AsyncUtils.applyContext(contextCopy);
 
-		Collection<User> users = jda.getUsers();
-		long bots = users.stream().filter(User::isBot).count();
-		String userField = String.format("%,d (%,d)", users.size(), bots);
-		builder.addField(messages.botTotalUsers(), userField, true);
+			model.setBotDescription(info.getDescription());
+			model.setTotalGuilds(jda.getGuilds().size());
 
-		Long guildId = config.getSupportGuildId();
+			Collection<User> users = jda.getUsers();
+			model.setTotalUsers(users.size());
+			long bots = users.stream().filter(User::isBot).count();
+			model.setTotalBots((int)bots);
 
-		if (guildId == null) {
-			logger.warn("Support guild was not specified in this instance, guild info and invite will be omitted.");
-			return builder.build();
-		}
+			Long supportGuildId = authorConfig.getSupportGuildId();
 
-		Guild guild = jda.getGuildById(config.getSupportGuildId());
+			if (message.isFromGuild() && message.getGuild().getIdLong() == supportGuildId)
+				model.setSupportGuildText(messages.botUserInSupportGuildAlready());
+			else if (supportGuildId == null)
+				logger.warn("Support guild was not specified in this instance, guild info and invite will be omitted.");
+			else {
+				getBotInfoWithInviteLink(context, model, jda, supportGuildId);
+				return;
+			}
+
+			sender.send(model);
+			context.deactivate();
+		});
+	}
+
+	private void getBotInfoWithInviteLink(BoundRequestContext context, BotInfoModel model, JDA jda, long supportGuildId) {
+		Guild guild = jda.getGuildById(supportGuildId);
 
 		if (guild == null) {
 			logger.warn("The guild specified in discord.support-guild-id was not found, not displaying guild info.");
-			return builder.build();
-		}
-
-		Member selfMember = guild.getSelfMember();
-		List<Invite> invites = null;
-
-		if (selfMember.hasPermission(Permission.MANAGE_SERVER)) {
-			invites = guild.retrieveInvites().complete();
+			sender.send(model);
+			context.deactivate();
 		} else {
-			logger.warn("The bot doesn't have the permission to get all server invites.");
+			Member selfMember = guild.getSelfMember();
 
-			List<GuildChannel> channels = guild.getChannels()
-				.stream()
-				.filter((channel) -> selfMember.hasPermission(channel, Permission.MANAGE_CHANNEL))
-				.collect(Collectors.toList());
-
-			if (!channels.isEmpty()) {
-				GuildChannel channel = channels.stream().max(Comparator.comparingInt((x) -> x.getMembers().size())).get();
-				invites = channel.retrieveInvites().complete();
+			if (selfMember.hasPermission(Permission.MANAGE_SERVER)) {
+				guild.retrieveInvites().queue((invites) -> {
+					addInviteLinkToEmbed(context, model, invites);
+				});
 			} else {
-				logger.warn("The bot doesn't have the permission in any of the channels to fetch invite links.");
+				logger.warn("The bot doesn't have the permission to get all server invites.");
 
-				List<GuildChannel> channels2 = guild.getChannels()
+				List<GuildChannel> channels = guild.getChannels()
 					.stream()
-					.filter((channel) -> selfMember.hasPermission(channel, Permission.CREATE_INSTANT_INVITE))
+					.filter((channel) -> selfMember.hasPermission(channel, Permission.MANAGE_CHANNEL))
 					.collect(Collectors.toList());
 
-				if (!channels2.isEmpty()) {
-					GuildChannel channel = channels2.stream().max(Comparator.comparingInt((x) -> x.getMembers().size())).get();
-					invites = List.of(channel.createInvite().complete());
+				if (!channels.isEmpty()) {
+					GuildChannel channel = channels.stream().max(Comparator.comparingInt((x) -> x.getMembers().size())).get();
+					channel.retrieveInvites().queue((invites) -> {
+						addInviteLinkToEmbed(context, model, invites);
+					});
 				} else {
-					logger.warn("The bot doesn't have the permission in any of the channels to create invite links.");
+					logger.warn("The bot doesn't have the permission in any of the channels to fetch invite links.");
+
+					List<GuildChannel> channels2 = guild.getChannels()
+						.stream()
+						.filter((channel) -> selfMember.hasPermission(channel, Permission.CREATE_INSTANT_INVITE))
+						.collect(Collectors.toList());
+
+					if (!channels2.isEmpty()) {
+						GuildChannel channel = channels2.stream().max(Comparator.comparingInt((x) -> x.getMembers().size())).get();
+						channel.createInvite().queue((invite) -> {
+							List<Invite> invites = List.of(invite);
+							addInviteLinkToEmbed(context, model, invites);
+						});
+					} else {
+						logger.warn("The bot doesn't have the permission in any of the channels to create invite links.");
+						sender.send(model);
+						context.deactivate();
+					}
 				}
 			}
 		}
-
-		if (invites == null || invites.isEmpty()) {
-			logger.warn("There are no invite links in the guild or channels, omitting guild info until invite exists.");
-			return builder.build();
-		}
-
-		Optional<Invite> invite = invites.stream().max(Comparator.comparingInt(Invite::getUses));
-		invite.ifPresent((o) -> builder.addField(messages.botSupportGuild(), MarkdownUtil.maskedLink(guild.getName(), o.getUrl()), true));
-
-		return builder.build();
 	}
 
-	public String say(@Everyone ActionEvent<Event, Message> event, @NotBlank String body) {
-		Event source = event.getRequest().getSource();
-		Guild guild = EventUtils.getGuild(source);
+	public void addInviteLinkToEmbed(BoundRequestContext context, BotInfoModel model, List<Invite> invites) {
+		Optional<Invite> optInvite = invites.stream().max(Comparator.comparingInt(Invite::getUses));
 
-		if (source != null) {
-			TextChannel channel = EventUtils.getTextChannel(source);
-			Member self = guild.getSelfMember();
+		if (optInvite.isEmpty())
+			logger.warn("There are no invite links in the guild or channels, omitting guild info until invite exists.");
+		else {
+			Invite invite = optInvite.get();
+			Invite.Guild guild = invite.getGuild();
 
-			if (self.hasPermission(channel, Permission.MESSAGE_MANAGE))
-				EventUtils.getMessage(source).delete().queue();
+			if (guild == null)
+				logger.warn("This shouldn't be possible, but the invite created for the support guild, is somehow not associated with a guild.");
+			else
+				model.setSupportGuildText(MarkdownUtil.maskedLink(invite.getGuild().getName(), invite.getUrl()));
+		}
+
+		sender.send(model);
+		context.deactivate();
+	}
+
+	@Static
+	@StandardCommand
+	public String say(@Everyone Message message, @Param @NotBlank String body) {
+		if (message.isFromGuild()) {
+			Member self = message.getGuild().getSelfMember();
+
+			if (self.hasPermission(message.getTextChannel(), Permission.MESSAGE_MANAGE))
+				message.delete().queue();
 		}
 
 		return body;
 	}
 
-	public EmbedBuilder invites(@Channels(ChannelType.TEXT) ActionEvent<Event, Message> event) {
-		Guild guild = EventUtils.getGuild(event.getRequest().getSource());
+	@Static
+	@StandardCommand
+	public EmbedBuilder invites(@Channels(ChannelType.TEXT) Message message) {
+		Guild guild = message.getGuild();
 		Collection<Member> bots = guild.getMembers();
 
 		Collection<User> users = bots.stream()

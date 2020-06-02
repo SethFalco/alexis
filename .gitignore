@@ -42,9 +42,9 @@ gradle-app.setting
 # Cache of project
 .gradletasknamecache
 
-##########
-# Alexis #
-##########
+###########
+# Project #
+###########
 
 # Configuration
 /config/**

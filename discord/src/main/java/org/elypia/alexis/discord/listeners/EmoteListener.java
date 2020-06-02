@@ -20,8 +20,9 @@ import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.apache.commons.collections4.Bag;
-import org.elypia.alexis.entities.*;
-import org.elypia.alexis.repositories.*;
+import org.elypia.alexis.persistence.enums.Feature;
+import org.elypia.alexis.persistence.entities.*;
+import org.elypia.alexis.persistence.repositories.*;
 import org.slf4j.*;
 
 import javax.inject.*;
@@ -37,25 +38,38 @@ public class EmoteListener extends ListenerAdapter {
 
     private static final Logger logger = LoggerFactory.getLogger(EmoteListener.class);
 
+    private final GuildRepository guildRepo;
     private final EmoteRepository emoteRepo;
     private final EmoteUsageRepository emoteUsageRepo;
 
     @Inject
-    public EmoteListener(EmoteRepository emoteRepo, EmoteUsageRepository emoteUsageRepo) {
+    public EmoteListener(GuildRepository guildRepo, EmoteRepository emoteRepo, EmoteUsageRepository emoteUsageRepo) {
+        this.guildRepo = Objects.requireNonNull(guildRepo);
         this.emoteRepo = Objects.requireNonNull(emoteRepo);
         this.emoteUsageRepo = Objects.requireNonNull(emoteUsageRepo);
     }
 
-    /**
-     * // TODO: Let users decide if this is enabled or not, and if it should track guild emotes only, or all mutual emotes.
-     * @param event
-     */
     @Override
     public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
+        if (event.getAuthor().isBot())
+            return;
+
         Message message = event.getMessage();
         List<Emote> emotes = message.getEmotes();
+
+        if (emotes.isEmpty())
+            return;
+
+        Guild eventGuild = event.getGuild();
+        long eventGuildId = eventGuild.getIdLong();
+        GuildData guildData = guildRepo.findBy(eventGuildId);
+        Map<Feature, GuildFeature> features = guildData.getFeatures();
+        GuildFeature feature = features.get(Feature.COUNT_GUILD_EMOTE_USAGE);
+
+        if (feature == null || !feature.isEnabled())
+            return;
+
         Bag<Emote> emotesBag = message.getEmotesBag();
-        long eventGuildId = event.getGuild().getIdLong();
 
         for (Emote emote : emotes) {
             Guild guild = emote.getGuild();
@@ -68,10 +82,10 @@ public class EmoteListener extends ListenerAdapter {
 
             logger.debug("Inserting emote and usage to database with ID: {} and Count: {}", emoteId, count);
 
-            EmoteData emoteData = new EmoteData(emoteId, guild.getIdLong());
+            EmoteData emoteData = new EmoteData(emoteId, guildData);
             emoteRepo.save(emoteData);
 
-            EmoteUsage emoteUsage = new EmoteUsage(emoteId, eventGuildId, count);
+            EmoteUsage emoteUsage = new EmoteUsage(emoteData, guildData, count);
             emoteUsageRepo.save(emoteUsage);
         }
     }

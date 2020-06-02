@@ -16,13 +16,17 @@
 
 package org.elypia.alexis.services.youtube;
 
+import com.google.api.client.googleapis.batch.BatchRequest;
+import com.google.api.client.googleapis.batch.json.JsonBatchCallback;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
+import com.google.api.client.googleapis.json.GoogleJsonError;
+import com.google.api.client.http.HttpHeaders;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.youtube.*;
 import com.google.api.services.youtube.model.*;
 import com.google.auth.http.HttpCredentialsAdapter;
 import com.google.auth.oauth2.GoogleCredentials;
-import org.elypia.alexis.config.AppConfig;
+import org.elypia.alexis.configuration.AppConfig;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -58,48 +62,61 @@ public class YouTubeService {
         channelThumbnailCache = new HashMap<>();
     }
 
+    public SubscriptionListResponse getChannelSubscriptions(String channelId) throws IOException {
+        return getChannelSubscriptions(channelId, 50);
+    }
+
+    /**
+     * @param channelId The channel to get subscriptions from.
+     * @param limit The maximum number of subscriptions to get.
+     * @return A list of subscriptions from the API.
+     * @throws IOException
+     */
+    public SubscriptionListResponse getChannelSubscriptions(String channelId, long limit) throws IOException {
+        var request = youtube.subscriptions().list(List.of("subscriberSnippet", "snippet"));
+        request.setChannelId(channelId);
+        request.setMaxResults(limit);
+
+        return request.execute();
+    }
+
     public Optional<SearchResult> getSearchResult(String query, ResourceType type) throws IOException {
         List<SearchResult> results = getSearchResults(query, type, 1);
         return results.isEmpty() ? Optional.empty() : Optional.of(results.get(0));
     }
 
     public List<SearchResult> getSearchResults(String query, ResourceType type, long limit) throws IOException {
-        YouTube.Search.List search = youtube.search().list("snippet");
+        YouTube.Search.List search = youtube.search().list(List.of("snippet"));
         search.setQ(query);
         search.setMaxResults(limit);
-        search.setType(type.getName());
+        search.setType(List.of(type.getName()));
 
         SearchListResponse response = search.execute();
         return response.getItems();
     }
 
-    public String getChannelThumbnail(String id) throws IOException {
-        return getChannelThumbnail(id, false);
+    public String getChannelThumbnail(String channelId) throws IOException {
+        if (channelThumbnailCache.containsKey(channelId))
+            return channelThumbnailCache.get(channelId);
+
+        var list = youtube.channels().list(List.of("snippet"));
+        list.setMaxResults(1L);
+        list.setId(List.of(channelId));
+
+        ChannelListResponse result = list.execute();
+        String url = result.getItems().get(0).getSnippet().getThumbnails().getHigh().getUrl();
+
+        channelThumbnailCache.put(channelId, url);
+        return url;
     }
 
-    public String getChannelThumbnail(final String id, boolean video) throws IOException {
-        if (channelThumbnailCache.containsKey(id))
-            return channelThumbnailCache.get(id);
+    public String getChannelThumbnailFromVideoId(String videoId) throws IOException {
+        Optional<SearchResult> result = getSearchResult(videoId, ResourceType.VIDEO);
 
-        String channelId = id;
+        if (result.isEmpty())
+            return null;
 
-        if (video) {
-            Optional<SearchResult> result = getSearchResult(id, ResourceType.VIDEO);
-
-            if (result.isPresent())
-                channelId = result.get().getSnippet().getChannelId();
-            else
-                return null;
-        }
-
-        Optional<SearchResult> result = getSearchResult(channelId, ResourceType.CHANNEL);
-
-        if (result.isPresent()) {
-            String url = result.get().getSnippet().getThumbnails().getHigh().getUrl();
-            channelThumbnailCache.put(id, url);
-            return url;
-        }
-
-        return null;
+        String channelId = result.get().getSnippet().getChannelId();
+        return getChannelThumbnail(channelId);
     }
 }

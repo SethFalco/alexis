@@ -17,10 +17,10 @@
 package org.elypia.alexis.discord.binders;
 
 import net.dv8tion.jda.api.events.Event;
-import org.elypia.commandler.Request;
+import org.elypia.commandler.annotation.stereotypes.Binder;
 import org.elypia.commandler.api.HeaderBinder;
+import org.elypia.commandler.event.Request;
 
-import javax.enterprise.context.ApplicationScoped;
 import java.util.*;
 
 /**
@@ -29,7 +29,7 @@ import java.util.*;
  *
  * @author seth@elypia.org (Seth Falco)
  */
-@ApplicationScoped
+@Binder
 public class MentionBinder implements HeaderBinder {
 
     @Override

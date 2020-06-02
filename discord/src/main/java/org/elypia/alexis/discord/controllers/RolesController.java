@@ -17,14 +17,16 @@
 package org.elypia.alexis.discord.controllers;
 
 import net.dv8tion.jda.api.entities.*;
-import org.elypia.alexis.entities.AssignableRole;
+import org.elypia.alexis.persistence.entities.AssignableRole;
+import org.elypia.commandler.annotation.command.StandardCommand;
+import org.elypia.commandler.annotation.stereotypes.CommandController;
 import org.elypia.commandler.api.Controller;
 
-import javax.enterprise.context.ApplicationScoped;
 import java.util.*;
 import java.util.stream.Collectors;
 
-@ApplicationScoped
+@CommandController
+@StandardCommand
 public class RolesController implements Controller {
 
 //    public String getSelfAssignableRoles(@Channels(ChannelType.TEXT) ActionEvent<Event, Message> event) {

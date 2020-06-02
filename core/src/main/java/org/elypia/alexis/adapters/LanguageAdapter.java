@@ -17,20 +17,18 @@
 package org.elypia.alexis.adapters;
 
 import com.google.cloud.translate.Language;
-import org.elypia.alexis.services.TranslateService;
-import org.elypia.commandler.annotation.ParamAdapter;
+import org.elypia.alexis.services.translate.TranslateService;
+import org.elypia.commandler.annotation.stereotypes.ParamAdapter;
 import org.elypia.commandler.api.Adapter;
 import org.elypia.commandler.event.ActionEvent;
 import org.elypia.commandler.metadata.MetaParam;
 
-import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.util.Objects;
 
 /**
  * @author seth@elypia.org (Seth Falco)
  */
-@ApplicationScoped
 @ParamAdapter(Language.class)
 public class LanguageAdapter implements Adapter<Language> {
 
@@ -45,7 +43,7 @@ public class LanguageAdapter implements Adapter<Language> {
     public Language adapt(String input, Class<? extends Language> type, MetaParam metaParam, ActionEvent<?, ?> event) {
         Objects.requireNonNull(input);
 
-        for (Language language : translateService.getSupportedLangauges()) {
+        for (Language language : translateService.getSupportedLanguages()) {
             if (language.getCode().equalsIgnoreCase(input) || language.getName().equalsIgnoreCase(input))
                 return language;
         }

@@ -17,19 +17,21 @@
 package org.elypia.alexis.discord.controllers;
 
 import net.dv8tion.jda.api.entities.User;
-import org.elypia.comcord.Scope;
-import org.elypia.comcord.annotations.Scoped;
+import org.elypia.commandler.annotation.*;
+import org.elypia.commandler.annotation.command.StandardCommand;
+import org.elypia.commandler.annotation.stereotypes.CommandController;
 import org.elypia.commandler.api.Controller;
-
-import javax.enterprise.context.ApplicationScoped;
 
 /**
  * @author seth@elypia.org (Seth Falco)
  */
-@ApplicationScoped
+@CommandController
+@StandardCommand
 public class UserController implements Controller {
 
-	public User info(@Scoped(inGuild = Scope.LOCAL, inPrivate = Scope.MUTUAL) User user) {
+	@Default
+	@StandardCommand
+	public User info(@Param(value = "${source.author}", displayAs = "you") User user) {
         return user;
 	}
 }

@@ -18,20 +18,23 @@ package org.elypia.alexis.discord.controllers;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
+import org.elypia.commandler.annotation.Param;
+import org.elypia.commandler.annotation.command.StandardCommand;
+import org.elypia.commandler.annotation.stereotypes.CommandController;
 import org.elypia.commandler.api.Controller;
 import org.elypia.elypiai.runescape.*;
-import org.hibernate.validator.constraints.Length;
 import org.slf4j.*;
 
-import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.validation.constraints.Size;
 import java.io.IOException;
 import java.util.*;
 
 /**
  * @author seth@elypia.org (Seth Falco)
  */
-@ApplicationScoped
+@CommandController
+@StandardCommand
 public class RuneScapeController implements Controller {
 
 	private static final Logger logger = LoggerFactory.getLogger(RuneScapeController.class);
@@ -43,15 +46,18 @@ public class RuneScapeController implements Controller {
 		this.runescape = new RuneScape();
 	}
 
+    @StandardCommand
 	public void status() {
 
 	}
 
-//	public void stats(@Length(min = 1, max = 12) String username) {
-//
-//	}
+    @StandardCommand
+	public void stats(@Param @Size(min = 1, max = 12) String username) {
 
-	public Object quests(@Length(min = 1, max = 12) String username) throws IOException {
+	}
+
+    @StandardCommand
+	public Object quests(@Param @Size(min = 1, max = 12) String username) throws IOException {
 		Optional<List<QuestStats>> optQuests = runescape.getQuestStatuses(username).complete();
 
 		if (optQuests.isEmpty())

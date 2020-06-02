@@ -37,7 +37,7 @@ public class JoinLeaveListener extends ListenerAdapter {
     private static final Logger logger = LoggerFactory.getLogger(JoinLeaveListener.class);
 
     /** The format to log the new total of guilds, users, and bots. */
-    private final static String GUILD_USERS_FORMAT = "%,d guilds | %,d users | %,d bots!";
+    private static final String GUILD_USERS_FORMAT = "%,d guilds | %,d users | %,d bots!";
 
     private final AlexisMessages messages;
 
@@ -64,7 +64,8 @@ public class JoinLeaveListener extends ListenerAdapter {
         String name = guild.getName();
         TextChannel channel = DiscordUtils.getWriteableChannel(guild);
 
-        logger.info("The guild {} just invited me! ({})", name, statsMessage(event.getJDA()));
+        if (logger.isInfoEnabled())
+            logger.info("The guild {} just invited me! ({})", name, statsMessage(event.getJDA()));
 
         if (channel == null) {
             logger.info("We were unable to talk in any channel in {};  no thank you message was delivered.", name);
@@ -77,7 +78,8 @@ public class JoinLeaveListener extends ListenerAdapter {
 
     @Override
     public void onGuildLeave(GuildLeaveEvent event) {
-        logger.info("The guild {} just kicked me! ({})", event.getGuild().getName(), statsMessage(event.getJDA()));
+        if (logger.isInfoEnabled())
+            logger.info("The guild {} just kicked me! ({})", event.getGuild().getName(), statsMessage(event.getJDA()));
     }
 
     /**
@@ -88,8 +90,7 @@ public class JoinLeaveListener extends ListenerAdapter {
         int guildCount = jda.getGuilds().size();
         List<User> users = jda.getUsers();
         long botCount = users.stream().filter(User::isBot).count();
-        long userCount = users.size() - botCount;
 
-        return String.format(GUILD_USERS_FORMAT, guildCount, userCount, botCount);
+        return String.format(GUILD_USERS_FORMAT, guildCount, users.size(), botCount);
     }
 }

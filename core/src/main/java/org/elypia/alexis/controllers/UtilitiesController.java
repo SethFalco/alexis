@@ -16,17 +16,31 @@
 
 package org.elypia.alexis.controllers;
 
+import org.elypia.alexis.i18n.AlexisMessages;
+import org.elypia.commandler.annotation.*;
+import org.elypia.commandler.annotation.command.StandardCommand;
+import org.elypia.commandler.annotation.stereotypes.CommandController;
 import org.elypia.commandler.api.Controller;
 
-import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 
 /**
  * @author seth@elypia.org (Seth Falco)
  */
-@ApplicationScoped
+@CommandController
+@StandardCommand
 public class UtilitiesController implements Controller {
 
-    public int count(String input) {
-        return input.length();
+    private final AlexisMessages messages;
+
+    @Inject
+    public UtilitiesController(final AlexisMessages messages) {
+        this.messages = messages;
+    }
+
+    @Static
+    @StandardCommand
+    public String count(@Param String input) {
+        return messages.utilitiesTotalCharacters(input.length());
     }
 }

@@ -21,6 +21,7 @@ import net.dv8tion.jda.api.entities.*;
 import org.elypia.alexis.discord.utils.DiscordUtils;
 import org.elypia.alexis.i18n.AlexisMessages;
 import org.elypia.comcord.api.DiscordMessenger;
+import org.elypia.commandler.annotation.stereotypes.MessageProvider;
 import org.elypia.commandler.event.ActionEvent;
 import org.elypia.commandler.utils.ChatUtils;
 import org.elypia.elypiai.urbandictionary.Definition;
@@ -30,6 +31,7 @@ import javax.inject.Inject;
 /**
  * @author seth@elypia.org (Seth Falco)
  */
+@MessageProvider(provides = Message.class, value = Definition.class)
 public class DefinitionMessenger implements DiscordMessenger<Definition> {
 
     private static final String THUMBS_UP = "\uD83D\uDC4D";
@@ -45,27 +47,28 @@ public class DefinitionMessenger implements DiscordMessenger<Definition> {
     }
 
     @Override
-    public Message buildMessage(ActionEvent<?, Message> event, Definition output) {
+    public Message buildMessage(ActionEvent<?, Message> event, Definition definition) {
         return null;
     }
 
     @Override
-    public Message buildEmbed(ActionEvent<?, Message> event, Definition toSend) {
+    public Message buildEmbed(ActionEvent<?, Message> event, Definition definition) {
         EmbedBuilder builder = DiscordUtils.newEmbed(event);
 
-        builder.setAuthor(toSend.getAuthor());
-        builder.setTitle(toSend.getWord(), toSend.getPermaLink());
+        builder.setAuthor(definition.getAuthor());
+        builder.setTitle(definition.getWord(), definition.getPermaLink());
+        builder.setFooter(messages.uniqueIdentifier(definition.getDefinitionId()));
 
-        String description = toSend.getDefinition();
+        String description = definition.getDefinitionBody();
         description = ChatUtils.truncateAndAppend(description, MessageEmbed.TEXT_MAX_LENGTH, "...");
         builder.setDescription(description);
 
-        String example = toSend.getExample();
+        String example = definition.getExample();
 
         if (example != null && !example.isBlank())
             builder.addField(messages.udExampleUsageOfWord(), example, false);
 
-        String descText = String.format(SCORES_FORMAT, toSend.getThumbsUp(), toSend.getThumbsDown());
+        String descText = String.format(SCORES_FORMAT, definition.getThumbsUp(), definition.getThumbsDown());
         builder.addField(messages.udThumbsUpThumbsDown(), descText, false);
 
         return new MessageBuilder(builder.build()).build();

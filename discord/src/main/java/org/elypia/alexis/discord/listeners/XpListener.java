@@ -20,11 +20,11 @@ import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.*;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import org.elypia.alexis.persistence.entities.*;
+import org.elypia.alexis.persistence.repositories.*;
 import org.elypia.alexis.discord.services.AuditService;
 import org.elypia.alexis.discord.utils.DiscordUtils;
-import org.elypia.alexis.entities.*;
 import org.elypia.alexis.i18n.AlexisMessages;
-import org.elypia.alexis.repositories.*;
 import org.elypia.alexis.utils.LevelUtils;
 import org.slf4j.*;
 
@@ -144,7 +144,7 @@ public class XpListener extends ListenerAdapter {
      */
     private void giveGuildXp(GenericMessageEvent event, GuildData guildData, int earned) {
         long oldXp = guildData.getXp();
-        double multipler = guildData.getMutlipler();
+        double multipler = guildData.getMultiplier();
 
         int oldLevel = LevelUtils.getLevelFromXp(oldXp, multipler);
         guildData.setXp(oldXp += earned);

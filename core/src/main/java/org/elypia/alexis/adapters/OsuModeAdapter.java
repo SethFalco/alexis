@@ -16,42 +16,50 @@
 
 package org.elypia.alexis.adapters;
 
-import org.elypia.commandler.adapters.EnumAdapter;
-import org.elypia.commandler.annotation.ParamAdapter;
+import org.elypia.commandler.annotation.stereotypes.ParamAdapter;
 import org.elypia.commandler.api.Adapter;
 import org.elypia.commandler.event.ActionEvent;
 import org.elypia.commandler.metadata.MetaParam;
 import org.elypia.elypiai.osu.data.OsuMode;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
+import java.util.Objects;
 
 /**
  * @author seth@elypia.org (Seth Falco)
  */
-@ApplicationScoped
 @ParamAdapter(OsuMode.class)
 public class OsuModeAdapter implements Adapter<OsuMode> {
 
-    private final EnumAdapter enumAdapter;
-
-    @Inject
-    public OsuModeAdapter(final EnumAdapter enumAdapter) {
-        this.enumAdapter = enumAdapter;
-    }
-
     @Override
     public OsuMode adapt(String input, Class<? extends OsuMode> type, MetaParam metaParam, ActionEvent<?, ?> event) {
-        Enum e = enumAdapter.adapt(input, type, metaParam, event);
+        Objects.requireNonNull(input);
 
-        if (e != null)
-            return (OsuMode)e;
-
-        for (OsuMode mode : OsuMode.values()) {
-            if (String.valueOf(mode.getId()).equals(input))
-                return mode;
+        switch (input.toLowerCase()) {
+            case "osu":
+            case "osu!":
+            case "0":
+            case "zero":
+                return OsuMode.OSU;
+            case "taiko":
+            case "1":
+            case "one":
+                return OsuMode.TAIKO;
+            case "catch the beat":
+            case "catch_the_beat":
+            case "catch":
+            case "ctb":
+            case "2":
+            case "two":
+                return OsuMode.CATCH_THE_BEAT;
+            case "osu mania":
+            case "mania":
+            case "piano":
+            case "keys":
+            case "3":
+            case "three":
+                return OsuMode.MANIA;
+            default:
+                return null;
         }
-
-        return null;
     }
 }

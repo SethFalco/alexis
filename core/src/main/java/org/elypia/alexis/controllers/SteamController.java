@@ -16,15 +16,17 @@
 
 package org.elypia.alexis.controllers;
 
-import org.elypia.alexis.config.ApiConfig;
+import org.elypia.alexis.configuration.ApiConfig;
 import org.elypia.alexis.i18n.AlexisMessages;
+import org.elypia.commandler.annotation.Param;
+import org.elypia.commandler.annotation.command.StandardCommand;
+import org.elypia.commandler.annotation.stereotypes.CommandController;
 import org.elypia.commandler.api.Controller;
 import org.elypia.elypiai.steam.*;
-import org.hibernate.validator.constraints.Length;
 import org.slf4j.*;
 
-import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.validation.constraints.Size;
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
@@ -32,19 +34,23 @@ import java.util.concurrent.ThreadLocalRandom;
 /**
  * @author seth@elypia.org (Seth Falco)
  */
-@ApplicationScoped
+@CommandController
+@StandardCommand
 public class SteamController implements Controller {
 
 	private static final Logger logger = LoggerFactory.getLogger(SteamController.class);
 
+	/** The minimum length a steam username can be. */
+	protected static final int MIN_NAME_LENGTH = 1;
+
 	/** The maxmimum length a Steam username can be. */
-	private static final int MAX_USERNAME_LENGTH = 32;
+	protected static final int MAX_NAME_LENGTH = 32;
 
 	/** Access the Steam API */
-	private final Steam steam;
+	protected final Steam steam;
 
 	/** Strings that Alexis will say. */
-	private final AlexisMessages messages;
+	protected final AlexisMessages messages;
 
 	@Inject
 	public SteamController(final ApiConfig config, final AlexisMessages messages) {
@@ -52,47 +58,44 @@ public class SteamController implements Controller {
 		this.messages = messages;
 	}
 
-	public Object getId(@Length(max = MAX_USERNAME_LENGTH) String username) throws IOException {
-		Optional<SteamSearch> optSearch = steam.getIdFromVanityUrl(username).complete();
-		String errorText = messages.steamUserNotFound();
-
-		if (optSearch.isEmpty())
-			return errorText;
-
-		SteamSearch search = optSearch.get();
+	@StandardCommand
+	public String getId(@Param @Size(min = MIN_NAME_LENGTH, max = MAX_NAME_LENGTH) String username) throws IOException {
+		SteamSearch search = steam.getIdFromVanityUrl(username).complete();
 
 		if (!search.isSuccess())
-			return errorText;
+			return messages.steamUserNotFound();
 
-		return search.getId();
+		return messages.steamReturnSteam64Id(username, search.getId());
 	}
 
-	public Object getPlayerById(long steamId) throws IOException {
-		Optional<List<SteamUser>> optUsers = steam.getUsers(steamId).complete();
+	@StandardCommand
+	public Object getPlayerById(@Param long steamId) throws IOException {
+		List<SteamUser> users = steam.getUsers(steamId).complete();
 
-		if (optUsers.isEmpty())
+		if (users.isEmpty())
 			return messages.steamProfilePrivate();
 
-		List<SteamUser> users = optUsers.get();
 		return users.get(0);
 	}
 
-	public Object getPlayerByName(@Length(max = MAX_USERNAME_LENGTH) String username) throws IOException {
-		Object steamId = getId(username);
+	@StandardCommand
+	public Object getPlayerByName(@Param @Size(min = MIN_NAME_LENGTH, max = MAX_NAME_LENGTH) String username) throws IOException {
+		SteamSearch search = steam.getIdFromVanityUrl(username).complete();
 
-		if (!(steamId instanceof Long))
-			return steamId;
+		if (!search.isSuccess())
+			return messages.steamUserNotFound();
 
-		return getPlayerById((long)steamId);
+		return getPlayerById(search.getId());
 	}
 
-	public Object getRandomGame(@Length(max = MAX_USERNAME_LENGTH) String username) throws IOException {
-		Object steamId = getId(username);
+	@StandardCommand
+	public Object getRandomGame(@Param @Size(min = MIN_NAME_LENGTH, max = MAX_NAME_LENGTH) String username) throws IOException {
+		SteamSearch search = steam.getIdFromVanityUrl(username).complete();
 
-		if (!(steamId instanceof Long))
-			return steamId;
+		if (!search.isSuccess())
+			return messages.steamUserNotFound();
 
-		Optional<List<SteamGame>> optGames = steam.getLibrary((long)steamId).complete();
+		Optional<List<SteamGame>> optGames = steam.getLibrary(search.getId()).complete();
 
 		if (optGames.isEmpty())
 			return messages.steamLibraryPrivate();

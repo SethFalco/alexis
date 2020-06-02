@@ -16,59 +16,60 @@
 
 package org.elypia.alexis.discord.controllers;
 
-import net.dv8tion.jda.api.entities.*;
-import net.dv8tion.jda.api.events.Event;
-import org.elypia.alexis.config.ApiConfig;
-import org.elypia.alexis.entities.MessageChannelData;
-import org.elypia.alexis.repositories.MessageChannelRepository;
-import org.elypia.alexis.validation.constraints.Database;
-import org.elypia.comcord.EventUtils;
+import net.dv8tion.jda.api.entities.MessageChannel;
+import org.elypia.alexis.configuration.ApiConfig;
+import org.elypia.alexis.persistence.entities.MessageChannelData;
+import org.elypia.alexis.persistence.repositories.MessageChannelRepository;
+import org.elypia.commandler.annotation.Param;
+import org.elypia.commandler.annotation.command.StandardCommand;
+import org.elypia.commandler.annotation.stereotypes.CommandController;
 import org.elypia.commandler.api.Controller;
-import org.elypia.commandler.event.ActionEvent;
-import org.elypia.elypiai.cleverbot.*;
+import org.elypia.commandler.newb.AsyncUtils;
+import org.elypia.commandler.producers.MessageSender;
+import org.elypia.elypiai.cleverbot.Cleverbot;
 import org.slf4j.*;
 
-import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.validation.constraints.NotBlank;
-import java.io.IOException;
-import java.util.*;
+import java.util.Objects;
 
 /**
  * @author seth@elypia.org (Seth Falco)
  */
-@ApplicationScoped
+@CommandController
+@StandardCommand
 public class CleverbotController implements Controller {
 
     private static final Logger logger = LoggerFactory.getLogger(CleverbotController.class);
 
     private final MessageChannelRepository channelRepo;
     private final Cleverbot cleverbot;
+    private final MessageSender sender;
 
     @Inject
-    public CleverbotController(final MessageChannelRepository channelRepo, final ApiConfig config) {
+    public CleverbotController(MessageChannelRepository channelRepo, ApiConfig config, MessageSender sender) {
         this.channelRepo = Objects.requireNonNull(channelRepo);
+        this.sender = sender;
         cleverbot = new Cleverbot(config.getCleverbot());
     }
 
-    public Object say(@Database ActionEvent<Event, Message> event, @NotBlank String body) throws IOException {
-        MessageChannel channel = EventUtils.getMessageChannel(event.getRequest().getSource());
+    @StandardCommand
+    public void say(MessageChannel channel, @Param @NotBlank String body) {
+        var contextCopy = AsyncUtils.copyContext();
+
         MessageChannelData data = channelRepo.findBy(channel.getIdLong());
+        final MessageChannelData toUpdate = (data != null) ? data : new MessageChannelData(channel.getIdLong());
 
-        if (data == null)
-            data = new MessageChannelData(channel.getIdLong());
+        String cs = toUpdate.getCleverState();
 
-        String cs = data.getCleverState();
+        cleverbot.say(body, cs).queue((response) -> {
+            var context = AsyncUtils.applyContext(contextCopy);
 
-        Optional<CleverResponse> optResponse = cleverbot.say(body, cs).complete();
+            toUpdate.setCleverState(response.getCs());
+            channelRepo.save(data);
+            sender.send(response.getOutput());
 
-        if (optResponse.isEmpty())
-            return "The request failed for some reason.";
-
-        CleverResponse response = optResponse.get();
-        data.setCleverState(response.getCs());
-        channelRepo.save(data);
-
-        return response.getOutput();
+            context.deactivate();
+        });
     }
 }

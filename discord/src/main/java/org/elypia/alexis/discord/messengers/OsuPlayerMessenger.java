@@ -22,6 +22,7 @@ import net.dv8tion.jda.api.utils.MarkdownUtil;
 import org.elypia.alexis.discord.utils.DiscordUtils;
 import org.elypia.alexis.i18n.AlexisMessages;
 import org.elypia.comcord.api.DiscordMessenger;
+import org.elypia.commandler.annotation.stereotypes.MessageProvider;
 import org.elypia.commandler.event.ActionEvent;
 import org.elypia.commandler.utils.ChatUtils;
 import org.elypia.elypiai.osu.*;
@@ -32,6 +33,7 @@ import java.util.StringJoiner;
 /**
  * @author seth@elypia.org (Seth Falco)
  */
+@MessageProvider(provides = Message.class, value = Player.class)
 public class OsuPlayerMessenger implements DiscordMessenger<Player> {
 
     private final AlexisMessages messages;
@@ -49,7 +51,7 @@ public class OsuPlayerMessenger implements DiscordMessenger<Player> {
 
         joiner.add("**__" + output.getUsername() + "__** " + ChatUtils.replaceWithIndicators(playerCountry));
         joiner.add("");
-        joiner.add("**" + messages.osuLevel() + ": **" + (int)output.getLevel());
+        joiner.add("**" + messages.userLevel() + ": **" + (int)output.getLevel());
         joiner.add("**" + messages.osuRankedScore() + ": **" + intf(output.getRankedScore()));
         joiner.add("**" + messages.osuTotalScore() + ": **" + intf(output.getTotalScore()));
         joiner.add("**" + messages.osuPp() + ": **" + decf(output.getPp()));
@@ -70,7 +72,7 @@ public class OsuPlayerMessenger implements DiscordMessenger<Player> {
         builder.setThumbnail("https://countryflags.io/" + playerCountry + "/shiny/64.png");
 
         builder.addField(messages.osuUsername(), MarkdownUtil.maskedLink(output.getUsername(), output.getProfileUrl()), true);
-        builder.addField(messages.osuLevel(), String.valueOf((int)output.getLevel()), true);
+        builder.addField(messages.userLevel(), String.valueOf((int)output.getLevel()), true);
         builder.addField(messages.osuRankedScore(), intf(output.getRankedScore()), true);
         builder.addField(messages.osuTotalScore(), intf(output.getTotalScore()), true);
         builder.addField(messages.osuPp(), decf(output.getPp()), true);

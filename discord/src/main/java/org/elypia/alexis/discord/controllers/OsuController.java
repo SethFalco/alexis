@@ -16,42 +16,50 @@
 
 package org.elypia.alexis.discord.controllers;
 
-import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.events.Event;
-import org.elypia.alexis.config.ApiConfig;
+import org.elypia.alexis.configuration.ApiConfig;
+import org.elypia.alexis.i18n.AlexisMessages;
+import org.elypia.commandler.annotation.Param;
+import org.elypia.commandler.annotation.command.StandardCommand;
+import org.elypia.commandler.annotation.stereotypes.CommandController;
 import org.elypia.commandler.api.Controller;
-import org.elypia.commandler.event.ActionEvent;
-import org.elypia.elypiai.osu.*;
+import org.elypia.commandler.newb.AsyncUtils;
+import org.elypia.commandler.producers.MessageSender;
+import org.elypia.elypiai.osu.Osu;
 import org.elypia.elypiai.osu.data.OsuMode;
 import org.slf4j.*;
 
-import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.validation.constraints.Size;
-import java.io.IOException;
-import java.util.Optional;
 
 /**
  * @author seth@elypia.org (Seth Falco)
  */
-@ApplicationScoped
+@CommandController
+@StandardCommand
 public class OsuController implements Controller {
 
     private static final Logger logger = LoggerFactory.getLogger(OsuController.class);
 
+    private final AlexisMessages messages;
     private final Osu osu;
+    private final MessageSender sender;
 
     @Inject
-    public OsuController(final ApiConfig config) {
+    public OsuController(AlexisMessages messages, ApiConfig config, MessageSender sender) {
+        this.messages = messages;
         this.osu = new Osu(config.getOsu());
+        this.sender = sender;
     }
 
-    public Object get(ActionEvent<Event, Message> event, @Size(min = 3, max = 15) String username, OsuMode mode) throws IOException {
-        Optional<Player> player = osu.getPlayer(username, mode).complete();
+    @StandardCommand
+    public void get(@Param @Size(min = 3, max = 15) String username, @Param(value = "0", displayAs = "osu") OsuMode mode) {
+        var scopeToContextualInstances = AsyncUtils.copyContext();
 
-        if (player.isEmpty())
-            return "No player was found.";
-
-        return player.get();
+        osu.getPlayer(username, mode).queue((optPlayer) -> {
+            var requestContext = AsyncUtils.applyContext(scopeToContextualInstances);
+            Object response = (optPlayer.isEmpty()) ? "No player was found." : optPlayer.get();
+            sender.send(response);
+            requestContext.deactivate();
+        });
     }
 }

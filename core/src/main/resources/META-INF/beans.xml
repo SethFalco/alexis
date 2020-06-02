@@ -20,16 +20,26 @@
        xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/beans_2_0.xsd"
        bean-discovery-mode="all" version="2.0">
   <scan>
+    <exclude name="ch.**"/>
     <exclude name="com.**"/>
+    <exclude name="io.**"/>
     <exclude name="javax.**"/>
+    <exclude name="junit.**"/>
+    <exclude name="net.**"/>
     <exclude name="org.apache.commons.**"/>
+    <exclude name="org.checkerframework.**"/>
+    <exclude name="org.codehaus.**"/>
+    <exclude name="org.conscrypt.**"/>
+    <exclude name="org.dom4j.**"/>
     <exclude name="org.elypia.elypiai.**"/>
     <exclude name="org.hibernate.**"/>
     <exclude name="org.jboss.**"/>
+    <exclude name="org.jetbrains.**"/>
+    <exclude name="org.junit.**"/>
+    <exclude name="org.jvnet.**"/>
+    <exclude name="org.quartz.**"/>
     <exclude name="org.slf4j.**"/>
+    <exclude name="org.threeten.**"/>
     <exclude name="org.yaml.**"/>
   </scan>
-  <alternatives>
-    <class>org.elypia.alexis.i18n.AlexisLocaleResolver</class>
-  </alternatives>
 </beans>

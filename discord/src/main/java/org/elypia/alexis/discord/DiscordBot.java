@@ -22,7 +22,7 @@ import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import org.elypia.alexis.discord.listeners.*;
 import org.elypia.comcord.DiscordConfig;
-import org.elypia.elypiai.common.core.RequestService;
+import org.elypia.retropia.core.RequestService;
 import org.slf4j.*;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -63,15 +63,7 @@ public class DiscordBot {
     private final JDA jda;
 
     @Inject
-    public DiscordBot(
-        DiscordConfig discordConfig,
-        ReadyListener readyListener,
-        EmoteListener emoteListener,
-        EntityListener entityListener,
-        GreetingListener greetingListener,
-        JoinLeaveListener joinKickListener,
-        XpListener xpListener
-    ) throws LoginException {
+    public DiscordBot(DiscordConfig discordConfig, ConnectionListener connectionListener, EmoteListener emoteListener, GreetingListener greetingListener, JoinLeaveListener joinKickListener, XpListener xpListener) throws LoginException {
         String token = discordConfig.getBotToken();
 
         if (token == null) {
@@ -79,7 +71,7 @@ public class DiscordBot {
             throw new IllegalStateException("Unable to connect to Discord API.");
         }
 
-        logger.info("Initializing JDA and authenticate to Discord.");
+        logger.info("Initializing JDA and authenticating to Discord.");
 
         jda = JDABuilder.create(token, INTENTS)
             .disableCache(CACHE_FLAGS_DISABLED)
@@ -87,10 +79,8 @@ public class DiscordBot {
             .setBulkDeleteSplittingEnabled(false)
             .setActivity(DEFAULT_ACTIVITY)
             .setHttpClient(RequestService.getBuilder().build())
-            .addEventListeners(
-                readyListener,
+            .addEventListeners(connectionListener,
                 emoteListener,
-                entityListener,
                 greetingListener,
                 joinKickListener,
                 xpListener

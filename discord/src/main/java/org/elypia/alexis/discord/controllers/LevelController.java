@@ -18,25 +18,29 @@ package org.elypia.alexis.discord.controllers;
 
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.Event;
-import org.elypia.alexis.validation.constraints.Database;
 import org.elypia.comcord.constraints.*;
+import org.elypia.commandler.annotation.Param;
+import org.elypia.commandler.annotation.command.StandardCommand;
+import org.elypia.commandler.annotation.stereotypes.CommandController;
 import org.elypia.commandler.api.Controller;
 import org.elypia.commandler.event.ActionEvent;
 
-import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
 /**
  * @author seth@elypia.org (Seth Falco)
  */
-@ApplicationScoped
+@CommandController
+@StandardCommand
 public class LevelController implements Controller {
 
     @Inject
     public LevelController() {
+
     }
 
-    public String message(@Database @Elevated @Channels(ChannelType.TEXT) ActionEvent<Event, Message> event, String message) {
+    @StandardCommand
+    public String message(@Elevated @Channels(ChannelType.TEXT) ActionEvent<Event, Message> event, @Param String message) {
 //        Guild guild = EventUtils.getGuild(event.getSource());
 //        long id = guild.getIdLong();
 //
@@ -60,7 +64,8 @@ public class LevelController implements Controller {
         return null;
     }
 
-    public String test(@Database @Elevated @Channels(ChannelType.TEXT) ActionEvent<Event, Message> event) {
+    @StandardCommand
+    public String test(@Elevated @Channels(ChannelType.TEXT) ActionEvent<Event, Message> event) {
 //        Guild guild = EventUtils.getGuild(event.getSource());
 //        long id = guild.getIdLong();
 //

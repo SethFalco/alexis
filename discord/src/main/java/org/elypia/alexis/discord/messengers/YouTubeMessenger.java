@@ -16,8 +16,8 @@
 
 package org.elypia.alexis.discord.messengers;
 
-import com.google.api.client.util.DateTime;
 import com.google.api.services.youtube.model.*;
+import com.google.gson.internal.bind.util.ISO8601Utils;
 import net.dv8tion.jda.api.*;
 import net.dv8tion.jda.api.entities.Message;
 import org.elypia.alexis.discord.utils.DiscordUtils;
@@ -25,17 +25,19 @@ import org.elypia.alexis.i18n.AlexisMessages;
 import org.elypia.alexis.services.youtube.YouTubeService;
 import org.elypia.alexis.utils.YouTubeUtils;
 import org.elypia.comcord.api.DiscordMessenger;
+import org.elypia.commandler.annotation.stereotypes.MessageProvider;
 import org.elypia.commandler.event.ActionEvent;
 import org.slf4j.*;
 
-import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.io.IOException;
+import java.text.*;
+import java.util.Date;
 
 /**
  * @author seth@elypia.org (Seth Falco)
  */
-@ApplicationScoped
+@MessageProvider(provides = Message.class, value = SearchResult.class)
 public class YouTubeMessenger implements DiscordMessenger<SearchResult> {
 
     private static final Logger logger = LoggerFactory.getLogger(YouTubeMessenger.class);
@@ -65,15 +67,22 @@ public class YouTubeMessenger implements DiscordMessenger<SearchResult> {
         builder.setAuthor(snippet.getChannelTitle());
         builder.setTitle(snippet.getTitle(), YouTubeUtils.getVideoUrl(videoId));
         builder.setDescription(snippet.getDescription());
-        builder.setImage(YouTubeUtils.getThumbnailUrl(videoId));
+        builder.setImage(snippet.getThumbnails().getHigh().getUrl());
 
-        DateTime datetime = snippet.getPublishedAt();
-        builder.setFooter(messages.youtubePublishedOn(datetime), null);
+        String channelThumbnail = null;
 
         try {
-            builder.setThumbnail(youtube.getChannelThumbnail(snippet.getChannelId()));
+            channelThumbnail = youtube.getChannelThumbnail(snippet.getChannelId());
+            builder.setThumbnail(channelThumbnail);
         } catch (IOException e) {
             logger.error("Obtaining the thumbnail failed, and it isn't cached either.", e);
+        }
+
+        try {
+            Date date = ISO8601Utils.parse(snippet.getPublishedAt(), new ParsePosition(0));
+            builder.setFooter(messages.youtubePublishedOn(date), channelThumbnail);
+        } catch (ParseException ex) {
+            logger.error("The published at timestamp wasn't formatted as expected.", ex);
         }
 
         return new MessageBuilder(builder.build()).build();

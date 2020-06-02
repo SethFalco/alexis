@@ -19,15 +19,20 @@ package org.elypia.alexis.discord.controllers;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
+import org.apache.deltaspike.core.api.exclude.Exclude;
 import org.elypia.alexis.discord.audio.GuildPlayer;
 import org.elypia.alexis.services.youtube.YouTubeService;
+import org.elypia.commandler.annotation.command.StandardCommand;
+import org.elypia.commandler.annotation.stereotypes.CommandController;
 import org.elypia.commandler.api.Controller;
 import org.slf4j.*;
 
-import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import java.util.*;
 
-@ApplicationScoped
+@Exclude
+@CommandController
+@StandardCommand
 public class MusicController implements Controller {
 
 	private static final Logger logger = LoggerFactory.getLogger(MusicController.class);
@@ -56,6 +61,7 @@ public class MusicController implements Controller {
 	 */
 	private final Map<Long, GuildPlayer> guildPlayers;
 
+	@Inject
 	public MusicController(final YouTubeService youtube) {
 		this.youtube = youtube;
 		manager = new DefaultAudioPlayerManager();

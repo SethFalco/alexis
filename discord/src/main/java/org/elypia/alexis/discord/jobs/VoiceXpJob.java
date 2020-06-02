@@ -19,7 +19,7 @@ package org.elypia.alexis.discord.jobs;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.deltaspike.scheduler.api.Scheduled;
-import org.elypia.alexis.repositories.GuildRepository;
+import org.elypia.alexis.persistence.repositories.GuildRepository;
 import org.quartz.*;
 import org.slf4j.*;
 
@@ -29,8 +29,6 @@ import java.util.*;
 
 /**
  * Schedules task to change the bots displayed {@link Activity}.
- * If the connection to {@link DatabaseService} is severred, it'll
- * default to skip until the connection can is restablished.
  *
  * @author seth@elypia.org (Seth Falco)
  */

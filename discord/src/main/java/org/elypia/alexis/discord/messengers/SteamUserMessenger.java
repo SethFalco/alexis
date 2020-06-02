@@ -22,6 +22,7 @@ import net.dv8tion.jda.api.utils.MarkdownUtil;
 import org.elypia.alexis.discord.utils.DiscordUtils;
 import org.elypia.alexis.i18n.AlexisMessages;
 import org.elypia.comcord.api.DiscordMessenger;
+import org.elypia.commandler.annotation.stereotypes.MessageProvider;
 import org.elypia.commandler.event.ActionEvent;
 import org.elypia.elypiai.steam.*;
 
@@ -30,6 +31,7 @@ import javax.inject.Inject;
 /**
  * @author seth@elypia.org (Seth Falco)
  */
+@MessageProvider(provides = Message.class, value = SteamUser.class)
 public class SteamUserMessenger implements DiscordMessenger<SteamUser> {
 
     /** Base URL for SteamDB, append the users ID to get info for a specific user. */
@@ -47,12 +49,6 @@ public class SteamUserMessenger implements DiscordMessenger<SteamUser> {
         return null;
     }
 
-    /**
-     * TODO: The dates aren't returning expected results.
-     * @param event
-     * @param output
-     * @return
-     */
     @Override
     public Message buildEmbed(ActionEvent<?, Message> event, SteamUser output) {
         EmbedBuilder builder = DiscordUtils.newEmbed(event);
@@ -67,7 +63,7 @@ public class SteamUserMessenger implements DiscordMessenger<SteamUser> {
         if (session != null)
             builder.addField(messages.steamCurrentlyPlaying(), MarkdownUtil.maskedLink(session.getGameStatus(), session.getAppUrl()), true);
 
-        builder.setFooter(messages.steamId() + ": " + output.getId());
+        builder.setFooter(messages.steamId(output.getId()));
         return new MessageBuilder(builder.build()).build();
     }
 }

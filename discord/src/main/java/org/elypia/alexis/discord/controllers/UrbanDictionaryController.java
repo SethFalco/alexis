@@ -18,97 +18,93 @@ package org.elypia.alexis.discord.controllers;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
-import net.dv8tion.jda.api.events.Event;
 import net.dv8tion.jda.api.utils.MarkdownUtil;
 import org.elypia.alexis.discord.utils.DiscordUtils;
 import org.elypia.alexis.i18n.AlexisMessages;
-import org.elypia.comcord.EventUtils;
+import org.elypia.commandler.annotation.*;
+import org.elypia.commandler.annotation.command.StandardCommand;
+import org.elypia.commandler.annotation.stereotypes.CommandController;
 import org.elypia.commandler.api.Controller;
-import org.elypia.commandler.event.ActionEvent;
-import org.elypia.commandler.managers.MessengerManager;
+import org.elypia.commandler.newb.AsyncUtils;
+import org.elypia.commandler.producers.MessageSender;
 import org.elypia.commandler.utils.ChatUtils;
-import org.elypia.elypiai.common.core.RestLatch;
 import org.elypia.elypiai.urbandictionary.*;
+import org.elypia.retropia.core.requests.RestLatch;
 import org.slf4j.*;
 
-import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import java.util.*;
-import java.util.stream.*;
+import java.util.stream.Stream;
 
-// TODO: Allow Urban Dictionary to specify which definition by index.
-// TODO: Display the definition index so that it's repeatable
-// TODO: If a definition doesn't exist, throws an exception
-// TODO: Should UD return an optional?
 /**
  * @author seth@elypia.org (Seth Falco)
  */
-@ApplicationScoped
+@CommandController
+@StandardCommand
 public class UrbanDictionaryController implements Controller {
 
     private static final Logger logger = LoggerFactory.getLogger(UrbanDictionaryController.class);
 
-    private final UrbanDictionary ud;
-    private final MessengerManager messenger;
     private final AlexisMessages messages;
+    private final MessageSender sender;
+    private final UrbanDictionary ud;
 
 	@Inject
-    public UrbanDictionaryController(final MessengerManager messenger, AlexisMessages messages) {
-        this.ud = new UrbanDictionary();
-        this.messenger = messenger;
+    public UrbanDictionaryController(AlexisMessages messages, MessageSender sender) {
         this.messages = messages;
+        this.sender = sender;
+        this.ud = new UrbanDictionary();
     }
 
-	public void define(ActionEvent<Event, Message> event, String[] terms, boolean random) {
-        Event source = event.getRequest().getSource();
+    /**
+     * TODO: Return results in the order of the queue
+     *
+     * @param terms
+     * @param random
+     */
+    @Default
+    @Static
+    @StandardCommand
+    public void getDefinitions(Message message, @Param String[] terms, @Param("false") boolean random) {
         RestLatch<DefineResult> latch = new RestLatch<>();
 
-        List<String> termsList = Stream.of(terms)
+        Stream.of(terms)
             .map(String::toLowerCase)
             .distinct()
-            .collect(Collectors.toList());
+            .map(ud::getDefinitions)
+            .forEach(latch::add);
 
-        for (String term : termsList)
-            latch.add(ud.define(term));
+        var contexts = AsyncUtils.copyContext();
 
-        // TODO: Return results in the order of the queue
         latch.queue((results) -> {
-            MessageChannel channel = EventUtils.getMessageChannel(source);
+            var requestContext = AsyncUtils.applyContext(contexts);
+            Object response;
 
-            if (results.isEmpty())
-                channel.sendMessage(messages.udNoDefinitions()).queue();
-            else if (results.size() == 1) {
-                Optional<DefineResult> optResult = results.get(0);
-
-                if (optResult.isPresent()) {
-                    DefineResult result = optResult.get();
-
-                    if (!result.getDefinitions().isEmpty()) {
-                        Definition definition = result.getDefinition(random);
-                        Message message = messenger.getMessenger(event.getRequest().getIntegration(), Definition.class).provide(event, definition);
-                        channel.sendMessage(message).queue();
-                    } else {
-                        channel.sendMessage(messages.udNoDefinitions()).queue();
-                    }
-                }
-            } else {
-                EmbedBuilder builder = DiscordUtils.newEmbed(event);
+            if (results.isEmpty()) {
+                response = messages.udNoDefinitions();
+            } else if (results.size() > 1) {
+                EmbedBuilder builder = DiscordUtils.newEmbed(message);
                 builder.setTitle("Urban Dictionary", "https://www.urbandictionary.com/");
-                builder.setFooter(messages.udTotalResults(results.size()));
 
-                for (Optional<DefineResult> optDefinition : results) {
-                    if (optDefinition.isPresent()) {
-                        DefineResult result = optDefinition.get();
-                        Definition definition = result.getDefinition(random);
-                        String definitionBody = definition.getDefinition();
-                        String value = ChatUtils.truncateAndAppend(definitionBody, MessageEmbed.VALUE_MAX_LENGTH,  "... " + MarkdownUtil.maskedLink("Read More", definition.getPermaLink()));
-                        builder.addField(definition.getWord(), value, false);
-                    }
+                for (DefineResult result : results) {
+                    if (!result.hasDefinitions())
+                        continue;
+
+                    Definition definition = result.getDefinition(random);
+                    String definitionBody = definition.getDefinitionBody();
+                    String ifTruncated = "... " + MarkdownUtil.maskedLink(messages.readMore(), definition.getPermaLink());
+                    String value = ChatUtils.truncateAndAppend(definitionBody, MessageEmbed.VALUE_MAX_LENGTH, ifTruncated);
+                    builder.addField(definition.getWord(), value, false);
                 }
 
-                MessageEmbed messageEmbed = builder.build();
-                channel.sendMessage(messageEmbed).queue();
+                builder.setFooter(messages.udTotalResults(builder.getFields().size()));
+                response = builder;
+            } else {
+                DefineResult result = results.get(0);
+                response = (result.hasDefinitions()) ? result.getDefinition(random) : messages.udNoDefinitions();
             }
+
+            sender.send(response);
+            requestContext.deactivate();
         });
     }
 }

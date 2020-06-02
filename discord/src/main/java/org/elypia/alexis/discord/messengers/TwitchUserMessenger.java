@@ -23,6 +23,7 @@ import org.apache.commons.lang.StringUtils;
 import org.elypia.alexis.discord.utils.DiscordUtils;
 import org.elypia.alexis.i18n.AlexisMessages;
 import org.elypia.comcord.api.DiscordMessenger;
+import org.elypia.commandler.annotation.stereotypes.MessageProvider;
 import org.elypia.commandler.event.ActionEvent;
 
 import javax.inject.Inject;
@@ -30,6 +31,7 @@ import javax.inject.Inject;
 /**
  * @author seth@elypia.org (Seth Falco)
  */
+@MessageProvider(provides = Message.class, value = User.class)
 public class TwitchUserMessenger implements DiscordMessenger<User> {
 
     private final AlexisMessages messages;
@@ -59,7 +61,7 @@ public class TwitchUserMessenger implements DiscordMessenger<User> {
         if (!broadcasterType.isEmpty())
             builder.addField(messages.twitchType(), StringUtils.capitalize(broadcasterType), true);
 
-        builder.setFooter(messages.uniqueIdentifier() + output.getId(), avatarUrl);
+        builder.setFooter(messages.uniqueIdentifier(output.getId()), avatarUrl);
         return new MessageBuilder(builder.build()).build();
     }
 }

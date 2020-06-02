@@ -17,24 +17,21 @@
 package org.elypia.alexis.discord.controllers;
 
 import net.dv8tion.jda.api.entities.*;
-import net.dv8tion.jda.api.events.Event;
-import org.elypia.alexis.entities.GuildData;
+import org.elypia.alexis.persistence.entities.GuildData;
+import org.elypia.alexis.persistence.repositories.GuildRepository;
 import org.elypia.alexis.i18n.AlexisMessages;
-import org.elypia.alexis.repositories.GuildRepository;
-import org.elypia.alexis.validation.constraints.Database;
-import org.elypia.comcord.constraints.Channels;
+import org.elypia.comcord.constraints.*;
+import org.elypia.commandler.annotation.*;
+import org.elypia.commandler.annotation.command.StandardCommand;
+import org.elypia.commandler.annotation.stereotypes.CommandController;
 import org.elypia.commandler.api.Controller;
-import org.elypia.commandler.event.ActionEvent;
 import org.slf4j.*;
 
-import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 
-/**
- * TODO: These should be @Elevated
- */
-@ApplicationScoped
+@CommandController
+@StandardCommand
 public class PrefixController implements Controller {
 
     private static final Logger logger = LoggerFactory.getLogger(PrefixController.class);
@@ -48,14 +45,17 @@ public class PrefixController implements Controller {
         this.messages = messages;
     }
 
-    public String changePrefix(@Channels(ChannelType.TEXT) @Database ActionEvent<Event, Message> event, @Size(min = 1, max = 32) String prefix) {
-        long guildId = event.getRequest().getMessage().getGuild().getIdLong();
+    @Default
+    @StandardCommand
+    public String changePrefix(@Elevated @Channels(ChannelType.TEXT) Message message, @Param @NotBlank String prefix) {
+        long guildId = message.getGuild().getIdLong();
         setPrefix(guildId, prefix);
         return messages.prefixHasBeenChanged(prefix);
     }
 
-    public String enableMentionOnly(@Channels(ChannelType.TEXT) @Database ActionEvent<Event, Message> event) {
-        long guildId = event.getRequest().getMessage().getGuild().getIdLong();
+    @StandardCommand
+    public String enableMentionOnly(@Elevated @Channels(ChannelType.TEXT) Message message) {
+        long guildId = message.getGuild().getIdLong();
         setPrefix(guildId, null);
         return messages.disablePrefixMentionsOnly();
     }

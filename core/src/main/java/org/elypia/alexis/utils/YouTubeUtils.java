@@ -25,7 +25,8 @@ import java.util.concurrent.TimeUnit;
 public final class YouTubeUtils {
 
     private static final String VIDEO_URL = "https://www.youtube.com/watch?v=";
-    private static final String THUMBNAIL_FORMAT = "http://img.youtube.com/vi/%s/maxresdefault.jpg";
+
+    private static final String CHANNEL_URL = "https://www.youtube.com/channel/";
 
     private YouTubeUtils() {
         // Do nothing
@@ -79,21 +80,11 @@ public final class YouTubeUtils {
      * @param id The identifier of the video.
      * @return Url to the video id provided.
      */
-
     public static String getVideoUrl(String id) {
         return VIDEO_URL + id;
     }
 
-    /**
-     * Forms the thumbnail url from an identifier provided. <br>
-     * Do note: Does not use an API call.
-     * Simply inserts id into standard thumbnail url.
-     *
-     * @param id The identifier of the video.
-     * @return Url to the high quality youtube thumbnail.
-     */
-
-    public static String getThumbnailUrl(String id) {
-        return String.format(THUMBNAIL_FORMAT, id);
+    public static String getChannelUrl(String channelId) {
+        return CHANNEL_URL + channelId;
     }
 }

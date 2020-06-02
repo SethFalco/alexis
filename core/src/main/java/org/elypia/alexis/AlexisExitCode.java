@@ -6,13 +6,13 @@ public enum AlexisExitCode {
 
     INITIALIZATION_ERROR(1);
 
-    private final int EXIT_CODE;
+    private final int exitCode;
 
-    AlexisExitCode(final int EXIT_CODE) {
-        this.EXIT_CODE = EXIT_CODE;
+    AlexisExitCode(final int exitCode) {
+        this.exitCode = exitCode;
     }
 
     public int getExitCode() {
-        return EXIT_CODE;
+        return exitCode;
     }
 }
