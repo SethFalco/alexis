@@ -7,6 +7,20 @@ functions in guilds to help manage and automate management or encourage activity
 You can get even more information about me on my character profile on [Notebook.ai]!
 
 ## For Developers
+### Libaries
+We've worked really hard to not just make this bot, but to make a framework for
+building them with ease. [Commandler] is a command handler which uses 
+Java CDI extensions for an annotation driven approach to creating commands.
+It handles most of the work for you, and is a breeze to get started with.
+
+Commandler is a generic project which provides the foundation for a bot
+but not the integration with a particular platform right away. [Comcord] is 
+a command handler for Discord which includes everything you need to work
+in Discord.
+
+All services wrapped in this bot are available in [Elypiai], a repository where
+we keep our wraps for services that don't provide official ones for Java.
+
 ### Self-Hosting
 I recommend you use me through my invite link in this repository so you get,
 the me, managed and served by Elypia, however if you're a developer or have the technical 
@@ -36,6 +50,9 @@ are reserved by Elypia CIC.**
 [gitlab]: https://gitlab.com/Elypia/alexis/commits/master "Repository on GitLab"
 [elypia-donate]: https://elypia.org/donate "Donate to Elypia"
 [Notebook.ai]: https://www.notebook.ai/plan/characters/830595 "Alexis Character Design"
+[Commandler]: https://gitlab.com/Elypia/commandler "Commandler on GitLab"
+[Comcord]: https://gitlab.com/Elypia/comcord "Comcord on GitLab"
+[Elypiai]: https://gitlab.com/Elypia/elypiai "Elypiai on GitLab"
 [MySQL 5.7]: https://www.mysql.com "MySQL Database Server"
 [Apache 2.0]: https://www.apache.org/licenses/LICENSE-2.0 "Apache 2.0 License"
 [TL;DR]: https://tldrlegal.com/license/apache-license-2.0-(apache-2.0) "TL;DR of Apache 2.0"
