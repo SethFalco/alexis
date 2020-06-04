@@ -60,6 +60,9 @@ public interface AlexisMessages {
     @MessageTemplate("{dev_left_guild}")
     String devLeftGuild();
 
+    @MessageTemplate("{dev_rename_no_change}")
+    String devRenameNoChange(String name);
+
     @MessageTemplate("{dev_changed_bots_name}")
     String devChangedBotsName(String newName);
 
@@ -68,6 +71,9 @@ public interface AlexisMessages {
 
     @MessageTemplate("{dev_guild_info}")
     String devGuildInfo(String guildId, String guildName, int memberCount);
+
+    @MessageTemplate("{emote_post_lack_permissions}")
+    String emotePostLackPermissions(String emoteUrl);
 
     @MessageTemplate("{emote_guild_no_emotes}")
     String emoteGuildNoEmotes(String guildName);
@@ -350,4 +356,13 @@ public interface AlexisMessages {
 
     @MessageTemplate("{utilities_total_characters}")
     String utilitiesTotalCharacters(int characters);
+
+    @MessageTemplate("{levels_set_message}")
+    String levelsSetMessage();
+
+    @MessageTemplate("{not_storing_guild_data_yet}")
+    String notStoringGuildDataYet();
+
+    @MessageTemplate("{level_no_message}")
+    String levelNoMessage();
 }

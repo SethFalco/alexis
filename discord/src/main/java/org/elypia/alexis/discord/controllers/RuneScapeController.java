@@ -19,9 +19,8 @@ package org.elypia.alexis.discord.controllers;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import org.elypia.commandler.annotation.Param;
-import org.elypia.commandler.annotation.command.StandardCommand;
-import org.elypia.commandler.annotation.stereotypes.CommandController;
 import org.elypia.commandler.api.Controller;
+import org.elypia.commandler.dispatchers.standard.*;
 import org.elypia.elypiai.runescape.*;
 import org.slf4j.*;
 
@@ -33,8 +32,7 @@ import java.util.*;
 /**
  * @author seth@elypia.org (Seth Falco)
  */
-@CommandController
-@StandardCommand
+@StandardController
 public class RuneScapeController implements Controller {
 
 	private static final Logger logger = LoggerFactory.getLogger(RuneScapeController.class);

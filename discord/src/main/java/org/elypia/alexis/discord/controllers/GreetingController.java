@@ -18,25 +18,22 @@ package org.elypia.alexis.discord.controllers;
 
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.Event;
+import org.elypia.alexis.discord.enums.*;
+import org.elypia.alexis.i18n.AlexisMessages;
 import org.elypia.alexis.persistence.entities.*;
 import org.elypia.alexis.persistence.enums.*;
 import org.elypia.alexis.persistence.repositories.GuildRepository;
-import org.elypia.alexis.discord.enums.*;
-import org.elypia.alexis.i18n.AlexisMessages;
 import org.elypia.comcord.constraints.*;
 import org.elypia.commandler.annotation.Param;
-import org.elypia.commandler.annotation.command.StandardCommand;
-import org.elypia.commandler.annotation.stereotypes.CommandController;
 import org.elypia.commandler.api.Controller;
+import org.elypia.commandler.dispatchers.standard.*;
 import org.elypia.commandler.event.ActionEvent;
 
 import javax.inject.Inject;
 import javax.validation.constraints.NotBlank;
 import java.util.*;
 
-// TODO: Make waiting dispatcher, and review JDA Utils
-@CommandController
-@StandardCommand
+@StandardController
 public class GreetingController implements Controller {
 
     private GuildRepository guildRepo;
@@ -51,7 +48,12 @@ public class GreetingController implements Controller {
     // TODO: Instead of write same text twice, if it affects both and they have the same data, just send "BOTH"
     // TODO: Only update if it's actually changed
     @StandardCommand
-    public String setEnabled(@Elevated Message message, @Param Greeting greeting, @Param("true") boolean enabled, @Param("both") Recipient recipient) {
+    public String setEnabled(
+        @Channels(ChannelType.TEXT) @Elevated Message message,
+        @Param Greeting greeting,
+        @Param("true") boolean enabled,
+        @Param("both") Recipient recipient
+    ) {
         Guild guild = message.getGuild();
         long guildId = guild.getIdLong();
         long userId = message.getAuthor().getIdLong();
@@ -92,7 +94,12 @@ public class GreetingController implements Controller {
     }
 
     @StandardCommand
-    public String setGreeting(@Elevated Message eventMessage, @Param @NotBlank String body, @Param Greeting greeting, @Param Recipient recipient) {
+    public String setGreeting(
+        @Channels(ChannelType.TEXT) @Elevated Message eventMessage,
+        @Param @NotBlank String body,
+        @Param Greeting greeting,
+        @Param("both") Recipient recipient
+    ) {
         Guild guild = eventMessage.getGuild();
 
         long guildId = guild.getIdLong();

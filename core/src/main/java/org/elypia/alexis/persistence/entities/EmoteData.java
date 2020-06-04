@@ -18,7 +18,7 @@ package org.elypia.alexis.persistence.entities;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author seth@elypia.org (Seth Falco)
@@ -33,11 +33,12 @@ public class EmoteData implements Serializable {
     @Column(name = "emote_id")
     private long id;
 
+    /** The guild that <strong>owns</strong> this emote. */
     @ManyToOne
     @JoinColumn(name = "guild_id", nullable = false)
     private GuildData guildData;
 
-    @OneToMany(targetEntity = EmoteUsage.class, mappedBy = "emoteData")
+    @OneToMany(targetEntity = EmoteUsage.class, mappedBy = "emoteData", cascade = CascadeType.ALL)
     private List<EmoteUsage> usages;
 
     public EmoteData() {
@@ -47,6 +48,7 @@ public class EmoteData implements Serializable {
     public EmoteData(final long id, final GuildData guildData) {
         this.id = id;
         this.guildData = guildData;
+        usages = new ArrayList<>();
     }
 
     public long getId() {

@@ -35,7 +35,7 @@ public class GuildMessage implements Serializable {
     private static final long serialVersionUID = 1;
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "message_id")
     private int id;
 
@@ -58,13 +58,13 @@ public class GuildMessage implements Serializable {
         // Do nothing
     }
 
-    public GuildMessage(GuildData guildData, GuildMessageType type, long channelId) {
+    public GuildMessage(GuildData guildData, GuildMessageType type, Long channelId) {
         this.guildData = guildData;
         this.type = type;
         this.channelId = channelId;
     }
 
-    public GuildMessage(GuildData guildData, GuildMessageType type, long channelId, String body) {
+    public GuildMessage(GuildData guildData, GuildMessageType type, Long channelId, String body) {
         this(guildData, type, channelId);
         this.message = body;
     }
@@ -107,7 +107,7 @@ public class GuildMessage implements Serializable {
         return channelId;
     }
 
-    public void setChannelId(long channelId) {
+    public void setChannelId(Long channelId) {
         this.channelId = channelId;
     }
 

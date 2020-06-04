@@ -20,6 +20,7 @@ import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.*;
 
 /**
  * @author seth@elypia.org (Seth Falco)
@@ -36,11 +37,11 @@ public class Skill implements Serializable {
     private static final long serialVersionUID = 1;
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "skill_id")
     private int id;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "guild_id")
     private GuildData guild;
 
@@ -55,8 +56,11 @@ public class Skill implements Serializable {
     @Column(name = "skill_notify")
     private boolean notify;
 
+    @OneToMany(targetEntity = SkillRelation.class, mappedBy = "skill", cascade = CascadeType.ALL)
+    private List<SkillRelation> relations;
+
     public Skill() {
-        // Do nothing
+        relations = new ArrayList<>();
     }
 
     public Skill(GuildData guild, String name) {
@@ -108,5 +112,13 @@ public class Skill implements Serializable {
 
     public void setNotify(boolean notify) {
         this.notify = notify;
+    }
+
+    public List<SkillRelation> getRelations() {
+        return relations;
+    }
+
+    public void setRelations(List<SkillRelation> relations) {
+        this.relations = relations;
     }
 }

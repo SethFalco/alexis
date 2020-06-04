@@ -16,14 +16,13 @@
 
 package org.elypia.alexis.discord.controllers;
 
-import net.dv8tion.jda.api.entities.MessageChannel;
+import net.dv8tion.jda.api.entities.Message;
 import org.elypia.alexis.configuration.ApiConfig;
 import org.elypia.alexis.persistence.entities.MessageChannelData;
 import org.elypia.alexis.persistence.repositories.MessageChannelRepository;
 import org.elypia.commandler.annotation.Param;
-import org.elypia.commandler.annotation.command.StandardCommand;
-import org.elypia.commandler.annotation.stereotypes.CommandController;
 import org.elypia.commandler.api.Controller;
+import org.elypia.commandler.dispatchers.standard.*;
 import org.elypia.commandler.newb.AsyncUtils;
 import org.elypia.commandler.producers.MessageSender;
 import org.elypia.elypiai.cleverbot.Cleverbot;
@@ -36,8 +35,7 @@ import java.util.Objects;
 /**
  * @author seth@elypia.org (Seth Falco)
  */
-@CommandController
-@StandardCommand
+@StandardController
 public class CleverbotController implements Controller {
 
     private static final Logger logger = LoggerFactory.getLogger(CleverbotController.class);
@@ -53,19 +51,21 @@ public class CleverbotController implements Controller {
         cleverbot = new Cleverbot(config.getCleverbot());
     }
 
-    @StandardCommand
-    public void say(MessageChannel channel, @Param @NotBlank String body) {
+    @StandardCommand(isDefault = true)
+    public void say(Message message, @Param @NotBlank String body) {
+        long channelId = message.getChannel().getIdLong();
+
+        MessageChannelData data = channelRepo.findOptionalBy(channelId)
+            .orElse(new MessageChannelData(channelId));
+
+        String cs = data.getCleverState();
+
         var contextCopy = AsyncUtils.copyContext();
-
-        MessageChannelData data = channelRepo.findBy(channel.getIdLong());
-        final MessageChannelData toUpdate = (data != null) ? data : new MessageChannelData(channel.getIdLong());
-
-        String cs = toUpdate.getCleverState();
 
         cleverbot.say(body, cs).queue((response) -> {
             var context = AsyncUtils.applyContext(contextCopy);
 
-            toUpdate.setCleverState(response.getCs());
+            data.setCleverState(response.getCs());
             channelRepo.save(data);
             sender.send(response.getOutput());
 

@@ -39,7 +39,7 @@ public class CustomCommand implements Serializable {
     private static final long serialVersionUID = 1;
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "command_id")
     protected int id;
 

@@ -20,7 +20,7 @@ import org.apache.deltaspike.jpa.api.entitymanager.PersistenceUnitName;
 import org.slf4j.*;
 
 import javax.annotation.PreDestroy;
-import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.*;
 import javax.enterprise.inject.*;
 import javax.inject.Inject;
 import javax.persistence.*;
@@ -38,16 +38,20 @@ public class EntityManagerProducer implements Closeable {
 
     private final EntityManagerFactory factory;
 
-    // TODO: Add tests using h2
     @Inject
     public EntityManagerProducer(@PersistenceUnitName("alexis") EntityManagerFactory factory) {
         this.factory = Objects.requireNonNull(factory);
     }
 
-    @ApplicationScoped
+    /**
+     * This is {@link RequestScoped} as the underlying implementation
+     * is not thread safe when interacting with same table in multiple threads.
+     * So circumvent this we create en {@link EntityManager} per request.
+     *
+     * @return A new instance of the EntityManager from {@link #factory}.
+     */
     @Produces
     public EntityManager getEntityManager() {
-        logger.info("Producing instance of {} using {}.", EntityManager.class, factory);
         return factory.createEntityManager();
     }
 

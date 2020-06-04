@@ -18,6 +18,7 @@ package org.elypia.alexis.persistence.entities;
 
 import org.hibernate.annotations.*;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.*;
@@ -46,7 +47,7 @@ public class UserData implements Serializable {
     @Column(name = "last_activity")
     private Date lastMessage;
 
-    @OneToMany(targetEntity = MemberData.class, mappedBy = "userData")
+    @OneToMany(targetEntity = MemberData.class, mappedBy = "userData", cascade = CascadeType.ALL)
     private List<MemberData> members;
 
     public long getId() {

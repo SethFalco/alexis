@@ -36,7 +36,7 @@ public class MemberSkill implements Serializable {
     private static final long serialVersionUID = 1;
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "member_skill_id")
     private int id;
 

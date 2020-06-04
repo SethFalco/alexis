@@ -1,10 +1,9 @@
 package org.elypia.alexis.services;
 
 import com.github.philippheuer.credentialmanager.*;
-import com.github.philippheuer.credentialmanager.domain.*;
+import com.github.philippheuer.credentialmanager.domain.OAuth2Credential;
 import com.github.philippheuer.credentialmanager.identityprovider.OAuth2IdentityProvider;
 import com.github.twitch4j.*;
-import com.github.twitch4j.auth.providers.TwitchIdentityProvider;
 import com.github.twitch4j.helix.domain.*;
 import org.elypia.alexis.configuration.TwitchConfig;
 import org.slf4j.*;
@@ -32,9 +31,7 @@ public class TwitchService {
 
     @Inject
     public TwitchService(final TwitchConfig config) {
-        IdentityProvider identityProvider = new TwitchIdentityProvider(config.getClientId(), config.getClientSecret(), config.getRedirectUri());
         credentialManager = CredentialManagerBuilder.builder().build();
-        credentialManager.registerIdentityProvider(identityProvider);
 
         this.client = TwitchClientBuilder.builder()
             .withEnableHelix(true)

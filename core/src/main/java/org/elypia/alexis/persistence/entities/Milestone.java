@@ -29,7 +29,7 @@ public class Milestone implements Serializable {
     private static final long serialVersionUID = 1;
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "skill_ms_id")
     private int id;
 

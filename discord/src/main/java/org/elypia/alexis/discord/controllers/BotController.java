@@ -21,14 +21,13 @@ import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.utils.MarkdownUtil;
 import org.elypia.alexis.configuration.AuthorConfig;
 import org.elypia.alexis.discord.models.BotInfoModel;
-import org.elypia.alexis.discord.utils.*;
+import org.elypia.alexis.discord.utils.DiscordUtils;
 import org.elypia.alexis.i18n.AlexisMessages;
 import org.elypia.comcord.constraints.*;
 import org.elypia.commandler.annotation.*;
-import org.elypia.commandler.annotation.command.StandardCommand;
-import org.elypia.commandler.annotation.stereotypes.CommandController;
 import org.elypia.commandler.api.Controller;
-import org.elypia.commandler.newb.*;
+import org.elypia.commandler.dispatchers.standard.*;
+import org.elypia.commandler.newb.AsyncUtils;
 import org.elypia.commandler.producers.MessageSender;
 import org.jboss.weld.context.bound.BoundRequestContext;
 import org.slf4j.*;
@@ -42,8 +41,7 @@ import java.util.stream.Collectors;
 /**
  * @author seth@elypia.org (Seth Falco)
  */
-@CommandController
-@StandardCommand
+@StandardController(isStatic = true)
 public class BotController implements Controller {
 
 	private static final Logger logger = LoggerFactory.getLogger(BotController.class);
@@ -68,13 +66,11 @@ public class BotController implements Controller {
 		this.sender = sender;
 	}
 
-	@Static
 	@StandardCommand
 	public String ping() {
 		return messages.pong();
 	}
 
-	@Static
 	@Command(hidden = true)
 	@StandardCommand
 	public String pong() {
@@ -84,8 +80,7 @@ public class BotController implements Controller {
 	/**
 	 * @param message The message from the request context.
 	 */
-	@Default
-	@StandardCommand
+	@StandardCommand(isDefault = true)
 	public void getBotInfo(Message message) {
 		JDA jda = message.getJDA();
 		User self = jda.getSelfUser();
@@ -131,28 +126,29 @@ public class BotController implements Controller {
 	}
 
 	private void getBotInfoWithInviteLink(BoundRequestContext context, BotInfoModel model, JDA jda, long supportGuildId) {
-		Guild guild = jda.getGuildById(supportGuildId);
+		Guild supportGuild = jda.getGuildById(supportGuildId);
 
-		if (guild == null) {
+		if (supportGuild == null) {
 			logger.warn("The guild specified in discord.support-guild-id was not found, not displaying guild info.");
 			sender.send(model);
 			context.deactivate();
 		} else {
-			Member selfMember = guild.getSelfMember();
+			Member selfMember = supportGuild.getSelfMember();
 
 			if (selfMember.hasPermission(Permission.MANAGE_SERVER)) {
-				guild.retrieveInvites().queue((invites) -> {
+				supportGuild.retrieveInvites().queue((invites) -> {
 					addInviteLinkToEmbed(context, model, invites);
 				});
 			} else {
 				logger.warn("The bot doesn't have the permission to get all server invites.");
 
-				List<GuildChannel> channels = guild.getChannels()
+				List<GuildChannel> channels = supportGuild.getChannels()
 					.stream()
 					.filter((channel) -> selfMember.hasPermission(channel, Permission.MANAGE_CHANNEL))
 					.collect(Collectors.toList());
 
 				if (!channels.isEmpty()) {
+					// We don't want to spam the API, so we'll only check the most visible channel.
 					GuildChannel channel = channels.stream().max(Comparator.comparingInt((x) -> x.getMembers().size())).get();
 					channel.retrieveInvites().queue((invites) -> {
 						addInviteLinkToEmbed(context, model, invites);
@@ -160,7 +156,7 @@ public class BotController implements Controller {
 				} else {
 					logger.warn("The bot doesn't have the permission in any of the channels to fetch invite links.");
 
-					List<GuildChannel> channels2 = guild.getChannels()
+					List<GuildChannel> channels2 = supportGuild.getChannels()
 						.stream()
 						.filter((channel) -> selfMember.hasPermission(channel, Permission.CREATE_INSTANT_INVITE))
 						.collect(Collectors.toList());
@@ -200,7 +196,6 @@ public class BotController implements Controller {
 		context.deactivate();
 	}
 
-	@Static
 	@StandardCommand
 	public String say(@Everyone Message message, @Param @NotBlank String body) {
 		if (message.isFromGuild()) {
@@ -213,7 +208,6 @@ public class BotController implements Controller {
 		return body;
 	}
 
-	@Static
 	@StandardCommand
 	public EmbedBuilder invites(@Channels(ChannelType.TEXT) Message message) {
 		Guild guild = message.getGuild();

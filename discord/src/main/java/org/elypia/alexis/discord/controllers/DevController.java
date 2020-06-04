@@ -17,17 +17,16 @@
 package org.elypia.alexis.discord.controllers;
 
 import net.dv8tion.jda.api.entities.*;
-import net.dv8tion.jda.api.events.Event;
 import org.elypia.alexis.AlexisExitCode;
 import org.elypia.alexis.i18n.AlexisMessages;
 import org.elypia.comcord.Scope;
 import org.elypia.comcord.annotations.Scoped;
 import org.elypia.comcord.constraints.BotOwner;
+import org.elypia.commandler.Commandler;
 import org.elypia.commandler.annotation.Param;
-import org.elypia.commandler.annotation.command.StandardCommand;
 import org.elypia.commandler.annotation.stereotypes.CommandController;
 import org.elypia.commandler.api.Controller;
-import org.elypia.commandler.event.ActionEvent;
+import org.elypia.commandler.dispatchers.standard.*;
 import org.slf4j.*;
 
 import javax.inject.Inject;
@@ -38,8 +37,8 @@ import java.util.*;
 /**
  * @author seth@elypia.org (Seth Falco)
  */
-@CommandController
-@StandardCommand
+@CommandController(hidden = true)
+@StandardController
 public class DevController implements Controller {
 
     private static final Logger logger = LoggerFactory.getLogger(DevController.class);
@@ -52,9 +51,9 @@ public class DevController implements Controller {
     }
 
     @StandardCommand
-    public String guilds(@BotOwner ActionEvent<Event, Message> event) {
+    public String listGuilds(@BotOwner Message message) {
         StringJoiner joiner = new StringJoiner("\n");
-        Collection<Guild> guilds = event.getRequest().getSource().getJDA().getGuilds();
+        Collection<Guild> guilds = message.getJDA().getGuilds();
 
         for (Guild guild : guilds)
            joiner.add(messages.devGuildInfo(guild.getId(), guild.getName(), guild.getMembers().size()));
@@ -63,40 +62,49 @@ public class DevController implements Controller {
     }
 
     @StandardCommand
-    public String leave(@BotOwner ActionEvent<Event, Message> event, @Param @Scoped(inGuild = Scope.LOCAL, inPrivate = Scope.GLOBAL) Guild guild) {
+    public String leaveGuild(@BotOwner Message message, @Param @Scoped(inPrivate = Scope.GLOBAL) Guild guild) {
         guild.leave().queue();
         return messages.devLeftGuild();
     }
 
     @StandardCommand
-    public String rename(@BotOwner ActionEvent<Event, Message> event, @Param String input) {
-        event.getRequest().getSource().getJDA().getSelfUser().getManager().setName(input).complete();
+    public String setUsername(@BotOwner Message message, @Param String input) {
+        SelfUser self = message.getJDA().getSelfUser();
+
+        if (self.getName().equals(input))
+            return messages.devRenameNoChange(input);
+
+        self.getManager().setName(input).complete();
         return messages.devChangedBotsName(input);
     }
 
     @StandardCommand
-    public String avatar(@BotOwner ActionEvent<Event, Message> event, @Param URL url) throws IOException {
+    public String setAvatar(@BotOwner Message message, @Param URL url) throws IOException {
         try (InputStream stream = url.openStream()) {
             Icon icon = Icon.from(stream);
-            event.getRequest().getSource().getJDA().getSelfUser().getManager().setAvatar(icon).complete();
+            message.getJDA().getSelfUser().getManager().setAvatar(icon).complete();
             return messages.devChangedBotsAvatar();
         }
     }
 
+    /**
+     * TODO: Shutdown CDI container
+     * @param message The message that triggered this event.
+     */
     @StandardCommand
-    public void shutdown(@BotOwner ActionEvent<Event, Message> event) {
-        event.getRequest().getSource().getJDA().shutdown();
-        logger.info("Logging out of Discord.");
+    public void shutdown(@BotOwner Message message) {
+        message.getJDA().shutdown();
+        logger.info("Logged out of Discord.");
+
+        Commandler.stop();
+        logger.info("Finished shutting down Commandler, now shutting down application.");
+
         System.exit(AlexisExitCode.NORMAL.getExitCode());
     }
 
-    /**
-     * @param event
-     * @return
-     */
     @StandardCommand
-    public String clean(@BotOwner ActionEvent<Event, Message> event) {
-        event.getRequest().getSource().getJDA().getGuilds().forEach((guild) -> {
+    public String clean(@BotOwner Message message) {
+        message.getJDA().getGuilds().forEach((guild) -> {
             //
         });
 

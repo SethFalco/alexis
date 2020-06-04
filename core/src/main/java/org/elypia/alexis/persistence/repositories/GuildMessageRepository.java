@@ -25,5 +25,6 @@ import org.elypia.alexis.persistence.entities.GuildMessage;
 @Repository(forEntity = GuildMessage.class)
 public interface GuildMessageRepository extends EntityRepository<GuildMessage, Long> {
 
+    @Query("SELECT GuildMessage AS gm WHERE guildData.id = ?1 AND type = ?2")
     GuildMessage findByGuildIdAndType(long guildId, int type);
 }

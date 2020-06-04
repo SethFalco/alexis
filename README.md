@@ -35,7 +35,7 @@ your instance, and that it does _not_ use any of Elypia's graphics including Ale
 * [MySQL 5.7]
 
 ## Open-Source
-This project is open-source under the [Apache 2.0]!  
+This project is open-source under the [Apache 2.0] license!  
 While not legal advice, you can find a [TL;DR] that sums up what
 you're allowed and not allowed to do along with any requirements if you want to 
 use or derive work from this source code!  

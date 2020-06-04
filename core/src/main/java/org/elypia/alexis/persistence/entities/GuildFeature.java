@@ -42,7 +42,7 @@ public class GuildFeature implements Serializable {
     private static final long serialVersionUID = 1;
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "feature_id")
     private Integer id;
 

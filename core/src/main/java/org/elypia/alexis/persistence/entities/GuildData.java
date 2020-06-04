@@ -19,11 +19,12 @@ package org.elypia.alexis.persistence.entities;
 import org.elypia.alexis.persistence.enums.*;
 import org.hibernate.annotations.*;
 
-import javax.persistence.*;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
+import java.time.Duration;
 import java.util.*;
 
 /**
@@ -68,46 +69,51 @@ public class GuildData implements Serializable {
     @Column(name = "join_role_bot_id", unique = true)
     private Long joinRoleBotId;
 
-    /**
-     * Allow guilds to locally override the amount of XP awarded with a custom
-     * multiplier.
-     */
+    /** Allow guilds to locally override the amount of XP awarded with a custom multiplier. */
     @ColumnDefault("1.0")
     @Column(name = "xp_multp", nullable = false)
     private Double multiplier;
 
+    /**
+     * We'll delete all data we have on a guild if they kick the bot by default.
+     * If a user wants us to hold onto data even if they kick us, they can
+     * set how long we should hold onto it for.
+     */
+    @Column(name = "data_retention_duration")
+    private Duration dataRetentionDuration;
+
     /** The features that have been manually configured in this guild. */
     @MapKey(name = "feature")
     @MapKeyEnumerated(EnumType.STRING)
-    @OneToMany(targetEntity = GuildFeature.class, mappedBy = "guildData")
+    @OneToMany(targetEntity = GuildFeature.class, mappedBy = "guildData", cascade = CascadeType.ALL)
     private Map<Feature, GuildFeature> features;
 
     @MapKey(name = "type")
     @MapKeyEnumerated(EnumType.STRING)
-    @OneToMany(targetEntity = GuildMessage.class, mappedBy = "guildData")
+    @OneToMany(targetEntity = GuildMessage.class, mappedBy = "guildData", cascade = CascadeType.ALL)
     private Map<GuildMessageType, GuildMessage> messages;
 
     @MapKey(name = "logType")
     @MapKeyEnumerated(EnumType.STRING)
-    @OneToMany(targetEntity = LogSubscription.class, mappedBy = "guildData")
+    @OneToMany(targetEntity = LogSubscription.class, mappedBy = "guildData", cascade = CascadeType.ALL)
     private Map<LogType, LogSubscription> logSubscriptions;
 
-    @OneToMany(targetEntity = CustomCommand.class, mappedBy = "guildData")
+    @OneToMany(targetEntity = CustomCommand.class, mappedBy = "guildData", cascade = CascadeType.ALL)
     private List<CustomCommand> customCommands;
 
-    @OneToMany(targetEntity = EmoteData.class, mappedBy = "guildData")
+    @OneToMany(targetEntity = EmoteData.class, mappedBy = "guildData", cascade = CascadeType.ALL)
     private List<EmoteData> emotes;
 
-    @OneToMany(targetEntity = EmoteUsage.class, mappedBy = "guildData")
+    @OneToMany(targetEntity = EmoteUsage.class, mappedBy = "usageGuildData", cascade = CascadeType.ALL)
     private List<EmoteUsage> emoteUsages;
 
-    @OneToMany(targetEntity = MemberData.class, mappedBy = "guildData")
+    @OneToMany(targetEntity = MemberData.class, mappedBy = "guildData", cascade = CascadeType.ALL)
     private List<MemberData> members;
 
-    @OneToMany(targetEntity = MessageChannelData.class, mappedBy = "guildData")
+    @OneToMany(targetEntity = MessageChannelData.class, mappedBy = "guildData", cascade = CascadeType.ALL)
     private List<MessageChannelData> messageChannels;
 
-    @OneToMany(targetEntity = RoleData.class, mappedBy = "guildData")
+    @OneToMany(targetEntity = RoleData.class, mappedBy = "guildData", cascade = CascadeType.ALL)
     private List<RoleData> roles;
 
     @OneToMany(targetEntity = Skill.class, mappedBy = "guild", cascade = CascadeType.ALL)
@@ -119,6 +125,15 @@ public class GuildData implements Serializable {
 
     public GuildData(final long id) {
         this.id = id;
+        features = new EnumMap<>(Feature.class);
+        messages = new EnumMap<>(GuildMessageType.class);
+        customCommands = new ArrayList<>();
+        emotes = new ArrayList<>();
+        emoteUsages = new ArrayList<>();
+        members = new ArrayList<>();
+        messageChannels = new ArrayList<>();
+        roles = new ArrayList<>();
+        skills = new ArrayList<>();
     }
 
     @Override
@@ -196,6 +211,14 @@ public class GuildData implements Serializable {
 
     public void setMultiplier(Double mutlipler) {
         this.multiplier = mutlipler;
+    }
+
+    public Duration getDataRetentionDuration() {
+        return dataRetentionDuration;
+    }
+
+    public void setDataRetentionDuration(Duration dataRetentionDuration) {
+        this.dataRetentionDuration = dataRetentionDuration;
     }
 
     public Map<Feature, GuildFeature> getFeatures() {

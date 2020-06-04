@@ -18,34 +18,32 @@ package org.elypia.alexis.discord.controllers;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
+import org.elypia.alexis.i18n.AlexisMessages;
 import org.elypia.alexis.persistence.entities.*;
 import org.elypia.alexis.persistence.repositories.*;
-import org.elypia.alexis.i18n.AlexisMessages;
 import org.elypia.comcord.annotations.Scoped;
 import org.elypia.comcord.constraints.Channels;
 import org.elypia.commandler.annotation.Param;
-import org.elypia.commandler.annotation.command.StandardCommand;
-import org.elypia.commandler.annotation.stereotypes.CommandController;
 import org.elypia.commandler.api.Controller;
+import org.elypia.commandler.dispatchers.standard.*;
 
 import javax.inject.Inject;
 import java.util.*;
 
-@CommandController
-@StandardCommand
+@StandardController
 public class SkillController implements Controller {
 
     private final AlexisMessages messages;
-    private final MessageChannelRepository messageChannelRepo;
+    private final GuildRepository guildRepo;
+    private final MessageChannelRepository channelRepo;
     private final SkillRepository skillRepo;
-    private final SkillRelationRepository skillRelationRepo;
 
     @Inject
-    public SkillController(AlexisMessages messages, MessageChannelRepository messageChannelRepo, SkillRepository skillRepo, SkillRelationRepository skillRelationRepo) {
+    public SkillController(AlexisMessages messages, GuildRepository guildRepo, MessageChannelRepository channelRepo, SkillRepository skillRepo) {
         this.messages = messages;
-        this.messageChannelRepo = messageChannelRepo;
+        this.guildRepo = guildRepo;
+        this.channelRepo = channelRepo;
         this.skillRepo = skillRepo;
-        this.skillRelationRepo = skillRelationRepo;
     }
 
     @StandardCommand
@@ -91,8 +89,9 @@ public class SkillController implements Controller {
         if (count > 0)
             return messages.skillWithNameAlreadyExists(name, guild.getName());
 
-        Skill skill = new Skill(new GuildData(guildId), name, true, true);
-        skillRepo.save(skill);
+        GuildData guildData = guildRepo.findOptionalBy(guildId).orElse(new GuildData(guildId));
+        guildData.getSkills().add(new Skill(guildData, name, true, true));
+        guildRepo.save(guildData);
 
         return messages.skillAddedSuccesfully();
     }
@@ -132,17 +131,20 @@ public class SkillController implements Controller {
      * @return The response for the command.
      */
     @StandardCommand
-    public String assignSkill(@Channels(ChannelType.TEXT) Message message, @Param String name, @Param @Scoped TextChannel channel) {
+    public String assignSkillToChannel(@Channels(ChannelType.TEXT) Message message, @Param String name, @Param @Scoped TextChannel channel) {
         Skill skill = skillRepo.findByGuildAndNameEqualIgnoreCase(message.getGuild().getIdLong(), name);
 
         if (skill == null)
             return messages.skillNotFoundWithName(name);
 
         long channelId = channel.getIdLong();
-        messageChannelRepo.save(new MessageChannelData(channelId, new GuildData(channel.getGuild().getIdLong())));
 
-        SkillRelation relation = new SkillRelation(skill.getId(), channelId);
-        skillRelationRepo.save(relation);
+        Optional<MessageChannelData> optChannelData = channelRepo.findOptionalBy(channelId);
+        MessageChannelData channelData = optChannelData.orElse(new MessageChannelData(channelId, new GuildData(channel.getGuild().getIdLong())));
+
+        SkillRelation relation = new SkillRelation(skill, channelData);
+        skill.getRelations().add(relation);
+        skillRepo.save(skill);
 
         return messages.skillAssignedToChannel(skill.getName(), channel.getAsMention());
     }

@@ -16,39 +16,36 @@
 
 package org.elypia.alexis.discord.controllers;
 
-import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
-import org.elypia.alexis.persistence.enums.Feature;
-import org.elypia.alexis.persistence.entities.*;
-import org.elypia.alexis.persistence.repositories.*;
 import org.elypia.alexis.discord.models.*;
 import org.elypia.alexis.discord.utils.DiscordUtils;
 import org.elypia.alexis.i18n.AlexisMessages;
+import org.elypia.alexis.persistence.entities.*;
+import org.elypia.alexis.persistence.enums.Feature;
+import org.elypia.alexis.persistence.repositories.GuildRepository;
+import org.elypia.comcord.EventUtils;
 import org.elypia.comcord.constraints.*;
 import org.elypia.commandler.annotation.Param;
-import org.elypia.commandler.annotation.command.StandardCommand;
 import org.elypia.commandler.annotation.stereotypes.CommandController;
 import org.elypia.commandler.api.Controller;
+import org.elypia.commandler.dispatchers.standard.*;
 
 import javax.inject.Inject;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * @author seth@elypia.org (Seth Falco)
  */
 @CommandController
-@StandardCommand
+@StandardController
 public class EmoteController implements Controller {
 
     private final GuildRepository guildRepo;
-    private final EmoteRepository emoteRepo;
     private final AlexisMessages messages;
 
     @Inject
-    public EmoteController(GuildRepository guildRepo, AlexisMessages messages, EmoteRepository emoteRepo) {
+    public EmoteController(GuildRepository guildRepo, AlexisMessages messages) {
         this.guildRepo = guildRepo;
-        this.emoteRepo = emoteRepo;
         this.messages = messages;
     }
 
@@ -59,7 +56,7 @@ public class EmoteController implements Controller {
      * @return
      */
     @StandardCommand
-    public String list(@Param (value = "${source.guild}", displayAs = "current guild") Guild guild) {
+    public String listAllEmotes(@Param (value = "${source.guild}", displayAs = "current guild") Guild guild) {
         List<Emote> emotes = guild.getEmotes();
         int count = emotes.size();
 
@@ -76,27 +73,34 @@ public class EmoteController implements Controller {
 
     /**
      * Post an emote we can see, even if the user is unable to perform it.
-     * TODO: send back emote directly, not the embed
+     *
      * @param message The message that triggered this event.
      * @param emote The emote the user would like to post.
-     * @return
+     * @return Either a {@link MessageEmbed} or {@link String} response to the command.
      */
     @StandardCommand
-    public MessageEmbed post(Message message, @Param Emote emote) {
-        EmbedBuilder builder = DiscordUtils.newEmbed(message);
-        builder.setImage(emote.getImageUrl());
-        return builder.build();
+    public Object postEmote(Message message, @Param Emote emote) {
+        String emoteUrl = emote.getImageUrl();
+
+        if (EventUtils.canSendEmbed(message))
+            return DiscordUtils.newEmbed(message).setImage(emoteUrl).build();
+
+        return messages.emotePostLackPermissions(emoteUrl);
     }
 
+    // TODO: Multiple aliases prefix/commands
     @StandardCommand
     public String setEmoteTracking(@Channels(ChannelType.TEXT) @Elevated Message message, @Param("true") boolean isEnabled) {
-        GuildData data = guildRepo.findBy(message.getGuild().getIdLong());
+        long guildId = message.getGuild().getIdLong();
+        Optional<GuildData> optData = guildRepo.findOptionalBy(guildId);
+        GuildData data = optData.orElse(new GuildData(guildId));
+
         Map<Feature, GuildFeature> features = data.getFeatures();
         GuildFeature feature = features.get(Feature.COUNT_GUILD_EMOTE_USAGE);
         long userId = message.getAuthor().getIdLong();
 
         if (feature == null) {
-            data.addFeature(new GuildFeature(data, Feature.COUNT_GUILD_EMOTE_USAGE, isEnabled, userId));
+            features.put(Feature.COUNT_GUILD_EMOTE_USAGE, new GuildFeature(data, Feature.COUNT_GUILD_EMOTE_USAGE, isEnabled, userId));
             guildRepo.save(data);
             return "I've added the setting now.";
         } else {
@@ -112,7 +116,7 @@ public class EmoteController implements Controller {
     }
 
     /**
-     * TODO: This is broken to shit
+     * TODO: Address default values where object isn't in DMs
      * Display the emotes with how frequently they get used.
      *
      * @param entries How many entries to display of the leaderboard.
@@ -126,27 +130,26 @@ public class EmoteController implements Controller {
 
         long guildId = guild.getIdLong();
         GuildData guildData = guildRepo.findBy(guildId);
-        List<EmoteUsage> allEmoteUsages = guildData.getEmoteUsages();
+        List<EmoteData> allEmotes = guildData.getEmotes();
 
-        if (allEmoteUsages.isEmpty())
+        if (allEmotes.isEmpty())
             return messages.emoteLeaderboardNeverUsed();
-
-        Map<Long, List<EmoteUsage>> grouped = allEmoteUsages.stream()
-            .collect(Collectors.groupingBy((emoteUsage) -> emoteUsage.getEmoteData().getId()));
 
         List<EmoteLeaderboardEntryModel> models = new ArrayList<>();
 
-        grouped.forEach((emoteId, usages) -> {
-            if (usages.isEmpty())
-                return;
+        for (EmoteData emoteData : allEmotes) {
+            List<EmoteUsage> usages = emoteData.getUsages();
 
-            Emote emote = guild.getEmoteById(emoteId);
+            if (usages.isEmpty())
+                continue;
+
+            Emote emote = guild.getEmoteById(emoteData.getId());
 
             if (emote == null)
-                return;
+                continue;
 
             int local = usages.stream()
-                .filter((usage) -> guild.getIdLong() == usage.getGuildData().getId())
+                .filter((usage) -> guildId == usage.getUsageGuildData().getId())
                 .mapToInt(EmoteUsage::getOccurences)
                 .sum();
 
@@ -155,7 +158,7 @@ public class EmoteController implements Controller {
                 .sum();
 
             models.add(new EmoteLeaderboardEntryModel(emote, local, global));
-        });
+        }
 
         Collections.sort(models);
         List<EmoteLeaderboardEntryModel> limitedModels = models.subList(0, Math.min(entries, models.size()));

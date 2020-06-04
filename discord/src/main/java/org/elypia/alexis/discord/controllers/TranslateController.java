@@ -19,15 +19,14 @@ package org.elypia.alexis.discord.controllers;
 import com.google.cloud.translate.*;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.Event;
-import org.elypia.alexis.persistence.repositories.GuildRepository;
 import org.elypia.alexis.i18n.AlexisMessages;
 import org.elypia.alexis.models.TranslationModel;
+import org.elypia.alexis.persistence.repositories.GuildRepository;
 import org.elypia.alexis.services.translate.TranslateService;
 import org.elypia.comcord.constraints.*;
-import org.elypia.commandler.annotation.*;
-import org.elypia.commandler.annotation.command.StandardCommand;
-import org.elypia.commandler.annotation.stereotypes.CommandController;
+import org.elypia.commandler.annotation.Param;
 import org.elypia.commandler.api.*;
+import org.elypia.commandler.dispatchers.standard.*;
 import org.elypia.commandler.event.ActionEvent;
 import org.elypia.commandler.newb.AsyncUtils;
 import org.elypia.commandler.producers.MessageSender;
@@ -37,8 +36,7 @@ import javax.inject.Inject;
 import javax.validation.constraints.NotBlank;
 import java.util.regex.Pattern;
 
-@CommandController
-@StandardCommand
+@StandardController
 public class TranslateController implements Controller {
 
     /** Matches any mentionable entities. */
@@ -87,8 +85,7 @@ public class TranslateController implements Controller {
         });
     }
 
-    @Default
-    @StandardCommand
+    @StandardCommand(isDefault = true)
     public TranslationModel translate(@Everyone Message message, @NotBlank @Param String body, @Param Language language) {
         String toTranslate = markNonTranslatableEntities(body);
         Translation translation = translateService.translate(toTranslate, language);

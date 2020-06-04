@@ -16,13 +16,12 @@
 
 package org.elypia.alexis.controllers;
 
-import com.github.twitch4j.helix.domain.*;
+import com.github.twitch4j.helix.domain.User;
 import org.elypia.alexis.i18n.AlexisMessages;
 import org.elypia.alexis.services.TwitchService;
 import org.elypia.commandler.annotation.Param;
-import org.elypia.commandler.annotation.command.StandardCommand;
-import org.elypia.commandler.annotation.stereotypes.CommandController;
 import org.elypia.commandler.api.Controller;
+import org.elypia.commandler.dispatchers.standard.*;
 import org.slf4j.*;
 
 import javax.inject.Inject;
@@ -32,11 +31,10 @@ import java.util.Optional;
 /**
  * @author seth@elypia.org (Seth Falco)
  */
-@CommandController
-@StandardCommand
+@StandardController
 public class TwitchController implements Controller {
 
-    /** Logging with slf4j. */
+    /** Logging with SLF4J. */
     private static final Logger logger = LoggerFactory.getLogger(TwitchController.class);
 
     /** The minimum length a Twitch username can be. (We check this to avoid redundant requests.) */

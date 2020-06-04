@@ -17,20 +17,17 @@
 package org.elypia.alexis.discord.controllers;
 
 import net.dv8tion.jda.api.entities.User;
-import org.elypia.commandler.annotation.*;
-import org.elypia.commandler.annotation.command.StandardCommand;
-import org.elypia.commandler.annotation.stereotypes.CommandController;
+import org.elypia.commandler.annotation.Param;
 import org.elypia.commandler.api.Controller;
+import org.elypia.commandler.dispatchers.standard.*;
 
 /**
  * @author seth@elypia.org (Seth Falco)
  */
-@CommandController
-@StandardCommand
+@StandardController
 public class UserController implements Controller {
 
-	@Default
-	@StandardCommand
+	@StandardCommand(isDefault = true)
 	public User info(@Param(value = "${source.author}", displayAs = "you") User user) {
         return user;
 	}

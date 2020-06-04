@@ -28,12 +28,16 @@ import javax.inject.Inject;
 import java.util.*;
 
 /**
- * Schedules task to change the bots displayed {@link Activity}.
- *
+ * @see <a href="https://en.wikipedia.org/wiki/Cron">https://en.wikipedia.org/wiki/Cron</a>
  * @author seth@elypia.org (Seth Falco)
+ * @since 3.0.0
  */
 @ApplicationScoped
-@Scheduled(cronExpression = "0 0/1 * 1/1 * ? *", description = "Iterate the activities to display on Discord.")
+@Scheduled(
+    cronExpression = "0 0/1 * * * ? *",
+    description = "Award users with XP for being active in voice channels every minute.",
+    startScopes = {}
+)
 public class VoiceXpJob implements Job {
 
     /** Logging with SLF4J. */

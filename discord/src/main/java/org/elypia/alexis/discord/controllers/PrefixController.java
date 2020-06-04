@@ -17,21 +17,19 @@
 package org.elypia.alexis.discord.controllers;
 
 import net.dv8tion.jda.api.entities.*;
+import org.elypia.alexis.i18n.AlexisMessages;
 import org.elypia.alexis.persistence.entities.GuildData;
 import org.elypia.alexis.persistence.repositories.GuildRepository;
-import org.elypia.alexis.i18n.AlexisMessages;
 import org.elypia.comcord.constraints.*;
-import org.elypia.commandler.annotation.*;
-import org.elypia.commandler.annotation.command.StandardCommand;
-import org.elypia.commandler.annotation.stereotypes.CommandController;
+import org.elypia.commandler.annotation.Param;
 import org.elypia.commandler.api.Controller;
+import org.elypia.commandler.dispatchers.standard.*;
 import org.slf4j.*;
 
 import javax.inject.Inject;
-import javax.validation.constraints.*;
+import javax.validation.constraints.NotBlank;
 
-@CommandController
-@StandardCommand
+@StandardController
 public class PrefixController implements Controller {
 
     private static final Logger logger = LoggerFactory.getLogger(PrefixController.class);
@@ -45,8 +43,7 @@ public class PrefixController implements Controller {
         this.messages = messages;
     }
 
-    @Default
-    @StandardCommand
+    @StandardCommand(isDefault = true)
     public String changePrefix(@Elevated @Channels(ChannelType.TEXT) Message message, @Param @NotBlank String prefix) {
         long guildId = message.getGuild().getIdLong();
         setPrefix(guildId, prefix);

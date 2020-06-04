@@ -1,12 +1,11 @@
 package org.elypia.alexis.discord.i18n;
 
 import net.dv8tion.jda.api.entities.*;
-import net.dv8tion.jda.api.events.Event;
+import net.dv8tion.jda.api.events.GenericEvent;
 import org.apache.deltaspike.core.api.message.LocaleResolver;
 import org.elypia.alexis.persistence.entities.*;
 import org.elypia.alexis.persistence.repositories.*;
 import org.elypia.comcord.EventUtils;
-import org.elypia.commandler.event.Request;
 
 import javax.annotation.Priority;
 import javax.enterprise.context.RequestScoped;
@@ -29,25 +28,19 @@ public class DiscordLocaleResolver implements LocaleResolver {
     private final transient GuildRepository guildRepo;
     private final transient MessageChannelRepository messageChannelRepo;
 
-    private final transient Request<?, ?> request;
+    /** The Discord event that requires the locale. */
+    private final transient GenericEvent event;
 
     @Inject
-    public DiscordLocaleResolver(GuildRepository guildRepo, MessageChannelRepository messageChannelRepo, Request request) {
+    public DiscordLocaleResolver(GuildRepository guildRepo, MessageChannelRepository messageChannelRepo, GenericEvent event) {
         this.guildRepo = guildRepo;
         this.messageChannelRepo = messageChannelRepo;
-        this.request = request;
+        this.event = event;
     }
 
     @Override
     public Locale getLocale() {
-        Object source = request.getSource();
-
-        if (!(source instanceof Event))
-            return DEFAULT_LOCALE;
-
-        Event sourceEvent = (Event)source;
-
-        MessageChannel channel = EventUtils.getMessageChannel(sourceEvent);
+        MessageChannel channel = EventUtils.getMessageChannel(event);
 
         if (channel != null) {
             MessageChannelData channelData = messageChannelRepo.findBy(channel.getIdLong());
@@ -60,7 +53,7 @@ public class DiscordLocaleResolver implements LocaleResolver {
             }
         }
 
-        Guild guild = EventUtils.getGuild(sourceEvent);
+        Guild guild = EventUtils.getGuild(event);
 
         if (guild != null) {
             GuildData guildData = guildRepo.findBy(guild.getIdLong());

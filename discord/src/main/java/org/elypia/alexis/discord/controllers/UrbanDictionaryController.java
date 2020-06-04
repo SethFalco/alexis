@@ -21,10 +21,10 @@ import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.utils.MarkdownUtil;
 import org.elypia.alexis.discord.utils.DiscordUtils;
 import org.elypia.alexis.i18n.AlexisMessages;
-import org.elypia.commandler.annotation.*;
-import org.elypia.commandler.annotation.command.StandardCommand;
+import org.elypia.commandler.annotation.Param;
 import org.elypia.commandler.annotation.stereotypes.CommandController;
 import org.elypia.commandler.api.Controller;
+import org.elypia.commandler.dispatchers.standard.StandardCommand;
 import org.elypia.commandler.newb.AsyncUtils;
 import org.elypia.commandler.producers.MessageSender;
 import org.elypia.commandler.utils.ChatUtils;
@@ -39,7 +39,6 @@ import java.util.stream.Stream;
  * @author seth@elypia.org (Seth Falco)
  */
 @CommandController
-@StandardCommand
 public class UrbanDictionaryController implements Controller {
 
     private static final Logger logger = LoggerFactory.getLogger(UrbanDictionaryController.class);
@@ -56,14 +55,13 @@ public class UrbanDictionaryController implements Controller {
     }
 
     /**
+     * TODO: Make an easy way for users to be able to contact the bot dev
      * TODO: Return results in the order of the queue
      *
      * @param terms
      * @param random
      */
-    @Default
-    @Static
-    @StandardCommand
+    @StandardCommand(isDefault = true, isStatic = true)
     public void getDefinitions(Message message, @Param String[] terms, @Param("false") boolean random) {
         RestLatch<DefineResult> latch = new RestLatch<>();
 

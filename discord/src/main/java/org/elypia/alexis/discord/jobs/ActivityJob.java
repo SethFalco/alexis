@@ -29,15 +29,35 @@ import javax.inject.Inject;
 import java.util.*;
 
 /**
- * Schedules task to change the bots displayed {@link Activity}.
+ * <p>Schedules task to change the bots displayed {@link Activity}.</p>
+ * <p>
+ *     {@link Scheduled#cronExpression()} accepts parameters in the following order,
+ *     of which only one of <code>Day of Month</code> or <code>Day of Week</code> should
+ *     be populated, and the other left with a <code>?</code>:
+ *     <ul>
+ *         <li>Seconds</li>
+ *         <li>Minutes</li>
+ *         <li>Hours</li>
+ *         <li>Day of Month</li>
+ *         <li>Months</li>
+ *         <li>Day of Week</li>
+ *         <li>Years</li>
+ *     </ul>
+ * </p>
  *
+ * @see <a href="https://en.wikipedia.org/wiki/Cron">https://en.wikipedia.org/wiki/Cron</a>
  * @author seth@elypia.org (Seth Falco)
+ * @since 3.0.0
  */
 @ApplicationScoped
-@Scheduled(cronExpression = "0 0/1 * 1/1 * ? *", description = "Iterate the activities to display on Discord.")
+@Scheduled(
+    cronExpression = "0 0/1 * * * ? *",
+    description = "Iterate the activities to display on Discord every minute.",
+    startScopes = {}
+)
 public class ActivityJob implements Job {
 
-    /** Logging with slf4j. */
+    /** Logging with SLF4J. */
     private static final Logger logger = LoggerFactory.getLogger(ActivityJob.class);
 
     /**
@@ -86,6 +106,6 @@ public class ActivityJob implements Job {
             jda.getPresence().setActivity(activity);
 
             previousActivityId = activityData.getId();
-        }, () -> logger.debug("Not changing bot activity, no applicable activities to change to."));
+        }, () -> logger.debug("Didn't find activities. Previous Activuty ID: {}", previousActivityId));
     }
 }

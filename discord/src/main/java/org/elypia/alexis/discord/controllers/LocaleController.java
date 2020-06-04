@@ -19,16 +19,15 @@ package org.elypia.alexis.discord.controllers;
 import com.google.cloud.translate.Language;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
+import org.elypia.alexis.i18n.AlexisMessages;
 import org.elypia.alexis.persistence.entities.*;
 import org.elypia.alexis.persistence.repositories.*;
-import org.elypia.alexis.i18n.AlexisMessages;
 import org.elypia.alexis.services.translate.TranslateService;
 import org.elypia.comcord.annotations.ReactionCommand;
 import org.elypia.comcord.constraints.*;
 import org.elypia.commandler.annotation.Param;
-import org.elypia.commandler.annotation.command.StandardCommand;
-import org.elypia.commandler.annotation.stereotypes.CommandController;
 import org.elypia.commandler.api.Controller;
+import org.elypia.commandler.dispatchers.standard.*;
 import org.elypia.commandler.newb.AsyncUtils;
 import org.elypia.commandler.producers.MessageSender;
 
@@ -36,8 +35,7 @@ import javax.inject.Inject;
 import java.util.*;
 import java.util.stream.Collectors;
 
-@CommandController
-@StandardCommand
+@StandardController
 public class LocaleController implements Controller {
 
     private final GuildRepository guildRepo;

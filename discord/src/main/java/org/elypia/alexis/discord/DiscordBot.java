@@ -21,7 +21,7 @@ import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import org.elypia.alexis.discord.listeners.*;
-import org.elypia.comcord.DiscordConfig;
+import org.elypia.comcord.configuration.DiscordConfig;
 import org.elypia.retropia.core.RequestService;
 import org.slf4j.*;
 
@@ -79,7 +79,8 @@ public class DiscordBot {
             .setBulkDeleteSplittingEnabled(false)
             .setActivity(DEFAULT_ACTIVITY)
             .setHttpClient(RequestService.getBuilder().build())
-            .addEventListeners(connectionListener,
+            .addEventListeners(
+                connectionListener,
                 emoteListener,
                 greetingListener,
                 joinKickListener,

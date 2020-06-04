@@ -37,7 +37,7 @@ public class MemberData implements Serializable {
     private static final long serialVersionUID = 1;
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "member_id")
     private int id;
 
@@ -53,7 +53,7 @@ public class MemberData implements Serializable {
     @Column(name = "member_xp")
     private long xp;
 
-    @OneToMany(targetEntity = MemberSkill.class, mappedBy = "memberData")
+    @OneToMany(targetEntity = MemberSkill.class, mappedBy = "memberData", cascade = CascadeType.ALL)
     private List<MemberSkill> skills;
 
     public int getId() {

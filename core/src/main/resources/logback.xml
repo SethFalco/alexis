@@ -15,14 +15,23 @@
   -->
 
 <configuration>
+    <contextListener class="ch.qos.logback.classic.jul.LevelChangePropagator"/>
+
     <logger name="com" level="WARN"/>
     <logger name="com.netflix.config.sources.URLConfigurationSource" level="ERROR"/>
+    <logger name="feign" level="WARN"/>
+    <logger name="io" level="WARN"/>
+    <logger name="javax" level="WARN"/>
+    <logger name="jdk" level="WARN"/>
     <logger name="net" level="WARN"/>
+    <logger name="okhttp3" level="WARN"/>
+    <logger name="org.apache" level="WARN"/>
     <logger name="org.hibernate" level="WARN"/>
     <logger name="org.jboss" level="WARN"/>
     <logger name="org.jboss.weld.Validator" level="ERROR"/>
     <logger name="org.quartz" level="WARN"/>
     <logger name="reactor" level="WARN"/>
+    <logger name="sun" level="WARN"/>
 
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
@@ -30,15 +39,16 @@
         </encoder>
     </appender>
 
-    <!-- If STACKDRIVER is defined, assume we're running on Google Cloud Platform. -->
-    <if condition='isDefined("STACKDRIVER")'>
+    <!-- If GOOGLE_CLOUD_LOGGING is defined, enable logging to Google Cloud Logs Viewer. -->
+    <if condition='property("GOOGLE_CLOUD_LOGGING").equals("true")'>
         <then>
-            <appender name="STACKDRIVER" class="com.google.cloud.logging.logback.LoggingAppender">
+            <appender name="CLOUD" class="com.google.cloud.logging.logback.LoggingAppender">
                 <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
                     <level>INFO</level>
                 </filter>
                 <log>alexis.log</log>
                 <flushLevel>WARN</flushLevel>
+                <enhancer>org.elypia.alexis.ProjectStageLoggingEnhancer</enhancer>
             </appender>
         </then>
     </if>
@@ -46,8 +56,8 @@
     <root level="ALL">
         <appender-ref ref="STDOUT"/>
 
-        <if condition='isDefined("STACKDRIVER")'>
-            <then><appender-ref ref="STACKDRIVER"/></then>
+        <if condition='property("GOOGLE_CLOUD_LOGGING").equals("true")'>
+            <then><appender-ref ref="CLOUD"/></then>
         </if>
     </root>
 </configuration>

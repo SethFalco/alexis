@@ -39,7 +39,7 @@ public class ConnectionListener extends ListenerAdapter {
     private static final Logger logger = LoggerFactory.getLogger(ConnectionListener.class);
 
     /** The default activity to display after the bot is ready. */
-    private static final Activity DEFAULT_ACTIVITY = Activity.watching("myself get ready!");
+    private static final Activity DEFAULT_ACTIVITY = Activity.playing("with you guys!");
 
     /**
      * Perform some initialization work, then remove this listenering since

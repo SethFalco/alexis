@@ -29,23 +29,25 @@ public class SkillRelation implements Serializable {
     private static final long serialVersionUID = 1;
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "relation_id")
     private int id;
 
-    @Column(name = "skill_id")
-    private int skillId;
+    @ManyToOne
+    @JoinColumn(name = "skill_id", nullable = false)
+    private Skill skill;
 
-    @Column(name = "text_channel_id")
-    private long channelId;
+    @ManyToOne
+    @JoinColumn(name = "text_channel_id", nullable = false)
+    private MessageChannelData channelData;
 
     public SkillRelation() {
         // Do nothing
     }
 
-    public SkillRelation(int skillId, long channelId) {
-        this.skillId = skillId;
-        this.channelId = channelId;
+    public SkillRelation(Skill skill, MessageChannelData channelData) {
+        this.skill = skill;
+        this.channelData = channelData;
     }
 
     public int getId() {
@@ -56,19 +58,19 @@ public class SkillRelation implements Serializable {
         this.id = id;
     }
 
-    public int getSkillId() {
-        return skillId;
+    public Skill getSkill() {
+        return skill;
     }
 
-    public void setSkillId(int skillId) {
-        this.skillId = skillId;
+    public void setSkill(Skill skill) {
+        this.skill = skill;
     }
 
-    public long getChannelId() {
-        return channelId;
+    public MessageChannelData getChannelData() {
+        return channelData;
     }
 
-    public void setChannelId(long channelId) {
-        this.channelId = channelId;
+    public void setChannelData(MessageChannelData channelData) {
+        this.channelData = channelData;
     }
 }

@@ -18,6 +18,7 @@ package org.elypia.alexis;
 
 import org.elypia.commandler.Commandler;
 import org.slf4j.*;
+import org.slf4j.bridge.SLF4JBridgeHandler;
 
 /**
  * This is the main class for the bot which initialised everything Alexis
@@ -37,6 +38,10 @@ public class Alexis {
 	 * @param args Command line arguments passed when running this application.
 	 */
 	public static void main(String[] args) {
+		SLF4JBridgeHandler.removeHandlersForRootLogger();
+		SLF4JBridgeHandler.install();
+		logger.info("Bridged JUL Logger to SLF4J.");
+
 		logger.info("Initializing the Commandler application.");
 		Commandler commandler = Commandler.create();
 

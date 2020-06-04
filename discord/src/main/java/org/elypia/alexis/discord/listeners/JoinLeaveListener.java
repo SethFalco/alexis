@@ -19,9 +19,9 @@ package org.elypia.alexis.discord.listeners;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.guild.*;
-import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.elypia.alexis.discord.utils.DiscordUtils;
 import org.elypia.alexis.i18n.AlexisMessages;
+import org.elypia.comcord.ActivatedListenerAdapter;
 import org.slf4j.*;
 
 import javax.inject.*;
@@ -32,7 +32,7 @@ import java.util.List;
  * @author seth@elypia.org (Seth Falco)
  */
 @Singleton
-public class JoinLeaveListener extends ListenerAdapter {
+public class JoinLeaveListener extends ActivatedListenerAdapter {
 
     private static final Logger logger = LoggerFactory.getLogger(JoinLeaveListener.class);
 
@@ -57,7 +57,6 @@ public class JoinLeaveListener extends ListenerAdapter {
     public void onGuildJoin(GuildJoinEvent event) {
         Guild guild = event.getGuild();
 
-        // If we didn't actually join this guild now and it's a false notification.
         if (guild.getSelfMember().getTimeJoined().isBefore(OffsetDateTime.now().minusMinutes(10)))
             return;
 
@@ -65,10 +64,10 @@ public class JoinLeaveListener extends ListenerAdapter {
         TextChannel channel = DiscordUtils.getWriteableChannel(guild);
 
         if (logger.isInfoEnabled())
-            logger.info("The guild {} just invited me! ({})", name, statsMessage(event.getJDA()));
+            logger.info("The guild `{}` just invited me! ({})", name, statsMessage(event.getJDA()));
 
         if (channel == null) {
-            logger.info("We were unable to talk in any channel in {};  no thank you message was delivered.", name);
+            logger.info("We were unable to talk in any channel in `{}`; no thank you message was delivered.", name);
             return;
         }
 

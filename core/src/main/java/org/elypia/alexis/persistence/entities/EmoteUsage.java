@@ -34,7 +34,7 @@ public class EmoteUsage implements Serializable {
     private static final long serialVersionUID = 1;
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "emote_usage_id")
     private int id;
 
@@ -46,10 +46,13 @@ public class EmoteUsage implements Serializable {
     @JoinColumn(name = "emote_id", nullable = false)
     private EmoteData emoteData;
 
-    /** The guild these emotes were used in. */
+    /**
+     * The guild these emotes were used in.
+     * This can be any guild, not just the guild that owns the emote.
+     */
     @ManyToOne
-    @JoinColumn(name = "guild_id", nullable = false)
-    private GuildData guildData;
+    @JoinColumn(name = "usage_guild_id", nullable = false)
+    private GuildData usageGuildData;
 
     /** The number of times this emote occured in the message. */
     @Column(name = "occurences", nullable = false)
@@ -65,15 +68,21 @@ public class EmoteUsage implements Serializable {
         // Do nothing
     }
 
-    public EmoteUsage(EmoteData emoteData, GuildData guildData, int occurences) {
-        this(emoteData, guildData, occurences, new Date());
+    public EmoteUsage(EmoteData emoteData, GuildData usageGuildData, int occurences) {
+        this(emoteData, usageGuildData, occurences, new Date());
     }
 
-    public EmoteUsage(EmoteData emoteData, GuildData guildData, int occurences, Date timestamp) {
+    public EmoteUsage(EmoteData emoteData, GuildData usageGuildData, int occurences, Date timestamp) {
         this.emoteData = emoteData;
-        this.guildData = guildData;
+        this.usageGuildData = usageGuildData;
         this.occurences = occurences;
         this.timestamp = timestamp;
+    }
+
+    @Override
+    public String toString() {
+        final String format = "%s(Occurences: %,d, Timestamp: %s)";
+        return String.format(format, this.getClass(), occurences, timestamp);
     }
 
     public int getId() {
@@ -88,12 +97,12 @@ public class EmoteUsage implements Serializable {
         this.emoteData = emoteData;
     }
 
-    public GuildData getGuildData() {
-        return guildData;
+    public GuildData getUsageGuildData() {
+        return usageGuildData;
     }
 
-    public void setGuildData(GuildData guildData) {
-        this.guildData = guildData;
+    public void setUsageGuildData(GuildData usageGuildData) {
+        this.usageGuildData = usageGuildData;
     }
 
     public int getOccurences() {

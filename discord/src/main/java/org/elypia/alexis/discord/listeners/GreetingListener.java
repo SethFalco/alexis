@@ -19,12 +19,12 @@ package org.elypia.alexis.discord.listeners;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.guild.GenericGuildEvent;
 import net.dv8tion.jda.api.events.guild.member.*;
-import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import org.elypia.alexis.discord.controllers.GreetingController;
+import org.elypia.alexis.i18n.AlexisMessages;
 import org.elypia.alexis.persistence.entities.*;
 import org.elypia.alexis.persistence.enums.*;
 import org.elypia.alexis.persistence.repositories.GuildRepository;
-import org.elypia.alexis.discord.controllers.GreetingController;
-import org.elypia.alexis.i18n.AlexisMessages;
+import org.elypia.comcord.ActivatedListenerAdapter;
 import org.slf4j.*;
 
 import javax.inject.*;
@@ -39,7 +39,7 @@ import java.util.Objects;
  * @author seth@elypia.org (Seth Falco)
  */
 @Singleton
-public class GreetingListener extends ListenerAdapter {
+public class GreetingListener extends ActivatedListenerAdapter {
 
     private static final Logger logger = LoggerFactory.getLogger(GreetingListener.class);
 

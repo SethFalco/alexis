@@ -34,10 +34,14 @@ public interface SkillRepository extends EntityRepository<Skill, Integer> {
     @Query("SELECT COUNT(s) FROM Skill s WHERE guild.id = ?1 AND name = ?2")
     int countByGuildIdAndNameEqualIgnoreCase(long guildId, String name);
 
+    @Query("SELECT s FROM Skill s WHERE guild.id = ?1")
     List<Skill> findByGuild(long guildId);
 
+    @Query("SELECT s FROM Skill s WHERE guild.id = ?1 AND name = ?2")
     Skill findByGuildAndNameEqualIgnoreCase(long guildId, String name);
 
+    @Modifying
+    @Query("DELETE s FROM Skill s WHERE guild.id = ?1 AND name = ?2")
     int deleteByGuildAndNameEqualIgnoreCase(long guildId, String name);
 
     /**
@@ -46,5 +50,7 @@ public interface SkillRepository extends EntityRepository<Skill, Integer> {
      * @param guildId The guild to delete skills from.
      * @return The number of rows that have been deleted.
      */
+    @Modifying
+    @Query("DELETE s FROM Skill s WHERE guild.id = ?1")
     int deleteByGuild(long guildId);
 }

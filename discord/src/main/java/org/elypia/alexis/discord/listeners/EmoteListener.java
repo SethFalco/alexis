@@ -20,8 +20,8 @@ import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.apache.commons.collections4.Bag;
-import org.elypia.alexis.persistence.enums.Feature;
 import org.elypia.alexis.persistence.entities.*;
+import org.elypia.alexis.persistence.enums.Feature;
 import org.elypia.alexis.persistence.repositories.*;
 import org.slf4j.*;
 
@@ -40,13 +40,11 @@ public class EmoteListener extends ListenerAdapter {
 
     private final GuildRepository guildRepo;
     private final EmoteRepository emoteRepo;
-    private final EmoteUsageRepository emoteUsageRepo;
 
     @Inject
-    public EmoteListener(GuildRepository guildRepo, EmoteRepository emoteRepo, EmoteUsageRepository emoteUsageRepo) {
+    public EmoteListener(GuildRepository guildRepo, EmoteRepository emoteRepo) {
         this.guildRepo = Objects.requireNonNull(guildRepo);
         this.emoteRepo = Objects.requireNonNull(emoteRepo);
-        this.emoteUsageRepo = Objects.requireNonNull(emoteUsageRepo);
     }
 
     @Override
@@ -60,9 +58,12 @@ public class EmoteListener extends ListenerAdapter {
         if (emotes.isEmpty())
             return;
 
-        Guild eventGuild = event.getGuild();
-        long eventGuildId = eventGuild.getIdLong();
+        long eventGuildId = event.getGuild().getIdLong();
         GuildData guildData = guildRepo.findBy(eventGuildId);
+
+        if (guildData == null)
+            return;
+
         Map<Feature, GuildFeature> features = guildData.getFeatures();
         GuildFeature feature = features.get(Feature.COUNT_GUILD_EMOTE_USAGE);
 
@@ -72,21 +73,23 @@ public class EmoteListener extends ListenerAdapter {
         Bag<Emote> emotesBag = message.getEmotesBag();
 
         for (Emote emote : emotes) {
-            Guild guild = emote.getGuild();
+            Guild emoteOwnerGuild = emote.getGuild();
 
-            if (guild == null)
+            if (emoteOwnerGuild == null)
                 return;
 
+            long emoteOwnerId = emoteOwnerGuild.getIdLong();
+            GuildData emoteOwnerGuildData = guildRepo.findOptionalBy(emoteOwnerId).orElse(new GuildData(emoteOwnerId));
+
             long emoteId = emote.getIdLong();
-            int count = emotesBag.getCount(emote);
+            int occurences = emotesBag.getCount(emote);
 
-            logger.debug("Inserting emote and usage to database with ID: {} and Count: {}", emoteId, count);
+            EmoteData emoteData = new EmoteData(emoteId, emoteOwnerGuildData);
+            EmoteUsage emoteUsage = new EmoteUsage(emoteData, guildData, occurences);
+            logger.debug("Inserting emote and usage: {}", emoteUsage);
+            emoteData.getUsages().add(emoteUsage);
 
-            EmoteData emoteData = new EmoteData(emoteId, guildData);
             emoteRepo.save(emoteData);
-
-            EmoteUsage emoteUsage = new EmoteUsage(emoteData, guildData, count);
-            emoteUsageRepo.save(emoteUsage);
         }
     }
 }

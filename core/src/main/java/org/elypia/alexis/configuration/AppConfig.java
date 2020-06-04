@@ -18,12 +18,15 @@ package org.elypia.alexis.configuration;
 
 import org.apache.deltaspike.core.api.config.*;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * @author seth@elypia.org (Seth Falco)
  */
 @Configuration(prefix = "application.")
 public interface AppConfig {
 
+    @NotNull
     @ConfigProperty(name = "name")
     String getApplicationName();
 }
