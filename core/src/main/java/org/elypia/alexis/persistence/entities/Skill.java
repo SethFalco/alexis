@@ -48,6 +48,13 @@ public class Skill implements Serializable {
     @Column(name = "skill_name")
     private String name;
 
+    /**
+     * Should we treat this {@link Skill} is active and in use.
+     * If not then we we'll pretend it doesn't exist.
+     *
+     * Users may want to turn this off when they don't think they want
+     * to use a skill, but don't want to delete any data regarding it.
+     */
     @ColumnDefault("1")
     @Column(name = "skill_enabled")
     private boolean enabled;
@@ -56,7 +63,14 @@ public class Skill implements Serializable {
     @Column(name = "skill_notify")
     private boolean notify;
 
-    @OneToMany(targetEntity = SkillRelation.class, mappedBy = "skill", cascade = CascadeType.ALL)
+    /**
+     * Represents all noteable achievments or milestones for this skill.
+     * This can be used to to provide rewards like certain rewards.
+     */
+    @OneToMany(targetEntity = SkillMilestone.class, mappedBy = "skill", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<SkillMilestone> milestones;
+
+    @OneToMany(targetEntity = SkillRelation.class, mappedBy = "skill", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SkillRelation> relations;
 
     public Skill() {
@@ -112,6 +126,14 @@ public class Skill implements Serializable {
 
     public void setNotify(boolean notify) {
         this.notify = notify;
+    }
+
+    public List<SkillMilestone> getMilestones() {
+        return milestones;
+    }
+
+    public void setMilestones(List<SkillMilestone> milestones) {
+        this.milestones = milestones;
     }
 
     public List<SkillRelation> getRelations() {

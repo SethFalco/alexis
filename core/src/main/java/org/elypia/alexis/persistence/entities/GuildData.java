@@ -61,14 +61,6 @@ public class GuildData implements Serializable {
     @Column(name = "guild_prefix")
     private String prefix;
 
-    /** What role to apply to users on join. */
-    @Column(name = "join_role_user_id", unique = true)
-    private Long joinRoleUserId;
-
-    /** The role that should be applied to bots on join. */
-    @Column(name = "join_role_bot_id", unique = true)
-    private Long joinRoleBotId;
-
     /** Allow guilds to locally override the amount of XP awarded with a custom multiplier. */
     @ColumnDefault("1.0")
     @Column(name = "xp_multp", nullable = false)
@@ -85,46 +77,41 @@ public class GuildData implements Serializable {
     /** The features that have been manually configured in this guild. */
     @MapKey(name = "feature")
     @MapKeyEnumerated(EnumType.STRING)
-    @OneToMany(targetEntity = GuildFeature.class, mappedBy = "guildData", cascade = CascadeType.ALL)
+    @OneToMany(targetEntity = GuildFeature.class, mappedBy = "guildData", cascade = CascadeType.ALL, orphanRemoval = true)
     private Map<Feature, GuildFeature> features;
 
     @MapKey(name = "type")
     @MapKeyEnumerated(EnumType.STRING)
-    @OneToMany(targetEntity = GuildMessage.class, mappedBy = "guildData", cascade = CascadeType.ALL)
+    @OneToMany(targetEntity = GuildMessage.class, mappedBy = "guildData", cascade = CascadeType.ALL, orphanRemoval = true)
     private Map<GuildMessageType, GuildMessage> messages;
 
     @MapKey(name = "logType")
     @MapKeyEnumerated(EnumType.STRING)
-    @OneToMany(targetEntity = LogSubscription.class, mappedBy = "guildData", cascade = CascadeType.ALL)
+    @OneToMany(targetEntity = LogSubscription.class, mappedBy = "guildData", cascade = CascadeType.ALL, orphanRemoval = true)
     private Map<LogType, LogSubscription> logSubscriptions;
 
-    @OneToMany(targetEntity = CustomCommand.class, mappedBy = "guildData", cascade = CascadeType.ALL)
+    @OneToMany(targetEntity = CustomCommand.class, mappedBy = "guildData", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CustomCommand> customCommands;
 
-    @OneToMany(targetEntity = EmoteData.class, mappedBy = "guildData", cascade = CascadeType.ALL)
+    @OneToMany(targetEntity = EmoteData.class, mappedBy = "guildData", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<EmoteData> emotes;
 
-    @OneToMany(targetEntity = EmoteUsage.class, mappedBy = "usageGuildData", cascade = CascadeType.ALL)
+    @OneToMany(targetEntity = EmoteUsage.class, mappedBy = "usageGuildData", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<EmoteUsage> emoteUsages;
 
-    @OneToMany(targetEntity = MemberData.class, mappedBy = "guildData", cascade = CascadeType.ALL)
+    @OneToMany(targetEntity = MemberData.class, mappedBy = "guildData", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MemberData> members;
 
-    @OneToMany(targetEntity = MessageChannelData.class, mappedBy = "guildData", cascade = CascadeType.ALL)
+    @OneToMany(targetEntity = MessageChannelData.class, mappedBy = "guildData", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MessageChannelData> messageChannels;
 
-    @OneToMany(targetEntity = RoleData.class, mappedBy = "guildData", cascade = CascadeType.ALL)
+    @OneToMany(targetEntity = RoleData.class, mappedBy = "guildData", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<RoleData> roles;
 
-    @OneToMany(targetEntity = Skill.class, mappedBy = "guild", cascade = CascadeType.ALL)
+    @OneToMany(targetEntity = Skill.class, mappedBy = "guild", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Skill> skills;
 
     public GuildData() {
-        // Do nothing
-    }
-
-    public GuildData(final long id) {
-        this.id = id;
         features = new EnumMap<>(Feature.class);
         messages = new EnumMap<>(GuildMessageType.class);
         customCommands = new ArrayList<>();
@@ -134,6 +121,11 @@ public class GuildData implements Serializable {
         messageChannels = new ArrayList<>();
         roles = new ArrayList<>();
         skills = new ArrayList<>();
+    }
+
+    public GuildData(final long id) {
+        this();
+        this.id = id;
     }
 
     @Override
@@ -148,8 +140,6 @@ public class GuildData implements Serializable {
             xp == g.xp &&
             locale.equals(g.locale) &&
             prefix.equals(g.prefix) &&
-            joinRoleUserId.equals(g.joinRoleUserId) &&
-            joinRoleBotId.equals(g.joinRoleBotId) &&
             multiplier.equals(g.multiplier);
     }
 
@@ -187,22 +177,6 @@ public class GuildData implements Serializable {
 
     public void setPrefix(String prefix) {
         this.prefix = prefix;
-    }
-
-    public Long getJoinRoleUserId() {
-        return joinRoleUserId;
-    }
-
-    public void setJoinRoleUserId(Long joinRoleUserId) {
-        this.joinRoleUserId = joinRoleUserId;
-    }
-
-    public Long getJoinRoleBotId() {
-        return joinRoleBotId;
-    }
-
-    public void setJoinRoleBotId(Long joinRoleBotId) {
-        this.joinRoleBotId = joinRoleBotId;
     }
 
     public Double getMultiplier() {

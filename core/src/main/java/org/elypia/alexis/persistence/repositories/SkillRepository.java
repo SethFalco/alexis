@@ -19,7 +19,7 @@ package org.elypia.alexis.persistence.repositories;
 import org.apache.deltaspike.data.api.*;
 import org.elypia.alexis.persistence.entities.Skill;
 
-import java.util.List;
+import java.util.*;
 
 @Repository(forEntity = Skill.class)
 public interface SkillRepository extends EntityRepository<Skill, Integer> {
@@ -38,19 +38,5 @@ public interface SkillRepository extends EntityRepository<Skill, Integer> {
     List<Skill> findByGuild(long guildId);
 
     @Query("SELECT s FROM Skill s WHERE guild.id = ?1 AND name = ?2")
-    Skill findByGuildAndNameEqualIgnoreCase(long guildId, String name);
-
-    @Modifying
-    @Query("DELETE s FROM Skill s WHERE guild.id = ?1 AND name = ?2")
-    int deleteByGuildAndNameEqualIgnoreCase(long guildId, String name);
-
-    /**
-     * Delete all skills associated with a guild.
-     *
-     * @param guildId The guild to delete skills from.
-     * @return The number of rows that have been deleted.
-     */
-    @Modifying
-    @Query("DELETE s FROM Skill s WHERE guild.id = ?1")
-    int deleteByGuild(long guildId);
+    Optional<Skill> findByGuildAndNameEqualIgnoreCase(long guildId, String name);
 }

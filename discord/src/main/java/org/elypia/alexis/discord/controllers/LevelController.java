@@ -23,7 +23,6 @@ import org.elypia.alexis.persistence.enums.GuildMessageType;
 import org.elypia.alexis.persistence.repositories.GuildRepository;
 import org.elypia.comcord.constraints.*;
 import org.elypia.commandler.annotation.Param;
-import org.elypia.commandler.api.Controller;
 import org.elypia.commandler.dispatchers.standard.*;
 
 import javax.inject.Inject;
@@ -34,7 +33,7 @@ import java.util.*;
  * @author seth@elypia.org (Seth Falco)
  */
 @StandardController
-public class LevelController implements Controller {
+public class LevelController {
 
     private final GuildRepository guildRepo;
     private final AlexisMessages alexisMessages;

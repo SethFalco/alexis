@@ -43,19 +43,16 @@ public class MessageChannelData implements Serializable {
     @Column(name = "cleverbot_state", length = 8196)
     private String cleverState;
 
-    @OneToMany(targetEntity = SkillRelation.class, mappedBy = "channelData", cascade = CascadeType.ALL)
+    @OneToMany(targetEntity = SkillRelation.class, mappedBy = "channelData", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SkillRelation> skillRelations;
 
     public MessageChannelData() {
-        // Do nothing
-    }
-
-    public MessageChannelData(long channelId) {
-        this.id = channelId;
+        skillRelations = new ArrayList<>();
     }
 
     public MessageChannelData(long channelId, GuildData guildData) {
-        this(channelId);
+        this();
+        this.id = channelId;
         this.guildData = guildData;
     }
 

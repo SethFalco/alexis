@@ -1,11 +1,26 @@
 package org.elypia.alexis.discord.models;
 
 import net.dv8tion.jda.api.entities.Emote;
+import org.elypia.alexis.persistence.entities.EmoteUsage;
 
+/**
+ * Model object that represents the leaderboard for {@link EmoteUsage}.
+ *
+ * @author seth@elypia.org (Seth Falco)
+ * @since 3.0.0
+ */
 public class EmoteLeaderboardEntryModel implements Comparable<EmoteLeaderboardEntryModel> {
 
+    /** The emote that was used. */
     private Emote emote;
+
+    /** The number of times it was used in the current guild in total. */
     private int localeUsage;
+
+    /**
+     * The number of times it was used across all
+     * guilds including the current one in total.
+     */
     private int globalUsage;
 
     public EmoteLeaderboardEntryModel() {

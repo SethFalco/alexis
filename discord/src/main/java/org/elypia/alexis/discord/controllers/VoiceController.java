@@ -20,7 +20,6 @@ import net.dv8tion.jda.api.entities.*;
 import org.elypia.alexis.i18n.AlexisMessages;
 import org.elypia.comcord.constraints.Channels;
 import org.elypia.commandler.annotation.Param;
-import org.elypia.commandler.api.Controller;
 import org.elypia.commandler.dispatchers.standard.*;
 
 import javax.inject.Inject;
@@ -32,7 +31,7 @@ import java.util.stream.Collectors;
  * @author seth@elypia.org (Seth Falco)
  */
 @StandardController
-public class VoiceController implements Controller {
+public class VoiceController {
 
     private final AlexisMessages messages;
 

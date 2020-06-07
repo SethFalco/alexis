@@ -20,7 +20,6 @@ import com.github.twitch4j.helix.domain.User;
 import org.elypia.alexis.i18n.AlexisMessages;
 import org.elypia.alexis.services.TwitchService;
 import org.elypia.commandler.annotation.Param;
-import org.elypia.commandler.api.Controller;
 import org.elypia.commandler.dispatchers.standard.*;
 import org.slf4j.*;
 
@@ -32,7 +31,7 @@ import java.util.Optional;
  * @author seth@elypia.org (Seth Falco)
  */
 @StandardController
-public class TwitchController implements Controller {
+public class TwitchController {
 
     /** Logging with SLF4J. */
     private static final Logger logger = LoggerFactory.getLogger(TwitchController.class);

@@ -21,17 +21,15 @@ import net.dv8tion.jda.api.entities.*;
 import org.elypia.alexis.i18n.AlexisMessages;
 import org.elypia.alexis.persistence.entities.*;
 import org.elypia.alexis.persistence.repositories.*;
-import org.elypia.comcord.annotations.Scoped;
 import org.elypia.comcord.constraints.Channels;
 import org.elypia.commandler.annotation.Param;
-import org.elypia.commandler.api.Controller;
 import org.elypia.commandler.dispatchers.standard.*;
 
 import javax.inject.Inject;
 import java.util.*;
 
 @StandardController
-public class SkillController implements Controller {
+public class SkillController {
 
     private final AlexisMessages messages;
     private final GuildRepository guildRepo;
@@ -68,16 +66,12 @@ public class SkillController implements Controller {
     @StandardCommand
     public Object getSkillInfo(@Channels(ChannelType.TEXT) Message message, @Param String name) {
         long guildId = message.getGuild().getIdLong();
-        Skill skill = skillRepo.findByGuildAndNameEqualIgnoreCase(guildId, name);
+        Optional<Skill> optSkill = skillRepo.findByGuildAndNameEqualIgnoreCase(guildId, name);
 
-        if (skill == null)
+        if (optSkill.isEmpty())
             return messages.skillNotFoundWithName(name);
 
-        EmbedBuilder builder = new EmbedBuilder();
-        builder.setTitle(skill.getName());
-//        builder.setDescription(skill.getChannels().toString());
-        builder.setFooter(String.valueOf(skill.isEnabled()), null);
-        return builder;
+        return optSkill.get();
     }
 
     @StandardCommand
@@ -96,32 +90,42 @@ public class SkillController implements Controller {
         return messages.skillAddedSuccesfully();
     }
 
-    // TODO: this is throwing an exception
     @StandardCommand
     public String deleteSkill(@Channels(ChannelType.TEXT) Message message, @Param String name) {
         long guildId = message.getGuild().getIdLong();
-        int changes = skillRepo.deleteByGuildAndNameEqualIgnoreCase(guildId, name);
+        GuildData guildData = guildRepo.findBy(guildId);
+        List<Skill> skills = guildData.getSkills();
 
-        if (changes == 0)
+        Optional<Skill> optSkill = skills.stream()
+            .filter((skill) -> skill.getName().equalsIgnoreCase(name))
+            .findFirst();
+
+        if (optSkill.isEmpty())
             return messages.skillDeletedNonExistingSkill();
 
+        Skill skill = optSkill.get();
+        skills.remove(skill);
+        guildRepo.save(guildData);
         return messages.skillDeletedSuccesfully();
     }
 
     @StandardCommand
     public String pruneSkills(@Channels(ChannelType.TEXT) Message message) {
         long guildId = message.getGuild().getIdLong();
-        int changes = skillRepo.deleteByGuild(guildId);
+        GuildData guildData = guildRepo.findBy(guildId);
+        List<Skill> skills = guildData.getSkills();
 
-        if (changes == 0)
+        if (skills.isEmpty())
             return messages.skillGuildHasNoSkills();
 
-        return messages.skillDeleteAllSkills(changes);
+        int listSize = skills.size();
+        skills.clear();
+        guildRepo.save(guildData);
+
+        return messages.skillDeleteAllSkills(listSize);
     }
 
     /**
-     * TODO: Not checking if it already exists, throws exception if tried to add twice
-     *
      * Assigns a relationship between a {@link Skill} and {@link TextChannel}
      * so that users can gain XP from interactions in the channel.
      *
@@ -131,20 +135,26 @@ public class SkillController implements Controller {
      * @return The response for the command.
      */
     @StandardCommand
-    public String assignSkillToChannel(@Channels(ChannelType.TEXT) Message message, @Param String name, @Param @Scoped TextChannel channel) {
-        Skill skill = skillRepo.findByGuildAndNameEqualIgnoreCase(message.getGuild().getIdLong(), name);
+    public String assignSkillToChannel(@Channels(ChannelType.TEXT) Message message, @Param String name, @Param TextChannel channel) {
+        long guildId = message.getGuild().getIdLong();
+        Optional<Skill> optSkill = skillRepo.findByGuildAndNameEqualIgnoreCase(guildId, name);
 
-        if (skill == null)
+        if (optSkill.isEmpty())
             return messages.skillNotFoundWithName(name);
+
+        Skill skill = optSkill.get();
+        GuildData guildData = skill.getGuild();
 
         long channelId = channel.getIdLong();
 
-        Optional<MessageChannelData> optChannelData = channelRepo.findOptionalBy(channelId);
-        MessageChannelData channelData = optChannelData.orElse(new MessageChannelData(channelId, new GuildData(channel.getGuild().getIdLong())));
+        MessageChannelData channelData = guildData.getMessageChannels().stream()
+            .filter((cd) -> cd.getId() == channelId)
+            .findAny()
+            .orElse(new MessageChannelData(channelId, guildData));
 
         SkillRelation relation = new SkillRelation(skill, channelData);
-        skill.getRelations().add(relation);
-        skillRepo.save(skill);
+        channelData.getSkillRelations().add(relation);
+        channelRepo.save(channelData);
 
         return messages.skillAssignedToChannel(skill.getName(), channel.getAsMention());
     }
@@ -152,10 +162,12 @@ public class SkillController implements Controller {
     @StandardCommand
     public String setNotify(@Channels(ChannelType.TEXT) Message message, @Param String name, @Param boolean isEnabled) {
         long guildId = message.getGuild().getIdLong();
-        Skill skill = skillRepo.findByGuildAndNameEqualIgnoreCase(guildId, name);
+        Optional<Skill> optSkill = skillRepo.findByGuildAndNameEqualIgnoreCase(guildId, name);
 
-        if (skill == null)
+        if (optSkill.isEmpty())
             return messages.skillNotFoundWithName(name);
+
+        Skill skill = optSkill.get();
 
         if (skill.isEnabled() == isEnabled)
             return messages.skillSettingNotChanged();

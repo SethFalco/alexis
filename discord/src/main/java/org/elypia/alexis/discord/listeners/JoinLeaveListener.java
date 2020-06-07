@@ -19,6 +19,7 @@ package org.elypia.alexis.discord.listeners;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.guild.*;
+import org.elypia.alexis.discord.DiscordBot;
 import org.elypia.alexis.discord.utils.DiscordUtils;
 import org.elypia.alexis.i18n.AlexisMessages;
 import org.elypia.comcord.ActivatedListenerAdapter;
@@ -29,6 +30,9 @@ import java.time.OffsetDateTime;
 import java.util.List;
 
 /**
+ * Listener for when the {@link DiscordBot} joins or leaves
+ * guilds.
+ *
  * @author seth@elypia.org (Seth Falco)
  */
 @Singleton

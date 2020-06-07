@@ -47,7 +47,7 @@ public class UserData implements Serializable {
     @Column(name = "last_activity")
     private Date lastMessage;
 
-    @OneToMany(targetEntity = MemberData.class, mappedBy = "userData", cascade = CascadeType.ALL)
+    @OneToMany(targetEntity = MemberData.class, mappedBy = "userData", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MemberData> members;
 
     public long getId() {

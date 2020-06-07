@@ -22,7 +22,6 @@ import org.elypia.alexis.persistence.entities.GuildData;
 import org.elypia.alexis.persistence.repositories.GuildRepository;
 import org.elypia.comcord.constraints.*;
 import org.elypia.commandler.annotation.Param;
-import org.elypia.commandler.api.Controller;
 import org.elypia.commandler.dispatchers.standard.*;
 import org.slf4j.*;
 
@@ -30,7 +29,7 @@ import javax.inject.Inject;
 import javax.validation.constraints.NotBlank;
 
 @StandardController
-public class PrefixController implements Controller {
+public class PrefixController {
 
     private static final Logger logger = LoggerFactory.getLogger(PrefixController.class);
 

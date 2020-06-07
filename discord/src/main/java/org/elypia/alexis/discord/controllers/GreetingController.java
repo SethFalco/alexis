@@ -17,7 +17,6 @@
 package org.elypia.alexis.discord.controllers;
 
 import net.dv8tion.jda.api.entities.*;
-import net.dv8tion.jda.api.events.Event;
 import org.elypia.alexis.discord.enums.*;
 import org.elypia.alexis.i18n.AlexisMessages;
 import org.elypia.alexis.persistence.entities.*;
@@ -25,16 +24,14 @@ import org.elypia.alexis.persistence.enums.*;
 import org.elypia.alexis.persistence.repositories.GuildRepository;
 import org.elypia.comcord.constraints.*;
 import org.elypia.commandler.annotation.Param;
-import org.elypia.commandler.api.Controller;
 import org.elypia.commandler.dispatchers.standard.*;
-import org.elypia.commandler.event.ActionEvent;
 
 import javax.inject.Inject;
 import javax.validation.constraints.NotBlank;
 import java.util.*;
 
 @StandardController
-public class GreetingController implements Controller {
+public class GreetingController {
 
     private GuildRepository guildRepo;
     private AlexisMessages messages;
@@ -101,8 +98,6 @@ public class GreetingController implements Controller {
         @Param("both") Recipient recipient
     ) {
         Guild guild = eventMessage.getGuild();
-
-        long guildId = guild.getIdLong();
         TextChannel channel = eventMessage.getTextChannel();
         long channelId = channel.getIdLong();
 
@@ -152,26 +147,49 @@ public class GreetingController implements Controller {
         return joiner.toString();
     }
 
+    /**
+     * Set where greeting messages should be sent.
+     *
+     * @param message The message that triggered this event.
+     * @param channel The channel to send messages to.
+     * @param recipient The types of recipients that should have messages sent there.
+     * @return What to reply to this at the end of the command.
+     */
     @StandardCommand
-    public String setChannel(@Elevated ActionEvent<Event, Message> event, @Param (value = "${source.channel}", displayAs = "current") @Talkable TextChannel channel) {
-//        MessageReceivedEvent source = (MessageReceivedEvent) event.getSource();
-//        GuildData data = GuildData.query(source.getMessage().getGuild().getIdLong());
-//        GreetingSettings greetingSettings = data.getSettings().getGreetingSettings();
-//        long channelId = channel.getIdLong();
-//
-//        GreetingSetting welcome = greetingSettings.getJoin();
-//        welcome.getUser().setChannel(channelId);
-//        welcome.getBot().setChannel(channelId);
-//
-//        GreetingSetting farewell = greetingSettings.getLeave();
-//        farewell.getUser().setChannel(channelId);
-//        farewell.getBot().setChannel(channelId);
-//
-//        data.commit();
-//
-//        var params = Map.of("mention", channel.getAsMention());
-//
-        return "no u";
+    public String setChannel(
+        @Channels(ChannelType.TEXT) @Elevated Message message,
+        @Param(value = "${source.channel}", displayAs = "current") @Talkable TextChannel channel,
+        @Param(value = "both") Recipient recipient
+    ) {
+        Guild guild = message.getGuild();
+        long guildId = guild.getIdLong();
+
+        GuildData guildData = guildRepo.findBy(guildId);
+
+        if (guildData == null)
+            return messages.notStoringGuildDataYet();
+
+        Map<GuildMessageType, GuildMessage> guildMessages = guildData.getMessages();
+        long channelId = channel.getIdLong();
+
+        if (recipient == Recipient.USER || recipient == Recipient.BOTH) {
+            if (guildMessages.containsKey(GuildMessageType.USER_WELCOME))
+                guildMessages.get(GuildMessageType.USER_WELCOME).setChannelId(channelId);
+
+            if (guildMessages.containsKey(GuildMessageType.USER_LEAVE))
+                guildMessages.get(GuildMessageType.USER_LEAVE).setChannelId(channelId);
+        }
+
+        if (recipient == Recipient.BOT || recipient == Recipient.BOTH) {
+            if (guildMessages.containsKey(GuildMessageType.BOT_WELCOME))
+                guildMessages.get(GuildMessageType.BOT_WELCOME).setChannelId(channelId);
+
+            if (guildMessages.containsKey(GuildMessageType.BOT_LEAVE))
+                guildMessages.get(GuildMessageType.BOT_LEAVE).setChannelId(channelId);
+        }
+
+        guildRepo.save(guildData);
+        return messages.allGreetingMessagesSetToChannel(guild.getName(), channel.getAsMention());
     }
 
     /**

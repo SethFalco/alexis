@@ -19,7 +19,6 @@ package org.elypia.alexis.controllers;
 import org.elypia.alexis.configuration.ApiConfig;
 import org.elypia.alexis.i18n.AlexisMessages;
 import org.elypia.commandler.annotation.Param;
-import org.elypia.commandler.api.Controller;
 import org.elypia.commandler.dispatchers.standard.*;
 import org.elypia.elypiai.steam.*;
 import org.slf4j.*;
@@ -34,7 +33,7 @@ import java.util.concurrent.ThreadLocalRandom;
  * @author seth@elypia.org (Seth Falco)
  */
 @StandardController
-public class SteamController implements Controller {
+public class SteamController {
 
 	private static final Logger logger = LoggerFactory.getLogger(SteamController.class);
 

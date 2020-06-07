@@ -26,8 +26,6 @@ import org.elypia.alexis.persistence.repositories.GuildRepository;
 import org.elypia.comcord.EventUtils;
 import org.elypia.comcord.constraints.*;
 import org.elypia.commandler.annotation.Param;
-import org.elypia.commandler.annotation.stereotypes.CommandController;
-import org.elypia.commandler.api.Controller;
 import org.elypia.commandler.dispatchers.standard.*;
 
 import javax.inject.Inject;
@@ -36,9 +34,8 @@ import java.util.*;
 /**
  * @author seth@elypia.org (Seth Falco)
  */
-@CommandController
 @StandardController
-public class EmoteController implements Controller {
+public class EmoteController {
 
     private final GuildRepository guildRepo;
     private final AlexisMessages messages;
@@ -102,17 +99,19 @@ public class EmoteController implements Controller {
         if (feature == null) {
             features.put(Feature.COUNT_GUILD_EMOTE_USAGE, new GuildFeature(data, Feature.COUNT_GUILD_EMOTE_USAGE, isEnabled, userId));
             guildRepo.save(data);
-            return "I've added the setting now.";
+            return messages.emoteTrackingEnabled();
         } else {
             if (feature.isEnabled() == isEnabled)
-                return "That's what it's already set too. ^-^'";
+                return messages.emoteTrackingSetToSame();
 
             feature.setEnabled(isEnabled);
             feature.setModifiedBy(userId);
         }
 
         guildRepo.save(data);
-        return "I've changed the setting ";
+
+        String enabledDisplay = (isEnabled) ? messages.enabled() : messages.disabled();
+        return messages.emoteTrackingSettingChanged(enabledDisplay);
     }
 
     /**

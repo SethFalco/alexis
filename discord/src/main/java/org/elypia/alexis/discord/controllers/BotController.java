@@ -25,7 +25,6 @@ import org.elypia.alexis.discord.utils.DiscordUtils;
 import org.elypia.alexis.i18n.AlexisMessages;
 import org.elypia.comcord.constraints.*;
 import org.elypia.commandler.annotation.*;
-import org.elypia.commandler.api.Controller;
 import org.elypia.commandler.dispatchers.standard.*;
 import org.elypia.commandler.newb.AsyncUtils;
 import org.elypia.commandler.producers.MessageSender;
@@ -42,7 +41,7 @@ import java.util.stream.Collectors;
  * @author seth@elypia.org (Seth Falco)
  */
 @StandardController(isStatic = true)
-public class BotController implements Controller {
+public class BotController {
 
 	private static final Logger logger = LoggerFactory.getLogger(BotController.class);
 

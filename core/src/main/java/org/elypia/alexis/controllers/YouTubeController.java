@@ -21,7 +21,6 @@ import com.google.api.services.youtube.model.SearchResult;
 import org.elypia.alexis.i18n.AlexisMessages;
 import org.elypia.alexis.services.youtube.*;
 import org.elypia.commandler.annotation.Param;
-import org.elypia.commandler.api.Controller;
 import org.elypia.commandler.dispatchers.standard.*;
 import org.slf4j.*;
 
@@ -33,7 +32,7 @@ import java.util.*;
  * @author seth@elypia.org (Seth Falco)
  */
 @StandardController
-public class YouTubeController implements Controller {
+public class YouTubeController {
 
     private static final Logger logger = LoggerFactory.getLogger(YouTubeController.class);
 

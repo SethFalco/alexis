@@ -26,7 +26,6 @@ import org.elypia.alexis.services.translate.TranslateService;
 import org.elypia.comcord.annotations.ReactionCommand;
 import org.elypia.comcord.constraints.*;
 import org.elypia.commandler.annotation.Param;
-import org.elypia.commandler.api.Controller;
 import org.elypia.commandler.dispatchers.standard.*;
 import org.elypia.commandler.newb.AsyncUtils;
 import org.elypia.commandler.producers.MessageSender;
@@ -36,7 +35,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @StandardController
-public class LocaleController implements Controller {
+public class LocaleController {
 
     private final GuildRepository guildRepo;
     private final MessageChannelRepository messageChannelRepo;
@@ -92,7 +91,8 @@ public class LocaleController implements Controller {
                     sender.send("I couldn't find any plain text messages in the past 100 hundred messages that aren't mine.");
                 else {
                     Language language = translateService.detectMostFrequentAsLanguage(previousMessages);
-                    sender.send("I've set the language to " + language.getName() + " " + language.getCode());
+                    Locale locale = Locale.forLanguageTag(language.getCode());
+                    sender.send(setGlobalLocale(message, locale));
                 }
             }
 
@@ -110,8 +110,6 @@ public class LocaleController implements Controller {
         return messages.localeUpdatedGuild(locale.getDisplayName(locale));
     }
 
-    // TODO: make a way for users to use aliases in a single language
-    // TODO: default help controller has unexpected result on $help modules osu!
     @StandardCommand
     public String setLocalLocale(@Elevated Message message, @Param Locale locale) {
         MessageChannel channel = message.getChannel();

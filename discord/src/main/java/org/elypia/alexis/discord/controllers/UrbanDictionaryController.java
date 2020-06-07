@@ -22,9 +22,7 @@ import net.dv8tion.jda.api.utils.MarkdownUtil;
 import org.elypia.alexis.discord.utils.DiscordUtils;
 import org.elypia.alexis.i18n.AlexisMessages;
 import org.elypia.commandler.annotation.Param;
-import org.elypia.commandler.annotation.stereotypes.CommandController;
-import org.elypia.commandler.api.Controller;
-import org.elypia.commandler.dispatchers.standard.StandardCommand;
+import org.elypia.commandler.dispatchers.standard.*;
 import org.elypia.commandler.newb.AsyncUtils;
 import org.elypia.commandler.producers.MessageSender;
 import org.elypia.commandler.utils.ChatUtils;
@@ -38,8 +36,8 @@ import java.util.stream.Stream;
 /**
  * @author seth@elypia.org (Seth Falco)
  */
-@CommandController
-public class UrbanDictionaryController implements Controller {
+@StandardController
+public class UrbanDictionaryController {
 
     private static final Logger logger = LoggerFactory.getLogger(UrbanDictionaryController.class);
 
@@ -55,7 +53,6 @@ public class UrbanDictionaryController implements Controller {
     }
 
     /**
-     * TODO: Make an easy way for users to be able to contact the bot dev
      * TODO: Return results in the order of the queue
      *
      * @param terms

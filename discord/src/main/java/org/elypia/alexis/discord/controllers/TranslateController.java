@@ -25,7 +25,7 @@ import org.elypia.alexis.persistence.repositories.GuildRepository;
 import org.elypia.alexis.services.translate.TranslateService;
 import org.elypia.comcord.constraints.*;
 import org.elypia.commandler.annotation.Param;
-import org.elypia.commandler.api.*;
+import org.elypia.commandler.api.Integration;
 import org.elypia.commandler.dispatchers.standard.*;
 import org.elypia.commandler.event.ActionEvent;
 import org.elypia.commandler.newb.AsyncUtils;
@@ -37,7 +37,7 @@ import javax.validation.constraints.NotBlank;
 import java.util.regex.Pattern;
 
 @StandardController
-public class TranslateController implements Controller {
+public class TranslateController {
 
     /** Matches any mentionable entities. */
     private static final Pattern ENTITY_PATTERN = Pattern.compile("@(?:everyone|here)|<(?:(?:[@#])(?:[&!])?|:\\w{2,}?:)\\d+>");
@@ -104,6 +104,11 @@ public class TranslateController implements Controller {
         return null;
     }
 
+    /**
+     * @param content The content we want to translate.
+     * @return The same content with with notranslate
+     * markers placed around Discord entities.
+     */
     private String markNonTranslatableEntities(String content) {
         return content.replaceAll(ENTITY_PATTERN.pattern(), "<span class='notranslate'>$0</span>");
     }

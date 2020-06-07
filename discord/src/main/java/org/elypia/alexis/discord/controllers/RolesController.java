@@ -16,180 +16,281 @@
 
 package org.elypia.alexis.discord.controllers;
 
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
-import org.elypia.alexis.persistence.entities.AssignableRole;
-import org.elypia.commandler.api.Controller;
-import org.elypia.commandler.dispatchers.standard.StandardController;
+import net.dv8tion.jda.api.utils.MarkdownUtil;
+import org.elypia.alexis.i18n.AlexisMessages;
+import org.elypia.alexis.persistence.entities.*;
+import org.elypia.alexis.persistence.repositories.GuildRepository;
+import org.elypia.comcord.constraints.*;
+import org.elypia.commandler.annotation.Param;
+import org.elypia.commandler.dispatchers.standard.*;
 
+import javax.inject.Inject;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * Roles controller for setting up self-assignable roles
+ * so users can choose to pick one roles of their choice
+ * if configured by the guild.
+ *
+ * @author seth@elypia.org (Seth Falco)
+ */
 @StandardController
-public class RolesController implements Controller {
+public class RolesController {
 
-//    public String getSelfAssignableRoles(@Channels(ChannelType.TEXT) ActionEvent<Event, Message> event) {
-//        Guild guild = event.getMessage().getGuild();
-//        List<AssignableRole> allowed = getAssignableRoles(guild);
-//
-//        if (allowed.isEmpty())
-//            return "Sorry, there are no self-assignable roles in this guild.";
-//
-//        String string = asString(guild, allowed);
-//        return String.format("** Self-Assignable Roles**\n%s", string);
-//    }
-//
-//    public Object assign(
-//        @Channels(ChannelType.TEXT) @Permissions(value = Permission.MANAGE_ROLES, user = false) ActionEvent<Event, Message> event,
-//        @Scoped(inGuild = Scope.LOCAL) Role[] roles
-//    ) {
-//        Message message = event.getMessage();
-//        Guild guild = message.getGuild();
-//        Member member = message.getMember();
-//
-//        Objects.requireNonNull(member, "Guild only event was somehow performed with a null member.");
-//
-//        Set<Role> membersRoles = new HashSet<>(member.getRoles());
-//        List<AssignableRole> allowed = getAssignableRoles(guild);
-//
-//        if (hasDuplicates(roles))
-//            return "It seems you accidently specified some roles twice, maybe you had a typo?";
-//
-//        List<Role> rolesToAdd = getRoles(allowed, roles, true);
-//        List<Role> rolesDenied = getRoles(allowed, roles, false);
-//
-//        if (rolesToAdd.isEmpty())
-//            return "Sorry, none of the roles you specified were actually self-assignable at all.";
-//
-//        membersRoles.addAll(rolesToAdd);
-//        guild.modifyMemberRoles(member, membersRoles).complete();
-//
-//        String response = "I've succesfully added your roles for you.";
-//
-//        if (!rolesDenied.isEmpty())
-//            response += "\n" + "The following roles weren't added: " + asString(rolesDenied);
-//
-//        return response;
-//    }
+    private final GuildRepository guildRepo;
+    private final AlexisMessages messages;
 
-
-//    public Object allow(
-//        @Channels(ChannelType.TEXT) @Permissions(value = Permission.MANAGE_ROLES) @Elevated ActionEvent<Event, Message> command,
-//        @Scoped(inGuild = Scope.LOCAL) Role[] roles
-//    ) {
-//        GuildData data = GuildData.query(command.getSource().getGuild());
-//        List<AssignableRole> allowed = getAssignableRoles(data);
-//
-//        if (hasDuplicates(roles))
-//            return "It seems you accidently specified some roles twice, maybe you had a typo?";
-//
-//        List<Role> rolesAllowed = getRoles(allowed, roles, false);
-//        List<Role> alreadyAllowed = getRoles(allowed, roles, true);
-//
-//        rolesAllowed.forEach((role) -> allowed.add(new AssignableRole(role.getIdLong())));
-//
-//        if (alreadyAllowed.size() == roles.length)
-//            return scripts.get("roles.allow.already_allowed");
-//
-//        data.commit();
-//
-//        String response = scripts.get("roles.allow.success");
-//
-//        if (!alreadyAllowed.isEmpty())
-//            response += "\n" + scripts.get("roles.allow.partial") + asString(alreadyAllowed);
-//
-//        return response;
-//    }
-//
-//    @Command(id = "roles.deny", aliases = "deny", help = "roles.deny.h")
-//    @Param(id = "common.roles", help = "roles.deny.roles.h")
-//    public Object deny(@Channels(ChannelType.TEXT) @Elevated ActionEvent<Event, Message> command, @Search(Scope.LOCAL) Role[] roles) {
-//        GuildData data = GuildData.query(command.getSource().getGuild());
-//        List<AssignableRole> allowed = getAssignableRoles(data);
-//
-//        if (hasDuplicates(roles))
-//            return scripts.get("roles.assign.duplicate");
-//
-//        List<Role> rolesToRemove = getRoles(allowed, roles, true);
-//        List<Role> rolesCantRemove = getRoles(allowed, roles, false);
-//
-//        rolesToRemove.forEach((role) -> allowed.removeIf(o -> role.getIdLong() == o.getRoleId()));
-//
-//        if (rolesCantRemove.size() == roles.length)
-//            return scripts.get("roles.deny.not_assignable");
-//
-//        data.commit();
-//
-//        String response = scripts.get("roles.deny.success");
-//
-//        if (!rolesCantRemove.isEmpty())
-//            response += "\n" + scripts.get("roles.deny.partial") + asString(rolesCantRemove);
-//
-//        return response;
-//    }
-//
-//    private List<AssignableRole> getAssignableRoles(Guild guild) {
-//        return GuildData.query(guild).getSettings().getAssignableRoles();
-//    }
-//
-//    /**
-//     * Get a list of assignable roles in a guild from the GuildData.
-//     *
-//     * @param data The GuildData entity which represents a guild as far
-//     * as the bot is concerned int the database.
-//     * @return A list of any self-assignable roles this guild may have configured.
-//     */
-//    private List<AssignableRole> getAssignableRoles(GuildData data) {
-//        return data.getSettings().getAssignableRoles();
-//    }
-
-    /**
-     * Check if any of the roles specified in the command
-     * are a duplicate. This is likely a mistake and so should
-     * be deemed invalid.
-     *
-     * @param roles The roles specified by the user.
-     * @return If this array of roles contains are duplicates.
-     */
-    private boolean hasDuplicates(Role[] roles) {
-        return Arrays.stream(roles).distinct().count() != roles.length;
+    @Inject
+    public RolesController(GuildRepository guildRepo, AlexisMessages messages) {
+        this.guildRepo = guildRepo;
+        this.messages = messages;
     }
 
     /**
-     * Return a list of roles from the list of requested roles
-     * based split into either only allowed, or only denied.
+     * Return a list of roles that are assignable in the current guild,
+     * and any requirements needed to self-assign them.
      *
-     * @param assignableRoles All assignable roles in the guild.
-     * @param requestedRoles All request roles in this request.
-     * @param allowed If we want allowed roles, or denies roles.
-     * @return A list of Discord Role entities.
+     * @param message The mesage that trigged this event.
+     * @return The message to send in chat.
      */
-    private List<Role> getRoles(List<AssignableRole> assignableRoles, Role[] requestedRoles, boolean allowed) {
-        List<Role> roles = new ArrayList<>();
+    @StandardCommand
+    public String getSelfAssignableRoles(@Channels(ChannelType.TEXT) Message message) {
+        Guild guild = message.getGuild();
+        GuildData guildData = guildRepo.findBy(guild.getIdLong());
 
-        for (Role role : requestedRoles) {
-            boolean allow = assignableRoles.stream().anyMatch((assignableRole) -> {
-                return assignableRole.getRoleId() == role.getIdLong();
-            });
+        if (guildData == null)
+            return messages.assignableRolesNoData();
 
-            if (allow == allowed)
-                roles.add(role);
-        }
+        List<RoleData> selfAssignableRoles = guildData.getRoles().stream()
+            .filter(RoleData::isSelfAssignable)
+            .filter((role) -> guild.getRoleById(role.getId()) != null)
+            .collect(Collectors.toList());
 
-        return roles;
-    }
+        if (selfAssignableRoles.isEmpty())
+            return messages.assignableRolesNoRolesSet();
 
-    private String asString(Guild guild, Collection<AssignableRole> roles) {
-        return asString(roles.stream().map((role) -> guild.getRoleById(role.getRoleId()))
-            .collect(Collectors.toList()));
-    }
-
-    private String asString(List<Role> roles) {
-        Collections.sort(roles);
         StringJoiner joiner = new StringJoiner("\n");
 
-        for (Role role : roles)
-            joiner.add("`" + role.getName() + "`");
+        for (RoleData role : selfAssignableRoles)
+            joiner.add("`" + guild.getRoleById(role.getId()).getName() + "`");
+
+        return messages.assignableRolesList(joiner.toString());
+    }
+
+    @StandardCommand
+    public String assignSelfAssignableRole(
+        @Channels(ChannelType.TEXT) @Permissions(value = Permission.MANAGE_ROLES, userNeedsPermission = false) Message message,
+        @Param Role[] roles
+    ) {
+        Guild guild = message.getGuild();
+        GuildData guildData = guildRepo.findBy(guild.getIdLong());
+
+        if (guildData == null)
+            return messages.assignableRolesNoData();
+
+        Member member = message.getMember();
+
+        Objects.requireNonNull(member, "Guild only event was somehow performed with a null member.");
+
+        List<RoleData> selfAssignableRoles = guildData.getRoles().stream()
+            .filter(RoleData::isSelfAssignable)
+            .filter((role) -> guild.getRoleById(role.getId()) != null)
+            .collect(Collectors.toList());
+
+        List<Role> rolesList = new ArrayList<>(List.of(roles));
+        List<Role> distinct = popDistinct(rolesList);
+
+        List<Role> rolesToAdd = new ArrayList<>();
+        List<Role> rolesDenied = new ArrayList<>();
+
+        for (Role role : distinct) {
+            Optional<RoleData> optRoleData = selfAssignableRoles.stream()
+                .filter((rd) -> rd.getId() == role.getIdLong())
+                .findAny();
+
+            if (optRoleData.isEmpty())
+                rolesDenied.add(role);
+            else {
+                RoleData roleData = optRoleData.get();
+
+                if (roleData.isSelfAssignable())
+                    rolesToAdd.add(role);
+                else
+                    rolesDenied.add(role);
+            }
+        }
+
+        List<Role> alreadyOwned = new ArrayList<>();
+
+        for (int i = rolesToAdd.size() - 1; i >= 0; i--) {
+            if (member.getRoles().contains(rolesToAdd.get(i)))
+                alreadyOwned.add(rolesToAdd.remove(i));
+        }
+
+        guild.modifyMemberRoles(member, rolesToAdd, null).queue();
+
+        StringJoiner joiner = new StringJoiner("\n\n");
+
+        if (!rolesToAdd.isEmpty())
+            joiner.add(messages.assignableRolesUserAssignedRole(toRoleString(rolesToAdd)));
+
+        if (!rolesDenied.isEmpty())
+            joiner.add(messages.assignableRolesUserDeniedRole(toRoleString(rolesDenied)));
+
+        if (!alreadyOwned.isEmpty())
+            joiner.add(messages.assignableRolesUserAlreadyHadRole(toRoleString(alreadyOwned)));
+
+        if (!rolesList.isEmpty())
+            joiner.add(messages.assignableRolesIgnoredDuplicates(toRoleString(rolesList)));
 
         return joiner.toString();
+    }
+
+    /**
+     * Add roles that can be marked as assignable.
+     *
+     * @param message The mesage that trigged this event.
+     * @param roles The roles that should be marked as allowed for self-assignment.
+     * @return The message to send in chat.
+     */
+    @StandardCommand
+    public String addAssignableRoles(
+        @Channels(ChannelType.TEXT) @Permissions(value = Permission.MANAGE_ROLES) @Elevated Message message,
+        @Param Role[] roles
+    ) {
+        long guildId = message.getGuild().getIdLong();
+        GuildData guildData = guildRepo.findOptionalBy(guildId).orElse(new GuildData(guildId));
+        List<RoleData> roleDatas = guildData.getRoles();
+        List<Role> rolesList = new ArrayList<>(List.of(roles));
+        List<Role> distinct = popDistinct(rolesList);
+
+        List<Role> rolesToAllow = new ArrayList<>();
+        List<Role> alreadyAllowed = new ArrayList<>();
+
+        for (Role role : distinct) {
+            Optional<RoleData> optRoleData = roleDatas.stream()
+                .filter((rd) -> rd.getId() == role.getIdLong())
+                .findAny();
+
+            if (optRoleData.isPresent()) {
+                RoleData roleData = optRoleData.get();
+
+                if (roleData.isSelfAssignable())
+                    alreadyAllowed.add(role);
+                else {
+                    roleData.setSelfAssignable(true);
+                    rolesToAllow.add(role);
+                }
+            } else {
+                roleDatas.add(new RoleData(role.getIdLong(), guildData, true));
+                rolesToAllow.add(role);
+            }
+        }
+
+        StringJoiner joiner = new StringJoiner("\n\n");
+
+        if (!rolesToAllow.isEmpty())
+            joiner.add(messages.assignableRolesNowAllowed(toRoleString(rolesToAllow)));
+
+        if (!alreadyAllowed.isEmpty())
+            joiner.add(messages.assignableRolesAlreadyAllowed(toRoleString(alreadyAllowed)));
+
+        if (!rolesList.isEmpty())
+            joiner.add(messages.assignableRolesIgnoredDuplicates(toRoleString(rolesList)));
+
+        guildRepo.save(guildData);
+        return joiner.toString();
+    }
+
+    /**
+     * Disable any roles that have been set to be auto-assigned.
+     *
+     * @param message The mesage that trigged this event.
+     * @param roles The roles that should no longer be marked as self-assignable.
+     * @return The message to send in chat.
+     */
+    @StandardCommand
+    public String denyAssignableRoles(@Channels(ChannelType.TEXT) @Elevated Message message, @Param Role[] roles) {
+        long guildId = message.getGuild().getIdLong();
+        GuildData guildData = guildRepo.findBy(guildId);
+
+        if (guildData == null)
+            return messages.assignableRolesNoData();
+
+        List<RoleData> roleDatas = guildData.getRoles();
+        List<Role> rolesList = new ArrayList<>(List.of(roles));
+        List<Role> distinct = popDistinct(rolesList);
+
+        List<Role> rolesToRemove = new ArrayList<>();
+        List<Role> redundantRoles = new ArrayList<>();
+
+        for (Role role : distinct) {
+            Optional<RoleData> optRoleData = roleDatas.stream()
+                .filter((rd) -> rd.getId() == role.getIdLong())
+                .findAny();
+
+            if (optRoleData.isEmpty())
+                redundantRoles.add(role);
+            else {
+                RoleData roleData = optRoleData.get();
+
+                if (roleData.isSelfAssignable()) {
+                    roleData.setSelfAssignable(false);
+                    rolesToRemove.add(role);
+                } else {
+                    redundantRoles.add(role);
+                }
+            }
+        }
+
+        StringJoiner joiner = new StringJoiner("\n\n");
+
+        if (!rolesToRemove.isEmpty())
+            joiner.add(messages.assignableRolesRemoved(toRoleString(rolesToRemove)));
+
+        if (!redundantRoles.isEmpty())
+            joiner.add(messages.assignableRolesDidntExist(toRoleString(redundantRoles)));
+
+        if (!rolesList.isEmpty())
+            joiner.add(messages.assignableRolesIgnoredDuplicates(toRoleString(rolesList)));
+
+        guildRepo.save(guildData);
+        return joiner.toString();
+    }
+
+    /**
+     * Remove all distinct values from the provided list
+     * leaving the list with only duplicate values while returning
+     * the distinct values.
+     *
+     * @param items A list of items to pull distinct values from.
+     * @return A list of all distinct values in the collection,
+     * leaving the collection with only duplicates.
+     */
+    private <T> List<T> popDistinct(final List<T> items) {
+        List<T> distinct = new ArrayList<>();
+
+        for (int i = items.size() - 1; i >= 0; i--) {
+            if (!distinct.contains(items.get(i)))
+                distinct.add(items.remove(i));
+        }
+
+        return distinct;
+    }
+
+    /**
+     * Convert a list of Roles into an appropriate {@link String} that
+     * can be represented as a comma seperated list.
+     *
+     * @param roles The roles to join together.
+     * @return A single string representing a comma delimetered list of role names.
+     */
+    private String toRoleString(final Collection<Role> roles) {
+        return roles.stream()
+            .map((role) -> MarkdownUtil.monospace(role.getName()))
+            .collect(Collectors.joining(", "));
     }
 }

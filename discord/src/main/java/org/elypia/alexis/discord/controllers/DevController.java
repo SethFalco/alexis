@@ -24,8 +24,7 @@ import org.elypia.comcord.annotations.Scoped;
 import org.elypia.comcord.constraints.BotOwner;
 import org.elypia.commandler.Commandler;
 import org.elypia.commandler.annotation.Param;
-import org.elypia.commandler.annotation.stereotypes.CommandController;
-import org.elypia.commandler.api.Controller;
+import org.elypia.commandler.annotation.stereotypes.Controller;
 import org.elypia.commandler.dispatchers.standard.*;
 import org.slf4j.*;
 
@@ -37,9 +36,9 @@ import java.util.*;
 /**
  * @author seth@elypia.org (Seth Falco)
  */
-@CommandController(hidden = true)
+@Controller(hidden = true)
 @StandardController
-public class DevController implements Controller {
+public class DevController {
 
     private static final Logger logger = LoggerFactory.getLogger(DevController.class);
 
@@ -88,7 +87,6 @@ public class DevController implements Controller {
     }
 
     /**
-     * TODO: Shutdown CDI container
      * @param message The message that triggered this event.
      */
     @StandardCommand

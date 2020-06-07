@@ -17,7 +17,6 @@
 package org.elypia.alexis.controllers;
 
 import org.elypia.alexis.i18n.AlexisMessages;
-import org.elypia.commandler.api.Controller;
 import org.elypia.commandler.dispatchers.standard.*;
 import org.slf4j.*;
 
@@ -28,7 +27,7 @@ import java.util.concurrent.ThreadLocalRandom;
  * @author seth@elypia.org (Seth Falco)
  */
 @StandardController
-public class CoinController implements Controller {
+public class CoinController {
 
     private static final Logger logger = LoggerFactory.getLogger(CoinController.class);
 

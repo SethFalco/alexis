@@ -53,7 +53,7 @@ public class MemberData implements Serializable {
     @Column(name = "member_xp")
     private long xp;
 
-    @OneToMany(targetEntity = MemberSkill.class, mappedBy = "memberData", cascade = CascadeType.ALL)
+    @OneToMany(targetEntity = MemberSkill.class, mappedBy = "memberData", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MemberSkill> skills;
 
     public int getId() {

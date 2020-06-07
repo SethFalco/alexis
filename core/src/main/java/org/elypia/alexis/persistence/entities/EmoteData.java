@@ -38,7 +38,7 @@ public class EmoteData implements Serializable {
     @JoinColumn(name = "guild_id", nullable = false)
     private GuildData guildData;
 
-    @OneToMany(targetEntity = EmoteUsage.class, mappedBy = "emoteData", cascade = CascadeType.ALL)
+    @OneToMany(targetEntity = EmoteUsage.class, mappedBy = "emoteData", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<EmoteUsage> usages;
 
     public EmoteData() {

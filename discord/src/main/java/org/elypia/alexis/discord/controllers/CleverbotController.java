@@ -18,10 +18,9 @@ package org.elypia.alexis.discord.controllers;
 
 import net.dv8tion.jda.api.entities.Message;
 import org.elypia.alexis.configuration.ApiConfig;
-import org.elypia.alexis.persistence.entities.MessageChannelData;
+import org.elypia.alexis.persistence.entities.*;
 import org.elypia.alexis.persistence.repositories.MessageChannelRepository;
 import org.elypia.commandler.annotation.Param;
-import org.elypia.commandler.api.Controller;
 import org.elypia.commandler.dispatchers.standard.*;
 import org.elypia.commandler.newb.AsyncUtils;
 import org.elypia.commandler.producers.MessageSender;
@@ -36,7 +35,7 @@ import java.util.Objects;
  * @author seth@elypia.org (Seth Falco)
  */
 @StandardController
-public class CleverbotController implements Controller {
+public class CleverbotController {
 
     private static final Logger logger = LoggerFactory.getLogger(CleverbotController.class);
 
@@ -55,8 +54,10 @@ public class CleverbotController implements Controller {
     public void say(Message message, @Param @NotBlank String body) {
         long channelId = message.getChannel().getIdLong();
 
+        GuildData guildData = (message.isFromGuild()) ? new GuildData(message.getGuild().getIdLong()) : null;
+
         MessageChannelData data = channelRepo.findOptionalBy(channelId)
-            .orElse(new MessageChannelData(channelId));
+            .orElse(new MessageChannelData(channelId, guildData));
 
         String cs = data.getCleverState();
 

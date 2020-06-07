@@ -23,7 +23,6 @@ import org.elypia.alexis.persistence.entities.GuildData;
 import org.elypia.alexis.persistence.repositories.GuildRepository;
 import org.elypia.comcord.constraints.*;
 import org.elypia.commandler.annotation.Param;
-import org.elypia.commandler.api.Controller;
 import org.elypia.commandler.dispatchers.standard.*;
 import org.elypia.commandler.newb.AsyncUtils;
 
@@ -34,7 +33,7 @@ import javax.validation.constraints.*;
  * @author seth@elypia.org (Seth Falco)
  */
 @StandardController
-public class GuildController implements Controller {
+public class GuildController {
 
     private final GuildRepository guildRepo;
     private final AlexisMessages messages;

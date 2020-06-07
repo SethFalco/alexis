@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
-package org.elypia.alexis.discord.controllers;
+package org.elypia.alexis.controllers;
 
 import org.elypia.alexis.configuration.ApiConfig;
 import org.elypia.alexis.i18n.AlexisMessages;
 import org.elypia.commandler.annotation.Param;
-import org.elypia.commandler.api.Controller;
 import org.elypia.commandler.dispatchers.standard.*;
 import org.elypia.commandler.newb.AsyncUtils;
 import org.elypia.commandler.producers.MessageSender;
@@ -34,7 +33,7 @@ import javax.validation.constraints.Size;
  * @author seth@elypia.org (Seth Falco)
  */
 @StandardController
-public class OsuController implements Controller {
+public class OsuController {
 
     private static final Logger logger = LoggerFactory.getLogger(OsuController.class);
 
@@ -55,7 +54,7 @@ public class OsuController implements Controller {
 
         osu.getPlayer(username, mode).queue((optPlayer) -> {
             var requestContext = AsyncUtils.applyContext(scopeToContextualInstances);
-            Object response = (optPlayer.isEmpty()) ? "No player was found." : optPlayer.get();
+            Object response = (optPlayer.isEmpty()) ? messages.playerNotFound(username) : optPlayer.get();
             sender.send(response);
             requestContext.deactivate();
         });

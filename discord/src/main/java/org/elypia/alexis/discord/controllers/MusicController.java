@@ -22,7 +22,6 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import org.apache.deltaspike.core.api.exclude.Exclude;
 import org.elypia.alexis.discord.audio.GuildPlayer;
 import org.elypia.alexis.services.youtube.YouTubeService;
-import org.elypia.commandler.api.Controller;
 import org.elypia.commandler.dispatchers.standard.StandardController;
 import org.slf4j.*;
 
@@ -31,7 +30,7 @@ import java.util.*;
 
 @Exclude
 @StandardController
-public class MusicController implements Controller {
+public class MusicController {
 
 	private static final Logger logger = LoggerFactory.getLogger(MusicController.class);
 

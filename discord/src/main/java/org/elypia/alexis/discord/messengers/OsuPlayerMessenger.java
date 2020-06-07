@@ -44,44 +44,45 @@ public class OsuPlayerMessenger implements DiscordMessenger<Player> {
     }
 
     @Override
-    public Message buildMessage(ActionEvent<?, Message> event, Player output) {
+    public Message buildMessage(ActionEvent<?, Message> event, Player player) {
         StringJoiner joiner = new StringJoiner("\n");
+        String playerCountry = player.getCountry();
 
-        String playerCountry = output.getCountry();
-
-        joiner.add("**__" + output.getUsername() + "__** " + ChatUtils.replaceWithIndicators(playerCountry));
+        joiner.add("**__" + player.getUsername() + "__** " + ChatUtils.replaceWithIndicators(playerCountry));
         joiner.add("");
-        joiner.add("**" + messages.userLevel() + ": **" + (int)output.getLevel());
-        joiner.add("**" + messages.osuRankedScore() + ": **" + intf(output.getRankedScore()));
-        joiner.add("**" + messages.osuTotalScore() + ": **" + intf(output.getTotalScore()));
-        joiner.add("**" + messages.osuPp() + ": **" + decf(output.getPp()));
-        joiner.add("**" + messages.osuRank() + ": **" + intf(output.getRank()) + " (" + intf(output.getCountryRank()) + ")");
-        joiner.add("**" + messages.osuAccuracy() + ": **" + perf(output.getAccuracy()));
-        joiner.add("**" + messages.osuPlayCount() + ": **" + intf(output.getPlayCount()));
+        joiner.add("**" + messages.userLevel() + ": **" + (int)player.getLevel());
+        joiner.add("**" + messages.osuRankedScore() + ": **" + intf(player.getRankedScore()));
+        joiner.add("**" + messages.osuTotalScore() + ": **" + intf(player.getTotalScore()));
+        joiner.add("**" + messages.osuPp() + ": **" + decf(player.getPp()));
+        joiner.add("**" + messages.osuRank() + ": **" + intf(player.getRank()) + " (" + intf(player.getCountryRank()) + ")");
+        joiner.add("**" + messages.osuAccuracy() + ": **" + perf(player.getAccuracy()));
+        joiner.add("**" + messages.osuPlayCount() + ": **" + intf(player.getPlayCount()));
+        joiner.add(messages.uniqueIdentifier(player.getId()));
         joiner.add("");
-        joiner.add(output.getProfileUrl());
+        joiner.add(player.getProfileUrl());
 
         return new MessageBuilder(joiner.toString()).build();
     }
 
     @Override
-    public Message buildEmbed(ActionEvent<?, Message> event, Player output) {
+    public Message buildEmbed(ActionEvent<?, Message> event, Player player) {
         EmbedBuilder builder = DiscordUtils.newEmbed(event);
-        String playerCountry = output.getCountry();
+        String playerCountry = player.getCountry();
 
         builder.setThumbnail("https://countryflags.io/" + playerCountry + "/shiny/64.png");
+        builder.setFooter(messages.uniqueIdentifier(player.getId()), null);
 
-        builder.addField(messages.osuUsername(), MarkdownUtil.maskedLink(output.getUsername(), output.getProfileUrl()), true);
-        builder.addField(messages.userLevel(), String.valueOf((int)output.getLevel()), true);
-        builder.addField(messages.osuRankedScore(), intf(output.getRankedScore()), true);
-        builder.addField(messages.osuTotalScore(), intf(output.getTotalScore()), true);
-        builder.addField(messages.osuPp(), decf(output.getPp()), true);
-        builder.addField(messages.osuRank(), intf(output.getRank()) + " (" + intf(output.getCountryRank()) + ")", true);
-        builder.addField(messages.osuAccuracy(), perf(output.getAccuracy()), true);
-        builder.addField(messages.osuPlayCount(), intf(output.getPlayCount()), true);
+        builder.addField(messages.osuUsername(), MarkdownUtil.maskedLink(player.getUsername(), player.getProfileUrl()), true);
+        builder.addField(messages.userLevel(), String.valueOf((int)player.getLevel()), true);
+        builder.addField(messages.osuRankedScore(), intf(player.getRankedScore()), true);
+        builder.addField(messages.osuTotalScore(), intf(player.getTotalScore()), true);
+        builder.addField(messages.osuPp(), decf(player.getPp()), true);
+        builder.addField(messages.osuRank(), intf(player.getRank()) + " (" + intf(player.getCountryRank()) + ")", true);
+        builder.addField(messages.osuAccuracy(), perf(player.getAccuracy()), true);
+        builder.addField(messages.osuPlayCount(), intf(player.getPlayCount()), true);
 
-        if (!output.getEvents().isEmpty()) {
-            OsuEvent osuEvent = output.getEvents().get(0);
+        if (!player.getEvents().isEmpty()) {
+            OsuEvent osuEvent = player.getEvents().get(0);
             builder.addField(messages.osuLatestActivity() + " - " + osuEvent.getDate(), osuEvent.getMessage(), false);
         }
 

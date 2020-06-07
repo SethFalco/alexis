@@ -28,17 +28,34 @@ public class SkillMilestone implements Serializable {
 
     private static final long serialVersionUID = 1;
 
+    /** The generated ID that represents this milestone. */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "skill_ms_id")
     private int id;
 
-    @Column(name = "skill_id")
-    private int skillId;
+    /** The Skill this milestone belongs to. */
+    @ManyToOne
+    @JoinColumn(name = "skill_id", nullable = false)
+    private Skill skill;
 
+    /**
+     * The role that this milestone may reward the user.
+     * Can be null if this is just an achievement with no role as a reward.
+     */
+    @ManyToOne
+    @JoinColumn(name = "role_id")
+    private RoleData role;
+
+    /** The name of this milestone, it should be an achievment link name. */
     @Column(name = "skill_ms_name")
     private String name;
 
+    /**
+     * The amount of XP required to attain this skill.
+     * We're storing it as XP to ensure the scale is matches up
+     * incase the level formula uses internally ever changes.
+     */
     @Column(name = "skill_ms_xp")
     private int xpRequirement;
 
@@ -50,12 +67,20 @@ public class SkillMilestone implements Serializable {
         this.id = id;
     }
 
-    public int getSkillId() {
-        return skillId;
+    public Skill getSkill() {
+        return skill;
     }
 
-    public void setSkillId(int skillId) {
-        this.skillId = skillId;
+    public void setSkill(Skill skill) {
+        this.skill = skill;
+    }
+
+    public RoleData getRole() {
+        return role;
+    }
+
+    public void setRole(RoleData role) {
+        this.role = role;
     }
 
     public String getName() {

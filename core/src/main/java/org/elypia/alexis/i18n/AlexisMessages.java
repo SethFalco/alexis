@@ -129,6 +129,9 @@ public interface AlexisMessages {
     @MessageTemplate("{steam_playtime_hours}")
     String steamPlaytimeHours();
 
+    @MessageTemplate("{player_not_found}")
+    String playerNotFound(String username);
+
     @MessageTemplate("{osu_username}")
     String osuUsername();
 
@@ -321,6 +324,24 @@ public interface AlexisMessages {
     @MessageTemplate("{skill_title}")
     String skillTitle();
 
+    @MessageTemplate("{skill_not_assigned}")
+    String skillNotAssigned();
+
+    @MessageTemplate("{skill_assigned_to_channelsskill_assigned_to_channels}")
+    String skillAssignedToChannels(String channelMentions);
+
+    @MessageTemplate("{receive_notifications}")
+    String receiveNotifications();
+
+    @MessageTemplate("{status}")
+    String status();
+
+    @MessageTemplate("{enabled}")
+    String enabled();
+
+    @MessageTemplate("{disabled}")
+    String disabled();
+
     @MessageTemplate("{prefix_has_been_changed}")
     String prefixHasBeenChanged(String newPrefix);
 
@@ -365,4 +386,88 @@ public interface AlexisMessages {
 
     @MessageTemplate("{level_no_message}")
     String levelNoMessage();
+
+    @MessageTemplate("{assignable_roles_no_data}")
+    String assignableRolesNoData();
+
+    @MessageTemplate("{assignable_roles_no_roles_set}")
+    String assignableRolesNoRolesSet();
+
+    @MessageTemplate("{assignable_roles_list}")
+    String assignableRolesList(String assignableRoleNames);
+
+    @MessageTemplate("{assignable_roles_now_allowed}")
+    String assignableRolesNowAllowed(String rolesList);
+
+    @MessageTemplate("{assignable_roles_already_allowed}")
+    String assignableRolesAlreadyAllowed(String rolesList);
+
+    @MessageTemplate("{assignable_roles_ignored_duplicates}")
+    String assignableRolesIgnoredDuplicates(String rolesList);
+
+    @MessageTemplate("{assignable_roles_removed}")
+    String assignableRolesRemoved(String rolesList);
+
+    @MessageTemplate("{assignable_roles_didnt_exist}")
+    String assignableRolesDidntExist(String rolesList);
+
+    @MessageTemplate("{assignable_roles_user_assigned_role}")
+    String assignableRolesUserAssignedRole(String rolesList);
+
+    @MessageTemplate("{assignable_roles_user_denied_role}")
+    String assignableRolesUserDeniedRole(String rolesList);
+
+    @MessageTemplate("{assignable_roles_user_already_had_role}")
+    String assignableRolesUserAlreadyHadRole(String rolesList);
+
+    @MessageTemplate("{runescape_total_xp}")
+    String runescapeTotalXp();
+
+    @MessageTemplate("{runescape_combat_level}")
+    String runescapeCombatLevel();
+
+    @MessageTemplate("{runescape_total_level}")
+    String runescapeTotalLevel();
+
+    @MessageTemplate("{runescape_rank}")
+    String runescapeRank();
+
+    @MessageTemplate("{runescape_quest_statuses_title}")
+    String runescapeQuestStatusesTitle();
+
+    @MessageTemplate("{runescape_quest_statuses}")
+    String runeScapeQuestStatuses(int completedQuests, int startedQuests, int notStartedQuests);
+
+    @MessageTemplate("{runescape_latest_activity}")
+    String runescapeLatestActivity(Date date);
+
+    @MessageTemplate("{runescape_metrics_set_to_private}")
+    String runescapeMetricsSetToPrivate(String username);
+
+    @MessageTemplate("{runescape_metrics_not_active_account}")
+    String runescapeMetricsNotActiveAccount(String username);
+
+    @MessageTemplate("{runescape_metrics_user_not_found}")
+    String runescapeMetricsUserNotFound(String username);
+
+    @MessageTemplate("{quests_complete}")
+    String questsComplete();
+
+    @MessageTemplate("{quests_started}")
+    String questsStarted();
+
+    @MessageTemplate("{quests_not_started}")
+    String questsNotStarted();
+
+    @MessageTemplate("{emote_tracking_enabled}")
+    String emoteTrackingEnabled();
+
+    @MessageTemplate("{emote_tracking_set_to_same}")
+    String emoteTrackingSetToSame();
+
+    @MessageTemplate("{emote_tracking_setting_changed}")
+    String emoteTrackingSettingChanged(String enabledOrDisabled);
+
+    @MessageTemplate("{all_greeting_messages_set_to_channel}")
+    String allGreetingMessagesSetToChannel(String guildName, String channelMention);
 }

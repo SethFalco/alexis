@@ -6,12 +6,28 @@ package org.elypia.alexis.discord.models;
  */
 public class BotInfoModel {
 
+    /** The name of the author of the bot. */
     private String authorName;
+
+    /** A link to the authors website. */
     private String authorUrl;
+
+    /** The link to the authors logo. */
     private String authorLogo;
+
+    /**
+     * The text to display for the support guild, should
+     * be something that indicates the user is already in it,
+     * or an invite link to it.
+     */
     private String supportGuildText;
+
+    /** The name of the application. */
     private String botName;
+
+    /** A description of the bot, taken from the Discord API. */
     private String botDescription;
+
     private String botAvatarUrl;
     private String botInviteUrl;
     private long botId;

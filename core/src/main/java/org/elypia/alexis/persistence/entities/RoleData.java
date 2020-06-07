@@ -18,6 +18,7 @@ package org.elypia.alexis.persistence.entities;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.*;
 
 /**
  * Allows guilds to choose what messages they are subscribed too.
@@ -38,6 +39,45 @@ public class RoleData implements Serializable {
     @JoinColumn(name = "guild_id", nullable = false)
     private GuildData guildData;
 
+    @Column(name = "self_assignable")
+    private boolean selfAssignable;
+
+    /**
+     * If the assignable role should be automatically
+     * applied when attains any skill milestone requirements.
+     */
+    @Column(name = "auto_assign")
+    private boolean autoAssign;
+
+    /** Should this role be applied to users automatically on join. */
+    @Column(name = "on_user_join")
+    private boolean onUserJoin;
+
+    /** Should this role be applied to bots automatically on join. */
+    @Column(name = "on_bot_join")
+    private boolean onBotJoin;
+
+    @OneToMany(targetEntity = SkillMilestone.class, mappedBy = "role", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<SkillMilestone> skillMilestones;
+
+    public RoleData() {
+        skillMilestones = new ArrayList<>();
+    }
+
+    public RoleData(long roleId) {
+        this.id = roleId;
+    }
+
+    public RoleData(long roleId, GuildData guildData) {
+        this(roleId);
+        this.guildData = guildData;
+    }
+
+    public RoleData(long roleId, GuildData guildData, boolean selfAssignable) {
+        this(roleId, guildData);
+        this.selfAssignable = selfAssignable;
+    }
+
     public long getId() {
         return id;
     }
@@ -52,5 +92,45 @@ public class RoleData implements Serializable {
 
     public void setGuildData(GuildData guildData) {
         this.guildData = guildData;
+    }
+
+    public boolean isSelfAssignable() {
+        return selfAssignable;
+    }
+
+    public void setSelfAssignable(boolean selfAssignable) {
+        this.selfAssignable = selfAssignable;
+    }
+
+    public boolean isAutoAssign() {
+        return autoAssign;
+    }
+
+    public void setAutoAssign(boolean autoAssign) {
+        this.autoAssign = autoAssign;
+    }
+
+    public boolean isOnUserJoin() {
+        return onUserJoin;
+    }
+
+    public void setOnUserJoin(boolean onUserJoin) {
+        this.onUserJoin = onUserJoin;
+    }
+
+    public boolean isOnBotJoin() {
+        return onBotJoin;
+    }
+
+    public void setOnBotJoin(boolean onBotJoin) {
+        this.onBotJoin = onBotJoin;
+    }
+
+    public List<SkillMilestone> getSkillMilestones() {
+        return skillMilestones;
+    }
+
+    public void setSkillMilestones(List<SkillMilestone> skillMilestones) {
+        this.skillMilestones = skillMilestones;
     }
 }

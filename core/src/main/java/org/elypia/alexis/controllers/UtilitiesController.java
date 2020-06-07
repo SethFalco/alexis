@@ -18,7 +18,6 @@ package org.elypia.alexis.controllers;
 
 import org.elypia.alexis.i18n.AlexisMessages;
 import org.elypia.commandler.annotation.Param;
-import org.elypia.commandler.api.Controller;
 import org.elypia.commandler.dispatchers.standard.*;
 
 import javax.inject.Inject;
@@ -27,7 +26,7 @@ import javax.inject.Inject;
  * @author seth@elypia.org (Seth Falco)
  */
 @StandardController
-public class UtilitiesController implements Controller {
+public class UtilitiesController {
 
     private final AlexisMessages messages;
 
