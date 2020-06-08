@@ -436,7 +436,7 @@ public interface AlexisMessages {
     String runescapeQuestStatusesTitle();
 
     @MessageTemplate("{runescape_quest_statuses}")
-    String runeScapeQuestStatuses(int completedQuests, int startedQuests, int notStartedQuests);
+    String runeScapeQuestStatuses(String greenCircle, int completedQuests, String yellowCircle, int startedQuests, String redCircle, int notStartedQuests);
 
     @MessageTemplate("{runescape_latest_activity}")
     String runescapeLatestActivity(Date date);
