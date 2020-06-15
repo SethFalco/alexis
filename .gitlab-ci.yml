@@ -14,9 +14,13 @@ cache:
 build:
   stage: build
   script: gradle --build-cache --full-stacktrace shadowJar
+  artifacts:
+    paths:
+      - discord/build/libs/alexis-discord.jar
 
 test:
   stage: test
   script:
     - gradle --build-cache --full-stacktrace check
-    - cat build/reports/jacoco/test/html/index.html
+    - gradle jacocoReport
+    - cat build/reports/jacoco/jacocoReport/html/index.html

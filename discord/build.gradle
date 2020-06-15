@@ -16,11 +16,7 @@
 
 plugins {
     id "application"
-    id "com.github.johnrengelman.shadow"
-}
-
-ext {
-    comcordVersion = "2.0.0"
+    id "com.github.johnrengelman.shadow" version "5.2.0"
 }
 
 application {
@@ -31,7 +27,7 @@ shadowJar {
     archiveFileName = "${this.getRootProject().name}-${this.name}.jar"
 
     manifest {
-        attributes 'Implementation-Title' : this.name,
+        attributes 'Implementation-Title' : "${this.getRootProject().name}-${this.name}",
                    'Implementation-Version' : version,
                    'Main-Class' : "org.elypia.alexis.Alexis"
     }

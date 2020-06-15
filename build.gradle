@@ -15,14 +15,19 @@
  */
 
 plugins {
-    id "com.github.johnrengelman.shadow" version "5.2.0" apply false
     id "io.spring.dependency-management" version "1.0.9.RELEASE" apply false
 }
 
 allprojects() {
     apply plugin: "idea"
+    apply plugin: "jacoco"
+
+    group = "org.elypia.alexis"
+    version = "3.0.0"
+    description = "Hey! I'm a chatbot for Discord!"
 
     ext {
+        comcordVersion = "2.0.0"
         commandlerVersion = "4.0.1"
         elypiaiVersion = "4.1.0"
         deltaSpikeVersion = "1.9.3"
@@ -30,19 +35,6 @@ allprojects() {
         junitVersion = "5.6.2"
         slf4jVersion = "1.7.30"
     }
-}
-
-subprojects() {
-    apply plugin: "java"
-    apply plugin: "jacoco"
-    apply plugin: "io.spring.dependency-management"
-
-    group = "org.elypia.alexis"
-    version = "3.0.0"
-    description = "Hey! I'm a chatbot for Discord!"
-
-    sourceCompatibility = 11
-    targetCompatibility = 11
 
     repositories {
         jcenter()
@@ -52,6 +44,22 @@ subprojects() {
         // Local system
         mavenLocal()
     }
+
+    /** Coverage **/
+
+    jacoco {
+        toolVersion = "0.8.5"
+    }
+}
+
+subprojects() {
+    apply plugin: "java"
+    apply plugin: "io.spring.dependency-management"
+
+    sourceCompatibility = 11
+    targetCompatibility = 11
+
+    [compileJava, compileTestJava, javadoc]*.options*.encoding = 'UTF-8'
 
     dependencies {
         // Commandler Newb (Includes subjective default libraries/implementations.)
@@ -99,8 +107,6 @@ subprojects() {
         testRuntimeOnly "org.apache.deltaspike.modules:deltaspike-test-control-module-api:${deltaSpikeVersion}"
     }
 
-    [compileJava, compileTestJava, javadoc]*.options*.encoding = 'UTF-8'
-
     dependencyManagement {
         imports {
             mavenBom "org.apache.deltaspike.distribution:distributions-bom:${deltaSpikeVersion}"
@@ -132,16 +138,34 @@ subprojects() {
         }
     }
 
-    /** Coverage **/
-
-    jacoco {
-        toolVersion = "0.8.5"
-    }
-
     jacocoTestReport {
         reports {
-            html.enabled = true
+            html.enabled = false
             xml.enabled = false
         }
+    }
+}
+
+
+/** Combine and ouput code coverage. */
+
+task jacocoMerge(type: JacocoMerge) {
+    executionData = files(subprojects.jacocoTestReport.executionData.findAll {it.asList() })
+
+    doFirst {
+        executionData = files(executionData.findAll {
+            it.exists()
+        })
+    }
+}
+
+task jacocoReport(type: JacocoReport, dependsOn: jacocoMerge) {
+    sourceDirectories.from = files(subprojects.sourceSets.main.allSource.srcDirs.findAll { it.asList() })
+    classDirectories.from = files(subprojects.sourceSets.main.output.findAll { it.asList() })
+    executionData.from = files(jacocoMerge.destinationFile)
+
+    reports {
+        html.enabled = true
+        xml.enabled = false
     }
 }
