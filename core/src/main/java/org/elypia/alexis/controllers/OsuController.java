@@ -48,15 +48,26 @@ public class OsuController {
         this.sender = sender;
     }
 
+    // TODO: Make a generic callback exception error handler and dash that in there
     @StandardCommand
-    public void get(@Param @Size(min = 3, max = 15) String username, @Param(value = "0", displayAs = "osu") OsuMode mode) {
+    public void get(@Param @Size(min = 3, max = 15) String username, @Param("osu") OsuMode mode) {
         var scopeToContextualInstances = AsyncUtils.copyContext();
 
-        osu.getPlayer(username, mode).queue((optPlayer) -> {
-            var requestContext = AsyncUtils.applyContext(scopeToContextualInstances);
-            Object response = (optPlayer.isEmpty()) ? messages.playerNotFound(username) : optPlayer.get();
-            sender.send(response);
-            requestContext.deactivate();
-        });
+        osu.getPlayer(username, mode).subscribe(
+            (player) -> {
+                var requestContext = AsyncUtils.applyContext(scopeToContextualInstances);
+                sender.send(player);
+                requestContext.deactivate();
+            },
+            (ex) -> {
+                var requestContext = AsyncUtils.applyContext(scopeToContextualInstances);
+                sender.send(messages.genericNetworkError());
+                requestContext.deactivate();
+            },
+            () -> {
+                var requestContext = AsyncUtils.applyContext(scopeToContextualInstances);
+                sender.send(messages.playerNotFound(username));
+                requestContext.deactivate();
+            });
     }
 }

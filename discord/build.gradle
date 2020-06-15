@@ -14,8 +14,27 @@
  * limitations under the License.
  */
 
+plugins {
+    id "application"
+    id "com.github.johnrengelman.shadow"
+}
+
 ext {
     comcordVersion = "2.0.0"
+}
+
+application {
+    mainClassName = "org.elypia.alexis.Alexis"
+}
+
+shadowJar {
+    archiveFileName = "${this.getRootProject().name}-${this.name}.jar"
+
+    manifest {
+        attributes 'Implementation-Title' : this.name,
+                   'Implementation-Version' : version,
+                   'Main-Class' : "org.elypia.alexis.Alexis"
+    }
 }
 
 dependencies {

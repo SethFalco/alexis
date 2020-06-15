@@ -9,7 +9,7 @@ import org.elypia.comcord.api.DiscordMessenger;
 import org.elypia.commandler.annotation.stereotypes.MessageProvider;
 import org.elypia.commandler.event.ActionEvent;
 import org.elypia.commandler.utils.ChatUtils;
-import org.elypia.elypiai.runescape.QuestStats;
+import org.elypia.elypiai.runescape.QuestStatus;
 
 import javax.inject.Inject;
 import java.util.stream.Collectors;
@@ -52,7 +52,7 @@ public class QuestStatusesMessenger implements DiscordMessenger<QuestStatusModel
             }
 
             String value = quests.stream()
-                .map(QuestStats::getTitle)
+                .map(QuestStatus::getTitle)
                 .collect(Collectors.joining(", "));
 
             value = ChatUtils.truncateAndAppend(value, MessageEmbed.VALUE_MAX_LENGTH, "...");

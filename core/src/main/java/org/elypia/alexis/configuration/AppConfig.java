@@ -18,15 +18,22 @@ package org.elypia.alexis.configuration;
 
 import org.apache.deltaspike.core.api.config.*;
 
-import javax.validation.constraints.NotNull;
-
 /**
  * @author seth@elypia.org (Seth Falco)
  */
 @Configuration(prefix = "application.")
 public interface AppConfig {
 
-    @NotNull
+    /**
+      * @return The applications name.
+     */
     @ConfigProperty(name = "name")
     String getApplicationName();
+
+    /**
+     * @return Where the source-code for this project can be accessed.
+     * Or null if the source-code is not publically accesible.
+     */
+    @ConfigProperty(name = "git")
+    String getGitUrl();
 }

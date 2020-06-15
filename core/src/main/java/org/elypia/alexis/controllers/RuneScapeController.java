@@ -32,7 +32,6 @@ import javax.inject.Inject;
 import javax.validation.constraints.Size;
 import java.lang.annotation.Annotation;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * @author seth@elypia.org (Seth Falco)
@@ -60,7 +59,7 @@ public class RuneScapeController {
 	public void getPlayerInfo(@Param @Size(min = 1, max = 12) String username) {
         var contextCopy = AsyncUtils.copyContext();
 
-        runescape.getUser(username).queue((player) -> {
+        runescape.getUser(username).subscribe((player) -> {
             var context = AsyncUtils.applyContext(contextCopy);
             sender.send(player);
             context.deactivate();
@@ -71,17 +70,16 @@ public class RuneScapeController {
 	public void getPlayerQuestStatuses(@Param @Size(min = 1, max = 12) String username) {
         var contextCopy = AsyncUtils.copyContext();
 
-		runescape.getQuestStatuses(username).queue((optQuests) -> {
+		runescape.getQuestStatuses(username).subscribe((quests) -> {
             var context = AsyncUtils.applyContext(contextCopy);
 
-            if (optQuests.isEmpty())
+            if (quests.getQuestStatuses().isEmpty())
                 sender.send("No quests were found for this player.");
             else {
-                List<QuestStats> quests = optQuests.get();
-                Collections.sort(quests);
+                Map<CompletionStatus, List<QuestStatus>> groupedQuests = new EnumMap<>(CompletionStatus.class);
 
-                Map<CompletionStatus, List<QuestStats>> groupedQuests = quests.stream()
-                    .collect(Collectors.groupingBy(QuestStats::getStatus));
+                for (CompletionStatus status : CompletionStatus.values())
+                    groupedQuests.put(status, quests.getByCompletionStatus(status));
 
                 QuestStatusModel model = new QuestStatusModel(username, groupedQuests);
                 sender.send(model);

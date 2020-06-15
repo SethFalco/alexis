@@ -49,8 +49,8 @@ public class EmoteController {
     /**
      * List all emotes in the guild.
      *
-     * @param guild
-     * @return
+     * @param guild The guild to list all emotes form.
+     * @return A string where every emote has been mentioned from the guild.
      */
     @StandardCommand
     public String listAllEmotes(@Param (value = "${source.guild}", displayAs = "current guild") Guild guild) {
@@ -115,7 +115,6 @@ public class EmoteController {
     }
 
     /**
-     * TODO: Address default values where object isn't in DMs
      * Display the emotes with how frequently they get used.
      *
      * @param entries How many entries to display of the leaderboard.

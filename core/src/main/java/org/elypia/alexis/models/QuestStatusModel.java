@@ -1,6 +1,6 @@
 package org.elypia.alexis.models;
 
-import org.elypia.elypiai.runescape.QuestStats;
+import org.elypia.elypiai.runescape.QuestStatus;
 import org.elypia.elypiai.runescape.data.CompletionStatus;
 
 import java.util.*;
@@ -8,9 +8,9 @@ import java.util.*;
 public class QuestStatusModel {
 
     private String username;
-    private Map<CompletionStatus, List<QuestStats>> questStatuses;
+    private Map<CompletionStatus, List<QuestStatus>> questStatuses;
 
-    public QuestStatusModel(String username, Map<CompletionStatus, List<QuestStats>> questStatuses) {
+    public QuestStatusModel(String username, Map<CompletionStatus, List<QuestStatus>> questStatuses) {
         this.username = username;
         this.questStatuses = questStatuses;
     }
@@ -27,11 +27,11 @@ public class QuestStatusModel {
         this.username = username;
     }
 
-    public Map<CompletionStatus, List<QuestStats>> getQuestStatuses() {
+    public Map<CompletionStatus, List<QuestStatus>> getQuestStatuses() {
         return questStatuses;
     }
 
-    public void setQuestStatuses(Map<CompletionStatus, List<QuestStats>> questStatuses) {
+    public void setQuestStatuses(Map<CompletionStatus, List<QuestStatus>> questStatuses) {
         this.questStatuses = questStatuses;
     }
 }

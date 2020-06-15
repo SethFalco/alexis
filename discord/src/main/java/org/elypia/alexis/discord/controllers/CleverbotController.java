@@ -63,7 +63,7 @@ public class CleverbotController {
 
         var contextCopy = AsyncUtils.copyContext();
 
-        cleverbot.say(body, cs).queue((response) -> {
+        cleverbot.say(body, cs).subscribe((response) -> {
             var context = AsyncUtils.applyContext(contextCopy);
 
             data.setCleverState(response.getCs());

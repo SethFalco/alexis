@@ -73,7 +73,7 @@ public class DevController {
         if (self.getName().equals(input))
             return messages.devRenameNoChange(input);
 
-        self.getManager().setName(input).complete();
+        self.getManager().setName(input).queue();
         return messages.devChangedBotsName(input);
     }
 
@@ -81,7 +81,7 @@ public class DevController {
     public String setAvatar(@BotOwner Message message, @Param URL url) throws IOException {
         try (InputStream stream = url.openStream()) {
             Icon icon = Icon.from(stream);
-            message.getJDA().getSelfUser().getManager().setAvatar(icon).complete();
+            message.getJDA().getSelfUser().getManager().setAvatar(icon).queue();
             return messages.devChangedBotsAvatar();
         }
     }

@@ -2,7 +2,7 @@ package org.elypia.alexis.i18n;
 
 import org.apache.deltaspike.core.api.message.*;
 
-import java.time.OffsetDateTime;
+import java.time.*;
 import java.util.Date;
 
 /**
@@ -439,7 +439,7 @@ public interface AlexisMessages {
     String runeScapeQuestStatuses(String greenCircle, int completedQuests, String yellowCircle, int startedQuests, String redCircle, int notStartedQuests);
 
     @MessageTemplate("{runescape_latest_activity}")
-    String runescapeLatestActivity(Date date);
+    String runescapeLatestActivity(LocalDateTime date);
 
     @MessageTemplate("{runescape_metrics_set_to_private}")
     String runescapeMetricsSetToPrivate(String username);
@@ -470,4 +470,11 @@ public interface AlexisMessages {
 
     @MessageTemplate("{all_greeting_messages_set_to_channel}")
     String allGreetingMessagesSetToChannel(String guildName, String channelMention);
+
+    /**
+     * @return The message to display on a generic callback thread
+     * for any network request.
+     */
+    @MessageTemplate("{generic_network_error}")
+    String genericNetworkError();
 }

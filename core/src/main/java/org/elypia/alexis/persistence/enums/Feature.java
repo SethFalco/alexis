@@ -56,7 +56,6 @@ public enum Feature {
     COUNT_GUILD_EMOTE_USAGE("count global emote usage"),
 
     /**
-     * TODO: Should we have this?
      * Should Alexis count up all emote usages for emotes that
      * belong to this guild, or are mutually visible between users
      * in the guild, and Alexis.

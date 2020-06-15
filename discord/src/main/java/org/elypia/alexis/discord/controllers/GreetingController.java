@@ -42,7 +42,6 @@ public class GreetingController {
         this.messages = messages;
     }
 
-    // TODO: Instead of write same text twice, if it affects both and they have the same data, just send "BOTH"
     // TODO: Only update if it's actually changed
     @StandardCommand
     public String setEnabled(

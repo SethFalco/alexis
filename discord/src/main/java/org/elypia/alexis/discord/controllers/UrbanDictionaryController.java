@@ -16,6 +16,8 @@
 
 package org.elypia.alexis.discord.controllers;
 
+import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.core.*;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.utils.MarkdownUtil;
@@ -27,11 +29,11 @@ import org.elypia.commandler.newb.AsyncUtils;
 import org.elypia.commandler.producers.MessageSender;
 import org.elypia.commandler.utils.ChatUtils;
 import org.elypia.elypiai.urbandictionary.*;
-import org.elypia.retropia.core.requests.RestLatch;
 import org.slf4j.*;
 
 import javax.inject.Inject;
-import java.util.stream.Stream;
+import java.util.*;
+import java.util.stream.*;
 
 /**
  * @author seth@elypia.org (Seth Falco)
@@ -53,24 +55,31 @@ public class UrbanDictionaryController {
     }
 
     /**
-     * TODO: Return results in the order of the queue
-     *
-     * @param terms
-     * @param random
+     * @param message The event that caused this event.
+     * @param terms All terms the user wants to define.
+     * @param random If we should fetch random results, or the top definitions.
      */
     @StandardCommand(isDefault = true, isStatic = true)
     public void getDefinitions(Message message, @Param String[] terms, @Param("false") boolean random) {
-        RestLatch<DefineResult> latch = new RestLatch<>();
-
-        Stream.of(terms)
+        List<Observable<DefineResult>> requests = Stream.of(terms)
             .map(String::toLowerCase)
             .distinct()
             .map(ud::getDefinitions)
-            .forEach(latch::add);
+            .map(Single::toObservable)
+            .collect(Collectors.toList());
+
+        Observable<List<DefineResult>> test = Observable.zip(requests, objects -> {
+            List<DefineResult> list = new ArrayList<>();
+
+            for (Object object : objects)
+                list.add((DefineResult)object);
+
+            return list;
+        });
 
         var contexts = AsyncUtils.copyContext();
 
-        latch.queue((results) -> {
+        test.subscribe((results) -> {
             var requestContext = AsyncUtils.applyContext(contexts);
             Object response;
 
@@ -101,5 +110,26 @@ public class UrbanDictionaryController {
             sender.send(response);
             requestContext.deactivate();
         });
+    }
+
+    /**
+     * @param id The ID of the definition on UrbanDictionary.
+     */
+    @StandardCommand
+    public void getDefinitionById(@Param int id) {
+        var contextCopy = AsyncUtils.copyContext();
+
+        ud.getDefinitionById(id).subscribe(
+            (definition) -> {
+                var context = AsyncUtils.applyContext(contextCopy);
+                sender.send(definition);
+                context.deactivate();
+            },
+            (err) -> {},
+            () -> {
+                var context = AsyncUtils.applyContext(contextCopy);
+                sender.send(messages.udNoDefinitions());
+                context.deactivate();
+            });
     }
 }

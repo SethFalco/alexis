@@ -20,13 +20,13 @@ import org.elypia.alexis.configuration.ApiConfig;
 import org.elypia.alexis.i18n.AlexisMessages;
 import org.elypia.commandler.annotation.Param;
 import org.elypia.commandler.dispatchers.standard.*;
-import org.elypia.elypiai.steam.*;
+import org.elypia.commandler.newb.AsyncUtils;
+import org.elypia.commandler.producers.MessageSender;
+import org.elypia.elypiai.steam.Steam;
 import org.slf4j.*;
 
 import javax.inject.Inject;
 import javax.validation.constraints.Size;
-import java.io.IOException;
-import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -44,60 +44,101 @@ public class SteamController {
 	protected static final int MAX_NAME_LENGTH = 32;
 
 	/** Access the Steam API */
-	protected final Steam steam;
+	private final Steam steam;
 
 	/** Strings that Alexis will say. */
-	protected final AlexisMessages messages;
+	private final AlexisMessages messages;
+
+	private final MessageSender sender;
 
 	@Inject
-	public SteamController(final ApiConfig config, final AlexisMessages messages) {
+	public SteamController(final ApiConfig config, final AlexisMessages messages, final MessageSender sender) {
 		this.steam = new Steam(config.getSteam());
 		this.messages = messages;
+		this.sender = sender;
 	}
 
 	@StandardCommand
-	public String getId(@Param @Size(min = MIN_NAME_LENGTH, max = MAX_NAME_LENGTH) String username) throws IOException {
-		SteamSearch search = steam.getIdFromVanityUrl(username).complete();
+	public void getId(@Param @Size(min = MIN_NAME_LENGTH, max = MAX_NAME_LENGTH) String username) {
+		var contextCopy = AsyncUtils.copyContext();
 
-		if (!search.isSuccess())
-			return messages.steamUserNotFound();
+		steam.getIdFromVanityUrl(username).subscribe((steamSearch) -> {
+			var context = AsyncUtils.applyContext(contextCopy);
 
-		return messages.steamReturnSteam64Id(username, search.getId());
+			if (!steamSearch.isSuccess())
+				sender.send(messages.steamUserNotFound());
+			else
+				sender.send(messages.steamReturnSteam64Id(username, steamSearch.getId()));
+
+			context.deactivate();
+		});
 	}
 
 	@StandardCommand
-	public Object getPlayerById(@Param long steamId) throws IOException {
-		List<SteamUser> users = steam.getUsers(steamId).complete();
+	public void getPlayerById(@Param long steamId) {
+		var contextCopy = AsyncUtils.copyContext();
 
-		if (users.isEmpty())
-			return messages.steamProfilePrivate();
+		steam.getUsers(steamId).subscribe((users) -> {
+			var context = AsyncUtils.applyContext(contextCopy);
 
-		return users.get(0);
+			if (users.isEmpty())
+				sender.send(messages.steamProfilePrivate());
+			else
+				sender.send(users.get(0));
+
+			context.deactivate();
+		});
 	}
 
 	@StandardCommand
-	public Object getPlayerByName(@Param @Size(min = MIN_NAME_LENGTH, max = MAX_NAME_LENGTH) String username) throws IOException {
-		SteamSearch search = steam.getIdFromVanityUrl(username).complete();
+	public void getPlayerByName(@Param @Size(min = MIN_NAME_LENGTH, max = MAX_NAME_LENGTH) String username) {
+		var contextCopy = AsyncUtils.copyContext();
 
-		if (!search.isSuccess())
-			return messages.steamUserNotFound();
+		steam.getIdFromVanityUrl(username).subscribe(
+			(steamSearch) -> {
+				var context = AsyncUtils.applyContext(contextCopy);
 
-		return getPlayerById(search.getId());
+				if (!steamSearch.isSuccess())
+					messages.steamUserNotFound();
+				else
+					getPlayerById(steamSearch.getId());
+
+				context.deactivate();
+			}
+		);
 	}
 
+	/**
+	 * @param username A users Steam username.
+	 */
 	@StandardCommand
-	public Object getRandomGame(@Param @Size(min = MIN_NAME_LENGTH, max = MAX_NAME_LENGTH) String username) throws IOException {
-		SteamSearch search = steam.getIdFromVanityUrl(username).complete();
+	public void getRandomGame(@Param @Size(min = MIN_NAME_LENGTH, max = MAX_NAME_LENGTH) String username) {
+		var contextCopy = AsyncUtils.copyContext();
 
-		if (!search.isSuccess())
-			return messages.steamUserNotFound();
+		steam.getIdFromVanityUrl(username).subscribe((steamSearch) -> {
+			var context = AsyncUtils.applyContext(contextCopy);
 
-		Optional<List<SteamGame>> optGames = steam.getLibrary(search.getId()).complete();
+			if (!steamSearch.isSuccess())
+				sender.send(messages.steamUserNotFound());
+			else {
+				steam.getLibrary(steamSearch.getId()).subscribe(
+					(games) -> {
+						var contextCopyII = AsyncUtils.applyContext(contextCopy);
+						sender.send(games.get(ThreadLocalRandom.current().nextInt(games.size())));
+						contextCopyII.deactivate();
+					},
+					(error) -> {
 
-		if (optGames.isEmpty())
-			return messages.steamLibraryPrivate();
+					},
+					() -> {
+						var contextCopyII = AsyncUtils.applyContext(contextCopy);
+						sender.send(messages.steamLibraryPrivate());
+						contextCopyII.deactivate();
+					}
+				);
+			}
 
-		List<SteamGame> games = optGames.get();
-		return games.get(ThreadLocalRandom.current().nextInt(games.size()));
+			context.deactivate();
+		});
 	}
 }

@@ -1,5 +1,6 @@
 application:
   name: "Alexis"
+  git: "https://gitlab.com/Elypia/alexis"
   author:
     name: "Elypia"
     url: "https://elypia.org/"
