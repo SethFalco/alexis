@@ -123,10 +123,6 @@ subprojects() {
         }
     }
 
-    jar {
-        duplicatesStrategy = 'exclude'
-    }
-
     /** Testing */
 
     test {
