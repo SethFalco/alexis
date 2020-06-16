@@ -28,8 +28,7 @@ shadowJar {
 
     manifest {
         attributes 'Implementation-Title' : "${this.getRootProject().name}-${this.name}",
-                   'Implementation-Version' : archiveVersion,
-                   'Main-Class' : "org.elypia.alexis.Alexis"
+                   'Implementation-Version' : archiveVersion
     }
 }
 
