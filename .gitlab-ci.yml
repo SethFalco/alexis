@@ -14,7 +14,6 @@ cache:
 build:
   stage: build
   script:
-    - gradle --build-cache --full-stacktrace core:assemble
     - gradle --build-cache --full-stacktrace discord:shadowJar
   artifacts:
     paths:
