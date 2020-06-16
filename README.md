@@ -41,7 +41,7 @@ you're allowed and not allowed to do along with any requirements if you want to
 use or derive work from this source code!  
 
 **All non-code files including videos, models, audio, bitmaps, vectors, and 
-animations such as gifs, are not under the aforementioned license; all rights
+animations such as GIFs, are not under the aforementioned license; all rights
 are reserved by Elypia CIC.** 
 
 [matrix-community]: https://matrix.to/#/+elypia:matrix.org "Matrix Invite"
