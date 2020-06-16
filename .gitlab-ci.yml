@@ -14,8 +14,8 @@ cache:
 build:
   stage: build
   script:
-    - gradle --build-cache --full-stacktrace alexis:core:assemble
-    - gradle --build-cache --full-stacktrace alexis:discord:shadowJar
+    - gradle --build-cache --full-stacktrace core:assemble
+    - gradle --build-cache --full-stacktrace discord:shadowJar
   artifacts:
     paths:
       - discord/build/libs/alexis-discord.jar
