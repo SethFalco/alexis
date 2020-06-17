@@ -25,6 +25,7 @@ import org.elypia.comcord.configuration.DiscordConfig;
 import org.elypia.retropia.core.HttpClientSingleton;
 import org.slf4j.*;
 
+import javax.annotation.PreDestroy;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
@@ -87,6 +88,11 @@ public class DiscordBot {
                 xpListener
             )
             .build();
+    }
+
+    @PreDestroy
+    public void preDestroy() {
+        jda.shutdown();
     }
 
     @ApplicationScoped
