@@ -1,4 +1,4 @@
-# Alexis [![Matrix]][matrix-community] [![Discord]][discord-guild] [![i18n-badge]][i18n] [![Build]][gitlab] [![Coverage]][gitlab] [![Donate]][elypia-donate]
+# Alexis [![Matrix]][matrix-community] [![Discord]][discord-guild] [![Docker]][docker-image] [![i18n-badge]][i18n] [![Build]][gitlab] [![Coverage]][gitlab] [![Donate]][elypia-donate]
 ## About Me
 I'm a general purpose Discord bot with various functionality and integrations with many 
 popular games and services like Twitch, Steam and RuneScape. I also perform many 
@@ -46,6 +46,7 @@ are reserved by Elypia CIC.**
 
 [matrix-community]: https://matrix.to/#/+elypia:matrix.org "Matrix Invite"
 [discord-guild]: https://discord.com/invite/hprGMaM "Discord Invite"
+[docker-image]: https://hub.docker.com/r/elypia/alexis-discord "Project on Docker"
 [i18n]: https://i18n.elypia.org/engage/alexis/?utm "Weblate Translations"
 [gitlab]: https://gitlab.com/Elypia/alexis/commits/master "Repository on GitLab"
 [elypia-donate]: https://elypia.org/donate "Donate to Elypia"
@@ -59,6 +60,7 @@ are reserved by Elypia CIC.**
 
 [Matrix]: https://img.shields.io/matrix/elypia-general:matrix.org?logo=matrix "Matrix Shield"
 [Discord]: https://discord.com/api/guilds/184657525990359041/widget.png "Discord Shield"
+[Docker]: https://img.shields.io/docker/pulls/elypia/alexis-discord?logo=docker "Docker Shield"
 [i18n-badge]: https://i18n.elypia.org/widgets/alexis/-/svg-badge.svg "Weblate Translation Badge"
 [Build]: https://gitlab.com/Elypia/alexis/badges/master/pipeline.svg "GitLab Build Shield"
 [Coverage]: https://gitlab.com/Elypia/alexis/badges/master/coverage.svg "GitLab Coverage Shield"
