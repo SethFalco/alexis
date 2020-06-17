@@ -54,6 +54,7 @@ gradle-app.setting
 *.env
 *.json
 *.toml
+docker-compose.yml
 
 # IntelliJ
 build/

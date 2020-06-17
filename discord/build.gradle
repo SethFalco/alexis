@@ -25,6 +25,8 @@ application {
 
 shadowJar {
     duplicatesStrategy = 'exclude'
+    mergeServiceFiles()
+
     archiveFileName = "${this.getRootProject().name}-${this.name}.jar"
 
     manifest {

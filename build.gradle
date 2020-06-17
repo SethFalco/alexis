@@ -14,10 +14,6 @@
  * limitations under the License.
  */
 
-plugins {
-    id "io.spring.dependency-management" version "1.0.9.RELEASE" apply false
-}
-
 allprojects() {
     apply plugin: "idea"
     apply plugin: "jacoco"
@@ -54,7 +50,6 @@ allprojects() {
 
 subprojects() {
     apply plugin: "java"
-    apply plugin: "io.spring.dependency-management"
 
     sourceCompatibility = 11
     targetCompatibility = 11
@@ -107,20 +102,8 @@ subprojects() {
         testRuntimeOnly "org.apache.deltaspike.modules:deltaspike-test-control-module-api:${deltaSpikeVersion}"
     }
 
-    dependencyManagement {
-        imports {
-            mavenBom "org.apache.deltaspike.distribution:distributions-bom:${deltaSpikeVersion}"
-        }
-    }
-
-    sourceSets {
-        main {
-            output.resourcesDir = output.classesDirs.singleFile
-        }
-
-        test {
-            output.resourcesDir = output.classesDirs.singleFile
-        }
+    jar {
+        duplicatesStrategy = 'exclude'
     }
 
     /** Testing */
