@@ -22,12 +22,18 @@ import org.elypia.commandler.annotation.Param;
 import org.elypia.commandler.dispatchers.standard.*;
 import org.elypia.commandler.newb.AsyncUtils;
 import org.elypia.commandler.producers.MessageSender;
-import org.elypia.elypiai.steam.Steam;
+import org.elypia.elypiai.steam.*;
+import org.knowm.xchart.*;
+import org.knowm.xchart.style.*;
 import org.slf4j.*;
 
 import javax.inject.Inject;
 import javax.validation.constraints.Size;
+import java.io.IOException;
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 /**
  * @author seth@elypia.org (Seth Falco)
@@ -113,6 +119,71 @@ public class SteamController {
 	 */
 	@StandardCommand
 	public void getRandomGame(@Param @Size(min = MIN_NAME_LENGTH, max = MAX_NAME_LENGTH) String username) {
+		withLibrary(username, (games) -> {
+			sender.send(games.get(ThreadLocalRandom.current().nextInt(games.size())));
+		});
+	}
+
+	/**
+	 * Get the top most played games of the player, only
+	 * including games they've actually played recently.
+	 *
+	 * @param username The Steam user to get the library of.
+	 */
+//	@StandardCommand
+	public void getRecentlyPlayedGames(@Param @Size(min = MIN_NAME_LENGTH, max = MAX_NAME_LENGTH) String username) {
+		withLibrary(username, (games) -> {
+			if (games.isEmpty()) {
+				sender.send(messages.steamLibraryEmpty());
+				return;
+			}
+
+			List<SteamGame> playedGames = games.stream()
+				.filter((game) -> game.getRecentPlaytime() > 0)
+				.sorted()
+				.collect(Collectors.toList());
+
+			if (playedGames.isEmpty()) {
+				sender.send(messages.steamNoRecentlyPlayedGamed(username));
+				return;
+			}
+
+			CategoryChart chart = new CategoryChartBuilder()
+				.title("Steam Playtime Stats")
+				.xAxisTitle("Game")
+				.yAxisTitle("Hours")
+				.build();
+
+			List<String> gameNames = playedGames.stream()
+				.map(SteamGame::getName)
+				.collect(Collectors.toList());
+
+			List<Long> recentPlaytimes = playedGames.stream()
+				.map(SteamGame::getRecentPlaytime)
+				.collect(Collectors.toList());
+
+			chart.addSeries("Recent Playtime", gameNames, recentPlaytimes);
+
+			final CategoryStyler styler = chart.getStyler();
+			styler.setXAxisLabelRotation(90);
+			styler.setXAxisLabelAlignmentVertical(Styler.TextAlignment.Right);
+
+			try {
+				BitmapEncoder.saveBitmap(chart, "./test_" + username, BitmapEncoder.BitmapFormat.PNG);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		});
+	}
+
+	/**
+	 * Generic method to perform logic that requires a
+	 * Steam users library by their username.
+	 *
+	 * @param username The username of the player on Steam.
+	 * @param callback The callback to perform against the list of games the user has played.
+	 */
+	private void withLibrary(String username, Consumer<List<SteamGame>> callback) {
 		var contextCopy = AsyncUtils.copyContext();
 
 		steam.getIdFromVanityUrl(username).subscribe((steamSearch) -> {
@@ -124,11 +195,13 @@ public class SteamController {
 				steam.getLibrary(steamSearch.getId()).subscribe(
 					(games) -> {
 						var contextCopyII = AsyncUtils.applyContext(contextCopy);
-						sender.send(games.get(ThreadLocalRandom.current().nextInt(games.size())));
+						callback.accept(games);
 						contextCopyII.deactivate();
 					},
 					(error) -> {
-
+						var contextCopyII = AsyncUtils.applyContext(contextCopy);
+						sender.send(messages.genericNetworkError());
+						contextCopyII.deactivate();
 					},
 					() -> {
 						var contextCopyII = AsyncUtils.applyContext(contextCopy);

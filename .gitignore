@@ -46,6 +46,12 @@ gradle-app.setting
 # Project #
 ###########
 
+# H2
+*.db
+
+# Docker
+docker-compose.yml
+
 # Configuration
 /config/**
 *.p12
@@ -54,7 +60,6 @@ gradle-app.setting
 *.env
 *.json
 *.toml
-docker-compose.yml
 
 # IntelliJ
 build/

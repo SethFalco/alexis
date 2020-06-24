@@ -24,8 +24,11 @@ import org.apache.deltaspike.core.api.config.*;
 @Configuration(prefix = "application.persistence.")
 public interface PersistenceConfig {
 
+    @ConfigProperty(name = "dialect", defaultValue = "org.hibernate.dialect.H2Dialect")
+    String dialect();
+
     /** The host server this database server is running on. */
-    @ConfigProperty(name = "url")
+    @ConfigProperty(name = "url", defaultValue = "jdbc:h2:file:./persistence/alexis")
     String getUrl();
 
     /** The username for this database user. */
@@ -35,4 +38,7 @@ public interface PersistenceConfig {
     /** Password to the Alexis user on the database. */
     @ConfigProperty(name = "password")
     String getPassword();
+
+    @ConfigProperty(name = "driver", defaultValue = "org.h2.Driver")
+    String driver();
 }

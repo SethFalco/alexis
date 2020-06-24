@@ -29,27 +29,27 @@ import org.slf4j.bridge.SLF4JBridgeHandler;
  */
 public class Alexis {
 
-	private static final Logger logger = LoggerFactory.getLogger(Alexis.class);
+    private static final Logger logger = LoggerFactory.getLogger(Alexis.class);
 
-	/** The time this application started, this is used to determine runtime statistics. */
-	public static final long START_TIME = System.currentTimeMillis();
+    /** The time this application started, this is used to determine runtime statistics. */
+    public static final long START_TIME = System.currentTimeMillis();
 
-	/**
-	 * @param args Command line arguments passed when running this application.
-	 */
-	public static void main(String[] args) {
-		SLF4JBridgeHandler.removeHandlersForRootLogger();
-		SLF4JBridgeHandler.install();
-		logger.info("Bridged JUL Logger to SLF4J.");
+    /**
+     * @param args Command line arguments passed when running this application.
+     */
+    public static void main(String[] args) {
+        SLF4JBridgeHandler.removeHandlersForRootLogger();
+        SLF4JBridgeHandler.install();
+        logger.info("Bridged JUL Logger to SLF4J.");
 
-		logger.info("Initializing the Commandler application.");
-		Commandler commandler = Commandler.create();
+        logger.info("Initializing the Commandler application.");
+        Commandler commandler = Commandler.create();
 
-		try {
-			commandler.run();
-		} catch (Exception ex) {
-			logger.error("Exception occured during Commandler initialization, backing out and exiting application.", ex);
-			System.exit(AlexisExitCode.INITIALIZATION_ERROR.getExitCode());
-		}
+        try {
+            commandler.run();
+        } catch (Exception ex) {
+            logger.error("Exception occured during Commandler initialization, backing out and exiting application.", ex);
+            System.exit(ExitCode.INITIALIZATION_ERROR.getId());
+        }
     }
 }

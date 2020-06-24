@@ -80,6 +80,7 @@ public class ActivityJob implements Job {
         this.jda = Objects.requireNonNull(jda);
         this.activityRepo = Objects.requireNonNull(activityRepo);
         previousActivityId = QUERY_ANY_ACTIVITY;
+        logger.info("Finished construction {}.", this.getClass());
     }
 
     /**

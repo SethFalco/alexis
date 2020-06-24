@@ -195,6 +195,12 @@ public interface AlexisMessages {
     @MessageTemplate("{steam_library_private}")
     String steamLibraryPrivate();
 
+    @MessageTemplate("{steam_library_empty}")
+    String steamLibraryEmpty();
+
+    @MessageTemplate("{steam_no_recently_played_games}")
+    String steamNoRecentlyPlayedGamed(String username);
+
     @MessageTemplate("{translate_source}")
     String translateSource();
 

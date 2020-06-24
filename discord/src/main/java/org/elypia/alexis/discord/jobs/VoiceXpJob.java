@@ -55,6 +55,7 @@ public class VoiceXpJob implements Job {
     public VoiceXpJob(final JDA jda, final GuildRepository guildRepo) {
         this.jda = Objects.requireNonNull(jda);
         this.guildRepo = Objects.requireNonNull(guildRepo);
+        logger.info("Finished construction {}.", this.getClass());
     }
 
     /**

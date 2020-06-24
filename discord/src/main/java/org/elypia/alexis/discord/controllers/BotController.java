@@ -103,6 +103,7 @@ public class BotController {
 			model.setBotDescription(info.getDescription());
 			model.setTotalGuilds(jda.getGuilds().size());
 
+			// TODO: Without member intent, gives wrong number
 			Collection<User> users = jda.getUsers();
 			model.setTotalUsers(users.size());
 			long bots = users.stream().filter(User::isBot).count();

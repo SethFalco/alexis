@@ -26,7 +26,7 @@ allprojects() {
         comcordVersion = "2.0.0"
         commandlerVersion = "4.0.1"
         elypiaiVersion = "4.1.0"
-        deltaSpikeVersion = "1.9.3"
+        deltaSpikeVersion = "1.9.4"
         hibernateVersion = "5.4.17.Final"
         junitVersion = "5.6.2"
         slf4jVersion = "1.7.30"
@@ -57,9 +57,6 @@ subprojects() {
     [compileJava, compileTestJava, javadoc]*.options*.encoding = 'UTF-8'
 
     dependencies {
-        // Commandler Newb (Includes subjective default libraries/implementations.)
-        implementation "org.elypia.commandler:newb:${commandlerVersion}"
-
         // Elypiai
         implementation "org.elypia.elypiai:cleverbot:${elypiaiVersion}"
         implementation "org.elypia.elypiai:osu:${elypiaiVersion}"
@@ -68,12 +65,6 @@ subprojects() {
         implementation "org.elypia.elypiai:steam:${elypiaiVersion}"
         implementation "org.elypia.elypiai:urban-dictionary:${elypiaiVersion}"
         implementation "org.elypia.elypiai:yugioh-prices:${elypiaiVersion}"
-
-        // DeltaSpike
-        implementation "org.apache.deltaspike.modules:deltaspike-data-module-api:${deltaSpikeVersion}"
-        runtimeOnly "org.apache.deltaspike.modules:deltaspike-data-module-impl:${deltaSpikeVersion}"
-        implementation "org.apache.deltaspike.modules:deltaspike-scheduler-module-api:${deltaSpikeVersion}"
-        runtimeOnly "org.apache.deltaspike.modules:deltaspike-scheduler-module-impl:${deltaSpikeVersion}"
 
         // Twitch
         implementation "com.github.twitch4j:twitch4j:1.0.0-alpha.24"
@@ -84,14 +75,13 @@ subprojects() {
 
         // Database
         implementation "org.hibernate:hibernate-core:${hibernateVersion}"
-        implementation "org.hibernate:hibernate-c3p0:${hibernateVersion}"
+        runtimeOnly "org.hibernate:hibernate-c3p0:${hibernateVersion}"
         runtimeOnly "mysql:mysql-connector-java:8.0.20"
-        testImplementation "com.h2database:h2:1.4.200"
+        runtimeOnly "com.h2database:h2:1.4.200"
 
         // Logging
         implementation "org.slf4j:slf4j-api:${slf4jVersion}"
         implementation "org.slf4j:jul-to-slf4j:${slf4jVersion}"
-        runtimeOnly "org.codehaus.janino:janino:3.1.2"
         runtimeOnly "ch.qos.logback:logback-classic:1.2.3"
         implementation "com.google.cloud:google-cloud-logging-logback:0.116.0-alpha"
 

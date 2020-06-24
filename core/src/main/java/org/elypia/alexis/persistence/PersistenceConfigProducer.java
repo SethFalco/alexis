@@ -37,20 +37,28 @@ public class PersistenceConfigProducer implements PersistenceConfigurationProvid
 
     @Override
     public Properties getEntityManagerFactoryConfiguration(String persistenceUnitName) {
-        Properties properties = new Properties(4);
+        Properties properties = new Properties(6);
 
+        String dialect = persistenceConfig.dialect();
         String url = persistenceConfig.getUrl();
         String username = persistenceConfig.getUsername();
         String password = persistenceConfig.getPassword();
+        String driver = persistenceConfig.driver();
+
+        if (dialect != null)
+            properties.put("hibernate.dialect", dialect);
 
         if (url != null)
-            properties.put("hibernate.connection.url", persistenceConfig.getUrl());
+            properties.put("hibernate.connection.url", url);
 
         if (username != null)
-            properties.put("hibernate.connection.username", persistenceConfig.getUsername());
+            properties.put("hibernate.connection.username", username);
 
         if (password != null)
-            properties.put("hibernate.connection.password", persistenceConfig.getPassword());
+            properties.put("hibernate.connection.password", password);
+
+        if (driver != null)
+            properties.put("hibernate.connection.driver_class", driver);
 
         properties.put("javax.persistence.bean.manager", BeanManagerProvider.getInstance().getBeanManager());
         return properties;

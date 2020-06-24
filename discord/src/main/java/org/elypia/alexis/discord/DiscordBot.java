@@ -19,7 +19,9 @@ package org.elypia.alexis.discord;
 import net.dv8tion.jda.api.*;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.requests.GatewayIntent;
+import net.dv8tion.jda.api.utils.*;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
+import org.elypia.alexis.ExitCode;
 import org.elypia.alexis.discord.listeners.*;
 import org.elypia.comcord.configuration.DiscordConfig;
 import org.elypia.retropia.core.HttpClientSingleton;
@@ -44,8 +46,8 @@ public class DiscordBot {
     /** The default {@link Activity} to display while the bot launches. */
     private static final Activity DEFAULT_ACTIVITY = Activity.watching("myself launch!");
 
-    /** A list of intends to initialize the bot with. */
-    private static final Collection<GatewayIntent> INTENTS = List.of(
+    /** A list of {@link GatewayIntent} the bot will use by default. */
+    private static final Collection<GatewayIntent> DEFAULT_INTENTS = List.of(
         GatewayIntent.GUILD_MEMBERS,
         GatewayIntent.GUILD_EMOJIS,
         GatewayIntent.GUILD_VOICE_STATES,
@@ -61,33 +63,38 @@ public class DiscordBot {
     );
 
     /** The Discord client, this lets us interact with Discords API. */
-    private final JDA jda;
+    private JDA jda;
 
     @Inject
     public DiscordBot(DiscordConfig discordConfig, ConnectionListener connectionListener, EmoteListener emoteListener, GreetingListener greetingListener, JoinLeaveListener joinKickListener, XpListener xpListener) throws LoginException {
         String token = discordConfig.getBotToken();
 
         if (token == null) {
-            logger.warn("No Discord bot token was provided to the application.");
-            throw new IllegalStateException("Unable to connect to Discord API.");
+            logger.error("No Discord bot token was provided to the application.");
+            System.exit(ExitCode.INITIALIZATION_ERROR.getId());
         }
 
         logger.info("Initializing JDA and authenticating to Discord.");
 
-        jda = JDABuilder.create(token, INTENTS)
-            .disableCache(CACHE_FLAGS_DISABLED)
-            .setStatus(OnlineStatus.IDLE)
-            .setBulkDeleteSplittingEnabled(false)
-            .setActivity(DEFAULT_ACTIVITY)
-            .setHttpClient(HttpClientSingleton.getClient())
-            .addEventListeners(
-                connectionListener,
-                emoteListener,
-                greetingListener,
-                joinKickListener,
-                xpListener
-            )
-            .build();
+        try {
+            jda = JDABuilder.create(token, DEFAULT_INTENTS)
+                .disableCache(CACHE_FLAGS_DISABLED)
+                .setStatus(OnlineStatus.IDLE)
+                .setBulkDeleteSplittingEnabled(false)
+                .setActivity(DEFAULT_ACTIVITY)
+                .setHttpClient(HttpClientSingleton.getClient())
+                .addEventListeners(
+                    connectionListener,
+                    emoteListener,
+                    greetingListener,
+                    joinKickListener,
+                    xpListener
+                )
+                .build();
+        } catch (Exception ex) {
+            logger.error("Failed to authenticated to the Discord API.", ex);
+            System.exit(ExitCode.INITIALIZATION_ERROR.getId());
+        }
     }
 
     @PreDestroy

@@ -17,7 +17,7 @@
 package org.elypia.alexis.discord.controllers;
 
 import net.dv8tion.jda.api.entities.*;
-import org.elypia.alexis.AlexisExitCode;
+import org.elypia.alexis.ExitCode;
 import org.elypia.alexis.i18n.AlexisMessages;
 import org.elypia.comcord.Scope;
 import org.elypia.comcord.annotations.Scoped;
@@ -97,7 +97,7 @@ public class DevController {
         Commandler.stop();
         logger.info("Finished shutting down Commandler, now shutting down application.");
 
-        System.exit(AlexisExitCode.NORMAL.getExitCode());
+        System.exit(ExitCode.NORMAL.getId());
     }
 
     @StandardCommand

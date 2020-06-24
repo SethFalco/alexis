@@ -17,3 +17,17 @@
 plugins {
     id "java-library"
 }
+
+dependencies {
+    // Commandler Newb (Includes subjective default libraries/implementations.)
+    api "org.elypia.commandler:newb:${commandlerVersion}"
+
+    // DeltaSpike
+    api "org.apache.deltaspike.modules:deltaspike-data-module-api:${deltaSpikeVersion}"
+    runtimeOnly "org.apache.deltaspike.modules:deltaspike-data-module-impl:${deltaSpikeVersion}"
+    api "org.apache.deltaspike.modules:deltaspike-scheduler-module-api:${deltaSpikeVersion}"
+    runtimeOnly "org.apache.deltaspike.modules:deltaspike-scheduler-module-impl:${deltaSpikeVersion}"
+
+    // Graphing API
+    implementation "org.knowm.xchart:xchart:3.6.3"
+}

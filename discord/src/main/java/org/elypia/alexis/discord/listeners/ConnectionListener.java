@@ -18,10 +18,13 @@ package org.elypia.alexis.discord.listeners;
 
 import net.dv8tion.jda.api.*;
 import net.dv8tion.jda.api.entities.Activity;
-import net.dv8tion.jda.api.events.ReadyEvent;
+import net.dv8tion.jda.api.events.*;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.managers.Presence;
-import org.elypia.alexis.Alexis;
+import net.dv8tion.jda.api.requests.CloseCode;
+import org.apache.deltaspike.core.api.exclude.Exclude;
+import org.elypia.alexis.*;
+import org.elypia.commandler.Commandler;
 import org.slf4j.*;
 
 import javax.inject.Singleton;
@@ -57,5 +60,18 @@ public class ConnectionListener extends ListenerAdapter {
         long timeElapsed = System.currentTimeMillis() - Alexis.START_TIME;
         String timeElapsedText = String.format("%,d", timeElapsed);
         logger.info("Time taken to launch: {}ms", timeElapsedText);
+    }
+
+    @Override
+    public void onShutdown(ShutdownEvent event) {
+        logger.info("JDA is shutting down.");
+
+        CloseCode closeCode = event.getCloseCode();
+
+        if (closeCode == null || !closeCode.isReconnect()) {
+            logger.info("No attempt will be made to reconnect to Discord, stopping Commandler and exiting application.");
+            Commandler.stop();
+            System.exit(ExitCode.NORMAL.getId());
+        }
     }
 }
