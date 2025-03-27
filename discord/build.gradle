@@ -16,7 +16,7 @@
 
 plugins {
     id "application"
-    id "com.github.johnrengelman.shadow" version "6.0.0"
+    id "com.github.johnrengelman.shadow" version "7.0.0"
 }
 
 application {
@@ -35,14 +35,22 @@ shadowJar {
     }
 }
 
+repositories {
+  maven {
+    url 'https://m2.dv8tion.net/releases'
+  }
+}
+
 dependencies {
     implementation project(":core")
 
     // Comcord
     implementation "org.elypia.comcord:core:${comcordVersion}"
+    // Override resolution for JDA as version depended on by Comcord is no longer hosted.
+    implementation "net.dv8tion:JDA:4.2.0_249"
     implementation "org.elypia.comcord:validation:${comcordVersion}"
 
     // Discord
-    implementation "com.sedmelluq:lavaplayer:1.3.47"
+    implementation "com.sedmelluq:lavaplayer:1.3.75"
     implementation "com.github.DiscordBotList:DBL-Java-Library:2.0.1"
 }

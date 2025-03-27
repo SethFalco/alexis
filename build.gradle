@@ -67,7 +67,7 @@ subprojects() {
         implementation "org.elypia.elypiai:yugioh-prices:${elypiaiVersion}"
 
         // Twitch
-        implementation "com.github.twitch4j:twitch4j:1.0.0-alpha.24"
+        implementation "com.github.twitch4j:twitch4j:1.2.1"
 
         // Google Translate and YouTube
         implementation "com.google.cloud:google-cloud-translate:1.94.5"
