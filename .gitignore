@@ -48,6 +48,7 @@ gradle-app.setting
 
 # H2
 *.db
+data/
 
 # Docker
 docker-compose.yml
