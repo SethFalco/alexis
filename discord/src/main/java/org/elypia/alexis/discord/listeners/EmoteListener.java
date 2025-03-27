@@ -20,9 +20,11 @@ import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.apache.commons.collections4.Bag;
-import org.elypia.alexis.persistence.entities.*;
-import org.elypia.alexis.persistence.enums.Feature;
-import org.elypia.alexis.persistence.repositories.*;
+import org.elypia.alexis.core.persistence.entities.*;
+import org.elypia.alexis.core.persistence.enums.Feature;
+import org.elypia.alexis.core.persistence.repositories.*;
+import org.elypia.alexis.core.persistence.entities.*;
+import org.elypia.alexis.core.persistence.repositories.*;
 import org.slf4j.*;
 
 import javax.inject.*;

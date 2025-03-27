@@ -22,8 +22,7 @@ import net.dv8tion.jda.api.events.*;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.managers.Presence;
 import net.dv8tion.jda.api.requests.CloseCode;
-import org.apache.deltaspike.core.api.exclude.Exclude;
-import org.elypia.alexis.*;
+import org.elypia.alexis.core.*;
 import org.elypia.commandler.Commandler;
 import org.slf4j.*;
 

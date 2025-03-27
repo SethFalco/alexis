@@ -1,14 +1,14 @@
 application:
   name: "Alexis"
-  git: "https://gitlab.com/Elypia/alexis"
+  git: "https://gitlab.com/SethFalco/alexis"
   author:
-    name: "Elypia"
-    url: "https://elypia.org/"
-    icon-url: "https://storage.googleapis.com/alexis_cdn/elypia_logo_by_defectiveart_24px.png"
-    support-guild-id: 592144414672158755
+    name: "Seth Falco"
+    url: "https://falco.fun"
+    icon-url:
+    support-guild-id:
   translate:
     aggregate-character-cap: 2000
-    attribution-url: "https://storage.googleapis.com/alexis_cdn/google_translate_attribution.png"
+    attribution-url:
 commandler:
   i18n:
     message-bundle: "org.elypia.alexis.i18n.CommandlerMessages"

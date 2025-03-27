@@ -21,13 +21,15 @@ import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.guild.*;
 import org.elypia.alexis.discord.DiscordBot;
 import org.elypia.alexis.discord.utils.DiscordUtils;
-import org.elypia.alexis.i18n.AlexisMessages;
+import org.elypia.alexis.core.i18n.AlexisMessages;
+import org.elypia.alexis.core.persistence.entities.GuildData;
+import org.elypia.alexis.core.persistence.repositories.GuildRepository;
 import org.elypia.comcord.ActivatedListenerAdapter;
 import org.slf4j.*;
 
 import javax.inject.*;
-import java.time.OffsetDateTime;
-import java.util.List;
+import java.time.*;
+import java.util.*;
 
 /**
  * Listener for when the {@link DiscordBot} joins or leaves
@@ -43,10 +45,12 @@ public class JoinLeaveListener extends ActivatedListenerAdapter {
     /** The format to log the new total of guilds, users, and bots. */
     private static final String GUILD_USERS_FORMAT = "%,d guilds | %,d users | %,d bots!";
 
+    private final GuildRepository guildRepo;
     private final AlexisMessages messages;
 
     @Inject
-    public JoinLeaveListener(AlexisMessages messages) {
+    public JoinLeaveListener(GuildRepository guildRepo, AlexisMessages messages) {
+        this.guildRepo = guildRepo;
         this.messages = messages;
     }
 
@@ -61,7 +65,7 @@ public class JoinLeaveListener extends ActivatedListenerAdapter {
     public void onGuildJoin(GuildJoinEvent event) {
         Guild guild = event.getGuild();
 
-        if (guild.getSelfMember().getTimeJoined().isBefore(OffsetDateTime.now().minusMinutes(10)))
+        if (isOutdatedEvent(guild))
             return;
 
         String name = guild.getName();
@@ -81,8 +85,24 @@ public class JoinLeaveListener extends ActivatedListenerAdapter {
 
     @Override
     public void onGuildLeave(GuildLeaveEvent event) {
+        Guild guild = event.getGuild();
+
         if (logger.isInfoEnabled())
-            logger.info("The guild {} just kicked me! ({})", event.getGuild().getName(), statsMessage(event.getJDA()));
+            logger.info("The guild {} just kicked me! ({})", guild.getName(), statsMessage(event.getJDA()));
+
+        Optional<GuildData> optGuildData = guildRepo.findOptionalBy(guild.getIdLong());
+
+        optGuildData.ifPresent((guildData) -> {
+            Duration duration = guildData.getDataRetentionDuration();
+
+           if (duration != null && !duration.isZero()) {
+               logger.info("The guild that kicked me has a data retention duration configured, not deleting any data yet.");
+               return;
+           }
+
+            logger.info("The guild that kicked me didn't have a data retention duration configured, deleting all guild data.");
+            guildRepo.remove(guildData);
+        });
     }
 
     /**
@@ -95,5 +115,18 @@ public class JoinLeaveListener extends ActivatedListenerAdapter {
         long botCount = users.stream().filter(User::isBot).count();
 
         return String.format(GUILD_USERS_FORMAT, guildCount, users.size(), botCount);
+    }
+
+    /**
+     * Sometimes Discord is dumb and gives events for guild joins that had already
+     * occured. In the scenario that this occurs, we check and see did we join the guild
+     * less than 10 minutes ago? If we've been around longer, that's probably Discord
+     * being a dummy and giving us a false event.
+     *
+     * @param guild The guild to check against.
+     * @return If this is an old event.
+     */
+    private boolean isOutdatedEvent(Guild guild) {
+        return guild.getSelfMember().getTimeJoined().isBefore(OffsetDateTime.now().minusMinutes(10));
     }
 }

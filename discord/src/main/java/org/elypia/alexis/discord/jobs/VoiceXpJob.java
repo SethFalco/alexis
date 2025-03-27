@@ -19,7 +19,7 @@ package org.elypia.alexis.discord.jobs;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.deltaspike.scheduler.api.Scheduled;
-import org.elypia.alexis.persistence.repositories.GuildRepository;
+import org.elypia.alexis.core.persistence.repositories.GuildRepository;
 import org.quartz.*;
 import org.slf4j.*;
 

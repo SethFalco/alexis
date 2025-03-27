@@ -48,7 +48,7 @@
                 </filter>
                 <log>alexis.log</log>
                 <flushLevel>WARN</flushLevel>
-                <enhancer>org.elypia.alexis.ProjectStageLoggingEnhancer</enhancer>
+                <enhancer>org.elypia.alexis.core.ProjectStageLoggingEnhancer</enhancer>
             </appender>
         </then>
     </if>

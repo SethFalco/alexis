@@ -16,14 +16,17 @@
 
 package org.elypia.alexis.discord.listeners;
 
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.guild.GenericGuildEvent;
 import net.dv8tion.jda.api.events.guild.member.*;
-import org.elypia.alexis.discord.controllers.GreetingController;
-import org.elypia.alexis.i18n.AlexisMessages;
-import org.elypia.alexis.persistence.entities.*;
-import org.elypia.alexis.persistence.enums.*;
-import org.elypia.alexis.persistence.repositories.GuildRepository;
+import org.elypia.alexis.core.i18n.AlexisMessages;
+import org.elypia.alexis.core.persistence.entities.*;
+import org.elypia.alexis.core.persistence.enums.*;
+import org.elypia.alexis.core.persistence.repositories.GuildRepository;
+import org.elypia.alexis.discord.modules.GreetingController;
+import org.elypia.alexis.core.persistence.entities.*;
+import org.elypia.alexis.core.persistence.enums.*;
 import org.elypia.comcord.ActivatedListenerAdapter;
 import org.slf4j.*;
 
@@ -90,7 +93,12 @@ public class GreetingListener extends ActivatedListenerAdapter {
         List<Role> roles = roleDatas.map((roleData) -> guild.getRoleById(roleData.getId()))
             .collect(Collectors.toList());
 
-        guild.modifyMemberRoles(event.getMember(), roles, null).queue();
+        if (!roles.isEmpty()) {
+            if (guild.getSelfMember().hasPermission(Permission.MANAGE_ROLES))
+                guild.modifyMemberRoles(event.getMember(), roles, null).queue();
+            else
+                logger.debug("Attempted to add on-join roles to member but lacking the {} permission.", Permission.MANAGE_ROLES);
+        }
     }
 
     @Override

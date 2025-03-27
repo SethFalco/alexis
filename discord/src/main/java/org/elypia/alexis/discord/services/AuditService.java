@@ -17,9 +17,10 @@
 package org.elypia.alexis.discord.services;
 
 import net.dv8tion.jda.api.entities.Guild;
-import org.elypia.alexis.Alexis;
-import org.elypia.alexis.persistence.entities.*;
-import org.elypia.alexis.persistence.repositories.GuildRepository;
+import org.elypia.alexis.core.Alexis;
+import org.elypia.alexis.core.persistence.entities.*;
+import org.elypia.alexis.core.persistence.repositories.GuildRepository;
+import org.elypia.alexis.core.persistence.entities.*;
 import org.slf4j.*;
 
 import javax.enterprise.context.ApplicationScoped;

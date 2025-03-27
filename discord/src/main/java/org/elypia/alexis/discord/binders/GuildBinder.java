@@ -18,8 +18,8 @@ package org.elypia.alexis.discord.binders;
 
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.events.Event;
-import org.elypia.alexis.persistence.entities.GuildData;
-import org.elypia.alexis.persistence.repositories.GuildRepository;
+import org.elypia.alexis.core.persistence.entities.GuildData;
+import org.elypia.alexis.core.persistence.repositories.GuildRepository;
 import org.elypia.comcord.EventUtils;
 import org.elypia.commandler.annotation.stereotypes.Binder;
 import org.elypia.commandler.api.HeaderBinder;

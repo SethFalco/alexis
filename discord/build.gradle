@@ -46,10 +46,11 @@ dependencies {
 
     // Comcord
     implementation "org.elypia.comcord:core:${comcordVersion}"
-    // Override resolution for JDA as version depended on by Comcord is no longer hosted.
-    implementation "net.dv8tion:JDA:4.2.0_249"
     implementation "org.elypia.comcord:validation:${comcordVersion}"
 
     // Discord
     implementation "com.sedmelluq:lavaplayer:1.3.75"
+
+    // Override upstream dependency resolution
+    implementation "net.dv8tion:JDA:4.2.0_249"
 }

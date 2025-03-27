@@ -1,7 +1,7 @@
 package org.elypia.alexis.discord.models;
 
 import net.dv8tion.jda.api.entities.Emote;
-import org.elypia.alexis.persistence.entities.EmoteUsage;
+import org.elypia.alexis.core.persistence.entities.EmoteUsage;
 
 /**
  * Model object that represents the leaderboard for {@link EmoteUsage}.
