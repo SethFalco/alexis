@@ -82,6 +82,7 @@ subprojects() {
         // Logging
         implementation "org.slf4j:slf4j-api:${slf4jVersion}"
         implementation "org.slf4j:jul-to-slf4j:${slf4jVersion}"
+        runtimeOnly "org.codehaus.janino:janino:3.1.2"
         runtimeOnly "ch.qos.logback:logback-classic:1.2.3"
         implementation "com.google.cloud:google-cloud-logging-logback:0.116.0-alpha"
 
@@ -116,7 +117,7 @@ subprojects() {
 }
 
 
-/** Combine and ouput code coverage. */
+/** Combine and output code coverage. */
 
 task jacocoMerge(type: JacocoMerge) {
     executionData = files(subprojects.jacocoTestReport.executionData.findAll {it.asList() })
