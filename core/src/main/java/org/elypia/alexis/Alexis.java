@@ -48,7 +48,7 @@ public class Alexis {
         try {
             commandler.run();
         } catch (Exception ex) {
-            logger.error("Exception occured during Commandler initialization, backing out and exiting application.", ex);
+            logger.error("Exception occurred during Commandler initialization, backing out and exiting application.", ex);
             System.exit(ExitCode.INITIALIZATION_ERROR.getId());
         }
     }
