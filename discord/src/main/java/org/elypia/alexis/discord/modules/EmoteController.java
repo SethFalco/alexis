@@ -87,7 +87,6 @@ public class EmoteController {
         return messages.emotePostLackPermissions(emoteUrl);
     }
 
-    // TODO: Multiple aliases prefix/commands
     @StandardCommand
     public String setEmoteTracking(@Channels(ChannelType.TEXT) @Elevated Message message, @Param("true") boolean isEnabled) {
         long guildId = message.getGuild().getIdLong();

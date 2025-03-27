@@ -47,7 +47,6 @@ public class OsuController {
         this.sender = sender;
     }
 
-    // TODO: Make a generic callback exception error handler and dash that in there
     @StandardCommand
     public void get(@Param @Size(min = 3, max = 15) String username, @Param("osu") OsuMode mode) {
         var scopeToContextualInstances = AsyncUtils.copyContext();

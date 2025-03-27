@@ -98,7 +98,6 @@ public class TranslateController {
         return (toggle) ? messages.featureEnabledTryItNow() : messages.reactionFeatureDisabled();
     }
 
-    // TODO: Implement this
     @StandardCommand
     public String inPrivate(@Channels(ChannelType.TEXT) @Elevated ActionEvent<Event, Message> event, @Param boolean isPrivate) {
         return null;

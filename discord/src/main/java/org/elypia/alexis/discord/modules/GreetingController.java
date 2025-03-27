@@ -45,7 +45,6 @@ public class GreetingController {
         this.messages = messages;
     }
 
-    // TODO: Only update if it's actually changed
     @StandardCommand
     public String setEnabled(
         @Channels(ChannelType.TEXT) @Elevated Message message,
