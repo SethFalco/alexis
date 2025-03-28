@@ -32,7 +32,7 @@ public class YouTubeUtilsTest {
     }
 
     @Test
-    public void testTimestampmmss() {
+    public void testTimestampMmss() {
         String expected = "44:36";
         String actual = YouTubeUtils.toYouTubeTimeFormat(TimeUnit.SECONDS, 2676);
         assertEquals(expected, actual);
