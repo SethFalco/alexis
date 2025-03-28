@@ -31,12 +31,6 @@ public enum Feature {
     TRANSLATE_ON_REACTION("translate on reaction"),
 
     /**
-     * Sync the name of the voice channel, or username of
-     * the bot to the audio it's playing.
-     */
-    MUSIC_NAME_SYNC("sync name with music"),
-
-    /**
      * Display the global level instead of the current level
      * for the guild with this feature enabled.
      */
