@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2020 Elypia CIC
+ * Copyright 2019-2020 Seth Falco and Alexis Contributors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,7 +34,7 @@ import java.net.URL;
 import java.util.*;
 
 /**
- * @author seth@elypia.org (Seth Falco)
+ * @author seth@falco.fun (Seth Falco)
  */
 @Controller(hidden = true)
 @StandardController

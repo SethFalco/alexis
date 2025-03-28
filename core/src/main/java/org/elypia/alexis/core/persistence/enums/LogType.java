@@ -3,7 +3,7 @@ package org.elypia.alexis.core.persistence.enums;
 /**
  * The different types of messages that users may choose to subscribe to.
  *
- * @author seth@elypia.org (Seth Falco)
+ * @author seth@falco.fun (Seth Falco)
  * @since 3.0.0
  */
 public enum LogType {

@@ -19,7 +19,7 @@ import java.util.*;
  * aware configuration, namely environment variables,
  * using our own custom properties.
  *
- * @author seth@elypia.org (Seth Falco)
+ * @author seth@falco.fun (Seth Falco)
  * @since 3.0.0
  */
 @Priority(1)

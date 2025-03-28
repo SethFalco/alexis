@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * Model object that represents a single entry in the {@link EmoteLeaderboardModel}.
  *
- * @author seth@elypia.org (Seth Falco)
+ * @author seth@falco.fun (Seth Falco)
  * @since 3.0.0
  */
 public class EmoteLeaderboardModel {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2020 Elypia CIC
+ * Copyright 2019-2020 Seth Falco and Alexis Contributors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,7 +35,7 @@ import java.text.*;
 import java.util.Date;
 
 /**
- * @author seth@elypia.org (Seth Falco)
+ * @author seth@falco.fun (Seth Falco)
  */
 @MessageProvider(provides = Message.class, value = SearchResult.class)
 public class YouTubeMessenger implements DiscordMessenger<SearchResult> {
