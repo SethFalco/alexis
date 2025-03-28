@@ -8,7 +8,7 @@ import org.apache.deltaspike.core.util.ProjectStageProducer;
  * Adds a label to all logs with the {@link ProjectStage}
  * of the application.
  *
- * @author seth@elypia.org (Seth Falco)
+ * @author seth@falco.fun (Seth Falco)
  * @since 3.0.0
  */
 public class ProjectStageLoggingEnhancer implements LoggingEnhancer {

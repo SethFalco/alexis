@@ -1,7 +1,7 @@
 package org.elypia.alexis.discord.models;
 
 /**
- * @author seth@elypia.org (Seth Falco)
+ * @author seth@falco.fun (Seth Falco)
  * @since 3.0.0
  */
 public class BotInfoModel {

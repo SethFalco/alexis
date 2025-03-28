@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2020 Elypia CIC
+ * Copyright 2019-2020 Seth Falco and Alexis Contributors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,6 @@
  * packages, for example the {@link org.elypia.alexis.core.modules.osu.OsuConfig}
  * can be found in the {@link org.elypia.alexis.core.modules.osu} package.
  *
- * @author seth@elypia.org (Seth Falco)
+ * @author seth@falco.fun (Seth Falco)
  */
 package org.elypia.alexis.core.configuration;

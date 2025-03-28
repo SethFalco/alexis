@@ -16,7 +16,7 @@ import javax.inject.Inject;
 import java.util.Locale;
 
 /**
- * @author seth@elypia.org (Seth Falco)
+ * @author seth@falco.fun (Seth Falco)
  * @since 3.0.0
  */
 @Priority(1)

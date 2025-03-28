@@ -6,7 +6,7 @@ import org.elypia.alexis.core.persistence.entities.EmoteUsage;
 /**
  * Model object that represents the leaderboard for {@link EmoteUsage}.
  *
- * @author seth@elypia.org (Seth Falco)
+ * @author seth@falco.fun (Seth Falco)
  * @since 3.0.0
  */
 public class EmoteLeaderboardEntryModel implements Comparable<EmoteLeaderboardEntryModel> {
