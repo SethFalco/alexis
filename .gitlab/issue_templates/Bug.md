@@ -1,14 +1,19 @@
-# Bug Report
+# Bug
 <!--
-  This is for the reporting bugs or unexpected behavior 
-  in existing features.
-  
-  If you feel a heading is irrelevant, just ignore it, or remove the title.
+  For reporting bugs or unexpected behavior in existing features.
+  If a heading is irrelevant, ignore it or remove the title.
 -->
 
 ## Description
-<!-- 
-  Explain what this is about, try to use full sentences, and make your point clear.
--->
+<!-- Explain what this is about, use full sentences and be clear. -->
 
-/label ~Bug 
+## Steps to Reproduce
+<!-- If you can't reproduce the bug consistently, then take time to experiment and figure it out! -->
+
+ ## Expected Behavior
+<!-- What were you expecting to happen here? -->
+
+## Actual Behavior
+<!-- What actually happened here? If it's intermittent, please specify roughly how often it occurs. -->
+
+/label ~Bug
