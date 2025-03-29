@@ -76,11 +76,6 @@ public class GuildData implements Serializable {
     @OneToMany(targetEntity = GuildMessage.class, mappedBy = "guildData", cascade = CascadeType.ALL, orphanRemoval = true)
     private Map<GuildMessageType, GuildMessage> messages;
 
-    @MapKey(name = "logType")
-    @MapKeyEnumerated(EnumType.STRING)
-    @OneToMany(targetEntity = LogSubscription.class, mappedBy = "guildData", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Map<LogType, LogSubscription> logSubscriptions;
-
     @OneToMany(targetEntity = CustomCommand.class, mappedBy = "guildData", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CustomCommand> customCommands;
 
@@ -186,18 +181,6 @@ public class GuildData implements Serializable {
 
     public void addMessage(GuildMessage message) {
         messages.put(message.getType(), message);
-    }
-
-    public Map<LogType, LogSubscription> getLogSubscriptions() {
-        return logSubscriptions;
-    }
-
-    public void setLogSubscriptions(Map<LogType, LogSubscription> logSubscriptions) {
-        this.logSubscriptions = logSubscriptions;
-    }
-
-    public void addLogSubscriptions(LogSubscription subscription) {
-        logSubscriptions.put(subscription.getLogType(), subscription);
     }
 
     public List<CustomCommand> getCustomCommands() {
