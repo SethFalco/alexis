@@ -15,7 +15,6 @@
  */
 
 allprojects() {
-    apply plugin: "idea"
     apply plugin: "jacoco"
 
     group = "org.elypia.alexis"
