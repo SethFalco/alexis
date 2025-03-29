@@ -10,6 +10,7 @@ import java.util.Date;
  * This doesn't include validation messages, or commandler component metadata.
  */
 @MessageBundle
+@MessageContextConfig
 public interface AlexisMessages {
 
     @MessageTemplate("{deleted_or_banned}")

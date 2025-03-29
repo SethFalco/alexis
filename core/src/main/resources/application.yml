@@ -1,6 +1,5 @@
 application:
   name: "Alexis"
-  git: "https://gitlab.com/SethFalco/alexis"
   author:
     name: "Seth Falco"
     url: "https://falco.fun"
