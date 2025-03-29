@@ -27,7 +27,6 @@ import org.elypia.alexis.discord.listeners.ConnectionListener;
 import org.elypia.alexis.discord.listeners.EmoteListener;
 import org.elypia.alexis.discord.listeners.GreetingListener;
 import org.elypia.alexis.discord.listeners.JoinLeaveListener;
-import org.elypia.alexis.discord.listeners.XpListener;
 import org.slf4j.*;
 
 import javax.annotation.PreDestroy;
@@ -69,7 +68,7 @@ public class DiscordBot {
     private JDA jda;
 
     @Inject
-    public DiscordBot(DiscordConfig discordConfig, ConnectionListener connectionListener, EmoteListener emoteListener, GreetingListener greetingListener, JoinLeaveListener joinKickListener, XpListener xpListener) throws LoginException {
+    public DiscordBot(DiscordConfig discordConfig, ConnectionListener connectionListener, EmoteListener emoteListener, GreetingListener greetingListener, JoinLeaveListener joinKickListener) throws LoginException {
         String token = discordConfig.getBotToken();
 
         if (token == null) {
@@ -90,8 +89,7 @@ public class DiscordBot {
                     connectionListener,
                     emoteListener,
                     greetingListener,
-                    joinKickListener,
-                    xpListener
+                    joinKickListener
                 )
                 .build();
         } catch (Exception ex) {

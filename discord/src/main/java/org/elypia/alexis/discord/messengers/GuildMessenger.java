@@ -23,7 +23,6 @@ import org.elypia.alexis.discord.utils.DiscordUtils;
 import org.elypia.alexis.core.i18n.AlexisMessages;
 import org.elypia.alexis.core.persistence.entities.GuildData;
 import org.elypia.alexis.core.persistence.repositories.GuildRepository;
-import org.elypia.alexis.core.utils.LevelUtils;
 import org.elypia.comcord.api.DiscordMessenger;
 import org.elypia.commandler.annotation.stereotypes.MessageProvider;
 import org.elypia.commandler.event.ActionEvent;
@@ -75,9 +74,6 @@ public class GuildMessenger implements DiscordMessenger<Guild> {
         String guildPrefix = data.getPrefix();
         String prefix = (guildPrefix != null) ? guildPrefix : toSend.getSelfMember().getAsMention();
         builder.addField(messages.commandPrefix(), prefix, true);
-
-        int level = LevelUtils.getLevelFromXp(data.getXp());
-        builder.addField(messages.userLevel(), String.valueOf(level), true);
 
         Locale locale = data.getLocale();
         builder.addField(messages.currentLocale(), locale.getDisplayName(locale), false);

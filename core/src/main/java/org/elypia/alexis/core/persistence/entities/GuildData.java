@@ -49,11 +49,6 @@ public class GuildData implements Serializable {
     @Column(name = "description")
     private String description;
 
-    /** The total XP earned in this Guild. */
-    @ColumnDefault("0")
-    @Column(name = "guild_xp", nullable = false)
-    private long xp;
-
     @ColumnDefault("'en_US'")
     @Column(name = "guild_locale", nullable = false)
     private Locale locale;
@@ -61,11 +56,6 @@ public class GuildData implements Serializable {
     /** The prefix that must be before a command, or null if this guild only allows mentions. */
     @Column(name = "guild_prefix")
     private String prefix;
-
-    /** Allow guilds to locally override the amount of XP awarded with a custom multiplier. */
-    @ColumnDefault("1.0")
-    @Column(name = "xp_multp", nullable = false)
-    private Double multiplier;
 
     /**
      * We'll delete all data we have on a guild if they kick the bot by default.
@@ -109,9 +99,6 @@ public class GuildData implements Serializable {
     @OneToMany(targetEntity = RoleData.class, mappedBy = "guildData", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<RoleData> roles;
 
-    @OneToMany(targetEntity = Skill.class, mappedBy = "guild", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Skill> skills;
-
     public GuildData() {
         features = new EnumMap<>(Feature.class);
         messages = new EnumMap<>(GuildMessageType.class);
@@ -121,7 +108,6 @@ public class GuildData implements Serializable {
         members = new ArrayList<>();
         messageChannels = new ArrayList<>();
         roles = new ArrayList<>();
-        skills = new ArrayList<>();
     }
 
     public GuildData(final long id) {
@@ -138,10 +124,8 @@ public class GuildData implements Serializable {
 
         return id == g.id &&
             description.equals(g.description) &&
-            xp == g.xp &&
             locale.equals(g.locale) &&
-            prefix.equals(g.prefix) &&
-            multiplier.equals(g.multiplier);
+            prefix.equals(g.prefix);
     }
 
     public long getId() {
@@ -154,14 +138,6 @@ public class GuildData implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public long getXp() {
-        return xp;
-    }
-
-    public void setXp(long xp) {
-        this.xp = xp;
     }
 
     public Locale getLocale() {
@@ -178,14 +154,6 @@ public class GuildData implements Serializable {
 
     public void setPrefix(String prefix) {
         this.prefix = prefix;
-    }
-
-    public Double getMultiplier() {
-        return multiplier;
-    }
-
-    public void setMultiplier(Double mutlipler) {
-        this.multiplier = mutlipler;
     }
 
     public Duration getDataRetentionDuration() {
@@ -278,13 +246,5 @@ public class GuildData implements Serializable {
 
     public void setRoles(List<RoleData> roles) {
         this.roles = roles;
-    }
-
-    public List<Skill> getSkills() {
-        return skills;
-    }
-
-    public void setSkills(List<Skill> skills) {
-        this.skills = skills;
     }
 }

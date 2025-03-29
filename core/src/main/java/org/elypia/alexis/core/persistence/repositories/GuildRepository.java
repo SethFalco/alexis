@@ -28,10 +28,6 @@ import java.util.Locale;
 public interface GuildRepository extends EntityRepository<GuildData, Long> {
 
     @Modifying
-    @Query("UPDATE GuildData AS g SET g.xp = g.xp + ?1 WHERE g.id = ?2")
-    int incrementXp(final long xp, final long id);
-
-    @Modifying
     @Query("UPDATE GuildData AS g SET g.locale = ?1 WHERE g.id = ?2")
     int updateLocale(final Locale locale, final long id);
 

@@ -34,16 +34,7 @@ public enum GuildMessageType {
     USER_LEAVE("user farewell"),
 
     /** When a bot leaves a guild. */
-    BOT_LEAVE("bot farewell"),
-
-    /** When a user levels up globally. */
-    USER_LEVEL_UP("user level up"),
-
-    /** When a member levels up locally in a server. */
-    MEMBER_LEVEL_UP("member level up"),
-
-    /** When a guild levels up. */
-    GUILD_LEVEL_UP("guild level up");
+    BOT_LEAVE("bot farewell");
 
     /** A more user friendly name that can be used in messages. */
     private final String FRIENDLY_NAME;
