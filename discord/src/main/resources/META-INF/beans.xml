@@ -46,7 +46,5 @@
   </scan>
   <alternatives>
     <class>org.elypia.alexis.discord.i18n.DiscordLocaleResolver</class>
-    <class>org.elypia.alexis.core.PersistantActionCache</class>
-    <class>org.elypia.alexis.core.persistence.PersistenceConfigProducer</class>
   </alternatives>
 </beans>
