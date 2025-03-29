@@ -18,6 +18,7 @@ package org.elypia.alexis.discord.listeners;
 
 import net.dv8tion.jda.api.*;
 import net.dv8tion.jda.api.entities.Activity;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.events.*;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.managers.Presence;
@@ -25,6 +26,8 @@ import net.dv8tion.jda.api.requests.CloseCode;
 import org.elypia.alexis.core.*;
 import org.elypia.commandler.Commandler;
 import org.slf4j.*;
+
+import java.util.List;
 
 import javax.inject.Singleton;
 
@@ -59,6 +62,12 @@ public class ConnectionListener extends ListenerAdapter {
         long timeElapsed = System.currentTimeMillis() - Alexis.START_TIME;
         String timeElapsedText = String.format("%,d", timeElapsed);
         logger.info("Time taken to launch: {}ms", timeElapsedText);
+
+        if (logger.isInfoEnabled()) {
+            List<Guild> guilds = jda.getGuilds();
+            int members = guilds.stream().mapToInt(Guild::getMemberCount).sum();
+            logger.info("Initialized with {} guilds, {} users, and {} members.", guilds.size(), jda.getUsers().size(), members);
+        }
     }
 
     @Override
