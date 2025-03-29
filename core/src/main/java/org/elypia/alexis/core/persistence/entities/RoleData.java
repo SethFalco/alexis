@@ -42,13 +42,6 @@ public class RoleData implements Serializable {
     @Column(name = "self_assignable")
     private boolean selfAssignable;
 
-    /**
-     * If the assignable role should be automatically
-     * applied when attains any skill milestone requirements.
-     */
-    @Column(name = "auto_assign")
-    private boolean autoAssign;
-
     /** Should this role be applied to users automatically on join. */
     @Column(name = "on_user_join")
     private boolean onUserJoin;
@@ -57,11 +50,8 @@ public class RoleData implements Serializable {
     @Column(name = "on_bot_join")
     private boolean onBotJoin;
 
-    @OneToMany(targetEntity = SkillMilestone.class, mappedBy = "role", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<SkillMilestone> skillMilestones;
-
     public RoleData() {
-        skillMilestones = new ArrayList<>();
+        // Do nothing
     }
 
     public RoleData(long roleId) {
@@ -102,14 +92,6 @@ public class RoleData implements Serializable {
         this.selfAssignable = selfAssignable;
     }
 
-    public boolean isAutoAssign() {
-        return autoAssign;
-    }
-
-    public void setAutoAssign(boolean autoAssign) {
-        this.autoAssign = autoAssign;
-    }
-
     public boolean isOnUserJoin() {
         return onUserJoin;
     }
@@ -124,13 +106,5 @@ public class RoleData implements Serializable {
 
     public void setOnBotJoin(boolean onBotJoin) {
         this.onBotJoin = onBotJoin;
-    }
-
-    public List<SkillMilestone> getSkillMilestones() {
-        return skillMilestones;
-    }
-
-    public void setSkillMilestones(List<SkillMilestone> skillMilestones) {
-        this.skillMilestones = skillMilestones;
     }
 }

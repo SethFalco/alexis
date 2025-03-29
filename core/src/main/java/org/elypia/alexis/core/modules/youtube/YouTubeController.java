@@ -50,7 +50,7 @@ public class YouTubeController {
             Optional<SearchResult> searchResult = youtube.getSearchResult(query, ResourceType.VIDEO);
             return (searchResult.isPresent()) ? searchResult.get() : messages.noSearchResultsFound();
         } catch (GoogleJsonResponseException ex) {
-            logger.error("The YouTube API hasn't been configured propertly: {}", ex.getDetails().getMessage());
+            logger.error("The YouTube API hasn't been configured properly: {}", ex.getDetails().getMessage());
             return messages.youtubeApiError();
         }
     }

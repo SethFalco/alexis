@@ -38,10 +38,6 @@ public class UserData implements Serializable {
     @Column(name = "user_id")
     private long id;
 
-    @ColumnDefault("0")
-    @Column(name = "user_xp")
-    private int xp;
-
     @UpdateTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "last_activity")
@@ -52,14 +48,6 @@ public class UserData implements Serializable {
 
     public long getId() {
         return id;
-    }
-
-    public int getXp() {
-        return xp;
-    }
-
-    public void setXp(int xp) {
-        this.xp = xp;
     }
 
     public Date getLastMessage() {

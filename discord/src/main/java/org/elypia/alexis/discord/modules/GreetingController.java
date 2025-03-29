@@ -74,7 +74,7 @@ public class GreetingController {
                 Member lastModifiedBy = guild.getMemberById(guildFeature.getModifiedBy());
 
                 if (lastModifiedBy == null)
-                    joiner.add(messages.greetingModifedAlreadyByAnonUser(feature.getFriendlyName()));
+                    joiner.add(messages.greetingModifiedAlreadyByAnonUser(feature.getFriendlyName()));
                 else
                     joiner.add(messages.greetingModifiedAlready(feature.getFriendlyName(), guildFeature.getModifiedAt(), lastModifiedBy.getEffectiveName()));
 

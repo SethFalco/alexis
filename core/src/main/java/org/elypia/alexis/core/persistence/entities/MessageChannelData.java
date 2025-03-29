@@ -43,11 +43,8 @@ public class MessageChannelData implements Serializable {
     @Column(name = "cleverbot_state", length = 8196)
     private String cleverState;
 
-    @OneToMany(targetEntity = SkillRelation.class, mappedBy = "channelData", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<SkillRelation> skillRelations;
-
     public MessageChannelData() {
-        skillRelations = new ArrayList<>();
+        // Do nothing
     }
 
     public MessageChannelData(long channelId, GuildData guildData) {
@@ -82,13 +79,5 @@ public class MessageChannelData implements Serializable {
 
     public void setCleverState(String cleverState) {
         this.cleverState = cleverState;
-    }
-
-    public List<SkillRelation> getSkillRelations() {
-        return skillRelations;
-    }
-
-    public void setSkillRelations(List<SkillRelation> skillRelations) {
-        this.skillRelations = skillRelations;
     }
 }

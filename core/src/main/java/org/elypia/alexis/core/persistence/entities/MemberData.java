@@ -49,13 +49,6 @@ public class MemberData implements Serializable {
     @JoinColumn(name = "user_id", nullable = false)
     private UserData userData;
 
-    @ColumnDefault("0")
-    @Column(name = "member_xp")
-    private long xp;
-
-    @OneToMany(targetEntity = MemberSkill.class, mappedBy = "memberData", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<MemberSkill> skills;
-
     public int getId() {
         return id;
     }
@@ -74,21 +67,5 @@ public class MemberData implements Serializable {
 
     public void setUserData(UserData userData) {
         this.userData = userData;
-    }
-
-    public long getXp() {
-        return xp;
-    }
-
-    public void setXp(long xp) {
-        this.xp = xp;
-    }
-
-    public List<MemberSkill> getSkills() {
-        return skills;
-    }
-
-    public void setSkills(List<MemberSkill> skills) {
-        this.skills = skills;
     }
 }

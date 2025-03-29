@@ -45,17 +45,8 @@ public interface AlexisMessages {
     @MessageTemplate("{unique_identifier}")
     String uniqueIdentifier(Object id);
 
-    @MessageTemplate("{audit_level_enabled_no_message}")
-    String auditLevelEnabledNoMessage();
-
-    @MessageTemplate("{user_leveled_up}")
-    String userLeveledUp(int oldLevel, int newLevel);
-
     @MessageTemplate("{thank_you_for_invite}")
     String thankYouForInvite();
-
-    @MessageTemplate("{request_failed_unknown_reason}")
-    String requestFailedUnknownReason();
 
     @MessageTemplate("{dev_left_guild}")
     String devLeftGuild();
@@ -92,9 +83,6 @@ public interface AlexisMessages {
 
     @MessageTemplate("{emote_leaderboard_global}")
     String emoteLeaderboardGlobal();
-
-    @MessageTemplate("{bot_author}")
-    String botAuthor();
 
     @MessageTemplate("{bot_total_guilds}")
     String botTotalGuilds();
@@ -159,9 +147,6 @@ public interface AlexisMessages {
     @MessageTemplate("{osu_latest_activity}")
     String osuLatestActivity();
 
-    @MessageTemplate("{osu_player_not_found}")
-    String osuPlayerNotFound();
-
     @MessageTemplate("{steam_more_info}")
     String steamMoreInfo(String url);
 
@@ -180,7 +165,7 @@ public interface AlexisMessages {
     @MessageTemplate("{coin_flip_heads}")
     String coinFlipHeads();
 
-    @MessageTemplate("{coin_clip_tails}")
+    @MessageTemplate("{coin_flip_tails}")
     String coinClipTails();
 
     @MessageTemplate("{steam_user_not_found}")
@@ -243,8 +228,8 @@ public interface AlexisMessages {
     @MessageTemplate("{greeting_toggled_feature}")
     String greetingToggledFeature(String feature);
 
-    @MessageTemplate("{greeting_modifed_already_by_anon_user}")
-    String greetingModifedAlreadyByAnonUser(String feature);
+    @MessageTemplate("{greeting_modified_already_by_anon_user}")
+    String greetingModifiedAlreadyByAnonUser(String feature);
 
     @MessageTemplate("{greeting_modified_already}")
     String greetingModifiedAlready(String feature, Date date, String memberName);
@@ -273,12 +258,6 @@ public interface AlexisMessages {
     @MessageTemplate("{youtube_api_error}")
     String youtubeApiError();
 
-    @MessageTemplate("{youtube_channel_not_found")
-    String youtubeChannelNotFound(String channelId);
-
-    @MessageTemplate("{youtube_channel_no_results")
-    String youtubeChannelNoResults(String query);
-
     @MessageTemplate("{no_search_results_found}")
     String noSearchResultsFound();
 
@@ -293,51 +272,6 @@ public interface AlexisMessages {
 
     @MessageTemplate("{invite_bot}")
     String inviteBot(String botName);
-
-    @MessageTemplate("{skill_not_found_with_name}")
-    String skillNotFoundWithName(String skillName);
-
-    @MessageTemplate("{skill_assigned_to_channel}")
-    String skillAssignedToChannel(String skillName, String channelName);
-
-    @MessageTemplate("{skill_guild_has_no_skills}")
-    String skillGuildHasNoSkills();
-
-    @MessageTemplate("{skill_with_name_already_exists}")
-    String skillWithNameAlreadyExists(String skillName, String guildName);
-
-    @MessageTemplate("{skill_added_succesfully}")
-    String skillAddedSuccesfully();
-
-    @MessageTemplate("{skill_deleted_non_existing_skill}")
-    String skillDeletedNonExistingSkill();
-
-    @MessageTemplate("{skill_deleted_succesfully}")
-    String skillDeletedSuccesfully();
-
-    @MessageTemplate("{skill_delete_all_skills}")
-    String skillDeleteAllSkills(int numberDeleted);
-
-    @MessageTemplate("{skill_setting_not_changed}")
-    String skillSettingNotChanged();
-
-    @MessageTemplate("{skill_notification_on}")
-    String skillNotificationOn();
-
-    @MessageTemplate("{skill_notification_off}")
-    String skillNotificationOff();
-
-    @MessageTemplate("{skill_title}")
-    String skillTitle();
-
-    @MessageTemplate("{skill_not_assigned}")
-    String skillNotAssigned();
-
-    @MessageTemplate("{skill_assigned_to_channelsskill_assigned_to_channels}")
-    String skillAssignedToChannels(String channelMentions);
-
-    @MessageTemplate("{receive_notifications}")
-    String receiveNotifications();
 
     @MessageTemplate("{status}")
     String status();
@@ -384,14 +318,8 @@ public interface AlexisMessages {
     @MessageTemplate("{utilities_total_characters}")
     String utilitiesTotalCharacters(int characters);
 
-    @MessageTemplate("{levels_set_message}")
-    String levelsSetMessage();
-
     @MessageTemplate("{not_storing_guild_data_yet}")
     String notStoringGuildDataYet();
-
-    @MessageTemplate("{level_no_message}")
-    String levelNoMessage();
 
     @MessageTemplate("{assignable_roles_no_data}")
     String assignableRolesNoData();
