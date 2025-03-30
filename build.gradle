@@ -19,7 +19,7 @@ allprojects() {
 
     group = "org.elypia.alexis"
     version = "3.0.0"
-    description = "Hey! I'm a chatbot for Discord!"
+    description = "A general-purpose chatbot."
 
     ext {
         comcordVersion = "2.0.0"
