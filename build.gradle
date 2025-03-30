@@ -17,7 +17,7 @@
 allprojects() {
     apply plugin: "jacoco"
 
-    group = "org.elypia.alexis"
+    group = "fun.falco.alexis"
     version = "3.0.0"
     description = "A general-purpose chatbot."
 

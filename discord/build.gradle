@@ -20,7 +20,7 @@ plugins {
 }
 
 application {
-    mainClassName = "org.elypia.alexis.core.Alexis"
+    mainClassName = "fun.falco.alexis.core.Alexis"
 }
 
 shadowJar {

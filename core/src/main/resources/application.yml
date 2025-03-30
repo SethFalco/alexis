@@ -3,7 +3,7 @@ application:
     aggregate-character-cap: 2000
 commandler:
   i18n:
-    message-bundle: "org.elypia.alexis.i18n.CommandlerMessages"
+    message-bundle: "fun.falco.alexis.i18n.CommandlerMessages"
   standard-dispatcher:
     prefixes:
       - "${GUILD_PREFIX}"
