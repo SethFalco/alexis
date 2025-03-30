@@ -1,8 +1,4 @@
 application:
-  name: "Alexis"
-  author:
-    name: "Seth Falco"
-    url: "https://falco.fun"
   translate:
     aggregate-character-cap: 2000
 commandler:
