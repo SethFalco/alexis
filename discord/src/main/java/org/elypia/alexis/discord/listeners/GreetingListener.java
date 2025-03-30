@@ -116,7 +116,7 @@ public class GreetingListener extends ActivatedListenerAdapter {
     public void onGuildMemberEvent(GenericGuildEvent event, Feature feature, GuildMessageType type) {
         Guild guild = event.getGuild();
         GuildData data = guildRepo.findBy(guild.getIdLong());
-        GuildFeature guildFeature = data.getFeatures().get(feature);
+        FeatureSettings guildFeature = data.getFeatures().get(feature);
 
         if (guildFeature == null || !guildFeature.isEnabled())
             return;

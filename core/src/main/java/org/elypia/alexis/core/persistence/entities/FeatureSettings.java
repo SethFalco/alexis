@@ -32,12 +32,12 @@ import java.util.Date;
 @DynamicUpdate
 @Entity
 @Table(
-    name = "guild_feature",
+    name = "feature_settings",
     uniqueConstraints = {
         @UniqueConstraint(columnNames = {"guild_id", "feature"})
     }
 )
-public class GuildFeature implements Serializable {
+public class FeatureSettings implements Serializable {
 
     private static final long serialVersionUID = 1;
 
@@ -68,26 +68,26 @@ public class GuildFeature implements Serializable {
     @Column(name = "modified_at", nullable = false)
     private Date modifiedAt;
 
-    public GuildFeature() {
+    public FeatureSettings() {
         // Do nothing
     }
 
-    public GuildFeature(GuildData guildData, Feature feature) {
+    public FeatureSettings(GuildData guildData, Feature feature) {
         this.guildData = guildData;
         this.feature = feature;
     }
 
-    public GuildFeature(GuildData guildData, Feature feature, boolean isEnabled) {
+    public FeatureSettings(GuildData guildData, Feature feature, boolean isEnabled) {
         this(guildData, feature);
         this.isEnabled = isEnabled;
     }
 
-    public GuildFeature(GuildData guildData, Feature feature, boolean isEnabled, Long modifiedBy) {
+    public FeatureSettings(GuildData guildData, Feature feature, boolean isEnabled, Long modifiedBy) {
         this(guildData, feature, isEnabled);
         this.modifiedBy = modifiedBy;
     }
 
-    public GuildFeature(GuildData guildData, Feature feature, boolean isEnabled, Long modifiedBy, Date modifiedAt) {
+    public FeatureSettings(GuildData guildData, Feature feature, boolean isEnabled, Long modifiedBy, Date modifiedAt) {
         this(guildData, feature, isEnabled, modifiedBy);
         this.modifiedAt = modifiedAt;
     }

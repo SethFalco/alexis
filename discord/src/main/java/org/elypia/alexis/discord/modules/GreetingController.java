@@ -58,15 +58,15 @@ public class GreetingController {
 
         List<Feature> features = getFeatures(greeting, recipient);
         GuildData data = guildRepo.findBy(guildId);
-        Map<Feature, GuildFeature> guildFeatures = data.getFeatures();
+        Map<Feature, FeatureSettings> guildFeatures = data.getFeatures();
         StringJoiner joiner = new StringJoiner("\n");
 
         for (Feature feature : features) {
-            GuildFeature guildFeature = guildFeatures.get(feature);
+            FeatureSettings guildFeature = guildFeatures.get(feature);
 
             if (guildFeature == null) {
                 joiner.add(messages.greetingToggledFeature(feature.getFriendlyName()));
-                guildFeatures.put(feature, new GuildFeature(data, feature, enabled, userId));
+                guildFeatures.put(feature, new FeatureSettings(data, feature, enabled, userId));
                 continue;
             }
 
