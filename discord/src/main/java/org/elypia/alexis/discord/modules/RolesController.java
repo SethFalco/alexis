@@ -68,7 +68,7 @@ public class RolesController {
      * Return a list of roles that are assignable in the current guild,
      * and any requirements needed to self-assign them.
      *
-     * @param message The mesage that trigged this event.
+     * @param message The message that triggered this event.
      * @return The message to send in chat.
      */
     @StandardCommand
@@ -167,7 +167,7 @@ public class RolesController {
     /**
      * Add roles that can be marked as assignable.
      *
-     * @param message The mesage that trigged this event.
+     * @param message The message that triggered this event.
      * @param roles The roles that should be marked as allowed for self-assignment.
      * @return The message to send in chat.
      */
@@ -223,7 +223,7 @@ public class RolesController {
     /**
      * Disable any roles that have been set to be auto-assigned.
      *
-     * @param message The mesage that trigged this event.
+     * @param message The message that triggered this event.
      * @param roles The roles that should no longer be marked as self-assignable.
      * @return The message to send in chat.
      */
@@ -298,10 +298,10 @@ public class RolesController {
 
     /**
      * Convert a list of Roles into an appropriate {@link String} that
-     * can be represented as a comma seperated list.
+     * can be represented as a comma separated list.
      *
      * @param roles The roles to join together.
-     * @return A single string representing a comma delimetered list of role names.
+     * @return A single string representing a comma delimited list of role names.
      */
     private String toRoleString(final Collection<Role> roles) {
         return roles.stream()

@@ -27,16 +27,12 @@ import org.elypia.comcord.constraints.Elevated;
 import org.elypia.commandler.annotation.Param;
 import org.elypia.commandler.dispatchers.standard.StandardCommand;
 import org.elypia.commandler.dispatchers.standard.StandardController;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import net.dv8tion.jda.api.entities.ChannelType;
 import net.dv8tion.jda.api.entities.Message;
 
 @StandardController
 public class PrefixController {
-
-    private static final Logger logger = LoggerFactory.getLogger(PrefixController.class);
 
     private final GuildRepository guildRepo;
     private final AlexisMessages messages;

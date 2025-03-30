@@ -29,16 +29,12 @@ import org.elypia.commandler.newb.AsyncUtils;
 import org.elypia.commandler.producers.MessageSender;
 import org.elypia.elypiai.osu.Osu;
 import org.elypia.elypiai.osu.data.OsuMode;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * @author seth@falco.fun (Seth Falco)
  */
 @StandardController
 public class OsuController {
-
-    private static final Logger logger = LoggerFactory.getLogger(OsuController.class);
 
     private final AlexisMessages messages;
     private final Osu osu;

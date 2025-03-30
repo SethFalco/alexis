@@ -117,10 +117,6 @@ public class UserMessenger implements DiscordMessenger<User> {
         return new MessageBuilder(builder).build();
     }
 
-    private MessageEmbed.Field createDateField(String name, OffsetDateTime datetime) {
-        return createDateField(name, datetime, OffsetDateTime.now());
-    }
-
     private MessageEmbed.Field createDateField(String name, OffsetDateTime datetime, OffsetDateTime relativeTo) {
         long days = getAgeInDays(datetime, relativeTo);
         String value = messages.userJoinAge(datetime, days);

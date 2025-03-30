@@ -37,7 +37,7 @@ import net.dv8tion.jda.api.managers.Presence;
 import net.dv8tion.jda.api.requests.CloseCode;
 
 /**
- * A listener that waits for JDA to initializate and trigger the
+ * A listener that waits for JDA to initialize and trigger the
  * {@link #onReady(ReadyEvent)} method to perform one off tasks
  * and then removes itself from the {@link ListenerAdapter} pool.
  *
@@ -52,7 +52,7 @@ public class ConnectionListener extends ListenerAdapter {
     private static final Activity DEFAULT_ACTIVITY = Activity.playing("with you guys!");
 
     /**
-     * Perform some initialization work, then remove this listenering since
+     * Perform some initialization work, then remove this listener since
      * it no longer needs to receive events.
      *
      * @param event The ready event, issued when JDA is ready to receive events.

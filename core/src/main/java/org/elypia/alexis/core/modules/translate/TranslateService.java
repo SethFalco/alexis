@@ -68,7 +68,7 @@ public class TranslateService {
 
     /**
      * @param strings All the strings to detect the language of.
-     * @return The langaugue that comes up most often in a list.
+     * @return The language that comes up most often in a list.
      */
     public Language detectMostFrequentAsLanguage(List<String> strings) {
         String language = detectMostFrequent(strings);
@@ -84,7 +84,7 @@ public class TranslateService {
      * setting to cap out how many characters before making a request.
      *
      * @param strings All the strings to detect the language of.
-     * @return The langaugue that comes up most often in a list.
+     * @return The language that comes up most often in a list.
      */
     public String detectMostFrequent(List<String> strings) {
         int characterCap = translateConfig.getAggregateCharacterCap();
@@ -116,7 +116,7 @@ public class TranslateService {
      * Apply the specified cap to ensure we don't try to
      * detect the language from any more characters than specified.
      *
-     * @param strings A list of all candiates to apply detection on.
+     * @param strings A list of all candidates to apply detection on.
      * @param characterCap The character cap, the result shouldn't have more characters than this.
      * @return A truncated list of strings will elements removed from where the total would exceed the cap.
      */

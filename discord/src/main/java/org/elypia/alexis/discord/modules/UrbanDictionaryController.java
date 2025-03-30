@@ -34,8 +34,6 @@ import org.elypia.commandler.utils.ChatUtils;
 import org.elypia.elypiai.urbandictionary.DefineResult;
 import org.elypia.elypiai.urbandictionary.Definition;
 import org.elypia.elypiai.urbandictionary.UrbanDictionary;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Single;
@@ -49,8 +47,6 @@ import net.dv8tion.jda.api.utils.MarkdownUtil;
  */
 @StandardController
 public class UrbanDictionaryController {
-
-    private static final Logger logger = LoggerFactory.getLogger(UrbanDictionaryController.class);
 
     private final AlexisMessages messages;
     private final MessageSender sender;

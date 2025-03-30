@@ -23,16 +23,12 @@ import javax.inject.Inject;
 import org.elypia.alexis.core.i18n.AlexisMessages;
 import org.elypia.commandler.dispatchers.standard.StandardCommand;
 import org.elypia.commandler.dispatchers.standard.StandardController;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * @author seth@falco.fun (Seth Falco)
  */
 @StandardController
 public class CoinController {
-
-    private static final Logger logger = LoggerFactory.getLogger(CoinController.class);
 
     private final AlexisMessages messages;
 

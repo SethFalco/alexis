@@ -29,8 +29,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
 import org.apache.deltaspike.jpa.api.entitymanager.PersistenceUnitName;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * @author seth@falco.fun (Seth Falco)
@@ -38,8 +36,6 @@ import org.slf4j.LoggerFactory;
  */
 @ApplicationScoped
 public class EntityManagerProducer implements Closeable {
-
-    private static final Logger logger = LoggerFactory.getLogger(EntityManagerProducer.class);
 
     private final EntityManagerFactory factory;
 

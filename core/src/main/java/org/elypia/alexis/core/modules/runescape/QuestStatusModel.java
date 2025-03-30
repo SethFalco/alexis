@@ -18,7 +18,7 @@ public class QuestStatusModel {
 
     /**
      * @return The username of the player. This may not have the exact
-     * capitialization as registered as RuneScape.
+     * capitalization as registered as RuneScape.
      */
     public String getUsername() {
         return username;

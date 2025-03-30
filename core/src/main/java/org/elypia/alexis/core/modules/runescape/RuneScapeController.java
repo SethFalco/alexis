@@ -37,16 +37,12 @@ import org.elypia.elypiai.runescape.data.CompletionStatus;
 import org.elypia.elypiai.runescape.data.RuneScapeError;
 import org.elypia.retropia.core.exceptions.FriendlyException;
 import org.jboss.weld.context.api.ContextualInstance;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * @author seth@falco.fun (Seth Falco)
  */
 @StandardController
 public class RuneScapeController {
-
-	private static final Logger logger = LoggerFactory.getLogger(RuneScapeController.class);
 
 	private final AlexisMessages messages;
 

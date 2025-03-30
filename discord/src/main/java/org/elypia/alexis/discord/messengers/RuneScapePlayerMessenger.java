@@ -22,7 +22,6 @@ public class RuneScapePlayerMessenger implements DiscordMessenger<Player> {
 
     private static final String GREEN_CIRCLE = "\uD83D\uDFE2";
     private static final String YELLOW_CIRCLE = "\uD83D\uDFE1";
-    private static final String ORANGE_CIRCLE = "\uD83D\uDFE0";
     private static final String RED_CIRCLE = "\uD83D\uDD34";
 
     private final AlexisMessages messages;
