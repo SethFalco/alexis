@@ -43,6 +43,15 @@ public interface AlexisMessages {
     @MessageTemplate("{done}")
     String done();
 
+    @MessageTemplate("{dev_added_activity}")
+    String devAddedActivity();
+
+    @MessageTemplate("{dev_removed_activity}")
+    String devRemovedActivity(String content);
+
+    @MessageTemplate("{dev_activity_does_not_exist}")
+    String devActivityDoesNotExist(int id);
+
     @MessageTemplate("{unique_identifier}")
     String uniqueIdentifier(Object id);
 

@@ -26,6 +26,8 @@ import org.elypia.commandler.Commandler;
 import org.elypia.commandler.annotation.Param;
 import org.elypia.commandler.annotation.stereotypes.Controller;
 import org.elypia.commandler.dispatchers.standard.*;
+import org.elypia.alexis.core.persistence.entities.ActivityData;
+import org.elypia.alexis.core.persistence.repositories.ActivityRepository;
 import org.slf4j.*;
 
 import javax.inject.Inject;
@@ -42,11 +44,13 @@ public class DevController {
 
     private static final Logger logger = LoggerFactory.getLogger(DevController.class);
 
+    private final ActivityRepository activityRepo;
     private final AlexisMessages messages;
 
     @Inject
-    public DevController(AlexisMessages messages) {
-        this.messages = messages;
+    public DevController(final ActivityRepository activityRepo, AlexisMessages messages) {
+        this.activityRepo = Objects.requireNonNull(activityRepo);
+        this.messages = Objects.requireNonNull(messages);
     }
 
     @StandardCommand
@@ -101,11 +105,32 @@ public class DevController {
     }
 
     @StandardCommand
-    public String clean(@BotOwner Message message) {
-        message.getJDA().getGuilds().forEach((guild) -> {
-            //
-        });
+    public String addActivity(@BotOwner Message message, @Param Activity.ActivityType type, @Param String body) {
+        ActivityData data = new ActivityData(type.getKey(), body);
+        activityRepo.save(data);
+        return messages.devAddedActivity();
+    }
 
-        return messages.done();
+    @StandardCommand
+    public String removeActivity(@BotOwner Message message, @Param int activityId) {
+        Optional<ActivityData> optActivity = activityRepo.findOptionalBy(activityId);
+
+        if (optActivity.isEmpty())
+            return messages.devActivityDoesNotExist(activityId);
+
+        ActivityData activity = optActivity.get();
+        activityRepo.attachAndRemove(activity);
+        return messages.devRemovedActivity(activity.getText());
+    }
+
+    @StandardCommand
+    public String listActivities(@BotOwner Message message) {
+        List<ActivityData> activities = activityRepo.findAll();
+        StringJoiner joiner = new StringJoiner("\n");
+
+        for (ActivityData activity : activities)
+            joiner.add(activity.getId() + " " + Activity.ActivityType.fromKey(activity.getType()) + " " + activity.getText());
+
+        return joiner.toString();
     }
 }
