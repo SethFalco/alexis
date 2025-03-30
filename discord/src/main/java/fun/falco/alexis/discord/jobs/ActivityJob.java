@@ -51,7 +51,7 @@ import net.dv8tion.jda.api.entities.Activity;
  * </p>
  *
  * @author seth@falco.fun (Seth Falco)
- * @see <a href="https://en.wikipedia.org/wiki/Cron">https://en.wikipedia.org/wiki/Cron</a>
+ * @see <a href="https://wikipedia.org/wiki/Cron">https://wikipedia.org/wiki/Cron</a>
  * @since 3.0.0
  */
 @ApplicationScoped
