@@ -59,8 +59,9 @@ public class TwitchController {
     public Object getTwitchUser(@Param @Size(min = MIN_NAME_LENGTH, max = MAX_NAME_LENGTH) String username) {
         Optional<User> optUser = twitchService.getUser(username);
 
-        if (optUser.isPresent())
+        if (optUser.isPresent()) {
             return optUser.get();
+        }
 
         return messages.twitchUserNotFound();
     }

@@ -40,7 +40,7 @@ public class EmoteLeaderboardMessenger implements DiscordMessenger<EmoteLeaderbo
 
         StringJoiner joiner = new StringJoiner("\n");
         joiner.add("**" + messages.emoteLeaderboardTitle() + "**");
-        joiner.add(String.format(format, "#", "\u2b07\ufe0f", localUsageTitle, globalUsageTitle));
+        joiner.add(String.format(format, "#", "⬇️", localUsageTitle, globalUsageTitle));
 
         for (int i = 0; i < entries.size(); i++) {
             EmoteLeaderboardEntryModel entry = entries.get(i);

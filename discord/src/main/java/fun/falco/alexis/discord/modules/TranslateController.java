@@ -74,14 +74,14 @@ public class TranslateController {
         channel.getHistoryBefore(message.getIdLong(), 1).queue((history) -> {
             var context = AsyncUtils.applyContext(contextCopy);
 
-            if (history.isEmpty())
+            if (history.isEmpty()) {
                 sender.send(messages.translateNoLastMessage());
-            else {
+            } else {
                 Message lastMessage = history.getRetrievedHistory().get(0);
 
-                if (lastMessage.getContentRaw().isBlank() && !lastMessage.getEmbeds().isEmpty())
+                if (lastMessage.getContentRaw().isBlank() && !lastMessage.getEmbeds().isEmpty()) {
                     sender.send(messages.translateCantTranslateEmbeds());
-                else {
+                } else {
                     String lastMessageContent = lastMessage.getContentRaw();
                     String toTranslate = markNonTranslatableEntities(lastMessageContent);
                     Translation translation = translateService.translate(toTranslate, language);
@@ -113,9 +113,10 @@ public class TranslateController {
     }
 
     /**
-     * @param content The content we want to translate.
-     * @return The same content with with notranslate
-     * markers placed around Discord entities.
+     * @param content Content we want to translate.
+     * @return
+     *     Same content with with notranslate markers placed around Discord
+     *     entities.
      */
     private String markNonTranslatableEntities(String content) {
         return content.replaceAll(ENTITY_PATTERN.pattern(), "<span class='notranslate'>$0</span>");

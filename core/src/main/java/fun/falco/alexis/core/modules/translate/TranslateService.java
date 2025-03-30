@@ -67,8 +67,8 @@ public class TranslateService {
     }
 
     /**
-     * @param strings All the strings to detect the language of.
-     * @return The language that comes up most often in a list.
+     * @param strings Strings to detect the language of.
+     * @return Language that comes up most often in a list.
      */
     public Language detectMostFrequentAsLanguage(List<String> strings) {
         String language = detectMostFrequent(strings);
@@ -83,8 +83,8 @@ public class TranslateService {
      * This uses the {@link TranslateConfig#getAggregateCharacterCap()}
      * setting to cap out how many characters before making a request.
      *
-     * @param strings All the strings to detect the language of.
-     * @return The language that comes up most often in a list.
+     * @param strings Strings to detect the language of.
+     * @return Language that comes up most often in a list.
      */
     public String detectMostFrequent(List<String> strings) {
         int characterCap = translateConfig.getAggregateCharacterCap();
@@ -93,8 +93,9 @@ public class TranslateService {
         List<String> stringsToDetect = (shouldApplyCap) ? applyCap(strings, characterCap) : strings;
         List<Detection> detections = detect(stringsToDetect);
 
-        if (detections.isEmpty())
+        if (detections.isEmpty()) {
             throw new IllegalStateException("Unable to detect language, no strings were provided.");
+        }
 
         return detections.stream()
             .collect(Collectors.groupingBy(Detection::getLanguage))
@@ -106,8 +107,9 @@ public class TranslateService {
     }
 
     public List<Detection> detect(List<String> strings) {
-        if (strings.isEmpty())
+        if (strings.isEmpty()) {
             return List.of();
+        }
 
         return translate.detect(strings);
     }
@@ -116,9 +118,9 @@ public class TranslateService {
      * Apply the specified cap to ensure we don't try to
      * detect the language from any more characters than specified.
      *
-     * @param strings A list of all candidates to apply detection on.
-     * @param characterCap The character cap, the result shouldn't have more characters than this.
-     * @return A truncated list of strings will elements removed from where the total would exceed the cap.
+     * @param strings Candidates to apply detection on.
+     * @param characterCap Character cap, the result shouldn't have more characters than this.
+     * @return Truncated list of strings will elements removed from where the total would exceed the cap.
      */
     private List<String> applyCap(List<String> strings, int characterCap) {
         List<String> stringsToDetect = new ArrayList<>();
@@ -127,8 +129,9 @@ public class TranslateService {
         for (String string : strings) {
             int stringLength = string.length();
 
-            if (charactersToDetect + stringLength > characterCap)
+            if (charactersToDetect + stringLength > characterCap) {
                 break;
+            }
 
             stringsToDetect.add(string);
             charactersToDetect += stringLength;
@@ -140,8 +143,9 @@ public class TranslateService {
 
     public Translation translate(String text, Locale locale) {
         for (Language language : getSupportedLanguages()) {
-            if (language.getCode().equalsIgnoreCase(locale.getLanguage()))
+            if (language.getCode().equalsIgnoreCase(locale.getLanguage())) {
                 return translate(text, language);
+            }
         }
 
         throw new IllegalArgumentException("This isn't a supported language.");
@@ -157,8 +161,9 @@ public class TranslateService {
 
     public Language findLanguage(String language) {
         for (Language supportedLanguage : getSupportedLanguages()) {
-            if (supportedLanguage.getCode().equals(language))
+            if (supportedLanguage.getCode().equals(language)) {
                 return supportedLanguage;
+            }
         }
 
         return null;

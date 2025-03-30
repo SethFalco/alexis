@@ -67,8 +67,9 @@ public class GuildController {
 
         String oldDescription = guildData.getDescription();
 
-        if (description.equals(oldDescription))
+        if (description.equals(oldDescription)) {
             return messages.guildSameDescriptionAsBefore();
+        }
 
         if (oldDescription == null) {
             guildData.setDescription(description);

@@ -52,7 +52,7 @@ public class UrbanDictionaryController {
     private final MessageSender sender;
     private final UrbanDictionary ud;
 
-	@Inject
+    @Inject
     public UrbanDictionaryController(AlexisMessages messages, MessageSender sender) {
         this.messages = messages;
         this.sender = sender;
@@ -60,8 +60,8 @@ public class UrbanDictionaryController {
     }
 
     /**
-     * @param message The event that caused this event.
-     * @param terms All terms the user wants to define.
+     * @param message Event that caused this event.
+     * @param terms Terms the user wants to define.
      * @param random If we should fetch random results, or the top definitions.
      */
     @StandardCommand(isDefault = true, isStatic = true)
@@ -76,8 +76,9 @@ public class UrbanDictionaryController {
         Observable<List<DefineResult>> test = Observable.zip(requests, objects -> {
             List<DefineResult> list = new ArrayList<>();
 
-            for (Object object : objects)
-                list.add((DefineResult)object);
+            for (Object object : objects) {
+                list.add((DefineResult) object);
+            }
 
             return list;
         });
@@ -95,8 +96,9 @@ public class UrbanDictionaryController {
                 builder.setTitle("Urban Dictionary", "https://www.urbandictionary.com/");
 
                 for (DefineResult result : results) {
-                    if (!result.hasDefinitions())
+                    if (!result.hasDefinitions()) {
                         continue;
+                    }
 
                     Definition definition = result.getDefinition(random);
                     String definitionBody = definition.getDefinitionBody();
@@ -118,7 +120,7 @@ public class UrbanDictionaryController {
     }
 
     /**
-     * @param id The ID of the definition on UrbanDictionary.
+     * @param id ID of the definition on UrbanDictionary.
      */
     @StandardCommand
     public void getDefinitionById(@Param int id) {

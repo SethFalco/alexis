@@ -74,14 +74,16 @@ public class JoinLeaveListener extends ActivatedListenerAdapter {
     public void onGuildJoin(GuildJoinEvent event) {
         Guild guild = event.getGuild();
 
-        if (isOutdatedEvent(guild))
+        if (isOutdatedEvent(guild)) {
             return;
+        }
 
         String name = guild.getName();
         TextChannel channel = DiscordUtils.getWriteableChannel(guild);
 
-        if (logger.isInfoEnabled())
+        if (logger.isInfoEnabled()) {
             logger.info("The guild `{}` just invited me! ({})", name, statsMessage(event.getJDA()));
+        }
 
         if (channel == null) {
             logger.info("We were unable to talk in any channel in `{}`; no thank you message was delivered.", name);
@@ -96,8 +98,9 @@ public class JoinLeaveListener extends ActivatedListenerAdapter {
     public void onGuildLeave(GuildLeaveEvent event) {
         Guild guild = event.getGuild();
 
-        if (logger.isInfoEnabled())
+        if (logger.isInfoEnabled()) {
             logger.info("The guild {} just kicked me! ({})", guild.getName(), statsMessage(event.getJDA()));
+        }
 
         Optional<GuildData> optGuildData = guildRepo.findOptionalBy(guild.getIdLong());
 
@@ -115,7 +118,7 @@ public class JoinLeaveListener extends ActivatedListenerAdapter {
     }
 
     /**
-     * @param jda The JDA instance that has joined or left a guild.
+     * @param jda JDA instance that has joined or left a guild.
      * @return The stats for this bot.
      */
     private String statsMessage(JDA jda) {
@@ -132,7 +135,7 @@ public class JoinLeaveListener extends ActivatedListenerAdapter {
      * less than 10 minutes ago? If we've been around longer, that's probably Discord
      * being a dummy and giving us a false event.
      *
-     * @param guild The guild to check against.
+     * @param guild Guild to check against.
      * @return If this is an old event.
      */
     private boolean isOutdatedEvent(Guild guild) {

@@ -54,7 +54,7 @@ public class OsuPlayerMessenger implements DiscordMessenger<Player> {
 
         joiner.add("**__" + player.getUsername() + "__** " + ChatUtils.replaceWithIndicators(playerCountry));
         joiner.add("");
-        joiner.add("**" + messages.userLevel() + ": **" + (int)player.getLevel());
+        joiner.add("**" + messages.userLevel() + ": **" + (int) player.getLevel());
         joiner.add("**" + messages.osuRankedScore() + ": **" + intf(player.getRankedScore()));
         joiner.add("**" + messages.osuTotalScore() + ": **" + intf(player.getTotalScore()));
         joiner.add("**" + messages.osuPp() + ": **" + decf(player.getPp()));
@@ -77,7 +77,7 @@ public class OsuPlayerMessenger implements DiscordMessenger<Player> {
         builder.setFooter(messages.uniqueIdentifier(player.getId()), null);
 
         builder.addField(messages.osuUsername(), MarkdownUtil.maskedLink(player.getUsername(), player.getProfileUrl()), true);
-        builder.addField(messages.userLevel(), String.valueOf((int)player.getLevel()), true);
+        builder.addField(messages.userLevel(), String.valueOf((int) player.getLevel()), true);
         builder.addField(messages.osuRankedScore(), intf(player.getRankedScore()), true);
         builder.addField(messages.osuTotalScore(), intf(player.getTotalScore()), true);
         builder.addField(messages.osuPp(), decf(player.getPp()), true);

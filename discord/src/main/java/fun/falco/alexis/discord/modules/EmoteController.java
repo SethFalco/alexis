@@ -65,21 +65,23 @@ public class EmoteController {
     /**
      * List all emotes in the guild.
      *
-     * @param guild The guild to list all emotes form.
-     * @return A string where every emote has been mentioned from the guild.
+     * @param guild Guild to list all emotes form.
+     * @return String where every emote has been mentioned from the guild.
      */
     @StandardCommand
     public String listAllEmotes(@Param (value = "${source.guild}", displayAs = "current guild") Guild guild) {
         List<Emote> emotes = guild.getEmotes();
         int count = emotes.size();
 
-        if (count == 0)
+        if (count == 0) {
             return messages.emoteGuildNoEmotes(guild.getName());
+        }
 
         StringBuilder builder = new StringBuilder();
 
-        for (Emote emote : emotes)
+        for (Emote emote : emotes) {
             builder.append(emote.getAsMention());
+        }
 
         return builder.toString();
     }
@@ -87,16 +89,17 @@ public class EmoteController {
     /**
      * Post an emote we can see, even if the user is unable to perform it.
      *
-     * @param message The message that triggered this event.
-     * @param emote The emote the user would like to post.
+     * @param message Message that triggered this event.
+     * @param emote Emote the user would like to post.
      * @return Either a {@link MessageEmbed} or {@link String} response to the command.
      */
     @StandardCommand
     public Object postEmote(Message message, @Param Emote emote) {
         String emoteUrl = emote.getImageUrl();
 
-        if (EventUtils.canSendEmbed(message))
+        if (EventUtils.canSendEmbed(message)) {
             return DiscordUtils.newEmbed(message).setImage(emoteUrl).build();
+        }
 
         return messages.emotePostLackPermissions(emoteUrl);
     }
@@ -116,8 +119,9 @@ public class EmoteController {
             guildRepo.save(data);
             return messages.emoteTrackingEnabled();
         } else {
-            if (feature.isEnabled() == isEnabled)
+            if (feature.isEnabled() == isEnabled) {
                 return messages.emoteTrackingSetToSame();
+            }
 
             feature.setEnabled(isEnabled);
             feature.setModifiedBy(userId);
@@ -133,41 +137,45 @@ public class EmoteController {
      * Display the emotes with how frequently they get used.
      *
      * @param entries How many entries to display of the leaderboard.
-     * @param guild The guild to display a leaderboard for.
-     * @return The failure message, or a model representing a leaderboard.
+     * @param guild Guild to display a leaderboard for.
+     * @return Failure message, or a model representing a leaderboard.
      */
     @StandardCommand
     public Object getEmoteLeaderboard(@Param("10") int entries, @Param(value = "${source.guild}", displayAs = "current guild") Guild guild) {
-        if (guild.getEmotes().isEmpty())
+        if (guild.getEmotes().isEmpty()) {
             return messages.emoteLeaderboardNoEmotes();
+        }
 
         long guildId = guild.getIdLong();
         GuildData guildData = guildRepo.findBy(guildId);
         List<EmoteData> allEmotes = guildData.getEmotes();
 
-        if (allEmotes.isEmpty())
+        if (allEmotes.isEmpty()) {
             return messages.emoteLeaderboardNeverUsed();
+        }
 
         List<EmoteLeaderboardEntryModel> models = new ArrayList<>();
 
         for (EmoteData emoteData : allEmotes) {
             List<EmoteUsage> usages = emoteData.getUsages();
 
-            if (usages.isEmpty())
+            if (usages.isEmpty()) {
                 continue;
+            }
 
             Emote emote = guild.getEmoteById(emoteData.getId());
 
-            if (emote == null)
+            if (emote == null) {
                 continue;
+            }
 
             int local = usages.stream()
                 .filter((usage) -> guildId == usage.getUsageGuildData().getId())
-                .mapToInt(EmoteUsage::getOccurences)
+                .mapToInt(EmoteUsage::getOccurrences)
                 .sum();
 
             int global = usages.stream()
-                .mapToInt(EmoteUsage::getOccurences)
+                .mapToInt(EmoteUsage::getOccurrences)
                 .sum();
 
             models.add(new EmoteLeaderboardEntryModel(emote, local, global));

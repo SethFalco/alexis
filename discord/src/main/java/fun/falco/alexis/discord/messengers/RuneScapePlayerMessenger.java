@@ -20,9 +20,9 @@ import net.dv8tion.jda.api.entities.Message;
 @MessageProvider(provides = Message.class, value = Player.class)
 public class RuneScapePlayerMessenger implements DiscordMessenger<Player> {
 
-    private static final String GREEN_CIRCLE = "\uD83D\uDFE2";
-    private static final String YELLOW_CIRCLE = "\uD83D\uDFE1";
-    private static final String RED_CIRCLE = "\uD83D\uDD34";
+    private static final String GREEN_CIRCLE = "🟢";
+    private static final String YELLOW_CIRCLE = "🟡";
+    private static final String RED_CIRCLE = "🔴";
 
     private final AlexisMessages messages;
 

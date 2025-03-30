@@ -50,8 +50,8 @@ import net.dv8tion.jda.api.entities.Activity;
  *     </ul>
  * </p>
  *
- * @see <a href="https://en.wikipedia.org/wiki/Cron">https://en.wikipedia.org/wiki/Cron</a>
  * @author seth@falco.fun (Seth Falco)
+ * @see <a href="https://en.wikipedia.org/wiki/Cron">https://en.wikipedia.org/wiki/Cron</a>
  * @since 3.0.0
  */
 @ApplicationScoped
@@ -95,15 +95,18 @@ public class ActivityJob implements Job {
     public void execute(JobExecutionContext context) {
         Optional<ActivityData> optActivityDate = Optional.empty();
 
-        if (previousActivityId != QUERY_ANY_ACTIVITY)
+        if (previousActivityId != QUERY_ANY_ACTIVITY) {
             optActivityDate = activityRepo.findAnyByEnabledTrueAndIdGreaterThan(previousActivityId);
+        }
 
-        if (optActivityDate.isEmpty())
+        if (optActivityDate.isEmpty()) {
             optActivityDate = activityRepo.findAnyByEnabledTrue();
+        }
 
         optActivityDate.ifPresentOrElse((activityData) -> {
-            if (activityData.getId() == previousActivityId)
+            if (activityData.getId() == previousActivityId) {
                 return;
+            }
 
             Activity.ActivityType type = Activity.ActivityType.fromKey(activityData.getType());
             Activity activity = Activity.of(type, activityData.getText(), activityData.getUrl());

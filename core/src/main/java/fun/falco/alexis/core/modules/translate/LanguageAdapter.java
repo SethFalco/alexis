@@ -45,8 +45,9 @@ public class LanguageAdapter implements Adapter<Language> {
         Objects.requireNonNull(input);
 
         for (Language language : translateService.getSupportedLanguages()) {
-            if (language.getCode().equalsIgnoreCase(input) || language.getName().equalsIgnoreCase(input))
+            if (language.getCode().equalsIgnoreCase(input) || language.getName().equalsIgnoreCase(input)) {
                 return language;
+            }
         }
 
         return null;

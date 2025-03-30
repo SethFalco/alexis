@@ -53,8 +53,9 @@ public class DiscordLocaleResolver implements LocaleResolver {
             if (channelData != null) {
                 Locale channelLocale = channelData.getLocale();
 
-                if (channelLocale != null)
+                if (channelLocale != null) {
                     return channelLocale;
+                }
             }
         }
 
@@ -66,8 +67,9 @@ public class DiscordLocaleResolver implements LocaleResolver {
             if (guildData != null) {
                 Locale guildLocale = guildData.getLocale();
 
-                if (guildLocale != null)
+                if (guildLocale != null) {
                     return guildLocale;
+                }
             }
         }
 

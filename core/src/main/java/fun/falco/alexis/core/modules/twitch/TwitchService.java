@@ -53,8 +53,9 @@ public class TwitchService {
         if (appAccessToken == null) {
             Optional<OAuth2IdentityProvider> optIdentityProvider = credentialManager.getOAuth2IdentityProviderByName(IDENTIFY_PROVIDER);
 
-            if (optIdentityProvider.isEmpty())
+            if (optIdentityProvider.isEmpty()) {
                 throw new IllegalStateException("Identity Provider should never return null.");
+            }
 
             OAuth2IdentityProvider identityProvider = optIdentityProvider.get();
             appAccessToken = identityProvider.getAppAccessToken();
@@ -66,8 +67,8 @@ public class TwitchService {
     /**
      * Query the Twitch API by username.
      *
-     * @param username The username of the Twitch user to query.
-     * @return An optional which will contain the user if found, else be {@link Optional#empty()}.
+     * @param username Username of the Twitch user to query.
+     * @return Optional which will contain the user if found, else be {@link Optional#empty()}.
      */
     public Optional<User> getUser(String username) {
         UserList userList = client.getHelix().getUsers(getAccessToken(), null, List.of(username)).execute();

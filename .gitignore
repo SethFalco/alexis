@@ -55,7 +55,6 @@ data/
 docker-compose.yml
 
 # Configuration
-/config/**
 *.p12
 *.jks
 *.key

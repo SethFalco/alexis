@@ -36,7 +36,7 @@ public class MentionBinder implements HeaderBinder {
 
     @Override
     public <S, M> Map<String, String> bind(Request<S, M> request) {
-        Event source = (Event)request.getSource();
+        Event source = (Event) request.getSource();
         String id = source.getJDA().getSelfUser().getId();
 
         HashMap<String, String> headers = new HashMap<>();

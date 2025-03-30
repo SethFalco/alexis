@@ -115,7 +115,7 @@ public class EmoteUsage implements Serializable {
         this.usageGuildData = usageGuildData;
     }
 
-    public int getOccurences() {
+    public int getOccurrences() {
         return occurences;
     }
 

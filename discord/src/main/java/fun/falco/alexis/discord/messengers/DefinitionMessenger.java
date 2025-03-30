@@ -37,8 +37,8 @@ import net.dv8tion.jda.api.entities.MessageEmbed;
 @MessageProvider(provides = Message.class, value = Definition.class)
 public class DefinitionMessenger implements DiscordMessenger<Definition> {
 
-    private static final String THUMBS_UP = "\uD83D\uDC4D";
-    private static final String THUMBS_DOWN = "\uD83D\uDC4E";
+    private static final String THUMBS_UP = "👍";
+    private static final String THUMBS_DOWN = "👎";
 
     private static final String SCORES_FORMAT = THUMBS_UP + " %,d  " + THUMBS_DOWN + "  %,d";
 
@@ -68,8 +68,9 @@ public class DefinitionMessenger implements DiscordMessenger<Definition> {
 
         String example = definition.getExample();
 
-        if (example != null && !example.isBlank())
+        if (example != null && !example.isBlank()) {
             builder.addField(messages.udExampleUsageOfWord(), example, false);
+        }
 
         String descText = String.format(SCORES_FORMAT, definition.getThumbsUp(), definition.getThumbsDown());
         builder.addField(messages.udThumbsUpThumbsDown(), descText, false);

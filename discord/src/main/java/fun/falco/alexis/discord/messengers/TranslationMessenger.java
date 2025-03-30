@@ -46,8 +46,8 @@ public class TranslationMessenger implements DiscordMessenger<TranslationModel> 
     /** Logging with SLF4J. */
     private static final Logger logger = LoggerFactory.getLogger(TranslationMessenger.class);
 
-    /** Link to Google Translate */
-    private static final String GOOGLE_TRANSLATE = "https://translate.google.com/";
+    /** Link to Google Translate. */
+    private static final String GOOGLE_TRANSLATE = "https://translate.google.com";
 
     /** Format for the field titles for source and target string. */
     private static final String FIELD_TITLE_FORMAT = "%s (%s)";
@@ -65,8 +65,9 @@ public class TranslationMessenger implements DiscordMessenger<TranslationModel> 
         this.translateConfig = translateConfig;
         this.messages = messages;
 
-        if (translateConfig.getAttributionUrl() == null)
+        if (translateConfig.getAttributionUrl() == null) {
             logger.warn("No attribution image set in the configuration. This may be a breach of the attribution guidelines, please see: https://cloud.google.com/translate/attribution");
+        }
     }
 
     @Override
@@ -95,16 +96,17 @@ public class TranslationMessenger implements DiscordMessenger<TranslationModel> 
 
         String attribution = translateConfig.getAttributionUrl();
 
-        if (attribution != null)
+        if (attribution != null) {
             builder.setImage(attribution);
+        }
 
         builder.setFooter(GOOGLE_TRANSLATE);
         return new MessageBuilder(builder.build()).build();
     }
 
     /**
-     * @param body The text to format.
-     * @return The text with the notranslate markers removed.
+     * @param body Text to format.
+     * @return Text with the notranslate markers removed.
      */
     private String removeNoTranslateTags(String body) {
         return body.replaceAll(NO_TRANSLATE_PATTERN.pattern(), "$1");
@@ -116,9 +118,8 @@ public class TranslationMessenger implements DiscordMessenger<TranslationModel> 
      * with the notranslate class which needs to be stripped before
      * showing users.
      *
-     * @param body The text to format.
-     * @return The text with HTML codes escaped, and
-     * notranslate markers removed.
+     * @param body Text to format.
+     * @return Text with HTML codes escaped, and notranslate markers removed.
      */
     private String formatTranslation(String body) {
         String unescaped = StringEscapeUtils.unescapeHtml(body);

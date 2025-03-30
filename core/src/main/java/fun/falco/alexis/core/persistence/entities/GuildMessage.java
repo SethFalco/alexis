@@ -82,10 +82,11 @@ public class GuildMessage implements Serializable {
 
     @Override
     public boolean equals(Object o) {
-        if (!(o instanceof GuildMessage))
+        if (!(o instanceof GuildMessage)) {
             return false;
+        }
 
-        GuildMessage gm = (GuildMessage)o;
+        GuildMessage gm = (GuildMessage) o;
 
         return id == gm.id &&
             guildData.equals(gm.guildData) &&

@@ -87,10 +87,11 @@ public class GreetingController {
             if (guildFeature.isEnabled() == enabled) {
                 Member lastModifiedBy = guild.getMemberById(guildFeature.getModifiedBy());
 
-                if (lastModifiedBy == null)
+                if (lastModifiedBy == null) {
                     joiner.add(messages.greetingModifiedAlreadyByAnonUser(feature.getFriendlyName()));
-                else
+                } else {
                     joiner.add(messages.greetingModifiedAlready(feature.getFriendlyName(), guildFeature.getModifiedAt(), lastModifiedBy.getEffectiveName()));
+                }
 
                 continue;
             }
@@ -134,10 +135,11 @@ public class GreetingController {
             if (!body.equals(oldMessage.getMessage())) {
                 String oldBody = oldMessage.getMessage();
 
-                if (oldBody == null)
+                if (oldBody == null) {
                     joiner.add(messages.greetingSetNewMessage(messageType.getFriendlyName(), body));
-                else
+                } else {
                     joiner.add(messages.greetingUpdateExistingMessage(messageType.getFriendlyName(), body));
+                }
 
                 oldMessage.setMessage(body);
             } else {
@@ -165,9 +167,9 @@ public class GreetingController {
     /**
      * Set where greeting messages should be sent.
      *
-     * @param message The message that triggered this event.
-     * @param channel The channel to send messages to.
-     * @param recipient The types of recipients that should have messages sent there.
+     * @param message Message that triggered this event.
+     * @param channel Channel to send messages to.
+     * @param recipient Types of recipients that should have messages sent there.
      * @return What to reply to this at the end of the command.
      */
     @StandardCommand
@@ -181,26 +183,31 @@ public class GreetingController {
 
         GuildData guildData = guildRepo.findBy(guildId);
 
-        if (guildData == null)
+        if (guildData == null) {
             return messages.notStoringGuildDataYet();
+        }
 
         Map<GuildMessageType, GuildMessage> guildMessages = guildData.getMessages();
         long channelId = channel.getIdLong();
 
         if (recipient == Recipient.USER || recipient == Recipient.BOTH) {
-            if (guildMessages.containsKey(GuildMessageType.USER_WELCOME))
+            if (guildMessages.containsKey(GuildMessageType.USER_WELCOME)) {
                 guildMessages.get(GuildMessageType.USER_WELCOME).setChannelId(channelId);
+            }
 
-            if (guildMessages.containsKey(GuildMessageType.USER_LEAVE))
+            if (guildMessages.containsKey(GuildMessageType.USER_LEAVE)) {
                 guildMessages.get(GuildMessageType.USER_LEAVE).setChannelId(channelId);
+            }
         }
 
         if (recipient == Recipient.BOT || recipient == Recipient.BOTH) {
-            if (guildMessages.containsKey(GuildMessageType.BOT_WELCOME))
+            if (guildMessages.containsKey(GuildMessageType.BOT_WELCOME)) {
                 guildMessages.get(GuildMessageType.BOT_WELCOME).setChannelId(channelId);
+            }
 
-            if (guildMessages.containsKey(GuildMessageType.BOT_LEAVE))
+            if (guildMessages.containsKey(GuildMessageType.BOT_LEAVE)) {
                 guildMessages.get(GuildMessageType.BOT_LEAVE).setChannelId(channelId);
+            }
         }
 
         guildRepo.save(guildData);
@@ -208,8 +215,8 @@ public class GreetingController {
     }
 
     /**
-     * @param greeting The type of greeting we're referring to.
-     * @param recipient The type of recipients we're referring to.
+     * @param greeting Type of greeting we're referring to.
+     * @param recipient Type of recipients we're referring to.
      * @return Any {@link GuildMessageType} that is applicable to the specified values.
      */
     private List<GuildMessageType> getMessageTypes(Greeting greeting, Recipient recipient) {
@@ -217,19 +224,23 @@ public class GreetingController {
 
         switch (greeting) {
             case WELCOME:
-                if (recipient == Recipient.USER || recipient == Recipient.BOTH)
+                if (recipient == Recipient.USER || recipient == Recipient.BOTH) {
                     messageTypes.add(GuildMessageType.USER_WELCOME);
+                }
 
-                if (recipient == Recipient.BOT || recipient == Recipient.BOTH)
+                if (recipient == Recipient.BOT || recipient == Recipient.BOTH) {
                     messageTypes.add(GuildMessageType.BOT_WELCOME);
+                }
 
                 break;
             case FAREWELL:
-                if (recipient == Recipient.USER || recipient == Recipient.BOTH)
+                if (recipient == Recipient.USER || recipient == Recipient.BOTH) {
                     messageTypes.add(GuildMessageType.USER_LEAVE);
+                }
 
-                if (recipient == Recipient.BOT || recipient == Recipient.BOTH)
+                if (recipient == Recipient.BOT || recipient == Recipient.BOTH) {
                     messageTypes.add(GuildMessageType.BOT_LEAVE);
+                }
 
                 break;
             default:
@@ -240,8 +251,8 @@ public class GreetingController {
     }
 
     /**
-     * @param greeting The type of greeting we're referring to.
-     * @param recipient The type of recipients we're referring to.
+     * @param greeting Type of greeting we're referring to.
+     * @param recipient Type of recipients we're referring to.
      * @return Any {@link GuildMessageType} that is applicable to the specified values.
      */
     private List<Feature> getFeatures(Greeting greeting, Recipient recipient) {
@@ -249,19 +260,23 @@ public class GreetingController {
 
         switch (greeting) {
             case WELCOME:
-                if (recipient == Recipient.USER || recipient == Recipient.BOTH)
+                if (recipient == Recipient.USER || recipient == Recipient.BOTH) {
                     messageTypes.add(Feature.USER_JOIN_MESSAGE);
+                }
 
-                if (recipient == Recipient.BOT || recipient == Recipient.BOTH)
+                if (recipient == Recipient.BOT || recipient == Recipient.BOTH) {
                     messageTypes.add(Feature.BOT_JOIN_MESSAGE);
+                }
 
                 break;
             case FAREWELL:
-                if (recipient == Recipient.USER || recipient == Recipient.BOTH)
+                if (recipient == Recipient.USER || recipient == Recipient.BOTH) {
                     messageTypes.add(Feature.USER_LEAVE_MESSAGE);
+                }
 
-                if (recipient == Recipient.BOT || recipient == Recipient.BOTH)
+                if (recipient == Recipient.BOT || recipient == Recipient.BOTH) {
                     messageTypes.add(Feature.BOT_LEAVE_MESSAGE);
+                }
 
                 break;
             default:

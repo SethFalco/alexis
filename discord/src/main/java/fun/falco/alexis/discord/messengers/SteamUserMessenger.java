@@ -63,8 +63,9 @@ public class SteamUserMessenger implements DiscordMessenger<SteamUser> {
 
         GameSession session = output.getCurrentlyPlaying();
 
-        if (session != null)
+        if (session != null) {
             builder.addField(messages.steamCurrentlyPlaying(), MarkdownUtil.maskedLink(session.getGameStatus(), session.getAppUrl()), true);
+        }
 
         builder.setFooter(messages.steamId(output.getId()));
         return new MessageBuilder(builder.build()).build();

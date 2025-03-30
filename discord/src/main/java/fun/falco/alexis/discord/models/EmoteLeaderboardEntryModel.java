@@ -62,8 +62,9 @@ public class EmoteLeaderboardEntryModel implements Comparable<EmoteLeaderboardEn
     public int compareTo(EmoteLeaderboardEntryModel o) {
         int local = Integer.compare(o.localeUsage, localeUsage);
 
-        if (local != 0)
+        if (local != 0) {
             return local;
+        }
 
         return Integer.compare(o.globalUsage, globalUsage);
     }

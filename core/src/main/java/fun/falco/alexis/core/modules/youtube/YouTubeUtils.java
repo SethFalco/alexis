@@ -56,10 +56,11 @@ public final class YouTubeUtils {
         if (hours != 0 || started) {
             seconds -= TimeUnit.SECONDS.convert(hours, TimeUnit.HOURS);
 
-            if (started)
+            if (started) {
                 joiner.add(String.format("%02d", hours));
-            else
+            } else {
                 joiner.add(String.valueOf(hours));
+            }
 
             started = true;
         }
@@ -67,10 +68,11 @@ public final class YouTubeUtils {
         long minutes = TimeUnit.MINUTES.convert(seconds, TimeUnit.SECONDS);
         seconds -= TimeUnit.SECONDS.convert(minutes, TimeUnit.MINUTES);
 
-        if (started)
+        if (started) {
             joiner.add(String.format("%02d", minutes));
-        else
+        } else {
             joiner.add(String.valueOf(minutes));
+        }
 
         joiner.add(String.format("%02d", seconds));
         return joiner.toString();
@@ -81,8 +83,8 @@ public final class YouTubeUtils {
      * Do note: Does not use an API call.
      * Simple prepends standard youtube video url.
      *
-     * @param id The identifier of the video.
-     * @return Url to the video id provided.
+     * @param id Identifier of the video.
+     * @return URL to the video with ID.
      */
     public static String getVideoUrl(String id) {
         return VIDEO_URL + id;

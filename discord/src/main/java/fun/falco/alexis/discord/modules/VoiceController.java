@@ -57,11 +57,13 @@ public class VoiceController {
             .filter(Predicate.not(User::isBot))
             .collect(Collectors.toSet());
 
-        if (users.remove(author) && users.isEmpty())
+        if (users.remove(author) && users.isEmpty()) {
             return messages.voiceNoOneElseInChannel();
+        }
 
-        if (users.isEmpty())
+        if (users.isEmpty()) {
             return messages.voiceNoOneInChannel();
+        }
 
         return users.stream()
             .map(User::getAsMention)

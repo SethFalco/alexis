@@ -57,14 +57,16 @@ public class EntityManagerProducer implements Closeable {
     }
 
     public void close(@Disposes EntityManager manager) {
-        if (manager != null && manager.isOpen())
+        if (manager != null && manager.isOpen()) {
             manager.close();
+        }
     }
 
     @PreDestroy
     @Override
     public void close() {
-        if (factory.isOpen())
+        if (factory.isOpen()) {
             factory.close();
+        }
     }
 }

@@ -60,15 +60,17 @@ public class PrefixController {
     /**
      * Actually set the prefix in the database.
      *
-     * @param guildId The ID of the guild to update.
-     * @param prefix The new prefix this guild wants to use,
-     *               or null if no prefix is to be used.
+     * @param guildId ID of the guild to update.
+     * @param prefix
+     *     New prefix this guild wants to use, or null if no prefix is to be
+     *     used.
      */
     private void setPrefix(long guildId, String prefix) {
         GuildData data = guildRepo.findBy(guildId);
 
-        if (data == null)
+        if (data == null) {
             data = new GuildData(guildId);
+        }
 
         data.setPrefix(prefix);
         guildRepo.save(data);

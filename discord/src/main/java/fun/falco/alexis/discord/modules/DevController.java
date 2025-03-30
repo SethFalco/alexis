@@ -71,8 +71,9 @@ public class DevController {
         StringJoiner joiner = new StringJoiner("\n");
         Collection<Guild> guilds = message.getJDA().getGuilds();
 
-        for (Guild guild : guilds)
-           joiner.add(messages.devGuildInfo(guild.getId(), guild.getName(), guild.getMembers().size()));
+        for (Guild guild : guilds) {
+            joiner.add(messages.devGuildInfo(guild.getId(), guild.getName(), guild.getMembers().size()));
+        }
 
         return joiner.toString();
     }
@@ -87,8 +88,9 @@ public class DevController {
     public String setUsername(@BotOwner Message message, @Param String input) {
         SelfUser self = message.getJDA().getSelfUser();
 
-        if (self.getName().equals(input))
+        if (self.getName().equals(input)) {
             return messages.devRenameNoChange(input);
+        }
 
         self.getManager().setName(input).queue();
         return messages.devChangedBotsName(input);
@@ -104,7 +106,7 @@ public class DevController {
     }
 
     /**
-     * @param message The message that triggered this event.
+     * @param message Message that triggered this event.
      */
     @StandardCommand
     public void shutdown(@BotOwner Message message) {
@@ -128,8 +130,9 @@ public class DevController {
     public String removeActivity(@BotOwner Message message, @Param int activityId) {
         Optional<ActivityData> optActivity = activityRepo.findOptionalBy(activityId);
 
-        if (optActivity.isEmpty())
+        if (optActivity.isEmpty()) {
             return messages.devActivityDoesNotExist(activityId);
+        }
 
         ActivityData activity = optActivity.get();
         activityRepo.attachAndRemove(activity);
@@ -141,8 +144,9 @@ public class DevController {
         List<ActivityData> activities = activityRepo.findAll();
         StringJoiner joiner = new StringJoiner("\n");
 
-        for (ActivityData activity : activities)
+        for (ActivityData activity : activities) {
             joiner.add(activity.getId() + " " + Activity.ActivityType.fromKey(activity.getType()) + " " + activity.getText());
+        }
 
         return joiner.toString();
     }

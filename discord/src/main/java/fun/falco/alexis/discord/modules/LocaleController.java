@@ -72,7 +72,7 @@ public class LocaleController {
      * first filter through them and remove messaged that just contain
      * embeds or are sent by the bot itself.
      *
-     * @param message The message that trigger this event.
+     * @param message Message that trigger this event.
      */
     @StandardCommand
     public void detectLocaleLanguage(@Permissions(Permission.MESSAGE_HISTORY) @Elevated @Channels(ChannelType.TEXT) Message message) {
@@ -91,8 +91,9 @@ public class LocaleController {
                 List<String> previousMessages = history.getRetrievedHistory()
                     .stream()
                     .filter((previousMessage) -> {
-                        if (previousMessage.getAuthor() == self)
+                        if (previousMessage.getAuthor() == self) {
                             return false;
+                        }
 
                         String content = previousMessage.getContentRaw();
                         return !(content.isBlank() || content.startsWith(self.getAsMention()));
@@ -100,9 +101,9 @@ public class LocaleController {
                     .map(Message::getContentRaw)
                     .collect(Collectors.toList());
 
-                if (previousMessages.isEmpty())
+                if (previousMessages.isEmpty()) {
                     sender.send("I couldn't find any plain text messages in the past 100 hundred messages that aren't mine.");
-                else {
+                } else {
                     Language language = translateService.detectMostFrequentAsLanguage(previousMessages);
                     Locale locale = Locale.forLanguageTag(language.getCode());
                     sender.send(setGlobalLocale(message, locale));
@@ -113,7 +114,7 @@ public class LocaleController {
         });
     }
 
-    @ReactionCommand(emote = "\u21a9\ufe0f", params = "guild")
+    @ReactionCommand(emote = "↩️", params = "guild")
     @StandardCommand
     public String setGlobalLocale(@Elevated @Channels(ChannelType.TEXT) Message message, @Param Locale locale) {
         GuildData data = guildRepo.findBy(message.getGuild().getIdLong());
@@ -133,8 +134,9 @@ public class LocaleController {
         if (data == null) {
             Long guildId = null;
 
-            if (channel.getType().isGuild())
-                guildId = ((GuildChannel)channel).getGuild().getIdLong();
+            if (channel.getType().isGuild()) {
+                guildId = ((GuildChannel) channel).getGuild().getIdLong();
+            }
 
             data = new MessageChannelData(channelId, (guildId != null) ? new GuildData(guildId) : null);
         }

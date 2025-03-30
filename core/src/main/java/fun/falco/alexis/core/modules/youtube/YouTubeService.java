@@ -72,9 +72,9 @@ public class YouTubeService {
     }
 
     /**
-     * @param channelId The channel to get subscriptions from.
-     * @param limit The maximum number of subscriptions to get.
-     * @return A list of subscriptions from the API.
+     * @param channelId Channel to get subscriptions from.
+     * @param limit Maximum number of subscriptions to get.
+     * @return List of subscriptions from the API.
      * @throws IOException
      */
     public SubscriptionListResponse getChannelSubscriptions(String channelId, long limit) throws IOException {
@@ -101,8 +101,9 @@ public class YouTubeService {
     }
 
     public String getChannelThumbnail(String channelId) throws IOException {
-        if (channelThumbnailCache.containsKey(channelId))
+        if (channelThumbnailCache.containsKey(channelId)) {
             return channelThumbnailCache.get(channelId);
+        }
 
         var list = youtube.channels().list(List.of("snippet"));
         list.setMaxResults(1L);
@@ -118,8 +119,9 @@ public class YouTubeService {
     public String getChannelThumbnailFromVideoId(String videoId) throws IOException {
         Optional<SearchResult> result = getSearchResult(videoId, ResourceType.VIDEO);
 
-        if (result.isEmpty())
+        if (result.isEmpty()) {
             return null;
+        }
 
         String channelId = result.get().getSnippet().getChannelId();
         return getChannelThumbnail(channelId);

@@ -75,8 +75,9 @@ public class GuildMessenger implements DiscordMessenger<Guild> {
         GuildData data = guildRepo.findBy(toSend.getIdLong());
         String description = data.getDescription();
 
-        if (description != null)
+        if (description != null) {
             builder.setDescription(description);
+        }
 
         String guildPrefix = data.getPrefix();
         String prefix = (guildPrefix != null) ? guildPrefix : toSend.getSelfMember().getAsMention();

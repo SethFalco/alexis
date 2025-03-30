@@ -419,8 +419,9 @@ public interface AlexisMessages {
     String allGreetingMessagesSetToChannel(String guildName, String channelMention);
 
     /**
-     * @return The message to display on a generic callback thread
-     * for any network request.
+     * @return
+     *     The message to display on a generic callback thread for any network
+     *     request.
      */
     @MessageTemplate("{generic_network_error}")
     String genericNetworkError();

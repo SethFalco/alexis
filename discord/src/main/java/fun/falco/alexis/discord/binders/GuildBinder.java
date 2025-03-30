@@ -47,16 +47,18 @@ public class GuildBinder implements HeaderBinder {
 
     @Override
     public <S, M> Map<String, String> bind(Request<S, M> request) {
-        Event source = (Event)request.getSource();
+        Event source = (Event) request.getSource();
         Guild guild = EventUtils.getGuild(source);
 
-        if (guild == null)
+        if (guild == null) {
             return null;
+        }
 
         GuildData data = guildRepo.findBy(guild.getIdLong());
 
-        if (data == null)
+        if (data == null) {
             return null;
+        }
 
         HashMap<String, String> headers = new HashMap<>();
         headers.put("GUILD_PREFIX", data.getPrefix());

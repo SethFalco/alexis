@@ -74,20 +74,22 @@ public class GreetingListener extends ActivatedListenerAdapter {
      * Send a welcome message if the guild is configured to send one,
      * and add all join roles the user may be entitled to.
      *
-     * @param event The event that represents a new member joining a guild.
+     * @param event Event that represents a new member joining a guild.
      */
     @Override
     public void onGuildMemberJoin(GuildMemberJoinEvent event) {
         User user = event.getUser();
 
-        if (user == event.getJDA().getSelfUser())
+        if (user == event.getJDA().getSelfUser()) {
             return;
+        }
 
         Guild guild = event.getGuild();
         GuildData data = guildRepo.findBy(guild.getIdLong());
 
-        if (data == null)
+        if (data == null) {
             return;
+        }
 
         Stream<RoleData> roleDatas = data.getRoles().stream()
             .filter(RoleData::isSelfAssignable)
@@ -105,10 +107,11 @@ public class GreetingListener extends ActivatedListenerAdapter {
             .collect(Collectors.toList());
 
         if (!roles.isEmpty()) {
-            if (guild.getSelfMember().hasPermission(Permission.MANAGE_ROLES))
+            if (guild.getSelfMember().hasPermission(Permission.MANAGE_ROLES)) {
                 guild.modifyMemberRoles(event.getMember(), roles, null).queue();
-            else
+            } else {
                 logger.debug("Attempted to add on-join roles to member but lacking the {} permission.", Permission.MANAGE_ROLES);
+            }
         }
     }
 
@@ -116,13 +119,15 @@ public class GreetingListener extends ActivatedListenerAdapter {
     public void onGuildMemberRemove(GuildMemberRemoveEvent event) {
         User user = event.getUser();
 
-        if (user == event.getJDA().getSelfUser())
+        if (user == event.getJDA().getSelfUser()) {
             return;
+        }
 
-        if (user.isBot())
+        if (user.isBot()) {
             onGuildMemberEvent(event, Feature.BOT_LEAVE_MESSAGE, GuildMessageType.BOT_LEAVE);
-        else
+        } else {
             onGuildMemberEvent(event, Feature.USER_LEAVE_MESSAGE, GuildMessageType.USER_LEAVE);
+        }
     }
 
     public void onGuildMemberEvent(GenericGuildEvent event, Feature feature, GuildMessageType type) {
@@ -130,8 +135,9 @@ public class GreetingListener extends ActivatedListenerAdapter {
         GuildData data = guildRepo.findBy(guild.getIdLong());
         FeatureSettings guildFeature = data.getFeatures().get(feature);
 
-        if (guildFeature == null || !guildFeature.isEnabled())
+        if (guildFeature == null || !guildFeature.isEnabled()) {
             return;
+        }
 
         GuildMessage guildMessage = data.getMessages().get(type);
 

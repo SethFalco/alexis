@@ -55,7 +55,7 @@ public class ConnectionListener extends ListenerAdapter {
      * Perform some initialization work, then remove this listener since
      * it no longer needs to receive events.
      *
-     * @param event The ready event, issued when JDA is ready to receive events.
+     * @param event Ready event, issued when JDA is ready to receive events.
      */
     @Override
     public void onReady(ReadyEvent event) {

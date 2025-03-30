@@ -68,29 +68,32 @@ public class RolesController {
      * Return a list of roles that are assignable in the current guild,
      * and any requirements needed to self-assign them.
      *
-     * @param message The message that triggered this event.
-     * @return The message to send in chat.
+     * @param message Message that triggered this event.
+     * @return Message to send in chat.
      */
     @StandardCommand
     public String getSelfAssignableRoles(@Channels(ChannelType.TEXT) Message message) {
         Guild guild = message.getGuild();
         GuildData guildData = guildRepo.findBy(guild.getIdLong());
 
-        if (guildData == null)
+        if (guildData == null) {
             return messages.assignableRolesNoData();
+        }
 
         List<RoleData> selfAssignableRoles = guildData.getRoles().stream()
             .filter(RoleData::isSelfAssignable)
             .filter((role) -> guild.getRoleById(role.getId()) != null)
             .collect(Collectors.toList());
 
-        if (selfAssignableRoles.isEmpty())
+        if (selfAssignableRoles.isEmpty()) {
             return messages.assignableRolesNoRolesSet();
+        }
 
         StringJoiner joiner = new StringJoiner("\n");
 
-        for (RoleData role : selfAssignableRoles)
+        for (RoleData role : selfAssignableRoles) {
             joiner.add("`" + guild.getRoleById(role.getId()).getName() + "`");
+        }
 
         return messages.assignableRolesList(joiner.toString());
     }
@@ -103,8 +106,9 @@ public class RolesController {
         Guild guild = message.getGuild();
         GuildData guildData = guildRepo.findBy(guild.getIdLong());
 
-        if (guildData == null)
+        if (guildData == null) {
             return messages.assignableRolesNoData();
+        }
 
         Member member = message.getMember();
 
@@ -126,40 +130,46 @@ public class RolesController {
                 .filter((rd) -> rd.getId() == role.getIdLong())
                 .findAny();
 
-            if (optRoleData.isEmpty())
+            if (optRoleData.isEmpty()) {
                 rolesDenied.add(role);
-            else {
+            } else {
                 RoleData roleData = optRoleData.get();
 
-                if (roleData.isSelfAssignable())
+                if (roleData.isSelfAssignable()) {
                     rolesToAdd.add(role);
-                else
+                } else {
                     rolesDenied.add(role);
+                }
             }
         }
 
         List<Role> alreadyOwned = new ArrayList<>();
 
         for (int i = rolesToAdd.size() - 1; i >= 0; i--) {
-            if (member.getRoles().contains(rolesToAdd.get(i)))
+            if (member.getRoles().contains(rolesToAdd.get(i))) {
                 alreadyOwned.add(rolesToAdd.remove(i));
+            }
         }
 
         guild.modifyMemberRoles(member, rolesToAdd, null).queue();
 
         StringJoiner joiner = new StringJoiner("\n\n");
 
-        if (!rolesToAdd.isEmpty())
+        if (!rolesToAdd.isEmpty()) {
             joiner.add(messages.assignableRolesUserAssignedRole(toRoleString(rolesToAdd)));
+        }
 
-        if (!rolesDenied.isEmpty())
+        if (!rolesDenied.isEmpty()) {
             joiner.add(messages.assignableRolesUserDeniedRole(toRoleString(rolesDenied)));
+        }
 
-        if (!alreadyOwned.isEmpty())
+        if (!alreadyOwned.isEmpty()) {
             joiner.add(messages.assignableRolesUserAlreadyHadRole(toRoleString(alreadyOwned)));
+        }
 
-        if (!rolesList.isEmpty())
+        if (!rolesList.isEmpty()) {
             joiner.add(messages.assignableRolesIgnoredDuplicates(toRoleString(rolesList)));
+        }
 
         return joiner.toString();
     }
@@ -167,9 +177,9 @@ public class RolesController {
     /**
      * Add roles that can be marked as assignable.
      *
-     * @param message The message that triggered this event.
-     * @param roles The roles that should be marked as allowed for self-assignment.
-     * @return The message to send in chat.
+     * @param message Message that triggered this event.
+     * @param roles Roles that should be marked as allowed for self-assignment.
+     * @return Message to send in chat.
      */
     @StandardCommand
     public String addAssignableRoles(
@@ -193,9 +203,9 @@ public class RolesController {
             if (optRoleData.isPresent()) {
                 RoleData roleData = optRoleData.get();
 
-                if (roleData.isSelfAssignable())
+                if (roleData.isSelfAssignable()) {
                     alreadyAllowed.add(role);
-                else {
+                } else {
                     roleData.setSelfAssignable(true);
                     rolesToAllow.add(role);
                 }
@@ -207,14 +217,17 @@ public class RolesController {
 
         StringJoiner joiner = new StringJoiner("\n\n");
 
-        if (!rolesToAllow.isEmpty())
+        if (!rolesToAllow.isEmpty()) {
             joiner.add(messages.assignableRolesNowAllowed(toRoleString(rolesToAllow)));
+        }
 
-        if (!alreadyAllowed.isEmpty())
+        if (!alreadyAllowed.isEmpty()) {
             joiner.add(messages.assignableRolesAlreadyAllowed(toRoleString(alreadyAllowed)));
+        }
 
-        if (!rolesList.isEmpty())
+        if (!rolesList.isEmpty()) {
             joiner.add(messages.assignableRolesIgnoredDuplicates(toRoleString(rolesList)));
+        }
 
         guildRepo.save(guildData);
         return joiner.toString();
@@ -223,17 +236,18 @@ public class RolesController {
     /**
      * Disable any roles that have been set to be auto-assigned.
      *
-     * @param message The message that triggered this event.
-     * @param roles The roles that should no longer be marked as self-assignable.
-     * @return The message to send in chat.
+     * @param message Message that triggered this event.
+     * @param roles Roles that should no longer be marked as self-assignable.
+     * @return Message to send in chat.
      */
     @StandardCommand
     public String denyAssignableRoles(@Channels(ChannelType.TEXT) @Elevated Message message, @Param Role[] roles) {
         long guildId = message.getGuild().getIdLong();
         GuildData guildData = guildRepo.findBy(guildId);
 
-        if (guildData == null)
+        if (guildData == null) {
             return messages.assignableRolesNoData();
+        }
 
         List<RoleData> roleDatas = guildData.getRoles();
         List<Role> rolesList = new ArrayList<>(List.of(roles));
@@ -247,9 +261,9 @@ public class RolesController {
                 .filter((rd) -> rd.getId() == role.getIdLong())
                 .findAny();
 
-            if (optRoleData.isEmpty())
+            if (optRoleData.isEmpty()) {
                 redundantRoles.add(role);
-            else {
+            } else {
                 RoleData roleData = optRoleData.get();
 
                 if (roleData.isSelfAssignable()) {
@@ -263,14 +277,17 @@ public class RolesController {
 
         StringJoiner joiner = new StringJoiner("\n\n");
 
-        if (!rolesToRemove.isEmpty())
+        if (!rolesToRemove.isEmpty()) {
             joiner.add(messages.assignableRolesRemoved(toRoleString(rolesToRemove)));
+        }
 
-        if (!redundantRoles.isEmpty())
+        if (!redundantRoles.isEmpty()) {
             joiner.add(messages.assignableRolesDidntExist(toRoleString(redundantRoles)));
+        }
 
-        if (!rolesList.isEmpty())
+        if (!rolesList.isEmpty()) {
             joiner.add(messages.assignableRolesIgnoredDuplicates(toRoleString(rolesList)));
+        }
 
         guildRepo.save(guildData);
         return joiner.toString();
@@ -281,16 +298,18 @@ public class RolesController {
      * leaving the list with only duplicate values while returning
      * the distinct values.
      *
-     * @param items A list of items to pull distinct values from.
-     * @return A list of all distinct values in the collection,
-     * leaving the collection with only duplicates.
+     * @param items Items to pull distinct values from.
+     * @return
+     *     A list of all distinct values in the collection, leaving the
+     *     collection with only duplicates.
      */
     private <T> List<T> popDistinct(final List<T> items) {
         List<T> distinct = new ArrayList<>();
 
         for (int i = items.size() - 1; i >= 0; i--) {
-            if (!distinct.contains(items.get(i)))
+            if (!distinct.contains(items.get(i))) {
                 distinct.add(items.remove(i));
+            }
         }
 
         return distinct;
@@ -300,8 +319,8 @@ public class RolesController {
      * Convert a list of Roles into an appropriate {@link String} that
      * can be represented as a comma separated list.
      *
-     * @param roles The roles to join together.
-     * @return A single string representing a comma delimited list of role names.
+     * @param roles Roles to join together.
+     * @return Single string representing a comma delimited list of role names.
      */
     private String toRoleString(final Collection<Role> roles) {
         return roles.stream()

@@ -28,8 +28,8 @@ import net.dv8tion.jda.api.entities.User;
 @StandardController
 public class UserController {
 
-	@StandardCommand(isDefault = true)
-	public User info(@Param(value = "${source.author}", displayAs = "you") User user) {
+    @StandardCommand(isDefault = true)
+    public User info(@Param(value = "${source.author}", displayAs = "you") User user) {
         return user;
-	}
+    }
 }

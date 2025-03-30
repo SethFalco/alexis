@@ -61,34 +61,39 @@ public class EmoteListener extends ListenerAdapter {
 
     @Override
     public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
-        if (event.getAuthor().isBot())
+        if (event.getAuthor().isBot()) {
             return;
+        }
 
         Message message = event.getMessage();
         List<Emote> emotes = message.getEmotes();
 
-        if (emotes.isEmpty())
+        if (emotes.isEmpty()) {
             return;
+        }
 
         long eventGuildId = event.getGuild().getIdLong();
         GuildData guildData = guildRepo.findBy(eventGuildId);
 
-        if (guildData == null)
+        if (guildData == null) {
             return;
+        }
 
         Map<Feature, FeatureSettings> features = guildData.getFeatures();
         FeatureSettings feature = features.get(Feature.COUNT_GUILD_EMOTE_USAGE);
 
-        if (feature == null || !feature.isEnabled())
+        if (feature == null || !feature.isEnabled()) {
             return;
+        }
 
         Bag<Emote> emotesBag = message.getEmotesBag();
 
         for (Emote emote : emotes) {
             Guild emoteOwnerGuild = emote.getGuild();
 
-            if (emoteOwnerGuild == null)
+            if (emoteOwnerGuild == null) {
                 return;
+            }
 
             long emoteOwnerId = emoteOwnerGuild.getIdLong();
             GuildData emoteOwnerGuildData = guildRepo.findOptionalBy(emoteOwnerId).orElse(new GuildData(emoteOwnerId));

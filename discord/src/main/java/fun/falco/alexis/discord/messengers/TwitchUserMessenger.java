@@ -61,8 +61,9 @@ public class TwitchUserMessenger implements DiscordMessenger<User> {
         builder.setDescription(output.getDescription());
         builder.addField(messages.twitchTotalViews(), String.format("%,d", output.getViewCount()), true);
 
-        if (!broadcasterType.isEmpty())
+        if (!broadcasterType.isEmpty()) {
             builder.addField(messages.twitchType(), StringUtils.capitalize(broadcasterType), true);
+        }
 
         builder.setFooter(messages.uniqueIdentifier(output.getId()), avatarUrl);
         return new MessageBuilder(builder.build()).build();

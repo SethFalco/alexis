@@ -67,13 +67,14 @@ public class UserMessenger implements DiscordMessenger<User> {
 
         joiner.add(messages.userJoinedDiscord() + ": " + messages.userJoinAge(output.getTimeCreated(), discordAge));
 
-        Guild guild = EventUtils.getGuild((Event)event.getRequest().getSource());
+        Guild guild = EventUtils.getGuild((Event) event.getRequest().getSource());
 
         if (guild != null) {
             Member member = guild.getMember(output);
 
-            if (member == null)
+            if (member == null) {
                 throw new UnsupportedOperationException("User info queried for a user in a guild they aren't in. Aborting!");
+            }
 
             joiner.add(messages.userJoinedGuild(guild.getName()) + ": " + messages.userJoinAge(member.getTimeJoined(), discordAge));
         }
@@ -86,7 +87,7 @@ public class UserMessenger implements DiscordMessenger<User> {
     @Override
     public Message buildEmbed(ActionEvent<?, Message> event, User output) {
         EmbedBuilder builder = DiscordUtils.newEmbed(event);
-        Guild guild = EventUtils.getGuild((Event)event.getRequest().getSource());
+        Guild guild = EventUtils.getGuild((Event) event.getRequest().getSource());
 
         String avatar = output.getEffectiveAvatarUrl();
         builder.setThumbnail(avatar);
@@ -102,8 +103,9 @@ public class UserMessenger implements DiscordMessenger<User> {
         } else {
             Member member = guild.getMember(output);
 
-            if (member == null)
+            if (member == null) {
                 throw new UnsupportedOperationException("User info queried for a user in a guild they aren't in. Aborting!");
+            }
 
             builder.setAuthor(member.getEffectiveName(), avatar);
 
@@ -111,8 +113,9 @@ public class UserMessenger implements DiscordMessenger<User> {
             builder.addField(joinedGuild);
         }
 
-        if (output.isBot())
+        if (output.isBot()) {
             builder.addField(messages.userBot(), MarkdownUtil.maskedLink(messages.botInviteLink(), DiscordUtils.getInviteUrl(output)), false);
+        }
 
         return new MessageBuilder(builder).build();
     }

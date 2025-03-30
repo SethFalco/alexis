@@ -46,8 +46,9 @@ public class BotInfoMessenger implements DiscordMessenger<BotInfoModel> {
         String userField = String.format("%,d (%,d)", model.getTotalUsers(), model.getTotalBots());
         builder.addField(messages.totalBotsAndUsers(), userField, true);
 
-        if (supportGuildText != null)
+        if (supportGuildText != null) {
             builder.addField(messages.botSupportGuild(), model.getSupportGuildText(), false);
+        }
 
         return new MessageBuilder(builder).build();
     }

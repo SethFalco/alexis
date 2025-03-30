@@ -120,10 +120,11 @@ public class GuildData implements Serializable {
 
     @Override
     public boolean equals(Object o) {
-        if (!(o instanceof GuildData))
+        if (!(o instanceof GuildData)) {
             return false;
+        }
 
-        GuildData g = (GuildData)o;
+        GuildData g = (GuildData) o;
 
         return id == g.id &&
             description.equals(g.description) &&

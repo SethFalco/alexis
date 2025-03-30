@@ -35,11 +35,10 @@ public interface GuildRepository extends EntityRepository<GuildData, Long> {
     int updateLocale(final Locale locale, final long id);
 
     /**
-     * @param id The ID of the guild.
-     * @param prefix What to set he guild's prefix to.
-     * @return The number of rows that changed, this should always be 1.
+     * @param id Discord snowflake for the guild.
+     * @param prefix Updated prefix for the guild.
+     * @return Number of rows that changed, this should always be 1.
      */
-
     @Modifying
     @Query("UPDATE GuildData AS g SET g.prefix = ?1 WHERE g.id = ?2")
     int updatePrefix(final String prefix, final long id);
