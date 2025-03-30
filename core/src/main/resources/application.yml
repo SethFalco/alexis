@@ -3,11 +3,8 @@ application:
   author:
     name: "Seth Falco"
     url: "https://falco.fun"
-    icon-url:
-    support-guild-id:
   translate:
     aggregate-character-cap: 2000
-    attribution-url:
 commandler:
   i18n:
     message-bundle: "org.elypia.alexis.i18n.CommandlerMessages"
