@@ -25,5 +25,5 @@ Most third-party services supported in this project were wrapped in [Elypiai](ht
 
 ### Requirements
 
-* Java
+* Java 17
 * [MySQL 5.7](https://www.mysql.com)
