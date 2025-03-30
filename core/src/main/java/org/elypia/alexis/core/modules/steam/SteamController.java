@@ -16,11 +16,9 @@
 
 package org.elypia.alexis.core.modules.steam;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 import javax.validation.constraints.Size;
@@ -33,11 +31,6 @@ import org.elypia.commandler.newb.AsyncUtils;
 import org.elypia.commandler.producers.MessageSender;
 import org.elypia.elypiai.steam.Steam;
 import org.elypia.elypiai.steam.SteamGame;
-import org.knowm.xchart.BitmapEncoder;
-import org.knowm.xchart.CategoryChart;
-import org.knowm.xchart.CategoryChartBuilder;
-import org.knowm.xchart.style.CategoryStyler;
-import org.knowm.xchart.style.Styler;
 
 /**
  * @author seth@falco.fun (Seth Falco)
@@ -123,58 +116,6 @@ public class SteamController {
 	public void getRandomGame(@Param @Size(min = MIN_NAME_LENGTH, max = MAX_NAME_LENGTH) String username) {
 		withLibrary(username, (games) -> {
 			sender.send(games.get(ThreadLocalRandom.current().nextInt(games.size())));
-		});
-	}
-
-	/**
-	 * Get the top most played games of the player, only
-	 * including games they've actually played recently.
-	 *
-	 * @param username The Steam user to get the library of.
-	 */
-//	@StandardCommand
-	public void getRecentlyPlayedGames(@Param @Size(min = MIN_NAME_LENGTH, max = MAX_NAME_LENGTH) String username) {
-		withLibrary(username, (games) -> {
-			if (games.isEmpty()) {
-				sender.send(messages.steamLibraryEmpty());
-				return;
-			}
-
-			List<SteamGame> playedGames = games.stream()
-				.filter((game) -> game.getRecentPlaytime() > 0)
-				.sorted()
-				.collect(Collectors.toList());
-
-			if (playedGames.isEmpty()) {
-				sender.send(messages.steamNoRecentlyPlayedGamed(username));
-				return;
-			}
-
-			CategoryChart chart = new CategoryChartBuilder()
-				.title("Steam Playtime Stats")
-				.xAxisTitle("Game")
-				.yAxisTitle("Hours")
-				.build();
-
-			List<String> gameNames = playedGames.stream()
-				.map(SteamGame::getName)
-				.collect(Collectors.toList());
-
-			List<Long> recentPlaytimes = playedGames.stream()
-				.map(SteamGame::getRecentPlaytime)
-				.collect(Collectors.toList());
-
-			chart.addSeries("Recent Playtime", gameNames, recentPlaytimes);
-
-			final CategoryStyler styler = chart.getStyler();
-			styler.setXAxisLabelRotation(90);
-			styler.setXAxisLabelAlignmentVertical(Styler.TextAlignment.Right);
-
-			try {
-				BitmapEncoder.saveBitmap(chart, "./test_" + username, BitmapEncoder.BitmapFormat.PNG);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
 		});
 	}
 
