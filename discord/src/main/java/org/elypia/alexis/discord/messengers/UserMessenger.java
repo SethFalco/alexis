@@ -23,7 +23,6 @@ import net.dv8tion.jda.api.utils.MarkdownUtil;
 import net.dv8tion.jda.internal.entities.UserImpl;
 import org.elypia.alexis.discord.utils.DiscordUtils;
 import org.elypia.alexis.core.i18n.AlexisMessages;
-import org.elypia.alexis.core.persistence.repositories.UserRepository;
 import org.elypia.comcord.EventUtils;
 import org.elypia.comcord.api.DiscordMessenger;
 import org.elypia.commandler.annotation.stereotypes.MessageProvider;
@@ -42,12 +41,10 @@ import java.util.StringJoiner;
 @MessageProvider(provides = Message.class, value = {User.class, UserImpl.class})
 public class UserMessenger implements DiscordMessenger<User> {
 
-    private final UserRepository userRepo;
     private final AlexisMessages messages;
 
     @Inject
-    public UserMessenger(UserRepository userRepo, AlexisMessages messages) {
-        this.userRepo = userRepo;
+    public UserMessenger(AlexisMessages messages) {
         this.messages = messages;
     }
 

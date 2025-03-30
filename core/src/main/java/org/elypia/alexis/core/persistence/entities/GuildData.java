@@ -85,9 +85,6 @@ public class GuildData implements Serializable {
     @OneToMany(targetEntity = EmoteUsage.class, mappedBy = "usageGuildData", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<EmoteUsage> emoteUsages;
 
-    @OneToMany(targetEntity = MemberData.class, mappedBy = "guildData", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<MemberData> members;
-
     @OneToMany(targetEntity = MessageChannelData.class, mappedBy = "guildData", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MessageChannelData> messageChannels;
 
@@ -100,7 +97,6 @@ public class GuildData implements Serializable {
         customCommands = new ArrayList<>();
         emotes = new ArrayList<>();
         emoteUsages = new ArrayList<>();
-        members = new ArrayList<>();
         messageChannels = new ArrayList<>();
         roles = new ArrayList<>();
     }
@@ -205,14 +201,6 @@ public class GuildData implements Serializable {
 
     public void setEmoteUsages(List<EmoteUsage> emoteUsages) {
         this.emoteUsages = emoteUsages;
-    }
-
-    public List<MemberData> getMembers() {
-        return members;
-    }
-
-    public void setMembers(List<MemberData> members) {
-        this.members = members;
     }
 
     public List<MessageChannelData> getMessageChannels() {
