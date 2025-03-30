@@ -16,9 +16,14 @@
 
 package org.elypia.alexis.core.persistence.entities;
 
-import javax.persistence.*;
 import java.io.Serializable;
-import java.util.*;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 /**
  * Allows guilds to choose what messages they are subscribed too.

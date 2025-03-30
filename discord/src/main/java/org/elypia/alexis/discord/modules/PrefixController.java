@@ -16,17 +16,22 @@
 
 package org.elypia.alexis.discord.modules;
 
-import net.dv8tion.jda.api.entities.*;
+import javax.inject.Inject;
+import javax.validation.constraints.NotBlank;
+
 import org.elypia.alexis.core.i18n.AlexisMessages;
 import org.elypia.alexis.core.persistence.entities.GuildData;
 import org.elypia.alexis.core.persistence.repositories.GuildRepository;
-import org.elypia.comcord.constraints.*;
+import org.elypia.comcord.constraints.Channels;
+import org.elypia.comcord.constraints.Elevated;
 import org.elypia.commandler.annotation.Param;
-import org.elypia.commandler.dispatchers.standard.*;
-import org.slf4j.*;
+import org.elypia.commandler.dispatchers.standard.StandardCommand;
+import org.elypia.commandler.dispatchers.standard.StandardController;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import javax.inject.Inject;
-import javax.validation.constraints.NotBlank;
+import net.dv8tion.jda.api.entities.ChannelType;
+import net.dv8tion.jda.api.entities.Message;
 
 @StandardController
 public class PrefixController {

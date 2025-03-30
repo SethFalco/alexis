@@ -16,17 +16,20 @@
 
 package org.elypia.alexis.discord.messengers;
 
-import net.dv8tion.jda.api.*;
-import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.utils.MarkdownUtil;
-import org.elypia.alexis.discord.utils.DiscordUtils;
+import javax.inject.Inject;
+
 import org.elypia.alexis.core.i18n.AlexisMessages;
+import org.elypia.alexis.discord.utils.DiscordUtils;
 import org.elypia.comcord.api.DiscordMessenger;
 import org.elypia.commandler.annotation.stereotypes.MessageProvider;
 import org.elypia.commandler.event.ActionEvent;
-import org.elypia.elypiai.steam.*;
+import org.elypia.elypiai.steam.GameSession;
+import org.elypia.elypiai.steam.SteamUser;
 
-import javax.inject.Inject;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.MessageBuilder;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.utils.MarkdownUtil;
 
 /**
  * @author seth@falco.fun (Seth Falco)

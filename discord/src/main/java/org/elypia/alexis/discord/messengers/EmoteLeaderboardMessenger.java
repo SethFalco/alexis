@@ -1,16 +1,19 @@
 package org.elypia.alexis.discord.messengers;
 
-import net.dv8tion.jda.api.MessageBuilder;
-import net.dv8tion.jda.api.entities.Message;
+import java.util.List;
+import java.util.StringJoiner;
+
+import javax.inject.Inject;
+
 import org.elypia.alexis.core.i18n.AlexisMessages;
+import org.elypia.alexis.discord.models.EmoteLeaderboardEntryModel;
+import org.elypia.alexis.discord.models.EmoteLeaderboardModel;
 import org.elypia.comcord.api.DiscordMessenger;
 import org.elypia.commandler.annotation.stereotypes.MessageProvider;
 import org.elypia.commandler.event.ActionEvent;
-import org.elypia.alexis.discord.models.EmoteLeaderboardModel;
-import org.elypia.alexis.discord.models.EmoteLeaderboardEntryModel;
 
-import javax.inject.Inject;
-import java.util.*;
+import net.dv8tion.jda.api.MessageBuilder;
+import net.dv8tion.jda.api.entities.Message;
 
 /**
  * @author seth@falco.fun (Seth Falco)

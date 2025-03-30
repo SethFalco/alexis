@@ -16,20 +16,34 @@
 
 package org.elypia.alexis.discord.modules;
 
-import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.*;
-import net.dv8tion.jda.api.utils.MarkdownUtil;
-import org.elypia.alexis.core.i18n.AlexisMessages;
-import org.elypia.alexis.core.persistence.entities.*;
-import org.elypia.alexis.core.persistence.repositories.GuildRepository;
-import org.elypia.alexis.core.persistence.entities.*;
-import org.elypia.comcord.constraints.*;
-import org.elypia.commandler.annotation.Param;
-import org.elypia.commandler.dispatchers.standard.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.StringJoiner;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
-import java.util.*;
-import java.util.stream.Collectors;
+
+import org.elypia.alexis.core.i18n.AlexisMessages;
+import org.elypia.alexis.core.persistence.entities.GuildData;
+import org.elypia.alexis.core.persistence.entities.RoleData;
+import org.elypia.alexis.core.persistence.repositories.GuildRepository;
+import org.elypia.comcord.constraints.Channels;
+import org.elypia.comcord.constraints.Elevated;
+import org.elypia.comcord.constraints.Permissions;
+import org.elypia.commandler.annotation.Param;
+import org.elypia.commandler.dispatchers.standard.StandardCommand;
+import org.elypia.commandler.dispatchers.standard.StandardController;
+
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.ChannelType;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.Role;
+import net.dv8tion.jda.api.utils.MarkdownUtil;
 
 /**
  * Roles controller for setting up self-assignable roles

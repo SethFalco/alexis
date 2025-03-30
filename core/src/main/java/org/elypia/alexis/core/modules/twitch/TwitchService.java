@@ -1,15 +1,22 @@
 package org.elypia.alexis.core.modules.twitch;
 
-import com.github.philippheuer.credentialmanager.*;
-import com.github.philippheuer.credentialmanager.domain.OAuth2Credential;
-import com.github.philippheuer.credentialmanager.identityprovider.OAuth2IdentityProvider;
-import com.github.twitch4j.*;
-import com.github.twitch4j.helix.domain.*;
-import org.slf4j.*;
+import java.util.List;
+import java.util.Optional;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import java.util.*;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.github.philippheuer.credentialmanager.CredentialManager;
+import com.github.philippheuer.credentialmanager.CredentialManagerBuilder;
+import com.github.philippheuer.credentialmanager.domain.OAuth2Credential;
+import com.github.philippheuer.credentialmanager.identityprovider.OAuth2IdentityProvider;
+import com.github.twitch4j.TwitchClient;
+import com.github.twitch4j.TwitchClientBuilder;
+import com.github.twitch4j.helix.domain.User;
+import com.github.twitch4j.helix.domain.UserList;
 
 @ApplicationScoped
 public class TwitchService {

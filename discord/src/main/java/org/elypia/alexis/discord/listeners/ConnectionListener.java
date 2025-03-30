@@ -16,20 +16,25 @@
 
 package org.elypia.alexis.discord.listeners;
 
-import net.dv8tion.jda.api.*;
-import net.dv8tion.jda.api.entities.Activity;
-import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.events.*;
-import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import net.dv8tion.jda.api.managers.Presence;
-import net.dv8tion.jda.api.requests.CloseCode;
-import org.elypia.alexis.core.*;
-import org.elypia.commandler.Commandler;
-import org.slf4j.*;
-
 import java.util.List;
 
 import javax.inject.Singleton;
+
+import org.elypia.alexis.core.Alexis;
+import org.elypia.alexis.core.ExitCode;
+import org.elypia.commandler.Commandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.OnlineStatus;
+import net.dv8tion.jda.api.entities.Activity;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.events.ReadyEvent;
+import net.dv8tion.jda.api.events.ShutdownEvent;
+import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.managers.Presence;
+import net.dv8tion.jda.api.requests.CloseCode;
 
 /**
  * A listener that waits for JDA to initializate and trigger the

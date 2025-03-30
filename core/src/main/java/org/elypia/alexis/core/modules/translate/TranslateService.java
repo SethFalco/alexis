@@ -16,15 +16,27 @@
 
 package org.elypia.alexis.core.modules.translate;
 
-import com.google.auth.oauth2.GoogleCredentials;
-import com.google.cloud.translate.*;
-import org.slf4j.*;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Locale;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import java.io.IOException;
-import java.util.*;
-import java.util.stream.Collectors;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.auth.oauth2.GoogleCredentials;
+import com.google.cloud.translate.Detection;
+import com.google.cloud.translate.Language;
+import com.google.cloud.translate.Translate;
+import com.google.cloud.translate.TranslateOptions;
+import com.google.cloud.translate.Translation;
 
 /**
  * @author seth@falco.fun (Seth Falco)

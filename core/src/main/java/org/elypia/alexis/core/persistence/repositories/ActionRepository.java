@@ -16,10 +16,11 @@
 
 package org.elypia.alexis.core.persistence.repositories;
 
-import org.apache.deltaspike.data.api.*;
-import org.elypia.alexis.core.persistence.entities.ActionData;
-
 import java.io.Serializable;
+
+import org.apache.deltaspike.data.api.EntityRepository;
+import org.apache.deltaspike.data.api.Repository;
+import org.elypia.alexis.core.persistence.entities.ActionData;
 
 @Repository(forEntity = ActionData.class)
 public interface ActionRepository extends EntityRepository<ActionData, Serializable> {

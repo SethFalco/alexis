@@ -16,15 +16,19 @@
 
 package org.elypia.alexis.core.modules.twitch;
 
-import com.github.twitch4j.helix.domain.User;
-import org.elypia.alexis.core.i18n.AlexisMessages;
-import org.elypia.commandler.annotation.Param;
-import org.elypia.commandler.dispatchers.standard.*;
-import org.slf4j.*;
+import java.util.Optional;
 
 import javax.inject.Inject;
 import javax.validation.constraints.Size;
-import java.util.Optional;
+
+import org.elypia.alexis.core.i18n.AlexisMessages;
+import org.elypia.commandler.annotation.Param;
+import org.elypia.commandler.dispatchers.standard.StandardCommand;
+import org.elypia.commandler.dispatchers.standard.StandardController;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.github.twitch4j.helix.domain.User;
 
 /**
  * @author seth@falco.fun (Seth Falco)

@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package org.elypia.alexis.core.utils;
+package org.elypia.alexis.core.modules.youtube;
 
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.concurrent.TimeUnit;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Test;
 
 public class YouTubeUtilsTest {
 

@@ -16,27 +16,33 @@
 
 package org.elypia.alexis.discord;
 
-import net.dv8tion.jda.api.*;
-import net.dv8tion.jda.api.entities.Activity;
-import net.dv8tion.jda.api.requests.GatewayIntent;
-import net.dv8tion.jda.api.utils.cache.CacheFlag;
-import org.elypia.alexis.core.ExitCode;
-import org.elypia.comcord.configuration.DiscordConfig;
-import org.elypia.retropia.core.HttpClientSingleton;
-import net.dv8tion.jda.api.utils.MemberCachePolicy;
-import org.elypia.alexis.discord.listeners.ConnectionListener;
-import org.elypia.alexis.discord.listeners.LoggingListener;
-import org.elypia.alexis.discord.listeners.EmoteListener;
-import org.elypia.alexis.discord.listeners.GreetingListener;
-import org.elypia.alexis.discord.listeners.JoinLeaveListener;
-import org.slf4j.*;
+import java.util.Collection;
+import java.util.EnumSet;
 
 import javax.annotation.PreDestroy;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 import javax.security.auth.login.LoginException;
-import java.util.*;
+
+import org.elypia.alexis.core.ExitCode;
+import org.elypia.alexis.discord.listeners.ConnectionListener;
+import org.elypia.alexis.discord.listeners.EmoteListener;
+import org.elypia.alexis.discord.listeners.GreetingListener;
+import org.elypia.alexis.discord.listeners.JoinLeaveListener;
+import org.elypia.alexis.discord.listeners.LoggingListener;
+import org.elypia.comcord.configuration.DiscordConfig;
+import org.elypia.retropia.core.HttpClientSingleton;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.OnlineStatus;
+import net.dv8tion.jda.api.entities.Activity;
+import net.dv8tion.jda.api.requests.GatewayIntent;
+import net.dv8tion.jda.api.utils.MemberCachePolicy;
+import net.dv8tion.jda.api.utils.cache.CacheFlag;
 
 /**
  * @author seth@falco.fun (Seth Falco)

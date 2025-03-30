@@ -16,11 +16,12 @@
 
 package org.elypia.alexis.core.modules;
 
+import javax.inject.Inject;
+
 import org.elypia.alexis.core.i18n.AlexisMessages;
 import org.elypia.commandler.annotation.Param;
-import org.elypia.commandler.dispatchers.standard.*;
-
-import javax.inject.Inject;
+import org.elypia.commandler.dispatchers.standard.StandardCommand;
+import org.elypia.commandler.dispatchers.standard.StandardController;
 
 /**
  * @author seth@falco.fun (Seth Falco)

@@ -16,9 +16,8 @@
 
 package org.elypia.alexis.discord.messengers;
 
-import com.github.twitch4j.helix.domain.User;
-import net.dv8tion.jda.api.*;
-import net.dv8tion.jda.api.entities.Message;
+import javax.inject.Inject;
+
 import org.apache.commons.lang.StringUtils;
 import org.elypia.alexis.core.i18n.AlexisMessages;
 import org.elypia.alexis.discord.utils.DiscordUtils;
@@ -26,7 +25,11 @@ import org.elypia.comcord.api.DiscordMessenger;
 import org.elypia.commandler.annotation.stereotypes.MessageProvider;
 import org.elypia.commandler.event.ActionEvent;
 
-import javax.inject.Inject;
+import com.github.twitch4j.helix.domain.User;
+
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.MessageBuilder;
+import net.dv8tion.jda.api.entities.Message;
 
 /**
  * @author seth@falco.fun (Seth Falco)

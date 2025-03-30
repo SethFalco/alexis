@@ -16,24 +16,37 @@
 
 package org.elypia.alexis.discord.modules;
 
-import net.dv8tion.jda.api.entities.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.util.Collection;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.StringJoiner;
+
+import javax.inject.Inject;
+
 import org.elypia.alexis.core.ExitCode;
 import org.elypia.alexis.core.i18n.AlexisMessages;
+import org.elypia.alexis.core.persistence.entities.ActivityData;
+import org.elypia.alexis.core.persistence.repositories.ActivityRepository;
 import org.elypia.comcord.Scope;
 import org.elypia.comcord.annotations.Scoped;
 import org.elypia.comcord.constraints.BotOwner;
 import org.elypia.commandler.Commandler;
 import org.elypia.commandler.annotation.Param;
 import org.elypia.commandler.annotation.stereotypes.Controller;
-import org.elypia.commandler.dispatchers.standard.*;
-import org.elypia.alexis.core.persistence.entities.ActivityData;
-import org.elypia.alexis.core.persistence.repositories.ActivityRepository;
-import org.slf4j.*;
+import org.elypia.commandler.dispatchers.standard.StandardCommand;
+import org.elypia.commandler.dispatchers.standard.StandardController;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import javax.inject.Inject;
-import java.io.*;
-import java.net.URL;
-import java.util.*;
+import net.dv8tion.jda.api.entities.Activity;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Icon;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.SelfUser;
 
 /**
  * @author seth@falco.fun (Seth Falco)

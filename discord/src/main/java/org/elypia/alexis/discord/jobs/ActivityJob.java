@@ -16,17 +16,22 @@
 
 package org.elypia.alexis.discord.jobs;
 
-import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.entities.Activity;
-import org.apache.deltaspike.scheduler.api.Scheduled;
-import org.elypia.alexis.core.persistence.entities.ActivityData;
-import org.elypia.alexis.core.persistence.repositories.ActivityRepository;
-import org.quartz.*;
-import org.slf4j.*;
+import java.util.Objects;
+import java.util.Optional;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import java.util.*;
+
+import org.apache.deltaspike.scheduler.api.Scheduled;
+import org.elypia.alexis.core.persistence.entities.ActivityData;
+import org.elypia.alexis.core.persistence.repositories.ActivityRepository;
+import org.quartz.Job;
+import org.quartz.JobExecutionContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.entities.Activity;
 
 /**
  * <p>Schedules task to change the bots displayed {@link Activity}.</p>

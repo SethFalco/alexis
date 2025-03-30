@@ -16,9 +16,11 @@
 
 package org.elypia.alexis.discord.modules;
 
-import net.dv8tion.jda.api.entities.*;
 import org.elypia.commandler.annotation.Param;
-import org.elypia.commandler.dispatchers.standard.*;
+import org.elypia.commandler.dispatchers.standard.StandardCommand;
+import org.elypia.commandler.dispatchers.standard.StandardController;
+
+import net.dv8tion.jda.api.entities.User;
 
 /**
  * @author seth@falco.fun (Seth Falco)

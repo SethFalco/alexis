@@ -16,8 +16,10 @@
 
 package org.elypia.alexis.core.modules.translate;
 
-import org.apache.deltaspike.core.api.config.*;
 import javax.validation.constraints.Min;
+
+import org.apache.deltaspike.core.api.config.ConfigProperty;
+import org.apache.deltaspike.core.api.config.Configuration;
 
 /**
  * @author seth@falco.fun (Seth Falco)

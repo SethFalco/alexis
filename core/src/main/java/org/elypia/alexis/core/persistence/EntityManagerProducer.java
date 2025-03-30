@@ -16,16 +16,21 @@
 
 package org.elypia.alexis.core.persistence;
 
-import org.apache.deltaspike.jpa.api.entitymanager.PersistenceUnitName;
-import org.slf4j.*;
-
-import javax.annotation.PreDestroy;
-import javax.enterprise.context.*;
-import javax.enterprise.inject.*;
-import javax.inject.Inject;
-import javax.persistence.*;
 import java.io.Closeable;
 import java.util.Objects;
+
+import javax.annotation.PreDestroy;
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.RequestScoped;
+import javax.enterprise.inject.Disposes;
+import javax.enterprise.inject.Produces;
+import javax.inject.Inject;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+
+import org.apache.deltaspike.jpa.api.entitymanager.PersistenceUnitName;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author seth@falco.fun (Seth Falco)

@@ -16,19 +16,23 @@
 
 package org.elypia.alexis.discord.messengers;
 
-import net.dv8tion.jda.api.*;
-import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.utils.MarkdownUtil;
-import org.elypia.alexis.discord.utils.DiscordUtils;
+import java.util.StringJoiner;
+
+import javax.inject.Inject;
+
 import org.elypia.alexis.core.i18n.AlexisMessages;
+import org.elypia.alexis.discord.utils.DiscordUtils;
 import org.elypia.comcord.api.DiscordMessenger;
 import org.elypia.commandler.annotation.stereotypes.MessageProvider;
 import org.elypia.commandler.event.ActionEvent;
 import org.elypia.commandler.utils.ChatUtils;
-import org.elypia.elypiai.osu.*;
+import org.elypia.elypiai.osu.OsuEvent;
+import org.elypia.elypiai.osu.Player;
 
-import javax.inject.Inject;
-import java.util.StringJoiner;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.MessageBuilder;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.utils.MarkdownUtil;
 
 /**
  * @author seth@falco.fun (Seth Falco)

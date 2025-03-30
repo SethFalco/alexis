@@ -16,19 +16,28 @@
 
 package org.elypia.alexis.core.modules.youtube;
 
-import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
-import com.google.api.client.json.jackson2.JacksonFactory;
-import com.google.api.services.youtube.*;
-import com.google.api.services.youtube.model.*;
-import com.google.auth.http.HttpCredentialsAdapter;
-import com.google.auth.oauth2.GoogleCredentials;
-import org.elypia.alexis.core.configuration.AppConfig;
+import java.io.IOException;
+import java.security.GeneralSecurityException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import java.io.IOException;
-import java.security.GeneralSecurityException;
-import java.util.*;
+
+import org.elypia.alexis.core.configuration.AppConfig;
+
+import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
+import com.google.api.client.json.jackson2.JacksonFactory;
+import com.google.api.services.youtube.YouTube;
+import com.google.api.services.youtube.YouTubeScopes;
+import com.google.api.services.youtube.model.ChannelListResponse;
+import com.google.api.services.youtube.model.SearchListResponse;
+import com.google.api.services.youtube.model.SearchResult;
+import com.google.api.services.youtube.model.SubscriptionListResponse;
+import com.google.auth.http.HttpCredentialsAdapter;
+import com.google.auth.oauth2.GoogleCredentials;
 
 /**
  * @author seth@falco.fun (Seth Falco)

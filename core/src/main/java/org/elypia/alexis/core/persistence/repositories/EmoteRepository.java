@@ -16,10 +16,11 @@
 
 package org.elypia.alexis.core.persistence.repositories;
 
-import org.apache.deltaspike.data.api.*;
-import org.elypia.alexis.core.persistence.entities.EmoteData;
-
 import java.util.List;
+
+import org.apache.deltaspike.data.api.EntityRepository;
+import org.apache.deltaspike.data.api.Repository;
+import org.elypia.alexis.core.persistence.entities.EmoteData;
 
 /**
  * @author seth@falco.fun (Seth Falco)

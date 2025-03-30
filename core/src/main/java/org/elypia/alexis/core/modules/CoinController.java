@@ -16,12 +16,15 @@
 
 package org.elypia.alexis.core.modules;
 
-import org.elypia.alexis.core.i18n.AlexisMessages;
-import org.elypia.commandler.dispatchers.standard.*;
-import org.slf4j.*;
+import java.util.concurrent.ThreadLocalRandom;
 
 import javax.inject.Inject;
-import java.util.concurrent.ThreadLocalRandom;
+
+import org.elypia.alexis.core.i18n.AlexisMessages;
+import org.elypia.commandler.dispatchers.standard.StandardCommand;
+import org.elypia.commandler.dispatchers.standard.StandardController;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author seth@falco.fun (Seth Falco)

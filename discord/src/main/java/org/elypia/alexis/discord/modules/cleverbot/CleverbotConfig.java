@@ -16,7 +16,8 @@
 
 package org.elypia.alexis.discord.modules.cleverbot;
 
-import org.apache.deltaspike.core.api.config.*;
+import org.apache.deltaspike.core.api.config.ConfigProperty;
+import org.apache.deltaspike.core.api.config.Configuration;
 
 /**
  * @author seth@falco.fun (Seth Falco)

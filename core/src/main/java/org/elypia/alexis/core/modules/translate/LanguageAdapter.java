@@ -16,14 +16,16 @@
 
 package org.elypia.alexis.core.modules.translate;
 
-import com.google.cloud.translate.Language;
+import java.util.Objects;
+
+import javax.inject.Inject;
+
 import org.elypia.commandler.annotation.stereotypes.ParamAdapter;
 import org.elypia.commandler.api.Adapter;
 import org.elypia.commandler.event.ActionEvent;
 import org.elypia.commandler.metadata.MetaParam;
 
-import javax.inject.Inject;
-import java.util.Objects;
+import com.google.cloud.translate.Language;
 
 /**
  * @author seth@falco.fun (Seth Falco)

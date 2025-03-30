@@ -16,12 +16,14 @@
 
 package org.elypia.alexis.discord.binders;
 
-import net.dv8tion.jda.api.events.Event;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.elypia.commandler.annotation.stereotypes.Binder;
 import org.elypia.commandler.api.HeaderBinder;
 import org.elypia.commandler.event.Request;
 
-import java.util.*;
+import net.dv8tion.jda.api.events.Event;
 
 /**
  * Add the bots self-mentions to the headers so that they

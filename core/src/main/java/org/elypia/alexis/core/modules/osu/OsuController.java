@@ -16,19 +16,21 @@
 
 package org.elypia.alexis.core.modules.osu;
 
-import org.elypia.alexis.core.i18n.AlexisMessages;
-import org.elypia.commandler.annotation.Param;
-import org.elypia.commandler.dispatchers.standard.*;
-import org.elypia.commandler.newb.AsyncUtils;
-import org.elypia.commandler.producers.MessageSender;
-import org.elypia.elypiai.osu.Osu;
-import org.elypia.elypiai.osu.data.OsuMode;
-import org.slf4j.*;
-
 import java.util.Objects;
 
 import javax.inject.Inject;
 import javax.validation.constraints.Size;
+
+import org.elypia.alexis.core.i18n.AlexisMessages;
+import org.elypia.commandler.annotation.Param;
+import org.elypia.commandler.dispatchers.standard.StandardCommand;
+import org.elypia.commandler.dispatchers.standard.StandardController;
+import org.elypia.commandler.newb.AsyncUtils;
+import org.elypia.commandler.producers.MessageSender;
+import org.elypia.elypiai.osu.Osu;
+import org.elypia.elypiai.osu.data.OsuMode;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author seth@falco.fun (Seth Falco)

@@ -16,10 +16,11 @@
 
 package org.elypia.alexis.core.persistence.repositories;
 
-import org.apache.deltaspike.data.api.*;
-import org.elypia.alexis.core.persistence.entities.ActivityData;
-
 import java.util.Optional;
+
+import org.apache.deltaspike.data.api.EntityRepository;
+import org.apache.deltaspike.data.api.Repository;
+import org.elypia.alexis.core.persistence.entities.ActivityData;
 
 @Repository(forEntity = ActivityData.class)
 public interface ActivityRepository extends EntityRepository<ActivityData, Integer> {

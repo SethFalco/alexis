@@ -16,8 +16,11 @@
 
 package org.elypia.alexis.discord.binders;
 
-import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.events.Event;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.inject.Inject;
+
 import org.elypia.alexis.core.persistence.entities.GuildData;
 import org.elypia.alexis.core.persistence.repositories.GuildRepository;
 import org.elypia.comcord.EventUtils;
@@ -25,8 +28,8 @@ import org.elypia.commandler.annotation.stereotypes.Binder;
 import org.elypia.commandler.api.HeaderBinder;
 import org.elypia.commandler.event.Request;
 
-import javax.inject.Inject;
-import java.util.*;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.events.Event;
 
 /**
  * @author seth@falco.fun (Seth Falco)

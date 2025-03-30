@@ -16,10 +16,13 @@
 
 package org.elypia.alexis.core.persistence.repositories;
 
-import org.apache.deltaspike.data.api.*;
-import org.elypia.alexis.core.persistence.entities.GuildData;
-
 import java.util.Locale;
+
+import org.apache.deltaspike.data.api.EntityRepository;
+import org.apache.deltaspike.data.api.Modifying;
+import org.apache.deltaspike.data.api.Query;
+import org.apache.deltaspike.data.api.Repository;
+import org.elypia.alexis.core.persistence.entities.GuildData;
 
 /**
  * @author seth@falco.fun (Seth Falco)

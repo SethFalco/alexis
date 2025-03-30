@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.elypia.alexis.core.utils;
+package org.elypia.alexis.core.modules.youtube;
 
 import java.util.StringJoiner;
 import java.util.concurrent.TimeUnit;

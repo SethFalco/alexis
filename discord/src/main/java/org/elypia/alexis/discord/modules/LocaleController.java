@@ -16,25 +16,36 @@
 
 package org.elypia.alexis.discord.modules;
 
-import com.google.cloud.translate.Language;
-import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.*;
+import java.util.List;
+import java.util.Locale;
+import java.util.stream.Collectors;
+
+import javax.inject.Inject;
+
 import org.elypia.alexis.core.i18n.AlexisMessages;
-import org.elypia.alexis.core.persistence.entities.*;
-import org.elypia.alexis.core.persistence.repositories.*;
 import org.elypia.alexis.core.modules.translate.TranslateService;
-import org.elypia.alexis.core.persistence.entities.*;
-import org.elypia.alexis.core.persistence.repositories.*;
+import org.elypia.alexis.core.persistence.entities.GuildData;
+import org.elypia.alexis.core.persistence.entities.MessageChannelData;
+import org.elypia.alexis.core.persistence.repositories.GuildRepository;
+import org.elypia.alexis.core.persistence.repositories.MessageChannelRepository;
 import org.elypia.comcord.annotations.ReactionCommand;
-import org.elypia.comcord.constraints.*;
+import org.elypia.comcord.constraints.Channels;
+import org.elypia.comcord.constraints.Elevated;
+import org.elypia.comcord.constraints.Permissions;
 import org.elypia.commandler.annotation.Param;
-import org.elypia.commandler.dispatchers.standard.*;
+import org.elypia.commandler.dispatchers.standard.StandardCommand;
+import org.elypia.commandler.dispatchers.standard.StandardController;
 import org.elypia.commandler.newb.AsyncUtils;
 import org.elypia.commandler.producers.MessageSender;
 
-import javax.inject.Inject;
-import java.util.*;
-import java.util.stream.Collectors;
+import com.google.cloud.translate.Language;
+
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.ChannelType;
+import net.dv8tion.jda.api.entities.GuildChannel;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.MessageChannel;
+import net.dv8tion.jda.api.entities.User;
 
 @StandardController
 public class LocaleController {

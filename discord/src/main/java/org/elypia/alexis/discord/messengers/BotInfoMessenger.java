@@ -1,15 +1,17 @@
 package org.elypia.alexis.discord.messengers;
 
-import net.dv8tion.jda.api.*;
-import net.dv8tion.jda.api.entities.Message;
+import javax.inject.Inject;
+
+import org.elypia.alexis.core.i18n.AlexisMessages;
 import org.elypia.alexis.discord.models.BotInfoModel;
 import org.elypia.alexis.discord.utils.DiscordUtils;
-import org.elypia.alexis.core.i18n.AlexisMessages;
 import org.elypia.comcord.api.DiscordMessenger;
 import org.elypia.commandler.annotation.stereotypes.MessageProvider;
 import org.elypia.commandler.event.ActionEvent;
 
-import javax.inject.Inject;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.MessageBuilder;
+import net.dv8tion.jda.api.entities.Message;
 
 @MessageProvider(provides = Message.class, value = BotInfoModel.class)
 public class BotInfoMessenger implements DiscordMessenger<BotInfoModel> {

@@ -16,31 +16,34 @@
 
 package org.elypia.alexis.core.modules.steam;
 
-import org.elypia.alexis.core.i18n.AlexisMessages;
-import org.elypia.commandler.annotation.Param;
-import org.elypia.commandler.dispatchers.standard.*;
-import org.elypia.commandler.newb.AsyncUtils;
-import org.elypia.commandler.producers.MessageSender;
-import org.elypia.elypiai.steam.*;
-import org.knowm.xchart.*;
-import org.knowm.xchart.style.*;
-import org.slf4j.*;
-
-import javax.inject.Inject;
-import javax.validation.constraints.Size;
 import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
+import javax.inject.Inject;
+import javax.validation.constraints.Size;
+
+import org.elypia.alexis.core.i18n.AlexisMessages;
+import org.elypia.commandler.annotation.Param;
+import org.elypia.commandler.dispatchers.standard.StandardCommand;
+import org.elypia.commandler.dispatchers.standard.StandardController;
+import org.elypia.commandler.newb.AsyncUtils;
+import org.elypia.commandler.producers.MessageSender;
+import org.elypia.elypiai.steam.Steam;
+import org.elypia.elypiai.steam.SteamGame;
+import org.knowm.xchart.BitmapEncoder;
+import org.knowm.xchart.CategoryChart;
+import org.knowm.xchart.CategoryChartBuilder;
+import org.knowm.xchart.style.CategoryStyler;
+import org.knowm.xchart.style.Styler;
+
 /**
  * @author seth@falco.fun (Seth Falco)
  */
 @StandardController
 public class SteamController {
-
-	private static final Logger logger = LoggerFactory.getLogger(SteamController.class);
 
 	/** The minimum length a steam username can be. */
 	protected static final int MIN_NAME_LENGTH = 1;

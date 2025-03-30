@@ -16,21 +16,29 @@
 
 package org.elypia.alexis.core.modules.runescape;
 
-import org.elypia.alexis.core.i18n.AlexisMessages;
-import org.elypia.commandler.annotation.Param;
-import org.elypia.commandler.dispatchers.standard.*;
-import org.elypia.commandler.newb.AsyncUtils;
-import org.elypia.commandler.producers.MessageSender;
-import org.elypia.elypiai.runescape.*;
-import org.elypia.elypiai.runescape.data.*;
-import org.elypia.retropia.core.exceptions.FriendlyException;
-import org.jboss.weld.context.api.ContextualInstance;
-import org.slf4j.*;
+import java.lang.annotation.Annotation;
+import java.util.Collection;
+import java.util.EnumMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 import javax.validation.constraints.Size;
-import java.lang.annotation.Annotation;
-import java.util.*;
+
+import org.elypia.alexis.core.i18n.AlexisMessages;
+import org.elypia.commandler.annotation.Param;
+import org.elypia.commandler.dispatchers.standard.StandardCommand;
+import org.elypia.commandler.dispatchers.standard.StandardController;
+import org.elypia.commandler.newb.AsyncUtils;
+import org.elypia.commandler.producers.MessageSender;
+import org.elypia.elypiai.runescape.QuestStatus;
+import org.elypia.elypiai.runescape.RuneScape;
+import org.elypia.elypiai.runescape.data.CompletionStatus;
+import org.elypia.elypiai.runescape.data.RuneScapeError;
+import org.elypia.retropia.core.exceptions.FriendlyException;
+import org.jboss.weld.context.api.ContextualInstance;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author seth@falco.fun (Seth Falco)

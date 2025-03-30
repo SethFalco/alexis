@@ -1,9 +1,10 @@
 package org.elypia.alexis.core.modules.runescape;
 
+import java.util.List;
+import java.util.Map;
+
 import org.elypia.elypiai.runescape.QuestStatus;
 import org.elypia.elypiai.runescape.data.CompletionStatus;
-
-import java.util.*;
 
 public class QuestStatusModel {
 

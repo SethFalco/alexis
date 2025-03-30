@@ -16,9 +16,10 @@
 
 package org.elypia.alexis.core.modules.translate;
 
-import com.google.cloud.translate.*;
-
 import java.util.Objects;
+
+import com.google.cloud.translate.Language;
+import com.google.cloud.translate.Translation;
 
 /**
  * @author seth@falco.fun (Seth Falco)

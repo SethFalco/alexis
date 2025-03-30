@@ -16,13 +16,13 @@
 
 package org.elypia.alexis.core.modules.osu;
 
+import java.util.Objects;
+
 import org.elypia.commandler.annotation.stereotypes.ParamAdapter;
 import org.elypia.commandler.api.Adapter;
 import org.elypia.commandler.event.ActionEvent;
 import org.elypia.commandler.metadata.MetaParam;
 import org.elypia.elypiai.osu.data.OsuMode;
-
-import java.util.Objects;
 
 /**
  * @author seth@falco.fun (Seth Falco)
