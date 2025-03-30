@@ -27,7 +27,4 @@ dependencies {
     runtimeOnly "org.apache.deltaspike.modules:deltaspike-data-module-impl:${deltaSpikeVersion}"
     api "org.apache.deltaspike.modules:deltaspike-scheduler-module-api:${deltaSpikeVersion}"
     runtimeOnly "org.apache.deltaspike.modules:deltaspike-scheduler-module-impl:${deltaSpikeVersion}"
-
-    // Graphing API
-    implementation "org.knowm.xchart:xchart:3.6.3"
 }
