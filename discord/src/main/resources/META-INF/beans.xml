@@ -45,6 +45,6 @@
     <exclude name="org.yaml.**"/>
   </scan>
   <alternatives>
-    <class>org.elypia.alexis.discord.i18n.DiscordLocaleResolver</class>
+    <class>fun.falco.alexis.discord.i18n.DiscordLocaleResolver</class>
   </alternatives>
 </beans>
