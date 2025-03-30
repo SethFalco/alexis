@@ -29,11 +29,4 @@ public interface AppConfig {
      */
     @ConfigProperty(name = "name")
     String getApplicationName();
-
-    /**
-     * @return Where the source-code for this project can be accessed.
-     * Or null if the source-code is not publicly accessible.
-     */
-    @ConfigProperty(name = "git")
-    String getGitUrl();
 }

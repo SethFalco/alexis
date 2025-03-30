@@ -24,19 +24,19 @@ import org.apache.deltaspike.core.api.config.*;
 @Configuration(prefix = "application.author.")
 public interface AuthorConfig {
 
-    /** The name of the author of the bot. */
+    /** Name of the author of the bot. */
     @ConfigProperty(name = "name")
     String getName();
 
-    /** The url linking to a resource of the author. */
+    /** URL linking to a resource of the author. */
     @ConfigProperty(name = "url")
     String getUrl();
 
-    /** The logo or icon that represents the author of the bot. */
+    /** Logo or icon that represents the author of the bot. */
     @ConfigProperty(name = "icon-url")
     String getIconUrl();
 
-    /** The support guild to get help with the bot. */
+    /** Support guild to get help with the bot. */
     @ConfigProperty(name ="support-guild-id")
     Long getSupportGuildId();
 }

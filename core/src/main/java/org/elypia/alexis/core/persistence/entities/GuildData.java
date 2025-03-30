@@ -76,11 +76,6 @@ public class GuildData implements Serializable {
     @OneToMany(targetEntity = GuildMessage.class, mappedBy = "guildData", cascade = CascadeType.ALL, orphanRemoval = true)
     private Map<GuildMessageType, GuildMessage> messages;
 
-    @MapKey(name = "logType")
-    @MapKeyEnumerated(EnumType.STRING)
-    @OneToMany(targetEntity = LogSubscription.class, mappedBy = "guildData", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Map<LogType, LogSubscription> logSubscriptions;
-
     @OneToMany(targetEntity = CustomCommand.class, mappedBy = "guildData", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CustomCommand> customCommands;
 
@@ -89,9 +84,6 @@ public class GuildData implements Serializable {
 
     @OneToMany(targetEntity = EmoteUsage.class, mappedBy = "usageGuildData", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<EmoteUsage> emoteUsages;
-
-    @OneToMany(targetEntity = MemberData.class, mappedBy = "guildData", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<MemberData> members;
 
     @OneToMany(targetEntity = MessageChannelData.class, mappedBy = "guildData", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MessageChannelData> messageChannels;
@@ -105,7 +97,6 @@ public class GuildData implements Serializable {
         customCommands = new ArrayList<>();
         emotes = new ArrayList<>();
         emoteUsages = new ArrayList<>();
-        members = new ArrayList<>();
         messageChannels = new ArrayList<>();
         roles = new ArrayList<>();
     }
@@ -188,18 +179,6 @@ public class GuildData implements Serializable {
         messages.put(message.getType(), message);
     }
 
-    public Map<LogType, LogSubscription> getLogSubscriptions() {
-        return logSubscriptions;
-    }
-
-    public void setLogSubscriptions(Map<LogType, LogSubscription> logSubscriptions) {
-        this.logSubscriptions = logSubscriptions;
-    }
-
-    public void addLogSubscriptions(LogSubscription subscription) {
-        logSubscriptions.put(subscription.getLogType(), subscription);
-    }
-
     public List<CustomCommand> getCustomCommands() {
         return customCommands;
     }
@@ -222,14 +201,6 @@ public class GuildData implements Serializable {
 
     public void setEmoteUsages(List<EmoteUsage> emoteUsages) {
         this.emoteUsages = emoteUsages;
-    }
-
-    public List<MemberData> getMembers() {
-        return members;
-    }
-
-    public void setMembers(List<MemberData> members) {
-        this.members = members;
     }
 
     public List<MessageChannelData> getMessageChannels() {

@@ -35,13 +35,12 @@ import java.util.*;
 import java.util.stream.*;
 
 /**
- * This controller exclusively handles the greeting logic to welcome
- * or say farewell to users and bots.
+ * This controller exclusively handles the greeting logic to welcome or say
+ * farewell to users and bots.
  *
- * This uses additional configurations to produce the welcome message,
- * for example if join roles are enabled it may also say what roles were added.
+ * This uses additional configurations to produce the welcome message.
  *
- * This can be configured from the {@link GreetingController}.
+ * Can be configured from the {@link GreetingController}.
  *
  * @author seth@falco.fun (Seth Falco)
  */
