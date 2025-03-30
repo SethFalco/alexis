@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2020 Seth Falco and Alexis Contributors
+ * Copyright 2019-2025 Seth Falco and Alexis Contributors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,26 +16,44 @@
 
 package org.elypia.alexis.discord.modules;
 
-import net.dv8tion.jda.api.*;
-import net.dv8tion.jda.api.entities.*;
-import net.dv8tion.jda.api.utils.MarkdownUtil;
-import org.elypia.alexis.core.configuration.AuthorConfig;
-import org.elypia.alexis.discord.models.BotInfoModel;
-import org.elypia.alexis.discord.utils.DiscordUtils;
-import org.elypia.alexis.core.i18n.AlexisMessages;
-import org.elypia.comcord.constraints.*;
-import org.elypia.commandler.annotation.*;
-import org.elypia.commandler.dispatchers.standard.*;
-import org.elypia.commandler.newb.AsyncUtils;
-import org.elypia.commandler.producers.MessageSender;
-import org.jboss.weld.context.bound.BoundRequestContext;
-import org.slf4j.*;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 import javax.validation.constraints.NotBlank;
-import java.time.*;
-import java.util.*;
-import java.util.stream.Collectors;
+
+import org.elypia.alexis.core.configuration.AuthorConfig;
+import org.elypia.alexis.core.i18n.AlexisMessages;
+import org.elypia.alexis.discord.models.BotInfoModel;
+import org.elypia.alexis.discord.utils.DiscordUtils;
+import org.elypia.comcord.constraints.Channels;
+import org.elypia.comcord.constraints.Everyone;
+import org.elypia.commandler.annotation.Command;
+import org.elypia.commandler.annotation.Param;
+import org.elypia.commandler.dispatchers.standard.StandardCommand;
+import org.elypia.commandler.dispatchers.standard.StandardController;
+import org.elypia.commandler.newb.AsyncUtils;
+import org.elypia.commandler.producers.MessageSender;
+import org.jboss.weld.context.bound.BoundRequestContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.ChannelType;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.GuildChannel;
+import net.dv8tion.jda.api.entities.Invite;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.utils.MarkdownUtil;
 
 /**
  * @author seth@falco.fun (Seth Falco)

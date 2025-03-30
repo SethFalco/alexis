@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2020 Seth Falco and Alexis Contributors
+ * Copyright 2019-2025 Seth Falco and Alexis Contributors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,17 +16,20 @@
 
 package org.elypia.alexis.discord.messengers;
 
-import net.dv8tion.jda.api.*;
-import net.dv8tion.jda.api.entities.Message;
-import org.elypia.alexis.discord.utils.DiscordUtils;
+import java.util.StringJoiner;
+
+import javax.inject.Inject;
+
 import org.elypia.alexis.core.i18n.AlexisMessages;
+import org.elypia.alexis.discord.utils.DiscordUtils;
 import org.elypia.comcord.api.DiscordMessenger;
 import org.elypia.commandler.annotation.stereotypes.MessageProvider;
 import org.elypia.commandler.event.ActionEvent;
 import org.elypia.elypiai.steam.SteamGame;
 
-import javax.inject.Inject;
-import java.util.StringJoiner;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.MessageBuilder;
+import net.dv8tion.jda.api.entities.Message;
 
 /**
  * @author seth@falco.fun (Seth Falco)

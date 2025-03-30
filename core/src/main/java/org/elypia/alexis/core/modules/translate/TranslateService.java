@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2020 Seth Falco and Alexis Contributors
+ * Copyright 2019-2025 Seth Falco and Alexis Contributors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,15 +16,27 @@
 
 package org.elypia.alexis.core.modules.translate;
 
-import com.google.auth.oauth2.GoogleCredentials;
-import com.google.cloud.translate.*;
-import org.slf4j.*;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Locale;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import java.io.IOException;
-import java.util.*;
-import java.util.stream.Collectors;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.auth.oauth2.GoogleCredentials;
+import com.google.cloud.translate.Detection;
+import com.google.cloud.translate.Language;
+import com.google.cloud.translate.Translate;
+import com.google.cloud.translate.TranslateOptions;
+import com.google.cloud.translate.Translation;
 
 /**
  * @author seth@falco.fun (Seth Falco)
@@ -56,7 +68,7 @@ public class TranslateService {
 
     /**
      * @param strings All the strings to detect the language of.
-     * @return The langaugue that comes up most often in a list.
+     * @return The language that comes up most often in a list.
      */
     public Language detectMostFrequentAsLanguage(List<String> strings) {
         String language = detectMostFrequent(strings);
@@ -72,7 +84,7 @@ public class TranslateService {
      * setting to cap out how many characters before making a request.
      *
      * @param strings All the strings to detect the language of.
-     * @return The langaugue that comes up most often in a list.
+     * @return The language that comes up most often in a list.
      */
     public String detectMostFrequent(List<String> strings) {
         int characterCap = translateConfig.getAggregateCharacterCap();
@@ -104,7 +116,7 @@ public class TranslateService {
      * Apply the specified cap to ensure we don't try to
      * detect the language from any more characters than specified.
      *
-     * @param strings A list of all candiates to apply detection on.
+     * @param strings A list of all candidates to apply detection on.
      * @param characterCap The character cap, the result shouldn't have more characters than this.
      * @return A truncated list of strings will elements removed from where the total would exceed the cap.
      */

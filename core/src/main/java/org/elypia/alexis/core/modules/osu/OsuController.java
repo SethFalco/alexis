@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2020 Seth Falco and Alexis Contributors
+ * Copyright 2019-2025 Seth Falco and Alexis Contributors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,27 +16,25 @@
 
 package org.elypia.alexis.core.modules.osu;
 
-import org.elypia.alexis.core.i18n.AlexisMessages;
-import org.elypia.commandler.annotation.Param;
-import org.elypia.commandler.dispatchers.standard.*;
-import org.elypia.commandler.newb.AsyncUtils;
-import org.elypia.commandler.producers.MessageSender;
-import org.elypia.elypiai.osu.Osu;
-import org.elypia.elypiai.osu.data.OsuMode;
-import org.slf4j.*;
-
 import java.util.Objects;
 
 import javax.inject.Inject;
 import javax.validation.constraints.Size;
+
+import org.elypia.alexis.core.i18n.AlexisMessages;
+import org.elypia.commandler.annotation.Param;
+import org.elypia.commandler.dispatchers.standard.StandardCommand;
+import org.elypia.commandler.dispatchers.standard.StandardController;
+import org.elypia.commandler.newb.AsyncUtils;
+import org.elypia.commandler.producers.MessageSender;
+import org.elypia.elypiai.osu.Osu;
+import org.elypia.elypiai.osu.data.OsuMode;
 
 /**
  * @author seth@falco.fun (Seth Falco)
  */
 @StandardController
 public class OsuController {
-
-    private static final Logger logger = LoggerFactory.getLogger(OsuController.class);
 
     private final AlexisMessages messages;
     private final Osu osu;

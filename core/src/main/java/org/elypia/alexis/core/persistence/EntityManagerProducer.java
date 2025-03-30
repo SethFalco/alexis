@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2020 Seth Falco and Alexis Contributors
+ * Copyright 2019-2025 Seth Falco and Alexis Contributors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,16 +16,19 @@
 
 package org.elypia.alexis.core.persistence;
 
-import org.apache.deltaspike.jpa.api.entitymanager.PersistenceUnitName;
-import org.slf4j.*;
-
-import javax.annotation.PreDestroy;
-import javax.enterprise.context.*;
-import javax.enterprise.inject.*;
-import javax.inject.Inject;
-import javax.persistence.*;
 import java.io.Closeable;
 import java.util.Objects;
+
+import javax.annotation.PreDestroy;
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.RequestScoped;
+import javax.enterprise.inject.Disposes;
+import javax.enterprise.inject.Produces;
+import javax.inject.Inject;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+
+import org.apache.deltaspike.jpa.api.entitymanager.PersistenceUnitName;
 
 /**
  * @author seth@falco.fun (Seth Falco)
@@ -33,8 +36,6 @@ import java.util.Objects;
  */
 @ApplicationScoped
 public class EntityManagerProducer implements Closeable {
-
-    private static final Logger logger = LoggerFactory.getLogger(EntityManagerProducer.class);
 
     private final EntityManagerFactory factory;
 

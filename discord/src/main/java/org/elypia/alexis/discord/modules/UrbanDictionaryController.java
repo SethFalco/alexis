@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2020 Seth Falco and Alexis Contributors
+ * Copyright 2019-2025 Seth Falco and Alexis Contributors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,32 +16,37 @@
 
 package org.elypia.alexis.discord.modules;
 
-import io.reactivex.rxjava3.core.Observable;
-import io.reactivex.rxjava3.core.*;
-import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.*;
-import net.dv8tion.jda.api.utils.MarkdownUtil;
-import org.elypia.alexis.discord.utils.DiscordUtils;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import javax.inject.Inject;
+
 import org.elypia.alexis.core.i18n.AlexisMessages;
+import org.elypia.alexis.discord.utils.DiscordUtils;
 import org.elypia.commandler.annotation.Param;
-import org.elypia.commandler.dispatchers.standard.*;
+import org.elypia.commandler.dispatchers.standard.StandardCommand;
+import org.elypia.commandler.dispatchers.standard.StandardController;
 import org.elypia.commandler.newb.AsyncUtils;
 import org.elypia.commandler.producers.MessageSender;
 import org.elypia.commandler.utils.ChatUtils;
-import org.elypia.elypiai.urbandictionary.*;
-import org.slf4j.*;
+import org.elypia.elypiai.urbandictionary.DefineResult;
+import org.elypia.elypiai.urbandictionary.Definition;
+import org.elypia.elypiai.urbandictionary.UrbanDictionary;
 
-import javax.inject.Inject;
-import java.util.*;
-import java.util.stream.*;
+import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.core.Single;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.MessageEmbed;
+import net.dv8tion.jda.api.utils.MarkdownUtil;
 
 /**
  * @author seth@falco.fun (Seth Falco)
  */
 @StandardController
 public class UrbanDictionaryController {
-
-    private static final Logger logger = LoggerFactory.getLogger(UrbanDictionaryController.class);
 
     private final AlexisMessages messages;
     private final MessageSender sender;

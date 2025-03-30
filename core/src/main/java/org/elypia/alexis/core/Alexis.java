@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2020 Seth Falco and Alexis Contributors
+ * Copyright 2019-2025 Seth Falco and Alexis Contributors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,11 +17,12 @@
 package org.elypia.alexis.core;
 
 import org.elypia.commandler.Commandler;
-import org.slf4j.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.slf4j.bridge.SLF4JBridgeHandler;
 
 /**
- * This is the main class for the bot which initialised everything Alexis
+ * This is the main class for the bot which initialized everything Alexis
  * depends on and connects to Discord. This does not contain any
  * actual command handling code.
  *

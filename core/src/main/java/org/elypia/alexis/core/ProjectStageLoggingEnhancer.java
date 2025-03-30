@@ -1,8 +1,10 @@
 package org.elypia.alexis.core;
 
-import com.google.cloud.logging.*;
 import org.apache.deltaspike.core.api.projectstage.ProjectStage;
 import org.apache.deltaspike.core.util.ProjectStageProducer;
+
+import com.google.cloud.logging.LogEntry;
+import com.google.cloud.logging.LoggingEnhancer;
 
 /**
  * Adds a label to all logs with the {@link ProjectStage}

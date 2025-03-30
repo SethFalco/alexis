@@ -1,9 +1,10 @@
 package org.elypia.alexis.core.persistence.repositories;
 
-import org.apache.deltaspike.data.api.*;
-import org.elypia.alexis.core.persistence.entities.EmoteUsage;
-
 import java.util.List;
+
+import org.apache.deltaspike.data.api.EntityRepository;
+import org.apache.deltaspike.data.api.Repository;
+import org.elypia.alexis.core.persistence.entities.EmoteUsage;
 
 @Repository(forEntity = EmoteUsage.class)
 public interface EmoteUsageRepository extends EntityRepository<EmoteUsage, Integer> {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2020 Seth Falco and Alexis Contributors
+ * Copyright 2019-2025 Seth Falco and Alexis Contributors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,19 +16,29 @@
 
 package org.elypia.alexis.discord.listeners;
 
-import net.dv8tion.jda.api.entities.*;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
+import org.apache.commons.collections4.Bag;
+import org.elypia.alexis.core.persistence.entities.EmoteData;
+import org.elypia.alexis.core.persistence.entities.EmoteUsage;
+import org.elypia.alexis.core.persistence.entities.FeatureSettings;
+import org.elypia.alexis.core.persistence.entities.GuildData;
+import org.elypia.alexis.core.persistence.enums.Feature;
+import org.elypia.alexis.core.persistence.repositories.EmoteRepository;
+import org.elypia.alexis.core.persistence.repositories.GuildRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import net.dv8tion.jda.api.entities.Emote;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import org.apache.commons.collections4.Bag;
-import org.elypia.alexis.core.persistence.entities.*;
-import org.elypia.alexis.core.persistence.enums.Feature;
-import org.elypia.alexis.core.persistence.repositories.*;
-import org.elypia.alexis.core.persistence.entities.*;
-import org.elypia.alexis.core.persistence.repositories.*;
-import org.slf4j.*;
-
-import javax.inject.*;
-import java.util.*;
 
 /**
  * Count up all emotes used in guilds.

@@ -1,23 +1,27 @@
 package org.elypia.alexis.discord.messengers;
 
-import net.dv8tion.jda.api.*;
-import net.dv8tion.jda.api.entities.Message;
-import org.elypia.alexis.discord.utils.DiscordUtils;
+import java.util.List;
+import java.util.StringJoiner;
+
+import javax.inject.Inject;
+
 import org.elypia.alexis.core.i18n.AlexisMessages;
+import org.elypia.alexis.discord.utils.DiscordUtils;
 import org.elypia.comcord.api.DiscordMessenger;
 import org.elypia.commandler.annotation.stereotypes.MessageProvider;
 import org.elypia.commandler.event.ActionEvent;
-import org.elypia.elypiai.runescape.*;
+import org.elypia.elypiai.runescape.Activity;
+import org.elypia.elypiai.runescape.Player;
 
-import javax.inject.Inject;
-import java.util.*;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.MessageBuilder;
+import net.dv8tion.jda.api.entities.Message;
 
 @MessageProvider(provides = Message.class, value = Player.class)
 public class RuneScapePlayerMessenger implements DiscordMessenger<Player> {
 
     private static final String GREEN_CIRCLE = "\uD83D\uDFE2";
     private static final String YELLOW_CIRCLE = "\uD83D\uDFE1";
-    private static final String ORANGE_CIRCLE = "\uD83D\uDFE0";
     private static final String RED_CIRCLE = "\uD83D\uDD34";
 
     private final AlexisMessages messages;

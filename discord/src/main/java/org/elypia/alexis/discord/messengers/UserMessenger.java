@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2020 Seth Falco and Alexis Contributors
+ * Copyright 2019-2025 Seth Falco and Alexis Contributors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,21 +16,29 @@
 
 package org.elypia.alexis.discord.messengers;
 
-import net.dv8tion.jda.api.*;
-import net.dv8tion.jda.api.entities.*;
-import net.dv8tion.jda.api.events.Event;
-import net.dv8tion.jda.api.utils.MarkdownUtil;
-import net.dv8tion.jda.internal.entities.UserImpl;
-import org.elypia.alexis.discord.utils.DiscordUtils;
+import java.time.Duration;
+import java.time.OffsetDateTime;
+import java.util.StringJoiner;
+
+import javax.inject.Inject;
+
 import org.elypia.alexis.core.i18n.AlexisMessages;
+import org.elypia.alexis.discord.utils.DiscordUtils;
 import org.elypia.comcord.EventUtils;
 import org.elypia.comcord.api.DiscordMessenger;
 import org.elypia.commandler.annotation.stereotypes.MessageProvider;
 import org.elypia.commandler.event.ActionEvent;
 
-import javax.inject.Inject;
-import java.time.*;
-import java.util.StringJoiner;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.MessageBuilder;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.MessageEmbed;
+import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.events.Event;
+import net.dv8tion.jda.api.utils.MarkdownUtil;
+import net.dv8tion.jda.internal.entities.UserImpl;
 
 /**
  * Build a Discord user into an attractive
@@ -107,10 +115,6 @@ public class UserMessenger implements DiscordMessenger<User> {
             builder.addField(messages.userBot(), MarkdownUtil.maskedLink(messages.botInviteLink(), DiscordUtils.getInviteUrl(output)), false);
 
         return new MessageBuilder(builder).build();
-    }
-
-    private MessageEmbed.Field createDateField(String name, OffsetDateTime datetime) {
-        return createDateField(name, datetime, OffsetDateTime.now());
     }
 
     private MessageEmbed.Field createDateField(String name, OffsetDateTime datetime, OffsetDateTime relativeTo) {

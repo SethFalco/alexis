@@ -1,19 +1,22 @@
 package org.elypia.alexis.discord.i18n;
 
-import net.dv8tion.jda.api.entities.*;
-import net.dv8tion.jda.api.events.GenericEvent;
-import org.apache.deltaspike.core.api.message.LocaleResolver;
-import org.elypia.alexis.core.persistence.entities.*;
-import org.elypia.alexis.core.persistence.repositories.*;
-import org.elypia.alexis.core.persistence.entities.*;
-import org.elypia.alexis.core.persistence.repositories.*;
-import org.elypia.comcord.EventUtils;
+import java.util.Locale;
 
 import javax.annotation.Priority;
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.inject.Alternative;
 import javax.inject.Inject;
-import java.util.Locale;
+
+import org.apache.deltaspike.core.api.message.LocaleResolver;
+import org.elypia.alexis.core.persistence.entities.GuildData;
+import org.elypia.alexis.core.persistence.entities.MessageChannelData;
+import org.elypia.alexis.core.persistence.repositories.GuildRepository;
+import org.elypia.alexis.core.persistence.repositories.MessageChannelRepository;
+import org.elypia.comcord.EventUtils;
+
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.MessageChannel;
+import net.dv8tion.jda.api.events.GenericEvent;
 
 /**
  * @author seth@falco.fun (Seth Falco)

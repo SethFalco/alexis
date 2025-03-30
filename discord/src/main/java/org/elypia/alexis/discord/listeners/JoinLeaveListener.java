@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2020 Seth Falco and Alexis Contributors
+ * Copyright 2019-2025 Seth Falco and Alexis Contributors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,20 +16,29 @@
 
 package org.elypia.alexis.discord.listeners;
 
-import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.entities.*;
-import net.dv8tion.jda.api.events.guild.*;
-import org.elypia.alexis.discord.DiscordBot;
-import org.elypia.alexis.discord.utils.DiscordUtils;
+import java.time.Duration;
+import java.time.OffsetDateTime;
+import java.util.List;
+import java.util.Optional;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import org.elypia.alexis.core.i18n.AlexisMessages;
 import org.elypia.alexis.core.persistence.entities.GuildData;
 import org.elypia.alexis.core.persistence.repositories.GuildRepository;
+import org.elypia.alexis.discord.DiscordBot;
+import org.elypia.alexis.discord.utils.DiscordUtils;
 import org.elypia.comcord.ActivatedListenerAdapter;
-import org.slf4j.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import javax.inject.*;
-import java.time.*;
-import java.util.*;
+import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
+import net.dv8tion.jda.api.events.guild.GuildLeaveEvent;
 
 /**
  * Listener for when the {@link DiscordBot} joins or leaves

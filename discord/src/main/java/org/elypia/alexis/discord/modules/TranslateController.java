@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2020 Seth Falco and Alexis Contributors
+ * Copyright 2019-2025 Seth Falco and Alexis Contributors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,25 +16,34 @@
 
 package org.elypia.alexis.discord.modules;
 
-import com.google.cloud.translate.*;
-import net.dv8tion.jda.api.entities.*;
-import net.dv8tion.jda.api.events.Event;
-import org.elypia.alexis.core.i18n.AlexisMessages;
-import org.elypia.alexis.core.modules.translate.TranslationModel;
-import org.elypia.alexis.core.persistence.repositories.GuildRepository;
-import org.elypia.alexis.core.modules.translate.TranslateService;
-import org.elypia.comcord.constraints.*;
-import org.elypia.commandler.annotation.Param;
-import org.elypia.commandler.api.Integration;
-import org.elypia.commandler.dispatchers.standard.*;
-import org.elypia.commandler.event.ActionEvent;
-import org.elypia.commandler.newb.AsyncUtils;
-import org.elypia.commandler.producers.MessageSender;
+import java.util.regex.Pattern;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.validation.constraints.NotBlank;
-import java.util.regex.Pattern;
+
+import org.elypia.alexis.core.i18n.AlexisMessages;
+import org.elypia.alexis.core.modules.translate.TranslateService;
+import org.elypia.alexis.core.modules.translate.TranslationModel;
+import org.elypia.alexis.core.persistence.repositories.GuildRepository;
+import org.elypia.comcord.constraints.Channels;
+import org.elypia.comcord.constraints.Elevated;
+import org.elypia.comcord.constraints.Everyone;
+import org.elypia.commandler.annotation.Param;
+import org.elypia.commandler.api.Integration;
+import org.elypia.commandler.dispatchers.standard.StandardCommand;
+import org.elypia.commandler.dispatchers.standard.StandardController;
+import org.elypia.commandler.event.ActionEvent;
+import org.elypia.commandler.newb.AsyncUtils;
+import org.elypia.commandler.producers.MessageSender;
+
+import com.google.cloud.translate.Language;
+import com.google.cloud.translate.Translation;
+
+import net.dv8tion.jda.api.entities.ChannelType;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.MessageChannel;
+import net.dv8tion.jda.api.events.Event;
 
 @StandardController
 public class TranslateController {

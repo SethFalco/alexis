@@ -1,18 +1,22 @@
 package org.elypia.alexis.discord.messengers;
 
-import net.dv8tion.jda.api.*;
-import net.dv8tion.jda.api.entities.*;
-import org.elypia.alexis.discord.utils.DiscordUtils;
+import java.util.stream.Collectors;
+
+import javax.inject.Inject;
+
 import org.elypia.alexis.core.i18n.AlexisMessages;
 import org.elypia.alexis.core.modules.runescape.QuestStatusModel;
+import org.elypia.alexis.discord.utils.DiscordUtils;
 import org.elypia.comcord.api.DiscordMessenger;
 import org.elypia.commandler.annotation.stereotypes.MessageProvider;
 import org.elypia.commandler.event.ActionEvent;
 import org.elypia.commandler.utils.ChatUtils;
 import org.elypia.elypiai.runescape.QuestStatus;
 
-import javax.inject.Inject;
-import java.util.stream.Collectors;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.MessageBuilder;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.MessageEmbed;
 
 @MessageProvider(provides = Message.class, value = QuestStatusModel.class)
 public class QuestStatusesMessenger implements DiscordMessenger<QuestStatusModel> {

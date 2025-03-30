@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2020 Seth Falco and Alexis Contributors
+ * Copyright 2019-2025 Seth Falco and Alexis Contributors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,17 +16,22 @@
 
 package org.elypia.alexis.discord.jobs;
 
-import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.entities.Activity;
-import org.apache.deltaspike.scheduler.api.Scheduled;
-import org.elypia.alexis.core.persistence.entities.ActivityData;
-import org.elypia.alexis.core.persistence.repositories.ActivityRepository;
-import org.quartz.*;
-import org.slf4j.*;
+import java.util.Objects;
+import java.util.Optional;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import java.util.*;
+
+import org.apache.deltaspike.scheduler.api.Scheduled;
+import org.elypia.alexis.core.persistence.entities.ActivityData;
+import org.elypia.alexis.core.persistence.repositories.ActivityRepository;
+import org.quartz.Job;
+import org.quartz.JobExecutionContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.entities.Activity;
 
 /**
  * <p>Schedules task to change the bots displayed {@link Activity}.</p>

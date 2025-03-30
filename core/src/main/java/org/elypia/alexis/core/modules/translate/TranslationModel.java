@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2020 Seth Falco and Alexis Contributors
+ * Copyright 2019-2025 Seth Falco and Alexis Contributors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,10 @@
 
 package org.elypia.alexis.core.modules.translate;
 
-import com.google.cloud.translate.*;
-
 import java.util.Objects;
+
+import com.google.cloud.translate.Language;
+import com.google.cloud.translate.Translation;
 
 /**
  * @author seth@falco.fun (Seth Falco)

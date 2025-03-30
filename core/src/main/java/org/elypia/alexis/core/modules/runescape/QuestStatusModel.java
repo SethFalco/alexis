@@ -1,9 +1,10 @@
 package org.elypia.alexis.core.modules.runescape;
 
+import java.util.List;
+import java.util.Map;
+
 import org.elypia.elypiai.runescape.QuestStatus;
 import org.elypia.elypiai.runescape.data.CompletionStatus;
-
-import java.util.*;
 
 public class QuestStatusModel {
 
@@ -17,7 +18,7 @@ public class QuestStatusModel {
 
     /**
      * @return The username of the player. This may not have the exact
-     * capitialization as registered as RuneScape.
+     * capitalization as registered as RuneScape.
      */
     public String getUsername() {
         return username;

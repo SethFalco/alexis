@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2020 Seth Falco and Alexis Contributors
+ * Copyright 2019-2025 Seth Falco and Alexis Contributors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,22 +16,36 @@
 
 package org.elypia.alexis.discord.modules;
 
-import net.dv8tion.jda.api.entities.*;
-import org.elypia.alexis.discord.utils.DiscordUtils;
-import org.elypia.alexis.core.i18n.AlexisMessages;
-import org.elypia.alexis.core.persistence.entities.*;
-import org.elypia.alexis.core.persistence.enums.Feature;
-import org.elypia.alexis.core.persistence.repositories.GuildRepository;
-import org.elypia.alexis.core.persistence.entities.*;
-import org.elypia.comcord.EventUtils;
-import org.elypia.comcord.constraints.*;
-import org.elypia.commandler.annotation.Param;
-import org.elypia.commandler.dispatchers.standard.*;
-import org.elypia.alexis.discord.models.EmoteLeaderboardModel;
-import org.elypia.alexis.discord.models.EmoteLeaderboardEntryModel;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 import javax.inject.Inject;
-import java.util.*;
+
+import org.elypia.alexis.core.i18n.AlexisMessages;
+import org.elypia.alexis.core.persistence.entities.EmoteData;
+import org.elypia.alexis.core.persistence.entities.EmoteUsage;
+import org.elypia.alexis.core.persistence.entities.FeatureSettings;
+import org.elypia.alexis.core.persistence.entities.GuildData;
+import org.elypia.alexis.core.persistence.enums.Feature;
+import org.elypia.alexis.core.persistence.repositories.GuildRepository;
+import org.elypia.alexis.discord.models.EmoteLeaderboardEntryModel;
+import org.elypia.alexis.discord.models.EmoteLeaderboardModel;
+import org.elypia.alexis.discord.utils.DiscordUtils;
+import org.elypia.comcord.EventUtils;
+import org.elypia.comcord.constraints.Channels;
+import org.elypia.comcord.constraints.Elevated;
+import org.elypia.commandler.annotation.Param;
+import org.elypia.commandler.dispatchers.standard.StandardCommand;
+import org.elypia.commandler.dispatchers.standard.StandardController;
+
+import net.dv8tion.jda.api.entities.ChannelType;
+import net.dv8tion.jda.api.entities.Emote;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.MessageEmbed;
 
 /**
  * @author seth@falco.fun (Seth Falco)

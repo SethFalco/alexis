@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2020 Seth Falco and Alexis Contributors
+ * Copyright 2019-2025 Seth Falco and Alexis Contributors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,19 +16,29 @@
 
 package org.elypia.alexis.discord.modules;
 
-import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.*;
+import java.time.Duration;
+
+import javax.inject.Inject;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+
 import org.elypia.alexis.core.i18n.AlexisMessages;
 import org.elypia.alexis.core.persistence.entities.GuildData;
 import org.elypia.alexis.core.persistence.repositories.GuildRepository;
-import org.elypia.comcord.constraints.*;
+import org.elypia.comcord.constraints.Channels;
+import org.elypia.comcord.constraints.Elevated;
+import org.elypia.comcord.constraints.Permissions;
 import org.elypia.commandler.annotation.Param;
-import org.elypia.commandler.dispatchers.standard.*;
+import org.elypia.commandler.dispatchers.standard.StandardCommand;
+import org.elypia.commandler.dispatchers.standard.StandardController;
 import org.elypia.commandler.newb.AsyncUtils;
 
-import javax.inject.Inject;
-import javax.validation.constraints.*;
-import java.time.Duration;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.ChannelType;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.TextChannel;
 
 /**
  * @author seth@falco.fun (Seth Falco)

@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2020 Seth Falco and Alexis Contributors
+ * Copyright 2019-2025 Seth Falco and Alexis Contributors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,27 +16,28 @@
 
 package org.elypia.alexis.discord.modules.cleverbot;
 
-import net.dv8tion.jda.api.entities.Message;
-import org.elypia.alexis.core.persistence.entities.*;
-import org.elypia.alexis.core.persistence.repositories.MessageChannelRepository;
-import org.elypia.commandler.annotation.Param;
-import org.elypia.commandler.dispatchers.standard.*;
-import org.elypia.commandler.newb.AsyncUtils;
-import org.elypia.commandler.producers.MessageSender;
-import org.elypia.elypiai.cleverbot.Cleverbot;
-import org.slf4j.*;
+import java.util.Objects;
 
 import javax.inject.Inject;
 import javax.validation.constraints.NotBlank;
-import java.util.Objects;
+
+import org.elypia.alexis.core.persistence.entities.GuildData;
+import org.elypia.alexis.core.persistence.entities.MessageChannelData;
+import org.elypia.alexis.core.persistence.repositories.MessageChannelRepository;
+import org.elypia.commandler.annotation.Param;
+import org.elypia.commandler.dispatchers.standard.StandardCommand;
+import org.elypia.commandler.dispatchers.standard.StandardController;
+import org.elypia.commandler.newb.AsyncUtils;
+import org.elypia.commandler.producers.MessageSender;
+import org.elypia.elypiai.cleverbot.Cleverbot;
+
+import net.dv8tion.jda.api.entities.Message;
 
 /**
  * @author seth@falco.fun (Seth Falco)
  */
 @StandardController
 public class CleverbotController {
-
-    private static final Logger logger = LoggerFactory.getLogger(CleverbotController.class);
 
     private final MessageChannelRepository channelRepo;
     private final Cleverbot cleverbot;

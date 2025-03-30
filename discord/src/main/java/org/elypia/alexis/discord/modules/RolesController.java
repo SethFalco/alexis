@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2020 Seth Falco and Alexis Contributors
+ * Copyright 2019-2025 Seth Falco and Alexis Contributors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,20 +16,34 @@
 
 package org.elypia.alexis.discord.modules;
 
-import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.*;
-import net.dv8tion.jda.api.utils.MarkdownUtil;
-import org.elypia.alexis.core.i18n.AlexisMessages;
-import org.elypia.alexis.core.persistence.entities.*;
-import org.elypia.alexis.core.persistence.repositories.GuildRepository;
-import org.elypia.alexis.core.persistence.entities.*;
-import org.elypia.comcord.constraints.*;
-import org.elypia.commandler.annotation.Param;
-import org.elypia.commandler.dispatchers.standard.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.StringJoiner;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
-import java.util.*;
-import java.util.stream.Collectors;
+
+import org.elypia.alexis.core.i18n.AlexisMessages;
+import org.elypia.alexis.core.persistence.entities.GuildData;
+import org.elypia.alexis.core.persistence.entities.RoleData;
+import org.elypia.alexis.core.persistence.repositories.GuildRepository;
+import org.elypia.comcord.constraints.Channels;
+import org.elypia.comcord.constraints.Elevated;
+import org.elypia.comcord.constraints.Permissions;
+import org.elypia.commandler.annotation.Param;
+import org.elypia.commandler.dispatchers.standard.StandardCommand;
+import org.elypia.commandler.dispatchers.standard.StandardController;
+
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.ChannelType;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.Role;
+import net.dv8tion.jda.api.utils.MarkdownUtil;
 
 /**
  * Roles controller for setting up self-assignable roles
@@ -54,7 +68,7 @@ public class RolesController {
      * Return a list of roles that are assignable in the current guild,
      * and any requirements needed to self-assign them.
      *
-     * @param message The mesage that trigged this event.
+     * @param message The message that triggered this event.
      * @return The message to send in chat.
      */
     @StandardCommand
@@ -153,7 +167,7 @@ public class RolesController {
     /**
      * Add roles that can be marked as assignable.
      *
-     * @param message The mesage that trigged this event.
+     * @param message The message that triggered this event.
      * @param roles The roles that should be marked as allowed for self-assignment.
      * @return The message to send in chat.
      */
@@ -209,7 +223,7 @@ public class RolesController {
     /**
      * Disable any roles that have been set to be auto-assigned.
      *
-     * @param message The mesage that trigged this event.
+     * @param message The message that triggered this event.
      * @param roles The roles that should no longer be marked as self-assignable.
      * @return The message to send in chat.
      */
@@ -284,10 +298,10 @@ public class RolesController {
 
     /**
      * Convert a list of Roles into an appropriate {@link String} that
-     * can be represented as a comma seperated list.
+     * can be represented as a comma separated list.
      *
      * @param roles The roles to join together.
-     * @return A single string representing a comma delimetered list of role names.
+     * @return A single string representing a comma delimited list of role names.
      */
     private String toRoleString(final Collection<Role> roles) {
         return roles.stream()
