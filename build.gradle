@@ -59,11 +59,9 @@ subprojects() {
         // Elypiai
         implementation "org.elypia.elypiai:cleverbot:${elypiaiVersion}"
         implementation "org.elypia.elypiai:osu:${elypiaiVersion}"
-        implementation "org.elypia.elypiai:path-of-exile:${elypiaiVersion}"
         implementation "org.elypia.elypiai:runescape:${elypiaiVersion}"
         implementation "org.elypia.elypiai:steam:${elypiaiVersion}"
         implementation "org.elypia.elypiai:urban-dictionary:${elypiaiVersion}"
-        implementation "org.elypia.elypiai:yugioh-prices:${elypiaiVersion}"
 
         // Twitch
         implementation "com.github.twitch4j:twitch4j:1.2.1"
@@ -87,7 +85,6 @@ subprojects() {
 
         // Testing
         testImplementation "org.junit.jupiter:junit-jupiter:${junitVersion}"
-        testImplementation "org.mockito:mockito-core:3.3.3"
         testImplementation "org.apache.deltaspike.modules:deltaspike-test-control-module-impl:${deltaSpikeVersion}"
         testRuntimeOnly "org.apache.deltaspike.modules:deltaspike-test-control-module-api:${deltaSpikeVersion}"
     }
