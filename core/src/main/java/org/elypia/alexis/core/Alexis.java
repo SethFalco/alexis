@@ -42,10 +42,11 @@ public class Alexis {
         SLF4JBridgeHandler.install();
         logger.info("Bridged JUL Logger to SLF4J.");
 
-        logger.info("Initializing the Commandler application.");
+        logger.info("Bootstrapping Commandler application.");
         Commandler commandler = Commandler.create();
 
         try {
+            logger.info("Initializing Commandler application.");
             commandler.run();
         } catch (Exception ex) {
             logger.error("Exception occurred during Commandler initialization, backing out and exiting application.", ex);
