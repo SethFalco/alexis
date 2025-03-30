@@ -26,5 +26,5 @@ public interface OsuConfig {
 
     /** The osu! API key. */
     @ConfigProperty(name = "api-key")
-    String getOsu();
+    String getApiKey();
 }

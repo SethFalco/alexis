@@ -25,6 +25,8 @@ import org.elypia.elypiai.osu.Osu;
 import org.elypia.elypiai.osu.data.OsuMode;
 import org.slf4j.*;
 
+import java.util.Objects;
+
 import javax.inject.Inject;
 import javax.validation.constraints.Size;
 
@@ -42,9 +44,9 @@ public class OsuController {
 
     @Inject
     public OsuController(AlexisMessages messages, OsuConfig config, MessageSender sender) {
-        this.messages = messages;
-        this.osu = new Osu(config.getOsu());
-        this.sender = sender;
+        this.messages = Objects.requireNonNull(messages);
+        this.osu = new Osu(config.getApiKey());
+        this.sender = Objects.requireNonNull(sender);
     }
 
     @StandardCommand

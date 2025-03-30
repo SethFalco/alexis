@@ -26,5 +26,5 @@ public interface SteamConfig {
 
     /** Steam API key. */
     @ConfigProperty(name = "api-key")
-    String getSteam();
+    String getApiKey();
 }

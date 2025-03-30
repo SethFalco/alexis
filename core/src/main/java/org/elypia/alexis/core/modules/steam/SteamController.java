@@ -58,7 +58,7 @@ public class SteamController {
 
 	@Inject
 	public SteamController(final SteamConfig config, final AlexisMessages messages, final MessageSender sender) {
-		this.steam = new Steam(config.getSteam());
+		this.steam = new Steam(config.getApiKey());
 		this.messages = messages;
 		this.sender = sender;
 	}
