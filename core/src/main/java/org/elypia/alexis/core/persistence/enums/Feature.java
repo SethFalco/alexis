@@ -25,36 +25,10 @@ package org.elypia.alexis.core.persistence.enums;
 public enum Feature {
 
     /**
-     * Translate messages to the specified language when
-     * country flag reactions are performed.
-     */
-    TRANSLATE_ON_REACTION("translate on reaction"),
-
-    /**
-     * Display the global level instead of the current level
-     * for the guild with this feature enabled.
-     */
-    DISPLAY_GLOBAL_LEVEL("display global levels"),
-
-    /**
-     * Track the roles in this guild, if a user leaves and joins
-     * back, we'll give back all (with configurable exceptions)
-     * roles they had before.
-     */
-    REAPPLY_PREVIOUS_ROLES("store and reapply roles"),
-
-    /**
      * Should Alexis count up all emote usages in for emotes that
      * belong to this guild, that are used in this guild.
      */
     COUNT_GUILD_EMOTE_USAGE("count global emote usage"),
-
-    /**
-     * Should Alexis count up all emote usages for emotes that
-     * belong to this guild, or are mutually visible between users
-     * in the guild, and Alexis.
-     */
-    COUNT_MUTUAL_EMOTE_USAGE("count mutual emote usage"),
 
     /** To send a message when a user (non-bot) joins the guild. */
     USER_JOIN_MESSAGE("user welcome messages"),
@@ -66,19 +40,7 @@ public enum Feature {
     BOT_JOIN_MESSAGE("bot welcome messages"),
 
     /** To send a message when a bot (non-user) leaves the guild. */
-    BOT_LEAVE_MESSAGE("bot farewell messages"),
-
-    /** To add a join role to users (non-bots) upon joining. */
-    USER_JOIN_ROLE("user join role"),
-
-    /** To add a join role to bots (non-users) upon joining. */
-    BOT_JOIN_ROLE("bot join role"),
-
-    /** Send notifications in a channel when a user has leveled up globally. */
-    GLOBAL_LEVEL_NOTIFICATION("global level notifications"),
-
-    /** Send a notification in a channel when a user has leveled up locally. */
-    GUILD_LEVEL_NOTIFICATION("guild level notifications");
+    BOT_LEAVE_MESSAGE("bot farewell messages");
 
     /** A more user friendly name that can be used in messages. */
     private final String friendlyName;
