@@ -39,7 +39,7 @@ public class TwitchService {
             .withCredentialManager(credentialManager)
             .build();
 
-        logger.info("Succesfully authenticated to the Twitch API.");
+        logger.info("Successfully authenticated to the Twitch API.");
     }
 
     public String getAccessToken() {

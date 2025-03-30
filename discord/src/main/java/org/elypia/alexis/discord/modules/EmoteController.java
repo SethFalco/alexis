@@ -93,12 +93,12 @@ public class EmoteController {
         Optional<GuildData> optData = guildRepo.findOptionalBy(guildId);
         GuildData data = optData.orElse(new GuildData(guildId));
 
-        Map<Feature, GuildFeature> features = data.getFeatures();
-        GuildFeature feature = features.get(Feature.COUNT_GUILD_EMOTE_USAGE);
+        Map<Feature, FeatureSettings> features = data.getFeatures();
+        FeatureSettings feature = features.get(Feature.COUNT_GUILD_EMOTE_USAGE);
         long userId = message.getAuthor().getIdLong();
 
         if (feature == null) {
-            features.put(Feature.COUNT_GUILD_EMOTE_USAGE, new GuildFeature(data, Feature.COUNT_GUILD_EMOTE_USAGE, isEnabled, userId));
+            features.put(Feature.COUNT_GUILD_EMOTE_USAGE, new FeatureSettings(data, Feature.COUNT_GUILD_EMOTE_USAGE, isEnabled, userId));
             guildRepo.save(data);
             return messages.emoteTrackingEnabled();
         } else {

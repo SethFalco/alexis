@@ -66,8 +66,8 @@ public class EmoteListener extends ListenerAdapter {
         if (guildData == null)
             return;
 
-        Map<Feature, GuildFeature> features = guildData.getFeatures();
-        GuildFeature feature = features.get(Feature.COUNT_GUILD_EMOTE_USAGE);
+        Map<Feature, FeatureSettings> features = guildData.getFeatures();
+        FeatureSettings feature = features.get(Feature.COUNT_GUILD_EMOTE_USAGE);
 
         if (feature == null || !feature.isEnabled())
             return;

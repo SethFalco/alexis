@@ -22,6 +22,7 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * @author seth@falco.fun (Seth Falco)
@@ -57,6 +58,25 @@ public class ActivityData implements Serializable {
     @ColumnDefault("1")
     @Column(name = "enabled", nullable = false)
     private boolean enabled;
+
+    public ActivityData() {
+        // Do nothing.
+    }
+
+    public ActivityData(int type, String text) {
+        this(type, text, null);
+    }
+
+    public ActivityData(int type, String text, String url) {
+        this(type, text, url, true);
+    }
+
+    public ActivityData(int type, String text, String url, boolean enabled) {
+        this.type = type;
+        this.text = Objects.requireNonNull(text, "Activity text must not be null.");
+        this.url = url;
+        this.enabled = enabled;
+    }
 
     public int getId() {
         return id;

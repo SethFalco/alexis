@@ -68,8 +68,8 @@ public class GuildData implements Serializable {
     /** The features that have been manually configured in this guild. */
     @MapKey(name = "feature")
     @MapKeyEnumerated(EnumType.STRING)
-    @OneToMany(targetEntity = GuildFeature.class, mappedBy = "guildData", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Map<Feature, GuildFeature> features;
+    @OneToMany(targetEntity = FeatureSettings.class, mappedBy = "guildData", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Map<Feature, FeatureSettings> features;
 
     @MapKey(name = "type")
     @MapKeyEnumerated(EnumType.STRING)
@@ -155,15 +155,15 @@ public class GuildData implements Serializable {
         this.dataRetentionDuration = dataRetentionDuration;
     }
 
-    public Map<Feature, GuildFeature> getFeatures() {
+    public Map<Feature, FeatureSettings> getFeatures() {
         return features;
     }
 
-    public void setFeatures(Map<Feature, GuildFeature> features) {
+    public void setFeatures(Map<Feature, FeatureSettings> features) {
         this.features = features;
     }
 
-    public void addFeature(GuildFeature feature) {
+    public void addFeature(FeatureSettings feature) {
         features.put(feature.getFeature(), feature);
     }
 

@@ -17,6 +17,7 @@
 package org.elypia.alexis.core.modules.translate;
 
 import org.apache.deltaspike.core.api.config.*;
+import javax.validation.constraints.Min;
 
 /**
  * @author seth@falco.fun (Seth Falco)
@@ -41,6 +42,7 @@ public interface TranslateConfig {
      *     result can be obtained with less, massively reducing the potential cost.
      * </strong>
      */
+    @Min(0)
     @ConfigProperty(name = "aggregate-character-cap", defaultValue = "0")
     int getAggregateCharacterCap();
 
