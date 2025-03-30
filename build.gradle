@@ -43,15 +43,15 @@ allprojects() {
     /** Coverage **/
 
     jacoco {
-        toolVersion = "0.8.5"
+        toolVersion = "0.8.8"
     }
 }
 
 subprojects() {
     apply plugin: "java"
 
-    sourceCompatibility = 11
-    targetCompatibility = 11
+    sourceCompatibility = 17
+    targetCompatibility = 17
 
     [compileJava, compileTestJava, javadoc]*.options*.encoding = 'UTF-8'
 
