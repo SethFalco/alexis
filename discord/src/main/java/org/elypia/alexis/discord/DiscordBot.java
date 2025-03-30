@@ -23,7 +23,9 @@ import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import org.elypia.alexis.core.ExitCode;
 import org.elypia.comcord.configuration.DiscordConfig;
 import org.elypia.retropia.core.HttpClientSingleton;
+import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import org.elypia.alexis.discord.listeners.ConnectionListener;
+import org.elypia.alexis.discord.listeners.LoggingListener;
 import org.elypia.alexis.discord.listeners.EmoteListener;
 import org.elypia.alexis.discord.listeners.GreetingListener;
 import org.elypia.alexis.discord.listeners.JoinLeaveListener;
@@ -49,26 +51,26 @@ public class DiscordBot {
     private static final Activity DEFAULT_ACTIVITY = Activity.watching("myself launch!");
 
     /** A list of {@link GatewayIntent} the bot will use by default. */
-    private static final Collection<GatewayIntent> DEFAULT_INTENTS = List.of(
+    private static final Collection<GatewayIntent> DEFAULT_INTENTS = EnumSet.of(
         GatewayIntent.GUILD_MEMBERS,
         GatewayIntent.GUILD_EMOJIS,
         GatewayIntent.GUILD_VOICE_STATES,
+        GatewayIntent.GUILD_PRESENCES,
         GatewayIntent.GUILD_MESSAGES,
         GatewayIntent.GUILD_MESSAGE_REACTIONS,
         GatewayIntent.DIRECT_MESSAGES,
         GatewayIntent.DIRECT_MESSAGE_REACTIONS
     );
 
-    private static final Collection<CacheFlag> CACHE_FLAGS_DISABLED = List.of(
-        CacheFlag.ACTIVITY,
-        CacheFlag.CLIENT_STATUS
+    private static final Collection<CacheFlag> CACHE_FLAGS_ENABLED = EnumSet.of(
+        CacheFlag.ACTIVITY
     );
 
     /** The Discord client, this lets us interact with Discords API. */
     private JDA jda;
 
     @Inject
-    public DiscordBot(DiscordConfig discordConfig, ConnectionListener connectionListener, EmoteListener emoteListener, GreetingListener greetingListener, JoinLeaveListener joinKickListener) throws LoginException {
+    public DiscordBot(DiscordConfig discordConfig, ConnectionListener connectionListener, LoggingListener loggingListener, EmoteListener emoteListener, GreetingListener greetingListener, JoinLeaveListener joinLeaveListener) throws LoginException {
         String token = discordConfig.getBotToken();
 
         if (token == null) {
@@ -80,16 +82,18 @@ public class DiscordBot {
 
         try {
             jda = JDABuilder.create(token, DEFAULT_INTENTS)
-                .disableCache(CACHE_FLAGS_DISABLED)
+                .enableCache(CACHE_FLAGS_ENABLED)
+                .setMemberCachePolicy(MemberCachePolicy.ALL)
                 .setStatus(OnlineStatus.IDLE)
                 .setBulkDeleteSplittingEnabled(false)
                 .setActivity(DEFAULT_ACTIVITY)
                 .setHttpClient(HttpClientSingleton.getClient())
                 .addEventListeners(
                     connectionListener,
+                    loggingListener,
                     emoteListener,
                     greetingListener,
-                    joinKickListener
+                    joinLeaveListener
                 )
                 .build();
         } catch (Exception ex) {
