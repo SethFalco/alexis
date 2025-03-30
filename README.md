@@ -18,10 +18,9 @@ There is no official or hosted version of Alexis available. To run this, you mus
 
 ### Requirements
 
-* Git
+* [Git](https://git-scm.com/)
 * Java 17
-* Gradle 7
-* [MySQL 5.7](https://www.mysql.com)
+* [Gradle 7](https://gradle.org/)
 
 ### Building
 
@@ -36,11 +35,13 @@ cd alexis
 
 ### Configuration
 
-Alexis can be configured through environment variables or Java system properties.
+Alexis can be configured through environment variables or Java system properties. A Discord bot token (`discord.bot-token`) is the only required configuration.
+
+If a MySQL database is not configured (`application.persistence.*`), we fall back to an embedded H2 database, however this is not recommended for production environments.
 
 |Variable / Property|Explanation|
 |---|---|
-|`discord.bot-token`|Discord bot token, this is required to run the bot. You can get one from the [Discord Developer Portal](https://discord.com/developers/docs/intro).|
+|`discord.bot-token`|Discord bot token, this is required to run the bot. You can get one from the [Discord Developer Portal](https://discord.com/developers/docs/intro). |
 |`application.name`|Name of the application, this is how the chatbot will refer to itself.|
 |`application.author.name`|Name of the author of the application.|
 |`application.author.url`|URL to attribute the author, like a website or social media profile.|
@@ -56,13 +57,25 @@ Alexis can be configured through environment variables or Java system properties
 |`application.twitch.client-id`|Twitch client ID, required for Twitch integration. You can get credentials on the [Twitch Developer Portal](https://dev.twitch.tv/).|
 |`application.twitch.client-secret`|Twitch client secret, required for Twitch integration. You can get credentials on the [Twitch Developer Portal](https://dev.twitch.tv/).|
 |`org.apache.deltaspike.ProjectStage`|Environment the build is deployed to, possible values: `Production`, `Development`|
-|`GOOGLE_APPLICATION_CREDENTIALS`|Path to your Google Cloud Platform service account credentials file. Required for YouTube and Google Translate. <br><br>⚠️ **Heads-up: Google Translate has a limited free-tier, but with enough usage, this will incur a bill.**|
-|`GOOGLE_CLOUD_LOGGING`|If `GOOGLE_APPLICATION_CREDENTIALS` is also populated, this can be set to `true` to send logs to Google Cloud Logging.|
+|`GOOGLE_APPLICATION_CREDENTIALS`|Path to your Google Cloud Platform service account credentials file. Required for YouTube and Google Translate. Environment variable only! <br><br>⚠️ **Heads-up: Google Translate has a limited free-tier, but with enough usage, this will incur a bill.**|
+|`GOOGLE_CLOUD_LOGGING`|If `GOOGLE_APPLICATION_CREDENTIALS` is also populated, this can be set to `true` to send logs to Google Cloud Logging. Environment variable only! |
 
 ### Running
 
+To run the project on your hosts Java runtime, the easiest way is to define the `JAVA_OPTS`environment variable with system properties.
+
 ```sh
-java --add-opens java.base/java.lang=ALL-UNNAMED -jar ./alexis-discord.jar
+# Optional
+GOOGLE_APPLICATION_CREDENTIALS=path/to/file
+GOOGLE_CLOUD_LOGGING=true
+
+# Required, additional options can be specified here too
+JAVA_OPTS='
+  -Ddiscord.bot-token={BOT_TOKEN}
+'
+
+# Run the chatbot!
+java ${JAVA_OPTS} --add-opens java.base/java.lang=ALL-UNNAMED -jar ./alexis-discord.jar
 ```
 
 ## For Developers
@@ -75,3 +88,5 @@ Java CDI extensions for an annotation-driven approach to creating commands.
 Commandler is a generic project which provides the foundation for a chatbot and is not coupled with any particular platform. [Comcord](https://gitlab.com/SethFalco/comcord) is a command handler for Discord which includes everything you need to work in Discord.
 
 Most third-party services supported in this project were wrapped in [Elypiai](https://gitlab.com/SethFalco/elypiai) where official Java libraries were not available.
+
+It's encouraged to review all of these projects independently to build your own bot from scratch. Alexis can be considered a reference implementation for how to use them.
