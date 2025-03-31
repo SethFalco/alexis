@@ -26,7 +26,7 @@ import org.apache.deltaspike.core.api.config.Configuration;
 public interface AppConfig {
 
     /**
-      * @return The applications name.
+      * @return Applications name.
      */
     @ConfigProperty(name = "name")
     String getApplicationName();

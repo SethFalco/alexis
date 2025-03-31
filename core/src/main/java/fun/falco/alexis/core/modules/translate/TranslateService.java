@@ -169,7 +169,7 @@ public class TranslateService {
     }
 
     /**
-     * @return A list of languages support by the Google Translate API.
+     * @return List of languages support by the Google Translate API.
      */
     public Collection<Language> getSupportedLanguages() {
         return (supported == null) ? supported = translate.listSupportedLanguages() : supported;

@@ -119,7 +119,7 @@ public class JoinLeaveListener extends ActivatedListenerAdapter {
 
     /**
      * @param jda JDA instance that has joined or left a guild.
-     * @return The stats for this bot.
+     * @return Stats for this bot.
      */
     private String statsMessage(JDA jda) {
         int guildCount = jda.getGuilds().size();

@@ -49,7 +49,7 @@ public class EntityManagerProducer implements Closeable {
      * is not thread safe when interacting with same table in multiple threads.
      * So circumvent this we create en {@link EntityManager} per request.
      *
-     * @return A new instance of the EntityManager from {@link #factory}.
+     * @return New instance of the EntityManager from {@link #factory}.
      */
     @Produces
     public EntityManager getEntityManager() {
