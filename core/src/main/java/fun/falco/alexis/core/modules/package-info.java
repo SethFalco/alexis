@@ -15,11 +15,12 @@
  */
 
 /**
- * All modules in Alexis, this contains all specialized logic dedicated
- * for each module registered for Alexis.
+ * All modules in Alexis, this contains all specialized logic dedicated for each
+ * module registered for Alexis.
  *
- * This can the controllers, services, models, configs, adapters, and messengers,
- * required for Alexis, typically grouped by the controller implementation.
+ * <p>This can the controllers, services, models, configs, adapters, and
+ * messengers, required for Alexis, typically grouped by the controller
+ * implementation.</p>
  *
  * @author seth@falco.fun (Seth Falco)
  */

@@ -29,6 +29,7 @@
     <module name="WhitespaceAfter"/>
     <module name="ModifierOrder"/>
     <module name="JavadocStyle"/>
+    <module name="JavadocParagraph"/>
     <module name="Regexp">
       <property name="format" value="@(param|return) [A-Za-z\d&gt;&lt;]+ (The|An?|All) "/>
       <property name="illegalPattern" value="true"/>

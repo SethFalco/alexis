@@ -50,9 +50,9 @@ import net.dv8tion.jda.api.events.guild.member.GuildMemberRemoveEvent;
  * This controller exclusively handles the greeting logic to welcome or say
  * farewell to users and bots.
  *
- * This uses additional configurations to produce the welcome message.
+ * <p>This uses additional configurations to produce the welcome message.</p>
  *
- * Can be configured from the {@link GreetingController}.
+ * <p>Can be configured from the {@link GreetingController}.</p>
  *
  * @author seth@falco.fun (Seth Falco)
  */

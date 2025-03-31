@@ -76,12 +76,11 @@ public class TranslateService {
     }
 
     /**
-     * Detect the language of a list of strings, and then
-     * return the language which is detected most frequently in this
-     * list.
+     * Detect the language of a list of strings, and then return the language
+     * which is detected most frequently in this list.
      *
-     * This uses the {@link TranslateConfig#getAggregateCharacterCap()}
-     * setting to cap out how many characters before making a request.
+     * <p>This uses the {@link TranslateConfig#getAggregateCharacterCap()}
+     * setting to cap out how many characters before making a request.</p>
      *
      * @param strings Strings to detect the language of.
      * @return Language that comes up most often in a list.
