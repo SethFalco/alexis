@@ -30,9 +30,14 @@
     <module name="ModifierOrder"/>
     <module name="JavadocStyle"/>
     <module name="Regexp">
-      <property name="format" value="@(param|return) [A-Za-z\d]+ (The|A|All) "/>
+      <property name="format" value="@(param|return) [A-Za-z\d&gt;&lt;]+ (The|An?|All) "/>
       <property name="illegalPattern" value="true"/>
       <property name="message" value="Don't start Javadocs with terms like &quot;the&quot;, &quot;a&quot;, or &quot;all&quot;, use the noun instead."/>
+    </module>
+    <module name="Regexp">
+      <property name="format" value="@return Returns? "/>
+      <property name="illegalPattern" value="true"/>
+      <property name="message" value="Don't start @return with &quot;return&quot;."/>
     </module>
   </module>
   <module name="FileTabCharacter"/>

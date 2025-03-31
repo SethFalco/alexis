@@ -1,4 +1,4 @@
-# Bug
+`# Bug
 <!--
   For reporting bugs or unexpected behavior in existing features.
   If a heading is irrelevant, ignore it or remove the title.
@@ -14,6 +14,6 @@
 <!-- What were you expecting to happen here? -->
 
 ## Actual Behavior
-<!-- What actually happened here? If it's intermittent, please specify roughly how often it occurs. -->
+<!-- What actually happened here? If it's intermittent, please estimate how often it occurs. -->
 
-/label ~Bug
+/label ~bug

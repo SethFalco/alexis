@@ -10,4 +10,4 @@
 ## Interface
 <!-- If you have any idea for what a good interface would be, share it here! How would an end-user use this feature request? -->
 
-/label ~"New Feature"
+/label ~"feature-request"

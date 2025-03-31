@@ -26,13 +26,13 @@ import fun.falco.alexis.core.persistence.entities.ActivityData;
 public interface ActivityRepository extends EntityRepository<ActivityData, Integer> {
 
     /**
-     * @return The activity data of any row that's enabled.
+     * @return Activity data of any row that's enabled.
      */
     Optional<ActivityData> findAnyByEnabledTrue();
 
     /**
-     * @param activityId An activity ID to ignore to ensure it's never returned.
-     * @return The activity data of any row that's enabled and not ignored.
+     * @param activityId Activity ID to ignore to ensure it's never returned.
+     * @return Activity data of any row that's enabled and not ignored.
      */
     Optional<ActivityData> findAnyByEnabledTrueAndIdGreaterThan(int activityId);
 }
