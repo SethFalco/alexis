@@ -1,4 +1,4 @@
-# Alexis [![](https://gitlab.com/SethFalco/alexis/badges/main/pipeline.svg)](https://gitlab.com/SethFalco/alexis/commits/main)
+# Alexis [![](https://gitlab.com/SethFalco/alexis/badges/main/pipeline.svg)](https://gitlab.com/SethFalco/alexis)
 
 ## Deprecation Notice
 
