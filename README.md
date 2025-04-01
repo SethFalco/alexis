@@ -31,6 +31,9 @@ cd alexis
 
 # Build the project
 ./gradlew assemble
+
+# Move build to current directory
+mv discord/build/libs/alexis-discord.jar .
 ```
 
 ### Configuration
