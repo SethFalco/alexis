@@ -49,9 +49,11 @@ dependencies {
     implementation project(":core")
 
     // Comcord
-    implementation "org.elypia.comcord:core:${comcordVersion}"
-    implementation "org.elypia.comcord:validation:${comcordVersion}"
-
-    // Override upstream dependency resolution
+    implementation("org.elypia.comcord:core:${comcordVersion}") {
+        exclude group: 'net.dv8tion:JDA'
+    }
+    implementation("org.elypia.comcord:validation:${comcordVersion}") {
+        exclude group: 'net.dv8tion:JDA'
+    }
     implementation "net.dv8tion:JDA:4.2.0_249"
 }

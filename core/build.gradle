@@ -20,7 +20,10 @@ plugins {
 
 dependencies {
     // Commandler Newb (Includes subjective default libraries/implementations.)
-    api "org.elypia.commandler:newb:${commandlerVersion}"
+    api("org.elypia.commandler:newb:${commandlerVersion}") {
+        exclude group: "org.quartz-scheduler"
+    }
+    api "org.quartz-scheduler:quartz:2.4.0"
 
     // DeltaSpike
     api "org.apache.deltaspike.modules:deltaspike-data-module-api:${deltaSpikeVersion}"
