@@ -23,6 +23,10 @@ application {
     mainClassName = "fun.falco.alexis.core.Alexis"
 }
 
+run {
+    jvmArgs '--add-opens', 'java.base/java.lang=ALL-UNNAMED'
+}
+
 shadowJar {
     duplicatesStrategy = 'exclude'
     mergeServiceFiles()
