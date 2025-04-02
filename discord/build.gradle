@@ -55,5 +55,5 @@ dependencies {
     implementation("org.elypia.comcord:validation:${comcordVersion}") {
         exclude group: 'net.dv8tion:JDA'
     }
-    implementation "net.dv8tion:JDA:4.2.0_249"
+    implementation("net.dv8tion:JDA:4.2.0_249")
 }

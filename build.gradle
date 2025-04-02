@@ -57,36 +57,36 @@ subprojects() {
 
     dependencies {
         // Elypiai
-        implementation "org.elypia.elypiai:cleverbot:${elypiaiVersion}"
-        implementation "org.elypia.elypiai:osu:${elypiaiVersion}"
-        implementation "org.elypia.elypiai:runescape:${elypiaiVersion}"
-        implementation "org.elypia.elypiai:steam:${elypiaiVersion}"
-        implementation "org.elypia.elypiai:urban-dictionary:${elypiaiVersion}"
+        implementation("org.elypia.elypiai:cleverbot:${elypiaiVersion}")
+        implementation("org.elypia.elypiai:osu:${elypiaiVersion}")
+        implementation("org.elypia.elypiai:runescape:${elypiaiVersion}")
+        implementation("org.elypia.elypiai:steam:${elypiaiVersion}")
+        implementation("org.elypia.elypiai:urban-dictionary:${elypiaiVersion}")
 
         // Twitch
-        implementation "com.github.twitch4j:twitch4j:1.2.1"
+        implementation("com.github.twitch4j:twitch4j:1.2.1")
 
         // Google Translate and YouTube
-        implementation "com.google.cloud:google-cloud-translate:1.94.5"
-        implementation "com.google.apis:google-api-services-youtube:v3-rev20200518-1.30.9"
+        implementation("com.google.cloud:google-cloud-translate:1.94.5")
+        implementation("com.google.apis:google-api-services-youtube:v3-rev20200518-1.30.9")
 
         // Database
-        implementation "org.hibernate:hibernate-core:${hibernateVersion}"
-        runtimeOnly "org.hibernate:hibernate-c3p0:${hibernateVersion}"
-        runtimeOnly "mysql:mysql-connector-java:8.0.20"
-        runtimeOnly "com.h2database:h2:1.4.200"
+        implementation("org.hibernate:hibernate-core:${hibernateVersion}")
+        runtimeOnly("org.hibernate:hibernate-c3p0:${hibernateVersion}")
+        runtimeOnly("mysql:mysql-connector-java:8.0.20")
+        runtimeOnly("com.h2database:h2:1.4.200")
 
         // Logging
-        implementation "org.slf4j:slf4j-api:${slf4jVersion}"
-        implementation "org.slf4j:jul-to-slf4j:${slf4jVersion}"
-        runtimeOnly "org.codehaus.janino:janino:3.1.2"
-        runtimeOnly "ch.qos.logback:logback-classic:1.2.3"
-        implementation "com.google.cloud:google-cloud-logging-logback:0.116.0-alpha"
+        implementation("org.slf4j:slf4j-api:${slf4jVersion}")
+        implementation("org.slf4j:jul-to-slf4j:${slf4jVersion}")
+        runtimeOnly("org.codehaus.janino:janino:3.1.2")
+        runtimeOnly("ch.qos.logback:logback-classic:1.2.3")
+        implementation("com.google.cloud:google-cloud-logging-logback:0.116.0-alpha")
 
         // Testing
-        testImplementation "org.junit.jupiter:junit-jupiter:${junitVersion}"
-        testImplementation "org.apache.deltaspike.modules:deltaspike-test-control-module-impl:${deltaSpikeVersion}"
-        testRuntimeOnly "org.apache.deltaspike.modules:deltaspike-test-control-module-api:${deltaSpikeVersion}"
+        testImplementation("org.junit.jupiter:junit-jupiter:${junitVersion}")
+        testImplementation("org.apache.deltaspike.modules:deltaspike-test-control-module-impl:${deltaSpikeVersion}")
+        testRuntimeOnly("org.apache.deltaspike.modules:deltaspike-test-control-module-api:${deltaSpikeVersion}")
     }
 
     jar {

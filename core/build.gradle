@@ -23,11 +23,11 @@ dependencies {
     api("org.elypia.commandler:newb:${commandlerVersion}") {
         exclude group: "org.quartz-scheduler"
     }
-    api "org.quartz-scheduler:quartz:2.4.0"
+    api("org.quartz-scheduler:quartz:2.4.0")
 
     // DeltaSpike
-    api "org.apache.deltaspike.modules:deltaspike-data-module-api:${deltaSpikeVersion}"
-    runtimeOnly "org.apache.deltaspike.modules:deltaspike-data-module-impl:${deltaSpikeVersion}"
-    api "org.apache.deltaspike.modules:deltaspike-scheduler-module-api:${deltaSpikeVersion}"
-    runtimeOnly "org.apache.deltaspike.modules:deltaspike-scheduler-module-impl:${deltaSpikeVersion}"
+    api("org.apache.deltaspike.modules:deltaspike-data-module-api:${deltaSpikeVersion}")
+    runtimeOnly("org.apache.deltaspike.modules:deltaspike-data-module-impl:${deltaSpikeVersion}")
+    api("org.apache.deltaspike.modules:deltaspike-scheduler-module-api:${deltaSpikeVersion}")
+    runtimeOnly("org.apache.deltaspike.modules:deltaspike-scheduler-module-impl:${deltaSpikeVersion}")
 }
