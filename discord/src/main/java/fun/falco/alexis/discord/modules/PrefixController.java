@@ -19,15 +19,15 @@ package fun.falco.alexis.discord.modules;
 import javax.inject.Inject;
 import javax.validation.constraints.NotBlank;
 
-import fun.falco.alexis.core.i18n.AlexisMessages;
-import fun.falco.alexis.core.persistence.entities.GuildData;
-import fun.falco.alexis.core.persistence.repositories.GuildRepository;
 import org.elypia.comcord.constraints.Channels;
 import org.elypia.comcord.constraints.Elevated;
 import org.elypia.commandler.annotation.Param;
 import org.elypia.commandler.dispatchers.standard.StandardCommand;
 import org.elypia.commandler.dispatchers.standard.StandardController;
 
+import fun.falco.alexis.core.i18n.AlexisMessages;
+import fun.falco.alexis.core.persistence.entities.GuildData;
+import fun.falco.alexis.core.persistence.repositories.GuildRepository;
 import net.dv8tion.jda.api.entities.ChannelType;
 import net.dv8tion.jda.api.entities.Message;
 

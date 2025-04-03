@@ -20,6 +20,7 @@ import java.io.Serializable;
 
 import org.apache.deltaspike.data.api.EntityRepository;
 import org.apache.deltaspike.data.api.Repository;
+
 import fun.falco.alexis.core.persistence.entities.ActionData;
 
 @Repository(forEntity = ActionData.class)

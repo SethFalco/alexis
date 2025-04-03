@@ -24,6 +24,13 @@ import java.util.Optional;
 
 import javax.inject.Inject;
 
+import org.elypia.comcord.EventUtils;
+import org.elypia.comcord.constraints.Channels;
+import org.elypia.comcord.constraints.Elevated;
+import org.elypia.commandler.annotation.Param;
+import org.elypia.commandler.dispatchers.standard.StandardCommand;
+import org.elypia.commandler.dispatchers.standard.StandardController;
+
 import fun.falco.alexis.core.i18n.AlexisMessages;
 import fun.falco.alexis.core.persistence.entities.EmoteData;
 import fun.falco.alexis.core.persistence.entities.EmoteUsage;
@@ -34,13 +41,6 @@ import fun.falco.alexis.core.persistence.repositories.GuildRepository;
 import fun.falco.alexis.discord.models.EmoteLeaderboardEntryModel;
 import fun.falco.alexis.discord.models.EmoteLeaderboardModel;
 import fun.falco.alexis.discord.utils.DiscordUtils;
-import org.elypia.comcord.EventUtils;
-import org.elypia.comcord.constraints.Channels;
-import org.elypia.comcord.constraints.Elevated;
-import org.elypia.commandler.annotation.Param;
-import org.elypia.commandler.dispatchers.standard.StandardCommand;
-import org.elypia.commandler.dispatchers.standard.StandardController;
-
 import net.dv8tion.jda.api.entities.ChannelType;
 import net.dv8tion.jda.api.entities.Emote;
 import net.dv8tion.jda.api.entities.Guild;

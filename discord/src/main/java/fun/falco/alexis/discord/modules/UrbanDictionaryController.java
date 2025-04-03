@@ -23,8 +23,6 @@ import java.util.stream.Stream;
 
 import javax.inject.Inject;
 
-import fun.falco.alexis.core.i18n.AlexisMessages;
-import fun.falco.alexis.discord.utils.DiscordUtils;
 import org.elypia.commandler.annotation.Param;
 import org.elypia.commandler.dispatchers.standard.StandardCommand;
 import org.elypia.commandler.dispatchers.standard.StandardController;
@@ -35,6 +33,8 @@ import org.elypia.elypiai.urbandictionary.DefineResult;
 import org.elypia.elypiai.urbandictionary.Definition;
 import org.elypia.elypiai.urbandictionary.UrbanDictionary;
 
+import fun.falco.alexis.core.i18n.AlexisMessages;
+import fun.falco.alexis.discord.utils.DiscordUtils;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Single;
 import net.dv8tion.jda.api.EmbedBuilder;

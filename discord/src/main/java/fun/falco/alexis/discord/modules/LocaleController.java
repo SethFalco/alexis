@@ -22,12 +22,6 @@ import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
-import fun.falco.alexis.core.i18n.AlexisMessages;
-import fun.falco.alexis.core.modules.translate.TranslateService;
-import fun.falco.alexis.core.persistence.entities.GuildData;
-import fun.falco.alexis.core.persistence.entities.MessageChannelData;
-import fun.falco.alexis.core.persistence.repositories.GuildRepository;
-import fun.falco.alexis.core.persistence.repositories.MessageChannelRepository;
 import org.elypia.comcord.annotations.ReactionCommand;
 import org.elypia.comcord.constraints.Channels;
 import org.elypia.comcord.constraints.Elevated;
@@ -40,6 +34,12 @@ import org.elypia.commandler.producers.MessageSender;
 
 import com.google.cloud.translate.Language;
 
+import fun.falco.alexis.core.i18n.AlexisMessages;
+import fun.falco.alexis.core.modules.translate.TranslateService;
+import fun.falco.alexis.core.persistence.entities.GuildData;
+import fun.falco.alexis.core.persistence.entities.MessageChannelData;
+import fun.falco.alexis.core.persistence.repositories.GuildRepository;
+import fun.falco.alexis.core.persistence.repositories.MessageChannelRepository;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.ChannelType;
 import net.dv8tion.jda.api.entities.GuildChannel;

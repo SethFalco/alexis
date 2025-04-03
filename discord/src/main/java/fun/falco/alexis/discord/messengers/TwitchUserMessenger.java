@@ -19,14 +19,14 @@ package fun.falco.alexis.discord.messengers;
 import javax.inject.Inject;
 
 import org.apache.commons.lang.StringUtils;
-import fun.falco.alexis.core.i18n.AlexisMessages;
-import fun.falco.alexis.discord.utils.DiscordUtils;
 import org.elypia.comcord.api.DiscordMessenger;
 import org.elypia.commandler.annotation.stereotypes.MessageProvider;
 import org.elypia.commandler.event.ActionEvent;
 
 import com.github.twitch4j.helix.domain.User;
 
+import fun.falco.alexis.core.i18n.AlexisMessages;
+import fun.falco.alexis.discord.utils.DiscordUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.Message;

@@ -24,6 +24,9 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import org.apache.commons.collections4.Bag;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import fun.falco.alexis.core.persistence.entities.EmoteData;
 import fun.falco.alexis.core.persistence.entities.EmoteUsage;
 import fun.falco.alexis.core.persistence.entities.FeatureSettings;
@@ -31,9 +34,6 @@ import fun.falco.alexis.core.persistence.entities.GuildData;
 import fun.falco.alexis.core.persistence.enums.Feature;
 import fun.falco.alexis.core.persistence.repositories.EmoteRepository;
 import fun.falco.alexis.core.persistence.repositories.GuildRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import net.dv8tion.jda.api.entities.Emote;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Message;

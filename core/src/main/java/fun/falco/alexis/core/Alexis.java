@@ -22,9 +22,8 @@ import org.slf4j.LoggerFactory;
 import org.slf4j.bridge.SLF4JBridgeHandler;
 
 /**
- * This is the main class for the bot which initialized everything Alexis
- * depends on and connects to Discord. This does not contain any
- * actual command handling code.
+ * Main class for the bot which initialized everything Alexis depends on and
+ * connects to Discord. This does not contain any actual command handling code.
  *
  * @author seth@falco.fun (Seth Falco)
  */
@@ -32,7 +31,7 @@ public class Alexis {
 
     private static final Logger logger = LoggerFactory.getLogger(Alexis.class);
 
-    /** The time this application started, this is used to determine runtime statistics. */
+    /** Time this application started, this is used to determine runtime statistics. */
     public static final long START_TIME = System.currentTimeMillis();
 
     /**

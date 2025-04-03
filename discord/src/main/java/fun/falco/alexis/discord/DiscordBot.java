@@ -25,17 +25,17 @@ import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 import javax.security.auth.login.LoginException;
 
+import org.elypia.comcord.configuration.DiscordConfig;
+import org.elypia.retropia.core.HttpClientSingleton;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import fun.falco.alexis.core.ExitCode;
 import fun.falco.alexis.discord.listeners.ConnectionListener;
 import fun.falco.alexis.discord.listeners.EmoteListener;
 import fun.falco.alexis.discord.listeners.GreetingListener;
 import fun.falco.alexis.discord.listeners.JoinLeaveListener;
 import fun.falco.alexis.discord.listeners.LoggingListener;
-import org.elypia.comcord.configuration.DiscordConfig;
-import org.elypia.retropia.core.HttpClientSingleton;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;

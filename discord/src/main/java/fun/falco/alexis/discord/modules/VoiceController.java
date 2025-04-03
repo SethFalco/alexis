@@ -24,12 +24,12 @@ import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
-import fun.falco.alexis.core.i18n.AlexisMessages;
 import org.elypia.comcord.constraints.Channels;
 import org.elypia.commandler.annotation.Param;
 import org.elypia.commandler.dispatchers.standard.StandardCommand;
 import org.elypia.commandler.dispatchers.standard.StandardController;
 
+import fun.falco.alexis.core.i18n.AlexisMessages;
 import net.dv8tion.jda.api.entities.ChannelType;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;

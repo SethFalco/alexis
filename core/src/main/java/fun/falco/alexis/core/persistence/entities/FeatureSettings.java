@@ -33,11 +33,12 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
 
-import fun.falco.alexis.core.persistence.enums.Feature;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.UpdateTimestamp;
+
+import fun.falco.alexis.core.persistence.enums.Feature;
 
 /**
  * @author seth@falco.fun (Seth Falco)

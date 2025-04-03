@@ -23,13 +23,13 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
 import org.apache.deltaspike.scheduler.api.Scheduled;
-import fun.falco.alexis.core.persistence.entities.ActivityData;
-import fun.falco.alexis.core.persistence.repositories.ActivityRepository;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import fun.falco.alexis.core.persistence.entities.ActivityData;
+import fun.falco.alexis.core.persistence.repositories.ActivityRepository;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Activity;
 

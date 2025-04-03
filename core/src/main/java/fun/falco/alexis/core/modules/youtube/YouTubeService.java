@@ -26,8 +26,6 @@ import java.util.Optional;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
-import fun.falco.alexis.core.configuration.AppConfig;
-
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.youtube.YouTube;
@@ -38,6 +36,8 @@ import com.google.api.services.youtube.model.SearchResult;
 import com.google.api.services.youtube.model.SubscriptionListResponse;
 import com.google.auth.http.HttpCredentialsAdapter;
 import com.google.auth.oauth2.GoogleCredentials;
+
+import fun.falco.alexis.core.configuration.AppConfig;
 
 /**
  * @author seth@falco.fun (Seth Falco)

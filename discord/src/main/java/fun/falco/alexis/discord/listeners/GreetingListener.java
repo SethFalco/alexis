@@ -24,6 +24,10 @@ import java.util.stream.Stream;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import org.elypia.comcord.ActivatedListenerAdapter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import fun.falco.alexis.core.i18n.AlexisMessages;
 import fun.falco.alexis.core.persistence.entities.FeatureSettings;
 import fun.falco.alexis.core.persistence.entities.GuildData;
@@ -33,10 +37,6 @@ import fun.falco.alexis.core.persistence.enums.Feature;
 import fun.falco.alexis.core.persistence.enums.GuildMessageType;
 import fun.falco.alexis.core.persistence.repositories.GuildRepository;
 import fun.falco.alexis.discord.modules.GreetingController;
-import org.elypia.comcord.ActivatedListenerAdapter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Role;

@@ -34,11 +34,12 @@ import javax.persistence.MapKeyEnumerated;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import fun.falco.alexis.core.persistence.enums.Feature;
-import fun.falco.alexis.core.persistence.enums.GuildMessageType;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+
+import fun.falco.alexis.core.persistence.enums.Feature;
+import fun.falco.alexis.core.persistence.enums.GuildMessageType;
 
 /**
  * The data representing a Discord Guild.

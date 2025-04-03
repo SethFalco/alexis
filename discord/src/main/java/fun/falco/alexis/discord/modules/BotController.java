@@ -27,10 +27,6 @@ import java.util.stream.Collectors;
 import javax.inject.Inject;
 import javax.validation.constraints.NotBlank;
 
-import fun.falco.alexis.core.configuration.AuthorConfig;
-import fun.falco.alexis.core.i18n.AlexisMessages;
-import fun.falco.alexis.discord.models.BotInfoModel;
-import fun.falco.alexis.discord.utils.DiscordUtils;
 import org.elypia.comcord.constraints.Channels;
 import org.elypia.comcord.constraints.Everyone;
 import org.elypia.commandler.annotation.Command;
@@ -43,6 +39,10 @@ import org.jboss.weld.context.bound.BoundRequestContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import fun.falco.alexis.core.configuration.AuthorConfig;
+import fun.falco.alexis.core.i18n.AlexisMessages;
+import fun.falco.alexis.discord.models.BotInfoModel;
+import fun.falco.alexis.discord.utils.DiscordUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;

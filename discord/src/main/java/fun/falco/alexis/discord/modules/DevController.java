@@ -27,10 +27,6 @@ import java.util.StringJoiner;
 
 import javax.inject.Inject;
 
-import fun.falco.alexis.core.ExitCode;
-import fun.falco.alexis.core.i18n.AlexisMessages;
-import fun.falco.alexis.core.persistence.entities.ActivityData;
-import fun.falco.alexis.core.persistence.repositories.ActivityRepository;
 import org.elypia.comcord.Scope;
 import org.elypia.comcord.annotations.Scoped;
 import org.elypia.comcord.constraints.BotOwner;
@@ -42,6 +38,10 @@ import org.elypia.commandler.dispatchers.standard.StandardController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import fun.falco.alexis.core.ExitCode;
+import fun.falco.alexis.core.i18n.AlexisMessages;
+import fun.falco.alexis.core.persistence.entities.ActivityData;
+import fun.falco.alexis.core.persistence.repositories.ActivityRepository;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Icon;

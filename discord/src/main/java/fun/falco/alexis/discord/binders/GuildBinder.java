@@ -21,13 +21,13 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
-import fun.falco.alexis.core.persistence.entities.GuildData;
-import fun.falco.alexis.core.persistence.repositories.GuildRepository;
 import org.elypia.comcord.EventUtils;
 import org.elypia.commandler.annotation.stereotypes.Binder;
 import org.elypia.commandler.api.HeaderBinder;
 import org.elypia.commandler.event.Request;
 
+import fun.falco.alexis.core.persistence.entities.GuildData;
+import fun.falco.alexis.core.persistence.repositories.GuildRepository;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.events.Event;
 

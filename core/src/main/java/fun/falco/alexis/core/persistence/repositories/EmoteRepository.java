@@ -20,6 +20,7 @@ import java.util.List;
 
 import org.apache.deltaspike.data.api.EntityRepository;
 import org.apache.deltaspike.data.api.Repository;
+
 import fun.falco.alexis.core.persistence.entities.EmoteData;
 
 /**

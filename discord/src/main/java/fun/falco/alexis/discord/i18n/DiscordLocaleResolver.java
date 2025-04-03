@@ -8,12 +8,12 @@ import javax.enterprise.inject.Alternative;
 import javax.inject.Inject;
 
 import org.apache.deltaspike.core.api.message.LocaleResolver;
+import org.elypia.comcord.EventUtils;
+
 import fun.falco.alexis.core.persistence.entities.GuildData;
 import fun.falco.alexis.core.persistence.entities.MessageChannelData;
 import fun.falco.alexis.core.persistence.repositories.GuildRepository;
 import fun.falco.alexis.core.persistence.repositories.MessageChannelRepository;
-import org.elypia.comcord.EventUtils;
-
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.events.GenericEvent;

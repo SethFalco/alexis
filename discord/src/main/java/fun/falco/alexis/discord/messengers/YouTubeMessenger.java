@@ -23,10 +23,6 @@ import java.util.Date;
 
 import javax.inject.Inject;
 
-import fun.falco.alexis.core.i18n.AlexisMessages;
-import fun.falco.alexis.core.modules.youtube.YouTubeService;
-import fun.falco.alexis.core.modules.youtube.YouTubeUtils;
-import fun.falco.alexis.discord.utils.DiscordUtils;
 import org.elypia.comcord.api.DiscordMessenger;
 import org.elypia.commandler.annotation.stereotypes.MessageProvider;
 import org.elypia.commandler.event.ActionEvent;
@@ -37,6 +33,10 @@ import com.google.api.services.youtube.model.SearchResult;
 import com.google.api.services.youtube.model.SearchResultSnippet;
 import com.google.gson.internal.bind.util.ISO8601Utils;
 
+import fun.falco.alexis.core.i18n.AlexisMessages;
+import fun.falco.alexis.core.modules.youtube.YouTubeService;
+import fun.falco.alexis.core.modules.youtube.YouTubeUtils;
+import fun.falco.alexis.discord.utils.DiscordUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.Message;

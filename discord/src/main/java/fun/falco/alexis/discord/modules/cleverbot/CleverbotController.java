@@ -21,9 +21,6 @@ import java.util.Objects;
 import javax.inject.Inject;
 import javax.validation.constraints.NotBlank;
 
-import fun.falco.alexis.core.persistence.entities.GuildData;
-import fun.falco.alexis.core.persistence.entities.MessageChannelData;
-import fun.falco.alexis.core.persistence.repositories.MessageChannelRepository;
 import org.elypia.commandler.annotation.Param;
 import org.elypia.commandler.dispatchers.standard.StandardCommand;
 import org.elypia.commandler.dispatchers.standard.StandardController;
@@ -31,6 +28,9 @@ import org.elypia.commandler.newb.AsyncUtils;
 import org.elypia.commandler.producers.MessageSender;
 import org.elypia.elypiai.cleverbot.Cleverbot;
 
+import fun.falco.alexis.core.persistence.entities.GuildData;
+import fun.falco.alexis.core.persistence.entities.MessageChannelData;
+import fun.falco.alexis.core.persistence.repositories.MessageChannelRepository;
 import net.dv8tion.jda.api.entities.Message;
 
 /**

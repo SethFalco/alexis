@@ -5,13 +5,13 @@ import java.util.StringJoiner;
 
 import javax.inject.Inject;
 
-import fun.falco.alexis.core.i18n.AlexisMessages;
-import fun.falco.alexis.discord.models.EmoteLeaderboardEntryModel;
-import fun.falco.alexis.discord.models.EmoteLeaderboardModel;
 import org.elypia.comcord.api.DiscordMessenger;
 import org.elypia.commandler.annotation.stereotypes.MessageProvider;
 import org.elypia.commandler.event.ActionEvent;
 
+import fun.falco.alexis.core.i18n.AlexisMessages;
+import fun.falco.alexis.discord.models.EmoteLeaderboardEntryModel;
+import fun.falco.alexis.discord.models.EmoteLeaderboardModel;
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.Message;
 

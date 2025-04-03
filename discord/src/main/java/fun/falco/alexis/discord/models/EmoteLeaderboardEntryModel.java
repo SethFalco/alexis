@@ -1,7 +1,6 @@
 package fun.falco.alexis.discord.models;
 
 import fun.falco.alexis.core.persistence.entities.EmoteUsage;
-
 import net.dv8tion.jda.api.entities.Emote;
 
 /**

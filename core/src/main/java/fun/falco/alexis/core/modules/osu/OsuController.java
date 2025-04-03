@@ -21,7 +21,6 @@ import java.util.Objects;
 import javax.inject.Inject;
 import javax.validation.constraints.Size;
 
-import fun.falco.alexis.core.i18n.AlexisMessages;
 import org.elypia.commandler.annotation.Param;
 import org.elypia.commandler.dispatchers.standard.StandardCommand;
 import org.elypia.commandler.dispatchers.standard.StandardController;
@@ -29,6 +28,8 @@ import org.elypia.commandler.newb.AsyncUtils;
 import org.elypia.commandler.producers.MessageSender;
 import org.elypia.elypiai.osu.Osu;
 import org.elypia.elypiai.osu.data.OsuMode;
+
+import fun.falco.alexis.core.i18n.AlexisMessages;
 
 /**
  * @author seth@falco.fun (Seth Falco)

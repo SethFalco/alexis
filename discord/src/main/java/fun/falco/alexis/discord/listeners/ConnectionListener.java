@@ -20,12 +20,12 @@ import java.util.List;
 
 import javax.inject.Singleton;
 
-import fun.falco.alexis.core.Alexis;
-import fun.falco.alexis.core.ExitCode;
 import org.elypia.commandler.Commandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import fun.falco.alexis.core.Alexis;
+import fun.falco.alexis.core.ExitCode;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;

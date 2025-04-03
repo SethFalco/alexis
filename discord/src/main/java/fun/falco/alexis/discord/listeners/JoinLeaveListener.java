@@ -24,15 +24,15 @@ import java.util.Optional;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import org.elypia.comcord.ActivatedListenerAdapter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import fun.falco.alexis.core.i18n.AlexisMessages;
 import fun.falco.alexis.core.persistence.entities.GuildData;
 import fun.falco.alexis.core.persistence.repositories.GuildRepository;
 import fun.falco.alexis.discord.DiscordBot;
 import fun.falco.alexis.discord.utils.DiscordUtils;
-import org.elypia.comcord.ActivatedListenerAdapter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;

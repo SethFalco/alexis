@@ -23,7 +23,6 @@ import java.util.function.Consumer;
 import javax.inject.Inject;
 import javax.validation.constraints.Size;
 
-import fun.falco.alexis.core.i18n.AlexisMessages;
 import org.elypia.commandler.annotation.Param;
 import org.elypia.commandler.dispatchers.standard.StandardCommand;
 import org.elypia.commandler.dispatchers.standard.StandardController;
@@ -31,6 +30,8 @@ import org.elypia.commandler.newb.AsyncUtils;
 import org.elypia.commandler.producers.MessageSender;
 import org.elypia.elypiai.steam.Steam;
 import org.elypia.elypiai.steam.SteamGame;
+
+import fun.falco.alexis.core.i18n.AlexisMessages;
 
 /**
  * @author seth@falco.fun (Seth Falco)

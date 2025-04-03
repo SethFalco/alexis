@@ -22,10 +22,6 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.validation.constraints.NotBlank;
 
-import fun.falco.alexis.core.i18n.AlexisMessages;
-import fun.falco.alexis.core.modules.translate.TranslateService;
-import fun.falco.alexis.core.modules.translate.TranslationModel;
-import fun.falco.alexis.core.persistence.repositories.GuildRepository;
 import org.elypia.comcord.constraints.Channels;
 import org.elypia.comcord.constraints.Elevated;
 import org.elypia.comcord.constraints.Everyone;
@@ -40,6 +36,10 @@ import org.elypia.commandler.producers.MessageSender;
 import com.google.cloud.translate.Language;
 import com.google.cloud.translate.Translation;
 
+import fun.falco.alexis.core.i18n.AlexisMessages;
+import fun.falco.alexis.core.modules.translate.TranslateService;
+import fun.falco.alexis.core.modules.translate.TranslationModel;
+import fun.falco.alexis.core.persistence.repositories.GuildRepository;
 import net.dv8tion.jda.api.entities.ChannelType;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;

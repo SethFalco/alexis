@@ -23,9 +23,6 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 
-import fun.falco.alexis.core.i18n.AlexisMessages;
-import fun.falco.alexis.core.persistence.entities.GuildData;
-import fun.falco.alexis.core.persistence.repositories.GuildRepository;
 import org.elypia.comcord.constraints.Channels;
 import org.elypia.comcord.constraints.Elevated;
 import org.elypia.comcord.constraints.Permissions;
@@ -34,6 +31,9 @@ import org.elypia.commandler.dispatchers.standard.StandardCommand;
 import org.elypia.commandler.dispatchers.standard.StandardController;
 import org.elypia.commandler.newb.AsyncUtils;
 
+import fun.falco.alexis.core.i18n.AlexisMessages;
+import fun.falco.alexis.core.persistence.entities.GuildData;
+import fun.falco.alexis.core.persistence.repositories.GuildRepository;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.ChannelType;
 import net.dv8tion.jda.api.entities.Guild;

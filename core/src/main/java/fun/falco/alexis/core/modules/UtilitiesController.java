@@ -18,10 +18,11 @@ package fun.falco.alexis.core.modules;
 
 import javax.inject.Inject;
 
-import fun.falco.alexis.core.i18n.AlexisMessages;
 import org.elypia.commandler.annotation.Param;
 import org.elypia.commandler.dispatchers.standard.StandardCommand;
 import org.elypia.commandler.dispatchers.standard.StandardController;
+
+import fun.falco.alexis.core.i18n.AlexisMessages;
 
 /**
  * @author seth@falco.fun (Seth Falco)
