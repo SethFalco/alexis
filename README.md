@@ -20,9 +20,9 @@ There is no official or hosted version of Alexis available. To run this, you mus
 
 ### Requirements
 
-* [Git](https://git-scm.com/)
+* [Git](https://git-scm.com)
 * Java 17
-* [Gradle 7](https://gradle.org/)
+* [Gradle 7](https://gradle.org)
 
 ### Building
 
