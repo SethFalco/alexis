@@ -57,7 +57,7 @@ If a MySQL database is not configured (`application.persistence.*`), we fall bac
 |`application.persistence.username`|Username to connect to the SQL database server.|
 |`application.persistence.password`|Password to connect to the SQL database server.|
 |`application.cleverbot.api-key`|API key for [Cleverbot](https://www.cleverbot.com/api/), required for Cleverbot integration.<br><br>⚠️ **Heads-up: Cleverbot is a billed API. There is no way to use it without spending money.**|
-|`application.osu.api-key`|API key for [osu!](https://osu.ppy.sh/wiki/en/osu%21api), required for osu! integration.|
+|`application.osu.api-key`|API key for [osu!](https://osu.ppy.sh/docs/index.html), required for osu! integration.|
 |`application.steam.api-key`|API key for [Steam](https://steamcommunity.com/dev), required for Steam integration.|
 |`application.twitch.client-id`|Twitch client ID, required for Twitch integration. You can get credentials on the [Twitch Developer Portal](https://dev.twitch.tv/).|
 |`application.twitch.client-secret`|Twitch client secret, required for Twitch integration. You can get credentials on the [Twitch Developer Portal](https://dev.twitch.tv/).|
